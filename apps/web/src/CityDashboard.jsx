@@ -5,13 +5,20 @@ import {
 } from "recharts";
 import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick } from "./ui.jsx";
 import { linreg, mean } from "./lib/stats.js";
-import { fetchPhoenix, fetchRural, fetchOpenMeteo } from "./lib/data.js";
-import UhiCard from "./UhiCard.jsx";
+import {
+  fetchCityYearly, fetchRural, fetchSeasonal, fetchDiurnal, fetchOpenMeteo,
+} from "./lib/data.js";
+import UhiCard from "./cards/UhiCard.jsx";
+import GoalpostsCard from "./cards/GoalpostsCard.jsx";
+import SeasonsCard from "./cards/SeasonsCard.jsx";
+import DiurnalCard from "./cards/DiurnalCard.jsx";
 
-export default function PhoenixNights() {
+export default function CityDashboard({ city }) {
   const [state, setState] = useState({ loading: true, error: null, rows: [], source: null });
   const [rural, setRural] = useState(null);
-  const [windowStart, setWindowStart] = useState(1970);
+  const [seasonal, setSeasonal] = useState(null);
+  const [diurnal, setDiurnal] = useState(null);
+  const [windowStart, setWindowStart] = useState(city.baseline.start);
   const [view, setView] = useState("anom");
   const [reloadKey, setReloadKey] = useState(0);
 
@@ -19,16 +26,21 @@ export default function PhoenixNights() {
     let alive = true;
     setState((s) => ({ ...s, loading: true, error: null }));
     setRural(null);
+    setSeasonal(null);
+    setDiurnal(null);
+    // the hour-by-hour card reads a static precomputed asset — independent of ACIS
+    fetchDiurnal(city).then((d) => alive && setDiurnal(d)).catch(() => {});
     (async () => {
       try {
-        const res = await fetchPhoenix();
+        const res = await fetchCityYearly(city);
         if (!alive) return;
         setState({ loading: false, error: null, ...res });
-        // the urban-vs-desert card is a bonus — never block or fail the page on it
-        fetchRural().then((rr) => alive && setRural(rr)).catch(() => {});
+        // bonus cards — never block or fail the page on them
+        fetchRural(city).then((rr) => alive && setRural(rr)).catch(() => {});
+        fetchSeasonal(city).then((ss) => alive && setSeasonal(ss)).catch(() => {});
       } catch (e1) {
         try {
-          const res = await fetchOpenMeteo();
+          const res = await fetchOpenMeteo(city);
           if (alive) setState({ loading: false, error: null, ...res });
         } catch (e2) {
           if (alive) setState({ loading: false, error: "Couldn't reach NOAA (ACIS) or the Open-Meteo archive. Check your connection, then tap retry.", rows: [], source: null });
@@ -36,16 +48,16 @@ export default function PhoenixNights() {
       }
     })();
     return () => { alive = false; };
-  }, [reloadKey]);
+  }, [reloadKey, city]);
 
   const { rows, source } = state;
-  const minYear = rows.length ? rows[0].year : 1970;
+  const minYear = rows.length ? rows[0].year : city.baseline.start;
   const vis = useMemo(() => rows.filter((r) => r.year >= windowStart), [rows, windowStart]);
 
   const base = useMemo(() => {
-    const b = rows.filter((r) => r.year >= 1970 && r.year <= 1979);
+    const b = rows.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
     return { low: mean(b.map((r) => r.low)), high: mean(b.map((r) => r.high)) };
-  }, [rows]);
+  }, [rows, city]);
 
   const fitLow = useMemo(() => linreg(vis.map((r) => ({ x: r.year, y: r.low }))), [vis]);
   const fitHigh = useMemo(() => linreg(vis.map((r) => ({ x: r.year, y: r.high }))), [vis]);
@@ -59,7 +71,10 @@ export default function PhoenixNights() {
     low: +r.low.toFixed(1), high: +r.high.toFixed(1),
     lowAnom: base.low != null ? +(r.low - base.low).toFixed(1) : null,
     highAnom: base.high != null ? +(r.high - base.high).toFixed(1) : null,
-    hotNights: r.hotNights, cdd: r.cdd,
+    nights8089: r.hotNights != null && r.nights90 != null ? r.hotNights - r.nights90 : r.hotNights,
+    nights90: r.nights90,
+    days110: r.days110,
+    cdd: r.cdd,
   })), [vis, base]);
 
   const decades = useMemo(() => {
@@ -87,15 +102,15 @@ export default function PhoenixNights() {
 
   const cddOk = useMemo(() => vis.filter((r) => r.cdd != null).length > vis.length * 0.7, [vis]);
   const hotOk = useMemo(() => vis.filter((r) => r.hotNights != null).length > vis.length * 0.7, [vis]);
+  const days110Ok = useMemo(() => vis.filter((r) => r.days110 != null).length > vis.length * 0.7, [vis]);
 
   const windows = [
-    { y: 1970, label: "Since 1970" },
-    { y: 1948, label: "Since 1948" },
-    ...(minYear <= 1900 ? [{ y: minYear, label: "Full record" }] : []),
+    ...city.windows,
+    ...(minYear < Math.min(...city.windows.map((w) => w.y)) ? [{ y: minYear, label: "Full record" }] : []),
   ];
 
   const sourceLabel = source === "acis"
-    ? "NOAA / NWS ACIS · Phoenix ThreadEx station record (downtown 1896–1933, Sky Harbor 1933–present)"
+    ? `NOAA / NWS ACIS · ${city.stationLabel}`
     : "Open-Meteo ERA5 reanalysis (modeled estimate — station data unavailable right now)";
 
   return (
@@ -116,7 +131,7 @@ export default function PhoenixNights() {
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <header className="mb-8">
           <div className="text-xs tracking-widest uppercase mb-3" style={{ color: C.emberSoft }}>
-            Live NOAA station record · Phoenix, AZ
+            Live NOAA station record · {city.name}
           </div>
           <h1 className="text-3xl sm:text-5xl leading-tight" style={{ fontFamily: DISPLAY, fontWeight: 650 }}>
             The desert still cools off at night.
@@ -125,7 +140,7 @@ export default function PhoenixNights() {
           </h1>
           <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: C.muted }}>
             Weather apps grade each day against a "normal range" and spotlight the afternoon high.
-            This page tests a different question with the official record: are Phoenix's
+            This page tests a different question with the official record: are {city.shortName}'s
             <em> overnight lows</em> abandoning their history faster than its highs?
           </p>
         </header>
@@ -181,7 +196,7 @@ export default function PhoenixNights() {
               </div>
               {ratio != null && ratio > 0 && (
                 <p className="mt-4 text-base sm:text-lg leading-relaxed">
-                  Since {windowStart}, Phoenix nights have warmed{" "}
+                  Since {windowStart}, {city.shortName} nights have warmed{" "}
                   <span style={{ color: C.gold, fontFamily: DISPLAY }}>{ratio.toFixed(1)}× faster</span>{" "}
                   than its days — the fingerprint of asphalt and concrete releasing stored heat after sunset.
                 </p>
@@ -201,7 +216,7 @@ export default function PhoenixNights() {
                 </button>
               ))}
               <span className="mx-1 hidden sm:inline" style={{ color: C.line }}>|</span>
-              {[{ v: "anom", label: "Departure from 1970s" }, { v: "actual", label: "Actual °F" }].map((o) => (
+              {[{ v: "anom", label: `Departure from ${city.baseline.label}` }, { v: "actual", label: "Actual °F" }].map((o) => (
                 <button key={o.v} onClick={() => setView(o.v)} className="rounded-full px-3 py-1.5 text-sm"
                   style={{
                     background: view === o.v ? C.panel2 : "transparent",
@@ -216,7 +231,7 @@ export default function PhoenixNights() {
             <Card>
               <CardHead kicker="Yearly averages" title="Pulling away from the past"
                 sub={view === "anom"
-                  ? "Each year's average low and high, shown as departure from this station's 1970s average. Watch the ember line climb away from zero while the blue line drifts."
+                  ? `Each year's average low and high, shown as departure from this station's ${city.baseline.label} average. Watch the ember line climb away from zero while the blue line drifts.`
                   : "Each year's average low and high in °F. The gap between night and day is quietly narrowing."} />
               <div style={{ width: "100%", height: 300 }}>
                 <ResponsiveContainer>
@@ -227,7 +242,7 @@ export default function PhoenixNights() {
                     <Tooltip content={<DarkTooltip unit="°F" />} />
                     {view === "anom" && (
                       <ReferenceLine y={0} stroke={C.muted} strokeDasharray="4 4"
-                        label={{ value: "1970s avg", fill: C.muted, fontSize: 11, position: "insideBottomLeft" }} />
+                        label={{ value: `${city.baseline.label} avg`, fill: C.muted, fontSize: 11, position: "insideBottomLeft" }} />
                     )}
                     <Line isAnimationActive={false} type="monotone" dataKey={view === "anom" ? "highAnom" : "high"} name="Avg high"
                       stroke={C.day} strokeWidth={2} dot={false} />
@@ -269,18 +284,24 @@ export default function PhoenixNights() {
                 </div>
                 {base.low != null && (
                   <p className="text-xs mt-3" style={{ color: C.muted }}>
-                    Thin gray tick = the 1970s average low ({base.low.toFixed(1)}°F), for reference.
+                    Thin gray tick = the {city.baseline.label} average low ({base.low.toFixed(1)}°F), for reference.
                   </p>
                 )}
               </Card>
             )}
 
-            {source === "acis" && rural && <UhiCard phxRows={rows} ruralRows={rural} />}
+            {source === "acis" && rural && <UhiCard city={city} cityRows={rows} ruralRows={rural} />}
+
+            {source === "acis" && <GoalpostsCard city={city} rows={rows} />}
+
+            {source === "acis" && seasonal && <SeasonsCard city={city} seasonal={seasonal} />}
+
+            {diurnal && <DiurnalCard city={city} diurnal={diurnal} />}
 
             {hotOk && (
               <Card>
                 <CardHead kicker="What it feels like" title="Nights that never dropped below 80°F"
-                  sub="Count of nights each year when the temperature stayed at or above 80°F — nights with no recovery for bodies, buildings, or power grids." />
+                  sub="Count of nights each year when the temperature stayed at or above 80°F — nights with no recovery for bodies, buildings, or power grids. The gold core counts nights that never even dropped below 90°F: once a once-a-decade freak event, now a summer routine." />
                 <div style={{ width: "100%", height: 240 }}>
                   <ResponsiveContainer>
                     <BarChart data={chartData} margin={{ top: 6, right: 8, left: -20, bottom: 0 }}>
@@ -288,10 +309,29 @@ export default function PhoenixNights() {
                       <XAxis dataKey="year" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} minTickGap={32} />
                       <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} />
                       <Tooltip content={<DarkTooltip unit=" nights" />} cursor={{ fill: "rgba(255,107,61,0.08)" }} />
-                      <Bar isAnimationActive={false} dataKey="hotNights" name="Nights ≥ 80°F" fill={C.ember} radius={[2, 2, 0, 0]} />
+                      <Bar isAnimationActive={false} dataKey="nights90" name="Nights ≥ 90°F" stackId="n" fill={C.gold} />
+                      <Bar isAnimationActive={false} dataKey="nights8089" name="Nights 80–89°F" stackId="n" fill={C.ember} radius={[2, 2, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
+                {days110Ok && (
+                  <>
+                    <div className="text-xs tracking-widest uppercase mt-6 mb-2" style={{ color: C.muted }}>
+                      …and the days at 110°F or hotter
+                    </div>
+                    <div style={{ width: "100%", height: 160 }}>
+                      <ResponsiveContainer>
+                        <BarChart data={chartData} margin={{ top: 6, right: 8, left: -20, bottom: 0 }}>
+                          <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
+                          <XAxis dataKey="year" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} minTickGap={32} />
+                          <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} />
+                          <Tooltip content={<DarkTooltip unit=" days" />} cursor={{ fill: "rgba(255,177,92,0.08)" }} />
+                          <Bar isAnimationActive={false} dataKey="days110" name="Days ≥ 110°F" fill={C.emberSoft} radius={[2, 2, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </>
+                )}
               </Card>
             )}
 
@@ -325,8 +365,9 @@ export default function PhoenixNights() {
               <ul className="text-sm space-y-2 leading-relaxed" style={{ color: C.muted }}>
                 <li>Data: {sourceLabel}, fetched live each time this page loads. Years missing more than 36 days of observations are excluded, as is the still-incomplete current year; {rows[rows.length - 1].year} is the last complete year shown.</li>
                 <li>Trends are ordinary least-squares fits to yearly means over the selected window, expressed per decade. The small ± figures are 95% confidence intervals on those trends.</li>
-                <li>"Departure" compares every year with the same station's 1970–1979 average — a fixed baseline, unlike rolling "normals" that quietly absorb past warming.</li>
-                <li>The Sky Harbor station sits inside the urban heat island it measures — that's the point. The control-experiment card above pairs it with an open-desert station to separate the city's contribution from the global trend.</li>
+                <li>"Departure" compares every year with the same station's {city.baseline.start}–{city.baseline.end} average — a fixed baseline, unlike rolling "normals" that quietly absorb past warming.</li>
+                <li>The {city.urbanShort} station sits inside the urban heat island it measures — that's the point. The control-experiment card pairs it with an open-desert station to separate the city's contribution from the global trend.</li>
+                <li>The hour-by-hour card is precomputed from NOAA's hourly archive (NCEI ISD); everything else is computed in your browser from the raw yearly and monthly station records.</li>
               </ul>
             </Card>
           </div>

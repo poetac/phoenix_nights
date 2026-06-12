@@ -26,9 +26,12 @@ The hypothesis — Phoenix lows deviating from historic norms faster than highs 
 
 | Source | Role | Notes |
 |---|---|---|
-| [ACIS](https://www.rcc-acis.org/docs_webservices.html) (`data.rcc-acis.org`) | Primary, fetched live in-browser | NOAA/NWS Regional Climate Centers API; free, no key, CORS-enabled. Phoenix threaded record (downtown 1896–1933 + Sky Harbor 1933–present) via ThreadEx sid `PHXthr 9`. |
+| [ACIS](https://www.rcc-acis.org/docs_webservices.html) (`data.rcc-acis.org`) | Primary, fetched live in-browser | NOAA/NWS Regional Climate Centers API; free, no key, CORS-enabled. Phoenix threaded record (downtown 1896–1933 + Sky Harbor 1933–present) via ThreadEx sid `PHXthr 9`. Yearly elements with `reduce:{reduce:"mean",add:"mcnt"}` for completeness checks; `cnt_ge_N` reduces for threshold counts; monthly (`mly`) interval for seasonal series. |
 | [NCEI GSOY](https://www.ncei.noaa.gov/access/services/data/v1) | Verification pipeline | Global Summary of the Year for Sky Harbor (`USW00023183`); used by `analysis/verify_v0.py`. |
+| [NCEI global-hourly (ISD)](https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-hourly) | Precomputed diurnal curves | Hourly observations since 1948. **Station-id era split:** `99999923183` covers ~1948–1972, `72278023183` covers 1973–present — query both. `TMP` is scaled tenths-°C with a quality flag (`+0306,1` = 30.6 °C); timestamps are UTC (Phoenix = UTC-7, no DST). Built into `apps/web/public/data/phx-diurnal.json` by `analysis/build_diurnal.py` (raw cache gitignored). |
 | [Open-Meteo archive](https://open-meteo.com/) | Fallback only | ERA5 reanalysis on a ~25 km grid — smooths the urban heat island, so it *understates* the signal. Labeled "modeled" in the UI. |
+
+Promising sources not yet wired in: EIA electricity demand (AC load vs. warm nights; needs free API key), Maricopa County heat-surveillance reports (annual heat deaths, PDFs), Census population series (correlate metro growth with the urban–rural gap), and dew-point trends (already captured in the diurnal JSON build, unused).
 
 ## Methodology
 
@@ -41,11 +44,19 @@ The hypothesis — Phoenix lows deviating from historic norms faster than highs 
 ## Repo layout
 
 ```
-apps/web/          Vite + React + Tailwind front-end (the v0 dashboard)
-packages/data/     (planned) TypeScript ACIS + NCEI clients, shared types, station registry
-analysis/          Python verification: recompute trends from NCEI GSOY, compare to app
-.github/workflows/ CI: build + verify
+apps/web/src/
+  CityDashboard.jsx   the page — takes a city config, renders the cards
+  cards/              one component per card (UHI pair, goalposts, seasons, diurnal)
+  lib/cities.js       city registry: station ids, baselines, rural pair, assets
+  lib/data.js         ACIS/NCEI/Open-Meteo fetchers, parameterized by city config
+  lib/stats.js        OLS with confidence intervals, helpers
+  ui.jsx              shared design tokens + Card/Tooltip primitives
+apps/web/public/data/ precomputed assets (e.g. phx-diurnal.json)
+analysis/             Python verification + precompute pipelines (stdlib only)
+.github/workflows/    CI: build + data verification; Pages deploy
 ```
+
+**Adding a city** (the M3 path): add an entry to `lib/cities.js` (ThreadEx sid via ACIS StnMeta, a rural pair station, baseline decade), optionally run the diurnal builder for its airport station, and render `<CityDashboard city={...} />`. The cards and fetchers don't change.
 
 ## Development
 
