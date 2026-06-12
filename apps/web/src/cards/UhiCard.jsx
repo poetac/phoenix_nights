@@ -90,6 +90,7 @@ export default function UhiCard({ city, cityRows, ruralRows }) {
         <li>{city.rural.elevationNote}</li>
         <li>The gap has narrowed slightly since the {gMax.decade}s (to {gLast.gap.toFixed(1)}°F in the {gLast.decade}s): {city.rural.growthCaveat}</li>
         <li>Years missing more than 36 days of observations are excluded; this station has occasional gaps.</li>
+        {city.rural.robustnessNote && <li>{city.rural.robustnessNote}</li>}
       </ul>
     </Card>
   );

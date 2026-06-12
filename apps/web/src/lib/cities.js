@@ -27,7 +27,42 @@ export const PHOENIX = {
       "The monument station sits ~300 ft higher than Sky Harbor, so part of the absolute gap is elevation — the honest signal is the gap's growth, not its size.",
     growthCaveat:
       "the Casa Grande–Maricopa corridor has been booming, so the \"rural\" reference is slowly growing its own heat island. If anything, that makes the city share above an underestimate.",
+    robustnessNote:
+      "Robustness: swapping the desert reference for Wickenburg (record through 2014) or Sacaton (through 2011) raises the city share to 62–67% — this card shows the most conservative of the three. Reproduce with analysis/uhi_robustness.py.",
   },
+  citations: [
+    {
+      label: "Brazel et al., \"The tale of two climates — Baseline and urban heat island analyses of the Phoenix region\"",
+      url: "https://www.researchgate.net/publication/226592731",
+      note: "Urbanization raised Sky Harbor nighttime minimums ~9°F — far more than daily averages.",
+    },
+    {
+      label: "Climate Central via NPR (2023): Phoenix summer nights warmed ~6°F since 1970",
+      url: "https://www.npr.org/2023/07/14/1187646149/",
+      note: "The seasonal card reproduces this figure from the raw station record.",
+    },
+    {
+      label: "ASU Arizona Climate: the Phoenix urban heat island",
+      url: "https://globalfutures.asu.edu/azclimate/urban-heat-island/",
+      note: "Documents the 10–14°F urban-rural temperature gap this page measures live.",
+    },
+    {
+      label: "Maricopa County heat surveillance reports",
+      url: "https://www.maricopa.gov/1858/Heat-Surveillance",
+      note: "Source of the confirmed heat-death counts in the human-cost card.",
+    },
+    {
+      label: "NOAA/NWS ACIS web services",
+      url: "https://www.rcc-acis.org/docs_webservices.html",
+      note: "The official station record this page queries live in your browser.",
+    },
+    {
+      label: "US EIA Hourly Electric Grid Monitor",
+      url: "https://www.eia.gov/electricity/gridmonitor/",
+      note: "Source of the hourly demand curves in the grid card.",
+    },
+  ],
+  repoUrl: "https://github.com/poetac/phoenix_nights",
   // built by analysis/build_diurnal.py from NCEI hourly observations
   diurnalAsset: "data/phx-diurnal.json",
   // built by analysis/build_heat_season.py from ACIS daily highs

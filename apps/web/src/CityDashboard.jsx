@@ -19,6 +19,7 @@ import GrowthCard from "./cards/GrowthCard.jsx";
 import StreakCard from "./cards/StreakCard.jsx";
 import WinterCard from "./cards/WinterCard.jsx";
 import GridCard from "./cards/GridCard.jsx";
+import SourcesCard from "./cards/SourcesCard.jsx";
 
 export default function CityDashboard({ city }) {
   const [state, setState] = useState({ loading: true, error: null, rows: [], source: null });
@@ -401,6 +402,8 @@ export default function CityDashboard({ city }) {
                 <li>The hour-by-hour card is precomputed from NOAA's hourly archive (NCEI ISD); everything else is computed in your browser from the raw yearly and monthly station records.</li>
               </ul>
             </Card>
+
+            <SourcesCard city={city} />
           </div>
         )}
       </div>
