@@ -7,7 +7,7 @@ import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick } from "./ui.js
 import { linreg, mean } from "./lib/stats.js";
 import {
   fetchCityYearly, fetchRural, fetchSeasonal, fetchDiurnal,
-  fetchHeatSeason, fetchHeatDeaths, fetchOpenMeteo,
+  fetchHeatSeason, fetchHeatDeaths, fetchStreaks, fetchGrid, fetchOpenMeteo,
 } from "./lib/data.js";
 import UhiCard from "./cards/UhiCard.jsx";
 import GoalpostsCard from "./cards/GoalpostsCard.jsx";
@@ -16,6 +16,9 @@ import DiurnalCard from "./cards/DiurnalCard.jsx";
 import SeasonLengthCard from "./cards/SeasonLengthCard.jsx";
 import HumanCostCard from "./cards/HumanCostCard.jsx";
 import GrowthCard from "./cards/GrowthCard.jsx";
+import StreakCard from "./cards/StreakCard.jsx";
+import WinterCard from "./cards/WinterCard.jsx";
+import GridCard from "./cards/GridCard.jsx";
 
 export default function CityDashboard({ city }) {
   const [state, setState] = useState({ loading: true, error: null, rows: [], source: null });
@@ -24,6 +27,8 @@ export default function CityDashboard({ city }) {
   const [diurnal, setDiurnal] = useState(null);
   const [heatSeason, setHeatSeason] = useState(null);
   const [heatDeaths, setHeatDeaths] = useState(null);
+  const [streaks, setStreaks] = useState(null);
+  const [grid, setGrid] = useState(null);
   const [windowStart, setWindowStart] = useState(city.baseline.start);
   const [view, setView] = useState("anom");
   const [reloadKey, setReloadKey] = useState(0);
@@ -36,10 +41,14 @@ export default function CityDashboard({ city }) {
     setDiurnal(null);
     setHeatSeason(null);
     setHeatDeaths(null);
+    setStreaks(null);
+    setGrid(null);
     // these cards read static precomputed assets — independent of ACIS
     fetchDiurnal(city).then((d) => alive && setDiurnal(d)).catch(() => {});
     fetchHeatSeason(city).then((d) => alive && setHeatSeason(d)).catch(() => {});
     fetchHeatDeaths(city).then((d) => alive && setHeatDeaths(d)).catch(() => {});
+    fetchStreaks(city).then((d) => alive && setStreaks(d)).catch(() => {});
+    fetchGrid(city).then((d) => alive && setGrid(d)).catch(() => {});
     (async () => {
       try {
         const res = await fetchCityYearly(city);
@@ -349,7 +358,13 @@ export default function CityDashboard({ city }) {
               </Card>
             )}
 
+            {streaks && <StreakCard city={city} streaks={streaks} />}
+
+            {streaks && <WinterCard city={city} streaks={streaks} />}
+
             {heatDeaths && source === "acis" && <HumanCostCard city={city} heatDeaths={heatDeaths} rows={rows} />}
+
+            {grid && <GridCard city={city} grid={grid} />}
 
             {cddOk && (
               <Card>

@@ -146,6 +146,20 @@ export async function fetchHeatDeaths(city) {
   return j;
 }
 
+export async function fetchStreaks(city) {
+  if (!city.streaksAsset) return null;
+  const j = await fetchAsset(city.streaksAsset);
+  if (!j.years || j.years.length < 30) throw new Error("streaks asset too thin");
+  return j;
+}
+
+export async function fetchGrid(city) {
+  if (!city.gridAsset) return null;
+  const j = await fetchAsset(city.gridAsset);
+  if (!j.years || Object.keys(j.years).length < 4) throw new Error("grid asset too thin");
+  return j;
+}
+
 export async function fetchOpenMeteo(city) {
   const endYear = lastCompleteYear();
   const [lat, lon] = city.latLon;

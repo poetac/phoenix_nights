@@ -34,6 +34,10 @@ export const PHOENIX = {
   heatSeasonAsset: "data/phx-heat-season.json",
   // hand-verified from the county's annual report (see the JSON's source field)
   heatDeathsAsset: "data/phx-heat-deaths.json",
+  // built by analysis/build_streaks.py from ACIS daily lows/highs
+  streaksAsset: "data/phx-streaks.json",
+  // built by analysis/build_grid.py from EIA-930 hourly demand (needs EIA_API_KEY)
+  gridAsset: "data/phx-grid.json",
   // decennial census, Maricopa County (US Census Bureau)
   metroPopulation: {
     1950: 331770, 1960: 663510, 1970: 971228, 1980: 1509175,

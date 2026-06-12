@@ -36,8 +36,10 @@ Also wired in:
 - **Maricopa County heat surveillance** — confirmed heat-related deaths 2015–2025, hand-verified against the county's [2025 annual report](https://www.maricopa.gov/1858/Heat-Surveillance) (April 2026) and stored with citation in `apps/web/public/data/phx-heat-deaths.json`.
 - **US Census decennial counts** — Maricopa County population 1950–2020, used for the population-vs-night-gap card (in `lib/cities.js`).
 - **ACIS daily highs** — every daily max since 1896 (one ~1 MB request) feeds `analysis/build_heat_season.py` → the 100°F-season card.
+- **ACIS daily lows + highs** — `analysis/build_streaks.py` → per-year streak/threshold series (longest run of 80°F+ nights, 110°F+ days, frost nights, cool nights). Validation: 2023's nationally reported 31-day run of 110°F+ days falls out of the pipeline exactly.
+- **EIA-930 hourly grid demand** — `analysis/build_grid.py` fetches July hourly demand for AZPS + SRP (`api.eia.gov` v2; set the `EIA_API_KEY` env var — free key, never committed) and emits July demand-by-local-hour curves per year. The public API serves hourly data from 2019.
 
-Tested and rejected: JJA dew-point trends from the hourly archive show no clean signal at decade resolution (monsoon variability dominates; 1950s mean 54.8°F vs 2020s 50.0°F with non-monotonic decades between) — the "drying city" story is not supportable from this station's record, so there is no card. The dew curves remain in `phx-diurnal.json` for future work. Still unwired: EIA electricity demand (needs free API key).
+Tested and rejected: JJA dew-point trends from the hourly archive show no clean signal at decade resolution (monsoon variability dominates; 1950s mean 54.8°F vs 2020s 50.0°F with non-monotonic decades between) — the "drying city" story is not supportable from this station's record, so there is no card. The dew curves remain in `phx-diurnal.json` for future work.
 
 ## Methodology
 

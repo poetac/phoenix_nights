@@ -1,0 +1,1047 @@
+{
+ "station": "Phoenix (ThreadEx PHXthr 9)",
+ "source": "NOAA/NWS ACIS daily mint/maxt",
+ "note": "streaks within calendar years; years missing >36 days excluded",
+ "years": [
+  {
+   "year": 1896,
+   "streak80": 5,
+   "streak90": 0,
+   "streak110": 8,
+   "frost": 9,
+   "cool60": 224
+  },
+  {
+   "year": 1897,
+   "streak80": 5,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 27,
+   "cool60": 216
+  },
+  {
+   "year": 1898,
+   "streak80": 11,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 26,
+   "cool60": 225
+  },
+  {
+   "year": 1899,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 11,
+   "cool60": 227
+  },
+  {
+   "year": 1900,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 4,
+   "frost": 5,
+   "cool60": 218
+  },
+  {
+   "year": 1901,
+   "streak80": 11,
+   "streak90": 0,
+   "streak110": 8,
+   "frost": 14,
+   "cool60": 228
+  },
+  {
+   "year": 1902,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 5,
+   "frost": 7,
+   "cool60": 229
+  },
+  {
+   "year": 1903,
+   "streak80": 11,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 14,
+   "cool60": 231
+  },
+  {
+   "year": 1904,
+   "streak80": 2,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 22,
+   "cool60": 217
+  },
+  {
+   "year": 1905,
+   "streak80": 1,
+   "streak90": 0,
+   "streak110": 5,
+   "frost": 12,
+   "cool60": 234
+  },
+  {
+   "year": 1906,
+   "streak80": 8,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 10,
+   "cool60": 228
+  },
+  {
+   "year": 1907,
+   "streak80": 4,
+   "streak90": 0,
+   "streak110": 9,
+   "frost": 6,
+   "cool60": 232
+  },
+  {
+   "year": 1908,
+   "streak80": 3,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 8,
+   "cool60": 249
+  },
+  {
+   "year": 1909,
+   "streak80": 3,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 6,
+   "cool60": 233
+  },
+  {
+   "year": 1910,
+   "streak80": 5,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 12,
+   "cool60": 204
+  },
+  {
+   "year": 1911,
+   "streak80": 2,
+   "streak90": 0,
+   "streak110": 0,
+   "frost": 25,
+   "cool60": 230
+  },
+  {
+   "year": 1912,
+   "streak80": 1,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 17,
+   "cool60": 230
+  },
+  {
+   "year": 1913,
+   "streak80": 6,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 14,
+   "cool60": 241
+  },
+  {
+   "year": 1914,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 3,
+   "cool60": 219
+  },
+  {
+   "year": 1915,
+   "streak80": 2,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 8,
+   "cool60": 236
+  },
+  {
+   "year": 1916,
+   "streak80": 4,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 28,
+   "cool60": 233
+  },
+  {
+   "year": 1917,
+   "streak80": 3,
+   "streak90": 0,
+   "streak110": 4,
+   "frost": 15,
+   "cool60": 244
+  },
+  {
+   "year": 1918,
+   "streak80": 2,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 23,
+   "cool60": 233
+  },
+  {
+   "year": 1919,
+   "streak80": 3,
+   "streak90": 0,
+   "streak110": 4,
+   "frost": 14,
+   "cool60": 228
+  },
+  {
+   "year": 1920,
+   "streak80": 5,
+   "streak90": 0,
+   "streak110": 5,
+   "frost": 14,
+   "cool60": 230
+  },
+  {
+   "year": 1921,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 11,
+   "cool60": 224
+  },
+  {
+   "year": 1922,
+   "streak80": 4,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 19,
+   "cool60": 223
+  },
+  {
+   "year": 1923,
+   "streak80": 2,
+   "streak90": 0,
+   "streak110": 5,
+   "frost": 10,
+   "cool60": 237
+  },
+  {
+   "year": 1924,
+   "streak80": 5,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 16,
+   "cool60": 223
+  },
+  {
+   "year": 1925,
+   "streak80": 10,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 15,
+   "cool60": 212
+  },
+  {
+   "year": 1926,
+   "streak80": 2,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 22,
+   "cool60": 210
+  },
+  {
+   "year": 1927,
+   "streak80": 6,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 6,
+   "cool60": 228
+  },
+  {
+   "year": 1928,
+   "streak80": 9,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 16,
+   "cool60": 204
+  },
+  {
+   "year": 1929,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 6,
+   "frost": 13,
+   "cool60": 208
+  },
+  {
+   "year": 1930,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 13,
+   "cool60": 227
+  },
+  {
+   "year": 1931,
+   "streak80": 10,
+   "streak90": 0,
+   "streak110": 4,
+   "frost": 18,
+   "cool60": 198
+  },
+  {
+   "year": 1932,
+   "streak80": 10,
+   "streak90": 0,
+   "streak110": 7,
+   "frost": 21,
+   "cool60": 215
+  },
+  {
+   "year": 1933,
+   "streak80": 16,
+   "streak90": 0,
+   "streak110": 5,
+   "frost": 14,
+   "cool60": 216
+  },
+  {
+   "year": 1934,
+   "streak80": 8,
+   "streak90": 1,
+   "streak110": 4,
+   "frost": 3,
+   "cool60": 190
+  },
+  {
+   "year": 1935,
+   "streak80": 8,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 3,
+   "cool60": 207
+  },
+  {
+   "year": 1936,
+   "streak80": 10,
+   "streak90": 1,
+   "streak110": 6,
+   "frost": 6,
+   "cool60": 194
+  },
+  {
+   "year": 1937,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 18,
+   "cool60": 213
+  },
+  {
+   "year": 1938,
+   "streak80": 9,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 3,
+   "cool60": 214
+  },
+  {
+   "year": 1939,
+   "streak80": 10,
+   "streak90": 0,
+   "streak110": 6,
+   "frost": 6,
+   "cool60": 213
+  },
+  {
+   "year": 1940,
+   "streak80": 8,
+   "streak90": 0,
+   "streak110": 9,
+   "frost": 2,
+   "cool60": 190
+  },
+  {
+   "year": 1941,
+   "streak80": 4,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 2,
+   "cool60": 225
+  },
+  {
+   "year": 1942,
+   "streak80": 8,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 4,
+   "cool60": 220
+  },
+  {
+   "year": 1943,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 1,
+   "cool60": 197
+  },
+  {
+   "year": 1944,
+   "streak80": 4,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 5,
+   "cool60": 220
+  },
+  {
+   "year": 1945,
+   "streak80": 4,
+   "streak90": 0,
+   "streak110": 4,
+   "frost": 7,
+   "cool60": 211
+  },
+  {
+   "year": 1946,
+   "streak80": 3,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 9,
+   "cool60": 206
+  },
+  {
+   "year": 1947,
+   "streak80": 6,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 9,
+   "cool60": 203
+  },
+  {
+   "year": 1948,
+   "streak80": 5,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 11,
+   "cool60": 205
+  },
+  {
+   "year": 1949,
+   "streak80": 8,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 24,
+   "cool60": 205
+  },
+  {
+   "year": 1950,
+   "streak80": 5,
+   "streak90": 0,
+   "streak110": 4,
+   "frost": 6,
+   "cool60": 202
+  },
+  {
+   "year": 1951,
+   "streak80": 8,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 7,
+   "cool60": 214
+  },
+  {
+   "year": 1952,
+   "streak80": 11,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 5,
+   "cool60": 203
+  },
+  {
+   "year": 1953,
+   "streak80": 8,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 16,
+   "cool60": 221
+  },
+  {
+   "year": 1954,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 10,
+   "cool60": 204
+  },
+  {
+   "year": 1955,
+   "streak80": 2,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 14,
+   "cool60": 204
+  },
+  {
+   "year": 1956,
+   "streak80": 2,
+   "streak90": 0,
+   "streak110": 1,
+   "frost": 11,
+   "cool60": 217
+  },
+  {
+   "year": 1957,
+   "streak80": 8,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 1,
+   "cool60": 219
+  },
+  {
+   "year": 1958,
+   "streak80": 12,
+   "streak90": 0,
+   "streak110": 8,
+   "frost": 2,
+   "cool60": 189
+  },
+  {
+   "year": 1959,
+   "streak80": 12,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 2,
+   "cool60": 194
+  },
+  {
+   "year": 1960,
+   "streak80": 9,
+   "streak90": 0,
+   "streak110": 5,
+   "frost": 17,
+   "cool60": 205
+  },
+  {
+   "year": 1961,
+   "streak80": 10,
+   "streak90": 0,
+   "streak110": 5,
+   "frost": 5,
+   "cool60": 239
+  },
+  {
+   "year": 1962,
+   "streak80": 6,
+   "streak90": 0,
+   "streak110": 7,
+   "frost": 7,
+   "cool60": 238
+  },
+  {
+   "year": 1963,
+   "streak80": 3,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 18,
+   "cool60": 208
+  },
+  {
+   "year": 1964,
+   "streak80": 4,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 35,
+   "cool60": 228
+  },
+  {
+   "year": 1965,
+   "streak80": 3,
+   "streak90": 0,
+   "streak110": 6,
+   "frost": 8,
+   "cool60": 258
+  },
+  {
+   "year": 1966,
+   "streak80": 9,
+   "streak90": 0,
+   "streak110": 4,
+   "frost": 31,
+   "cool60": 219
+  },
+  {
+   "year": 1967,
+   "streak80": 6,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 18,
+   "cool60": 230
+  },
+  {
+   "year": 1968,
+   "streak80": 6,
+   "streak90": 0,
+   "streak110": 7,
+   "frost": 13,
+   "cool60": 230
+  },
+  {
+   "year": 1969,
+   "streak80": 14,
+   "streak90": 0,
+   "streak110": 5,
+   "frost": 7,
+   "cool60": 211
+  },
+  {
+   "year": 1970,
+   "streak80": 13,
+   "streak90": 1,
+   "streak110": 6,
+   "frost": 11,
+   "cool60": 219
+  },
+  {
+   "year": 1971,
+   "streak80": 10,
+   "streak90": 0,
+   "streak110": 5,
+   "frost": 17,
+   "cool60": 225
+  },
+  {
+   "year": 1972,
+   "streak80": 13,
+   "streak90": 1,
+   "streak110": 6,
+   "frost": 13,
+   "cool60": 200
+  },
+  {
+   "year": 1973,
+   "streak80": 15,
+   "streak90": 1,
+   "streak110": 5,
+   "frost": 3,
+   "cool60": 208
+  },
+  {
+   "year": 1974,
+   "streak80": 9,
+   "streak90": 0,
+   "streak110": 18,
+   "frost": 5,
+   "cool60": 186
+  },
+  {
+   "year": 1975,
+   "streak80": 13,
+   "streak90": 0,
+   "streak110": 7,
+   "frost": 7,
+   "cool60": 209
+  },
+  {
+   "year": 1976,
+   "streak80": 9,
+   "streak90": 1,
+   "streak110": 3,
+   "frost": 4,
+   "cool60": 187
+  },
+  {
+   "year": 1977,
+   "streak80": 40,
+   "streak90": 0,
+   "streak110": 4,
+   "frost": 4,
+   "cool60": 186
+  },
+  {
+   "year": 1978,
+   "streak80": 14,
+   "streak90": 0,
+   "streak110": 9,
+   "frost": 4,
+   "cool60": 192
+  },
+  {
+   "year": 1979,
+   "streak80": 7,
+   "streak90": 0,
+   "streak110": 6,
+   "frost": 5,
+   "cool60": 194
+  },
+  {
+   "year": 1980,
+   "streak80": 28,
+   "streak90": 1,
+   "streak110": 4,
+   "frost": 0,
+   "cool60": 198
+  },
+  {
+   "year": 1981,
+   "streak80": 20,
+   "streak90": 1,
+   "streak110": 9,
+   "frost": 0,
+   "cool60": 179
+  },
+  {
+   "year": 1982,
+   "streak80": 19,
+   "streak90": 1,
+   "streak110": 5,
+   "frost": 0,
+   "cool60": 185
+  },
+  {
+   "year": 1983,
+   "streak80": 26,
+   "streak90": 1,
+   "streak110": 4,
+   "frost": 0,
+   "cool60": 179
+  },
+  {
+   "year": 1984,
+   "streak80": 17,
+   "streak90": 0,
+   "streak110": 3,
+   "frost": 0,
+   "cool60": 188
+  },
+  {
+   "year": 1985,
+   "streak80": 25,
+   "streak90": 1,
+   "streak110": 5,
+   "frost": 3,
+   "cool60": 169
+  },
+  {
+   "year": 1986,
+   "streak80": 27,
+   "streak90": 0,
+   "streak110": 4,
+   "frost": 0,
+   "cool60": 167
+  },
+  {
+   "year": 1987,
+   "streak80": 6,
+   "streak90": 1,
+   "streak110": 3,
+   "frost": 5,
+   "cool60": 155
+  },
+  {
+   "year": 1988,
+   "streak80": 35,
+   "streak90": 1,
+   "streak110": 4,
+   "frost": 4,
+   "cool60": 160
+  },
+  {
+   "year": 1989,
+   "streak80": 17,
+   "streak90": 2,
+   "streak110": 10,
+   "frost": 0,
+   "cool60": 155
+  },
+  {
+   "year": 1990,
+   "streak80": 16,
+   "streak90": 2,
+   "streak110": 9,
+   "frost": 4,
+   "cool60": 146
+  },
+  {
+   "year": 1991,
+   "streak80": 18,
+   "streak90": 0,
+   "streak110": 2,
+   "frost": 0,
+   "cool60": 174
+  },
+  {
+   "year": 1992,
+   "streak80": 11,
+   "streak90": 1,
+   "streak110": 4,
+   "frost": 0,
+   "cool60": 163
+  },
+  {
+   "year": 1993,
+   "streak80": 10,
+   "streak90": 1,
+   "streak110": 4,
+   "frost": 0,
+   "cool60": 173
+  },
+  {
+   "year": 1994,
+   "streak80": 34,
+   "streak90": 1,
+   "streak110": 4,
+   "frost": 0,
+   "cool60": 192
+  },
+  {
+   "year": 1995,
+   "streak80": 16,
+   "streak90": 2,
+   "streak110": 17,
+   "frost": 0,
+   "cool60": 185
+  },
+  {
+   "year": 1996,
+   "streak80": 12,
+   "streak90": 2,
+   "streak110": 3,
+   "frost": 0,
+   "cool60": 179
+  },
+  {
+   "year": 1997,
+   "streak80": 11,
+   "streak90": 1,
+   "streak110": 4,
+   "frost": 0,
+   "cool60": 171
+  },
+  {
+   "year": 1998,
+   "streak80": 21,
+   "streak90": 1,
+   "streak110": 5,
+   "frost": 1,
+   "cool60": 190
+  },
+  {
+   "year": 1999,
+   "streak80": 14,
+   "streak90": 1,
+   "streak110": 2,
+   "frost": 0,
+   "cool60": 176
+  },
+  {
+   "year": 2000,
+   "streak80": 21,
+   "streak90": 1,
+   "streak110": 5,
+   "frost": 1,
+   "cool60": 177
+  },
+  {
+   "year": 2001,
+   "streak80": 20,
+   "streak90": 1,
+   "streak110": 5,
+   "frost": 0,
+   "cool60": 152
+  },
+  {
+   "year": 2002,
+   "streak80": 16,
+   "streak90": 1,
+   "streak110": 5,
+   "frost": 0,
+   "cool60": 160
+  },
+  {
+   "year": 2003,
+   "streak80": 32,
+   "streak90": 6,
+   "streak110": 5,
+   "frost": 2,
+   "cool60": 169
+  },
+  {
+   "year": 2004,
+   "streak80": 17,
+   "streak90": 1,
+   "streak110": 4,
+   "frost": 0,
+   "cool60": 158
+  },
+  {
+   "year": 2005,
+   "streak80": 28,
+   "streak90": 2,
+   "streak110": 9,
+   "frost": 0,
+   "cool60": 168
+  },
+  {
+   "year": 2006,
+   "streak80": 19,
+   "streak90": 4,
+   "streak110": 5,
+   "frost": 0,
+   "cool60": 170
+  },
+  {
+   "year": 2007,
+   "streak80": 31,
+   "streak90": 3,
+   "streak110": 12,
+   "frost": 2,
+   "cool60": 153
+  },
+  {
+   "year": 2008,
+   "streak80": 20,
+   "streak90": 2,
+   "streak110": 11,
+   "frost": 0,
+   "cool60": 175
+  },
+  {
+   "year": 2009,
+   "streak80": 17,
+   "streak90": 5,
+   "streak110": 6,
+   "frost": 0,
+   "cool60": 167
+  },
+  {
+   "year": 2010,
+   "streak80": 31,
+   "streak90": 5,
+   "streak110": 5,
+   "frost": 1,
+   "cool60": 182
+  },
+  {
+   "year": 2011,
+   "streak80": 45,
+   "streak90": 4,
+   "streak110": 8,
+   "frost": 4,
+   "cool60": 164
+  },
+  {
+   "year": 2012,
+   "streak80": 18,
+   "streak90": 7,
+   "streak110": 9,
+   "frost": 0,
+   "cool60": 160
+  },
+  {
+   "year": 2013,
+   "streak80": 23,
+   "streak90": 3,
+   "streak110": 6,
+   "frost": 4,
+   "cool60": 160
+  },
+  {
+   "year": 2014,
+   "streak80": 29,
+   "streak90": 2,
+   "streak110": 3,
+   "frost": 0,
+   "cool60": 154
+  },
+  {
+   "year": 2015,
+   "streak80": 23,
+   "streak90": 4,
+   "streak110": 6,
+   "frost": 1,
+   "cool60": 148
+  },
+  {
+   "year": 2016,
+   "streak80": 27,
+   "streak90": 3,
+   "streak110": 6,
+   "frost": 0,
+   "cool60": 152
+  },
+  {
+   "year": 2017,
+   "streak80": 28,
+   "streak90": 2,
+   "streak110": 11,
+   "frost": 0,
+   "cool60": 142
+  },
+  {
+   "year": 2018,
+   "streak80": 17,
+   "streak90": 4,
+   "streak110": 7,
+   "frost": 0,
+   "cool60": 164
+  },
+  {
+   "year": 2019,
+   "streak80": 27,
+   "streak90": 4,
+   "streak110": 4,
+   "frost": 1,
+   "cool60": 170
+  },
+  {
+   "year": 2020,
+   "streak80": 26,
+   "streak90": 7,
+   "streak110": 11,
+   "frost": 0,
+   "cool60": 164
+  },
+  {
+   "year": 2021,
+   "streak80": 13,
+   "streak90": 4,
+   "streak110": 9,
+   "frost": 0,
+   "cool60": 161
+  },
+  {
+   "year": 2022,
+   "streak80": 28,
+   "streak90": 4,
+   "streak110": 10,
+   "frost": 0,
+   "cool60": 164
+  },
+  {
+   "year": 2023,
+   "streak80": 51,
+   "streak90": 16,
+   "streak110": 31,
+   "frost": 0,
+   "cool60": 151
+  },
+  {
+   "year": 2024,
+   "streak80": 74,
+   "streak90": 12,
+   "streak110": 12,
+   "frost": 0,
+   "cool60": 167
+  },
+  {
+   "year": 2025,
+   "streak80": 42,
+   "streak90": 9,
+   "streak110": 14,
+   "frost": 0,
+   "cool60": 136
+  }
+ ]
+}
