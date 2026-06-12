@@ -3,118 +3,14 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, BarChart, Bar, ReferenceLine, AreaChart, Area,
 } from "recharts";
-
-const C = {
-  bg: "#141021", panel: "#1d1832", panel2: "#251e3e", line: "#2f2750",
-  grid: "#2a2347", text: "#f2ecdf", muted: "#9b93ae",
-  ember: "#ff6b3d", emberSoft: "#ffb15c", day: "#8fb8d8", gold: "#ffd9a0",
-};
-const DISPLAY = "'Fraunces', Georgia, 'Times New Roman', serif";
-const BODY = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif";
-
-function linreg(pts) {
-  const n = pts.length;
-  if (n < 3) return null;
-  let sx = 0, sy = 0, sxy = 0, sxx = 0;
-  for (const p of pts) { sx += p.x; sy += p.y; sxy += p.x * p.y; sxx += p.x * p.x; }
-  const slope = (n * sxy - sx * sy) / (n * sxx - sx * sx);
-  return { slope, intercept: (sy - slope * sx) / n };
-}
-const num = (v) => { const f = parseFloat(v); return Number.isFinite(f) ? f : null; };
-const mean = (a) => (a.length ? a.reduce((s, v) => s + v, 0) / a.length : null);
-
-async function fetchACIS() {
-  const body = {
-    sid: "PHXthr 9", sdate: "1896-01-01", edate: "2025-12-31",
-    elems: [
-      { name: "maxt", interval: "yly", duration: "yly", reduce: "mean" },
-      { name: "mint", interval: "yly", duration: "yly", reduce: "mean" },
-      { name: "mint", interval: "yly", duration: "yly", reduce: "cnt_ge_80" },
-      { name: "cdd", interval: "yly", duration: "yly", reduce: "sum" },
-    ],
-    meta: ["name"],
-  };
-  const r = await fetch("https://data.rcc-acis.org/StnData", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!r.ok) throw new Error("ACIS " + r.status);
-  const j = await r.json();
-  if (!j.data || !j.data.length) throw new Error("ACIS returned no data");
-  const rows = j.data.map((d) => ({
-    year: parseInt(d[0], 10), high: num(d[1]), low: num(d[2]),
-    hotNights: num(d[3]), cdd: num(d[4]),
-  })).filter((r2) => r2.high != null && r2.low != null && r2.year <= 2025);
-  if (rows.length < 30) throw new Error("ACIS record too short");
-  return { rows, source: "acis" };
-}
-
-async function fetchOpenMeteo() {
-  const u =
-    "https://archive-api.open-meteo.com/v1/archive?latitude=33.4278&longitude=-112.0037" +
-    "&start_date=1948-01-01&end_date=2025-12-31" +
-    "&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=America%2FPhoenix";
-  const r = await fetch(u);
-  if (!r.ok) throw new Error("Open-Meteo " + r.status);
-  const j = await r.json();
-  const t = j.daily.time, mx = j.daily.temperature_2m_max, mn = j.daily.temperature_2m_min;
-  const by = {};
-  for (let i = 0; i < t.length; i++) {
-    if (mx[i] == null || mn[i] == null) continue;
-    const y = +t[i].slice(0, 4);
-    if (!by[y]) by[y] = { hs: 0, ls: 0, n: 0, hot: 0, cdd: 0 };
-    const b = by[y];
-    b.hs += mx[i]; b.ls += mn[i]; b.n++;
-    if (mn[i] >= 80) b.hot++;
-    const m = (mx[i] + mn[i]) / 2;
-    if (m > 65) b.cdd += m - 65;
-  }
-  const rows = Object.keys(by).map((y) => {
-    const b = by[y];
-    return { year: +y, high: b.hs / b.n, low: b.ls / b.n, hotNights: b.hot, cdd: Math.round(b.cdd) };
-  }).filter((r2) => r2.year <= 2025).sort((a, b) => a.year - b.year);
-  return { rows, source: "openmeteo" };
-}
-
-function Card({ children, style }) {
-  return (
-    <div className="rounded-2xl p-4 sm:p-6"
-      style={{ background: C.panel, border: `1px solid ${C.line}`, ...style }}>
-      {children}
-    </div>
-  );
-}
-
-function CardHead({ kicker, title, sub }) {
-  return (
-    <div className="mb-4">
-      {kicker && <div className="text-xs tracking-widest uppercase mb-1" style={{ color: C.muted }}>{kicker}</div>}
-      <h2 className="text-xl sm:text-2xl" style={{ fontFamily: DISPLAY, color: C.text, fontWeight: 600 }}>{title}</h2>
-      {sub && <p className="text-sm mt-1 leading-relaxed" style={{ color: C.muted }}>{sub}</p>}
-    </div>
-  );
-}
-
-function DarkTooltip({ active, payload, label, unit }) {
-  if (!active || !payload || !payload.length) return null;
-  return (
-    <div className="rounded-lg px-3 py-2 text-sm"
-      style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
-      <div style={{ color: C.muted }} className="text-xs mb-1">{label}</div>
-      {payload.map((p) => (
-        <div key={p.dataKey} className="flex items-center gap-2">
-          <span className="inline-block w-2 h-2 rounded-full" style={{ background: p.color }} />
-          <span>{p.name}: {typeof p.value === "number" ? p.value.toFixed(1) : p.value}{unit}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-const axisTick = { fill: C.muted, fontSize: 11, fontFamily: BODY };
+import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick } from "./ui.jsx";
+import { linreg, mean } from "./lib/stats.js";
+import { fetchPhoenix, fetchRural, fetchOpenMeteo } from "./lib/data.js";
+import UhiCard from "./UhiCard.jsx";
 
 export default function PhoenixNights() {
   const [state, setState] = useState({ loading: true, error: null, rows: [], source: null });
+  const [rural, setRural] = useState(null);
   const [windowStart, setWindowStart] = useState(1970);
   const [view, setView] = useState("anom");
   const [reloadKey, setReloadKey] = useState(0);
@@ -122,10 +18,14 @@ export default function PhoenixNights() {
   useEffect(() => {
     let alive = true;
     setState((s) => ({ ...s, loading: true, error: null }));
+    setRural(null);
     (async () => {
       try {
-        const res = await fetchACIS();
-        if (alive) setState({ loading: false, error: null, ...res });
+        const res = await fetchPhoenix();
+        if (!alive) return;
+        setState({ loading: false, error: null, ...res });
+        // the urban-vs-desert card is a bonus — never block or fail the page on it
+        fetchRural().then((rr) => alive && setRural(rr)).catch(() => {});
       } catch (e1) {
         try {
           const res = await fetchOpenMeteo();
@@ -259,12 +159,22 @@ export default function PhoenixNights() {
                 <div>
                   <div className="text-4xl sm:text-5xl" style={{ fontFamily: DISPLAY, color: C.ember, fontVariantNumeric: "tabular-nums" }}>
                     {lowPerDecade != null ? `+${lowPerDecade.toFixed(1)}°` : "—"}
+                    {fitLow?.ci95 != null && (
+                      <span className="text-base sm:text-lg ml-1" style={{ color: C.muted, fontFamily: BODY }}>
+                        ±{(fitLow.ci95 * 10).toFixed(1)}
+                      </span>
+                    )}
                   </div>
                   <div className="text-sm mt-1" style={{ color: C.emberSoft }}>overnight lows, per decade</div>
                 </div>
                 <div>
                   <div className="text-4xl sm:text-5xl" style={{ fontFamily: DISPLAY, color: C.day, fontVariantNumeric: "tabular-nums" }}>
                     {highPerDecade != null ? `${highPerDecade >= 0 ? "+" : ""}${highPerDecade.toFixed(1)}°` : "—"}
+                    {fitHigh?.ci95 != null && (
+                      <span className="text-base sm:text-lg ml-1" style={{ color: C.muted, fontFamily: BODY }}>
+                        ±{(fitHigh.ci95 * 10).toFixed(1)}
+                      </span>
+                    )}
                   </div>
                   <div className="text-sm mt-1" style={{ color: C.day }}>daytime highs, per decade</div>
                 </div>
@@ -319,9 +229,9 @@ export default function PhoenixNights() {
                       <ReferenceLine y={0} stroke={C.muted} strokeDasharray="4 4"
                         label={{ value: "1970s avg", fill: C.muted, fontSize: 11, position: "insideBottomLeft" }} />
                     )}
-                    <Line type="monotone" dataKey={view === "anom" ? "highAnom" : "high"} name="Avg high"
+                    <Line isAnimationActive={false} type="monotone" dataKey={view === "anom" ? "highAnom" : "high"} name="Avg high"
                       stroke={C.day} strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey={view === "anom" ? "lowAnom" : "low"} name="Avg low"
+                    <Line isAnimationActive={false} type="monotone" dataKey={view === "anom" ? "lowAnom" : "low"} name="Avg low"
                       stroke={C.ember} strokeWidth={3} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -365,6 +275,8 @@ export default function PhoenixNights() {
               </Card>
             )}
 
+            {source === "acis" && rural && <UhiCard phxRows={rows} ruralRows={rural} />}
+
             {hotOk && (
               <Card>
                 <CardHead kicker="What it feels like" title="Nights that never dropped below 80°F"
@@ -376,7 +288,7 @@ export default function PhoenixNights() {
                       <XAxis dataKey="year" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} minTickGap={32} />
                       <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} />
                       <Tooltip content={<DarkTooltip unit=" nights" />} cursor={{ fill: "rgba(255,107,61,0.08)" }} />
-                      <Bar dataKey="hotNights" name="Nights ≥ 80°F" fill={C.ember} radius={[2, 2, 0, 0]} />
+                      <Bar isAnimationActive={false} dataKey="hotNights" name="Nights ≥ 80°F" fill={C.ember} radius={[2, 2, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -400,7 +312,7 @@ export default function PhoenixNights() {
                       <XAxis dataKey="year" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} minTickGap={32} />
                       <YAxis tick={axisTick} tickLine={false} axisLine={false} width={52} />
                       <Tooltip content={<DarkTooltip unit=" CDD" />} />
-                      <Area type="monotone" dataKey="cdd" name="Cooling degree days"
+                      <Area isAnimationActive={false} type="monotone" dataKey="cdd" name="Cooling degree days"
                         stroke={C.emberSoft} strokeWidth={2} fill="url(#cddFill)" />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -411,10 +323,10 @@ export default function PhoenixNights() {
             <Card style={{ background: "transparent", border: `1px dashed ${C.line}` }}>
               <h3 className="text-sm uppercase tracking-widest mb-2" style={{ color: C.muted }}>How this works</h3>
               <ul className="text-sm space-y-2 leading-relaxed" style={{ color: C.muted }}>
-                <li>Data: {sourceLabel}, fetched live each time this page loads. Years with incomplete records are excluded; {rows[rows.length - 1].year} is the last complete year shown.</li>
-                <li>Trends are ordinary least-squares fits to yearly means over the selected window, expressed per decade.</li>
+                <li>Data: {sourceLabel}, fetched live each time this page loads. Years missing more than 36 days of observations are excluded, as is the still-incomplete current year; {rows[rows.length - 1].year} is the last complete year shown.</li>
+                <li>Trends are ordinary least-squares fits to yearly means over the selected window, expressed per decade. The small ± figures are 95% confidence intervals on those trends.</li>
                 <li>"Departure" compares every year with the same station's 1970–1979 average — a fixed baseline, unlike rolling "normals" that quietly absorb past warming.</li>
-                <li>One honest caveat: this station sits inside the urban heat island it measures. Pairing it with a rural station (Casa Grande, Wickenburg) is the next step, and isolates how much of the trend is the city itself.</li>
+                <li>The Sky Harbor station sits inside the urban heat island it measures — that's the point. The control-experiment card above pairs it with an open-desert station to separate the city's contribution from the global trend.</li>
               </ul>
             </Card>
           </div>

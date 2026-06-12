@@ -32,11 +32,11 @@ The hypothesis — Phoenix lows deviating from historic norms faster than highs 
 
 ## Methodology
 
-- **Trends:** ordinary least-squares on yearly means, reported as °F/decade, computed separately for lows and highs over a selectable window (default since 1970). Headline = the ratio (lows warming N× faster than highs).
+- **Trends:** ordinary least-squares on yearly means, reported as °F/decade with 95% confidence intervals, computed separately for lows and highs over a selectable window (default since 1970). Headline = the ratio (lows warming N× faster than highs).
 - **Baseline:** fixed 1970–1979 station average for anomaly views, explicitly contrasted with rolling 30-year "normals."
 - **Felt metrics:** nights/year with min ≥ 80°F; annual cooling degree days.
-- **Hygiene:** incomplete years and missing (`"M"`) values are excluded.
-- **Next:** urban–rural pair differencing (Sky Harbor minus Casa Grande TMIN) to isolate the UHI component from background climate change.
+- **Hygiene:** years missing more than 36 days of observations (ACIS `mcnt`) are excluded, as is the still-incomplete current year (computed dynamically).
+- **Urban–rural pair:** Sky Harbor vs. Casa Grande National Monument (`USC00021314`, the same rural control the City of Phoenix analysis used). Over common complete years since 1948, city lows warm ~+1.4°F/decade vs. ~+0.8 in the open desert — i.e. roughly half the city's night-warming is the city itself. The decade-average gap grew from ~6.6°F (1950s) to ~10.5°F (1990s), then narrowed slightly as the Casa Grande–Maricopa corridor urbanized. Since 1970 alone the city excess is small (~+0.2°F/decade) — the card states this nuance rather than hiding it. Reproduce with `python3 analysis/uhi_pair.py`.
 
 ## Repo layout
 

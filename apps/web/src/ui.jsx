@@ -1,0 +1,46 @@
+export const C = {
+  bg: "#141021", panel: "#1d1832", panel2: "#251e3e", line: "#2f2750",
+  grid: "#2a2347", text: "#f2ecdf", muted: "#9b93ae",
+  ember: "#ff6b3d", emberSoft: "#ffb15c", day: "#8fb8d8", gold: "#ffd9a0",
+  sage: "#9fd8b4",
+};
+
+export const DISPLAY = "'Fraunces', Georgia, 'Times New Roman', serif";
+export const BODY = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif";
+
+export const axisTick = { fill: C.muted, fontSize: 11, fontFamily: BODY };
+
+export function Card({ children, style }) {
+  return (
+    <div className="rounded-2xl p-4 sm:p-6"
+      style={{ background: C.panel, border: `1px solid ${C.line}`, ...style }}>
+      {children}
+    </div>
+  );
+}
+
+export function CardHead({ kicker, title, sub }) {
+  return (
+    <div className="mb-4">
+      {kicker && <div className="text-xs tracking-widest uppercase mb-1" style={{ color: C.muted }}>{kicker}</div>}
+      <h2 className="text-xl sm:text-2xl" style={{ fontFamily: DISPLAY, color: C.text, fontWeight: 600 }}>{title}</h2>
+      {sub && <p className="text-sm mt-1 leading-relaxed" style={{ color: C.muted }}>{sub}</p>}
+    </div>
+  );
+}
+
+export function DarkTooltip({ active, payload, label, unit }) {
+  if (!active || !payload || !payload.length) return null;
+  return (
+    <div className="rounded-lg px-3 py-2 text-sm"
+      style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
+      <div style={{ color: C.muted }} className="text-xs mb-1">{label}</div>
+      {payload.map((p) => (
+        <div key={p.dataKey} className="flex items-center gap-2">
+          <span className="inline-block w-2 h-2 rounded-full" style={{ background: p.color }} />
+          <span>{p.name}: {typeof p.value === "number" ? p.value.toFixed(1) : p.value}{unit}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
