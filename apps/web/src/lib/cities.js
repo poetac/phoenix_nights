@@ -30,4 +30,13 @@ export const PHOENIX = {
   },
   // built by analysis/build_diurnal.py from NCEI hourly observations
   diurnalAsset: "data/phx-diurnal.json",
+  // built by analysis/build_heat_season.py from ACIS daily highs
+  heatSeasonAsset: "data/phx-heat-season.json",
+  // hand-verified from the county's annual report (see the JSON's source field)
+  heatDeathsAsset: "data/phx-heat-deaths.json",
+  // decennial census, Maricopa County (US Census Bureau)
+  metroPopulation: {
+    1950: 331770, 1960: 663510, 1970: 971228, 1980: 1509175,
+    1990: 2122101, 2000: 3072149, 2010: 3817117, 2020: 4420568,
+  },
 };

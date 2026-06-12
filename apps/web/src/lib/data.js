@@ -119,12 +119,30 @@ export async function fetchSeasonal(city) {
   return out;
 }
 
+async function fetchAsset(path) {
+  const r = await fetch(import.meta.env.BASE_URL + path);
+  if (!r.ok) throw new Error("asset " + path + " " + r.status);
+  return r.json();
+}
+
 export async function fetchDiurnal(city) {
   if (!city.diurnalAsset) return null;
-  const r = await fetch(import.meta.env.BASE_URL + city.diurnalAsset);
-  if (!r.ok) throw new Error("diurnal asset " + r.status);
-  const j = await r.json();
+  const j = await fetchAsset(city.diurnalAsset);
   if (!j.decades || Object.keys(j.decades).length < 2) throw new Error("diurnal asset too thin");
+  return j;
+}
+
+export async function fetchHeatSeason(city) {
+  if (!city.heatSeasonAsset) return null;
+  const j = await fetchAsset(city.heatSeasonAsset);
+  if (!j.years || j.years.length < 30) throw new Error("heat-season asset too thin");
+  return j;
+}
+
+export async function fetchHeatDeaths(city) {
+  if (!city.heatDeathsAsset) return null;
+  const j = await fetchAsset(city.heatDeathsAsset);
+  if (!j.series || j.series.length < 5) throw new Error("heat-deaths asset too thin");
   return j;
 }
 

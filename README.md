@@ -31,7 +31,13 @@ The hypothesis — Phoenix lows deviating from historic norms faster than highs 
 | [NCEI global-hourly (ISD)](https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-hourly) | Precomputed diurnal curves | Hourly observations since 1948. **Station-id era split:** `99999923183` covers ~1948–1972, `72278023183` covers 1973–present — query both. `TMP` is scaled tenths-°C with a quality flag (`+0306,1` = 30.6 °C); timestamps are UTC (Phoenix = UTC-7, no DST). Built into `apps/web/public/data/phx-diurnal.json` by `analysis/build_diurnal.py` (raw cache gitignored). |
 | [Open-Meteo archive](https://open-meteo.com/) | Fallback only | ERA5 reanalysis on a ~25 km grid — smooths the urban heat island, so it *understates* the signal. Labeled "modeled" in the UI. |
 
-Promising sources not yet wired in: EIA electricity demand (AC load vs. warm nights; needs free API key), Maricopa County heat-surveillance reports (annual heat deaths, PDFs), Census population series (correlate metro growth with the urban–rural gap), and dew-point trends (already captured in the diurnal JSON build, unused).
+Also wired in:
+
+- **Maricopa County heat surveillance** — confirmed heat-related deaths 2015–2025, hand-verified against the county's [2025 annual report](https://www.maricopa.gov/1858/Heat-Surveillance) (April 2026) and stored with citation in `apps/web/public/data/phx-heat-deaths.json`.
+- **US Census decennial counts** — Maricopa County population 1950–2020, used for the population-vs-night-gap card (in `lib/cities.js`).
+- **ACIS daily highs** — every daily max since 1896 (one ~1 MB request) feeds `analysis/build_heat_season.py` → the 100°F-season card.
+
+Tested and rejected: JJA dew-point trends from the hourly archive show no clean signal at decade resolution (monsoon variability dominates; 1950s mean 54.8°F vs 2020s 50.0°F with non-monotonic decades between) — the "drying city" story is not supportable from this station's record, so there is no card. The dew curves remain in `phx-diurnal.json` for future work. Still unwired: EIA electricity demand (needs free API key).
 
 ## Methodology
 

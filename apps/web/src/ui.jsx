@@ -2,7 +2,7 @@ export const C = {
   bg: "#141021", panel: "#1d1832", panel2: "#251e3e", line: "#2f2750",
   grid: "#2a2347", text: "#f2ecdf", muted: "#9b93ae",
   ember: "#ff6b3d", emberSoft: "#ffb15c", day: "#8fb8d8", gold: "#ffd9a0",
-  sage: "#9fd8b4",
+  sage: "#9fd8b4", rose: "#e26d6d",
 };
 
 export const DISPLAY = "'Fraunces', Georgia, 'Times New Roman', serif";

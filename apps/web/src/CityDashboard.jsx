@@ -6,18 +6,24 @@ import {
 import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick } from "./ui.jsx";
 import { linreg, mean } from "./lib/stats.js";
 import {
-  fetchCityYearly, fetchRural, fetchSeasonal, fetchDiurnal, fetchOpenMeteo,
+  fetchCityYearly, fetchRural, fetchSeasonal, fetchDiurnal,
+  fetchHeatSeason, fetchHeatDeaths, fetchOpenMeteo,
 } from "./lib/data.js";
 import UhiCard from "./cards/UhiCard.jsx";
 import GoalpostsCard from "./cards/GoalpostsCard.jsx";
 import SeasonsCard from "./cards/SeasonsCard.jsx";
 import DiurnalCard from "./cards/DiurnalCard.jsx";
+import SeasonLengthCard from "./cards/SeasonLengthCard.jsx";
+import HumanCostCard from "./cards/HumanCostCard.jsx";
+import GrowthCard from "./cards/GrowthCard.jsx";
 
 export default function CityDashboard({ city }) {
   const [state, setState] = useState({ loading: true, error: null, rows: [], source: null });
   const [rural, setRural] = useState(null);
   const [seasonal, setSeasonal] = useState(null);
   const [diurnal, setDiurnal] = useState(null);
+  const [heatSeason, setHeatSeason] = useState(null);
+  const [heatDeaths, setHeatDeaths] = useState(null);
   const [windowStart, setWindowStart] = useState(city.baseline.start);
   const [view, setView] = useState("anom");
   const [reloadKey, setReloadKey] = useState(0);
@@ -28,8 +34,12 @@ export default function CityDashboard({ city }) {
     setRural(null);
     setSeasonal(null);
     setDiurnal(null);
-    // the hour-by-hour card reads a static precomputed asset — independent of ACIS
+    setHeatSeason(null);
+    setHeatDeaths(null);
+    // these cards read static precomputed assets — independent of ACIS
     fetchDiurnal(city).then((d) => alive && setDiurnal(d)).catch(() => {});
+    fetchHeatSeason(city).then((d) => alive && setHeatSeason(d)).catch(() => {});
+    fetchHeatDeaths(city).then((d) => alive && setHeatDeaths(d)).catch(() => {});
     (async () => {
       try {
         const res = await fetchCityYearly(city);
@@ -292,11 +302,15 @@ export default function CityDashboard({ city }) {
 
             {source === "acis" && rural && <UhiCard city={city} cityRows={rows} ruralRows={rural} />}
 
+            {source === "acis" && rural && <GrowthCard city={city} cityRows={rows} ruralRows={rural} />}
+
             {source === "acis" && <GoalpostsCard city={city} rows={rows} />}
 
             {source === "acis" && seasonal && <SeasonsCard city={city} seasonal={seasonal} />}
 
             {diurnal && <DiurnalCard city={city} diurnal={diurnal} />}
+
+            {heatSeason && <SeasonLengthCard city={city} heatSeason={heatSeason} />}
 
             {hotOk && (
               <Card>
@@ -334,6 +348,8 @@ export default function CityDashboard({ city }) {
                 )}
               </Card>
             )}
+
+            {heatDeaths && source === "acis" && <HumanCostCard city={city} heatDeaths={heatDeaths} rows={rows} />}
 
             {cddOk && (
               <Card>

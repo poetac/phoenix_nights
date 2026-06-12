@@ -1,0 +1,918 @@
+{
+ "station": "Phoenix (ThreadEx PHXthr 9)",
+ "thresholdF": 100,
+ "note": "first/last are day-of-year; years missing >36 daily highs excluded",
+ "source": "NOAA/NWS ACIS daily maxt",
+ "years": [
+  {
+   "year": 1896,
+   "first": 146,
+   "last": 261,
+   "length": 116,
+   "count": 81
+  },
+  {
+   "year": 1897,
+   "first": 148,
+   "last": 279,
+   "length": 132,
+   "count": 75
+  },
+  {
+   "year": 1898,
+   "first": 115,
+   "last": 271,
+   "length": 157,
+   "count": 76
+  },
+  {
+   "year": 1899,
+   "first": 133,
+   "last": 271,
+   "length": 139,
+   "count": 87
+  },
+  {
+   "year": 1900,
+   "first": 129,
+   "last": 259,
+   "length": 131,
+   "count": 77
+  },
+  {
+   "year": 1901,
+   "first": 167,
+   "last": 274,
+   "length": 108,
+   "count": 80
+  },
+  {
+   "year": 1902,
+   "first": 148,
+   "last": 255,
+   "length": 108,
+   "count": 86
+  },
+  {
+   "year": 1903,
+   "first": 132,
+   "last": 253,
+   "length": 122,
+   "count": 84
+  },
+  {
+   "year": 1904,
+   "first": 138,
+   "last": 246,
+   "length": 109,
+   "count": 66
+  },
+  {
+   "year": 1905,
+   "first": 136,
+   "last": 264,
+   "length": 129,
+   "count": 82
+  },
+  {
+   "year": 1906,
+   "first": 159,
+   "last": 273,
+   "length": 115,
+   "count": 71
+  },
+  {
+   "year": 1907,
+   "first": 140,
+   "last": 268,
+   "length": 129,
+   "count": 65
+  },
+  {
+   "year": 1908,
+   "first": 161,
+   "last": 267,
+   "length": 107,
+   "count": 62
+  },
+  {
+   "year": 1909,
+   "first": 152,
+   "last": 267,
+   "length": 116,
+   "count": 55
+  },
+  {
+   "year": 1910,
+   "first": 109,
+   "last": 282,
+   "length": 174,
+   "count": 101
+  },
+  {
+   "year": 1911,
+   "first": 155,
+   "last": 267,
+   "length": 113,
+   "count": 60
+  },
+  {
+   "year": 1912,
+   "first": 150,
+   "last": 264,
+   "length": 115,
+   "count": 53
+  },
+  {
+   "year": 1913,
+   "first": 169,
+   "last": 264,
+   "length": 96,
+   "count": 48
+  },
+  {
+   "year": 1914,
+   "first": 141,
+   "last": 266,
+   "length": 126,
+   "count": 76
+  },
+  {
+   "year": 1915,
+   "first": 132,
+   "last": 282,
+   "length": 151,
+   "count": 68
+  },
+  {
+   "year": 1916,
+   "first": 130,
+   "last": 263,
+   "length": 134,
+   "count": 77
+  },
+  {
+   "year": 1917,
+   "first": 159,
+   "last": 283,
+   "length": 125,
+   "count": 92
+  },
+  {
+   "year": 1918,
+   "first": 153,
+   "last": 265,
+   "length": 113,
+   "count": 76
+  },
+  {
+   "year": 1919,
+   "first": 147,
+   "last": 265,
+   "length": 119,
+   "count": 71
+  },
+  {
+   "year": 1920,
+   "first": 139,
+   "last": 273,
+   "length": 135,
+   "count": 78
+  },
+  {
+   "year": 1921,
+   "first": 133,
+   "last": 293,
+   "length": 161,
+   "count": 71
+  },
+  {
+   "year": 1922,
+   "first": 142,
+   "last": 282,
+   "length": 141,
+   "count": 97
+  },
+  {
+   "year": 1923,
+   "first": 127,
+   "last": 252,
+   "length": 126,
+   "count": 63
+  },
+  {
+   "year": 1924,
+   "first": 137,
+   "last": 272,
+   "length": 136,
+   "count": 98
+  },
+  {
+   "year": 1925,
+   "first": 104,
+   "last": 258,
+   "length": 155,
+   "count": 86
+  },
+  {
+   "year": 1926,
+   "first": 142,
+   "last": 268,
+   "length": 127,
+   "count": 95
+  },
+  {
+   "year": 1927,
+   "first": 133,
+   "last": 253,
+   "length": 121,
+   "count": 76
+  },
+  {
+   "year": 1928,
+   "first": 127,
+   "last": 282,
+   "length": 156,
+   "count": 96
+  },
+  {
+   "year": 1929,
+   "first": 139,
+   "last": 280,
+   "length": 142,
+   "count": 83
+  },
+  {
+   "year": 1930,
+   "first": 140,
+   "last": 264,
+   "length": 125,
+   "count": 85
+  },
+  {
+   "year": 1931,
+   "first": 133,
+   "last": 273,
+   "length": 141,
+   "count": 89
+  },
+  {
+   "year": 1932,
+   "first": 134,
+   "last": 271,
+   "length": 138,
+   "count": 93
+  },
+  {
+   "year": 1933,
+   "first": 146,
+   "last": 271,
+   "length": 126,
+   "count": 102
+  },
+  {
+   "year": 1934,
+   "first": 125,
+   "last": 282,
+   "length": 158,
+   "count": 105
+  },
+  {
+   "year": 1935,
+   "first": 143,
+   "last": 259,
+   "length": 117,
+   "count": 91
+  },
+  {
+   "year": 1936,
+   "first": 107,
+   "last": 285,
+   "length": 179,
+   "count": 106
+  },
+  {
+   "year": 1937,
+   "first": 123,
+   "last": 275,
+   "length": 153,
+   "count": 104
+  },
+  {
+   "year": 1938,
+   "first": 134,
+   "last": 271,
+   "length": 138,
+   "count": 99
+  },
+  {
+   "year": 1939,
+   "first": 147,
+   "last": 266,
+   "length": 120,
+   "count": 89
+  },
+  {
+   "year": 1940,
+   "first": 130,
+   "last": 269,
+   "length": 140,
+   "count": 95
+  },
+  {
+   "year": 1941,
+   "first": 127,
+   "last": 262,
+   "length": 136,
+   "count": 79
+  },
+  {
+   "year": 1942,
+   "first": 139,
+   "last": 271,
+   "length": 133,
+   "count": 91
+  },
+  {
+   "year": 1943,
+   "first": 120,
+   "last": 273,
+   "length": 154,
+   "count": 95
+  },
+  {
+   "year": 1944,
+   "first": 158,
+   "last": 284,
+   "length": 127,
+   "count": 81
+  },
+  {
+   "year": 1945,
+   "first": 163,
+   "last": 260,
+   "length": 98,
+   "count": 76
+  },
+  {
+   "year": 1946,
+   "first": 107,
+   "last": 268,
+   "length": 162,
+   "count": 98
+  },
+  {
+   "year": 1947,
+   "first": 121,
+   "last": 277,
+   "length": 157,
+   "count": 100
+  },
+  {
+   "year": 1948,
+   "first": 135,
+   "last": 282,
+   "length": 148,
+   "count": 95
+  },
+  {
+   "year": 1949,
+   "first": 113,
+   "last": 271,
+   "length": 159,
+   "count": 94
+  },
+  {
+   "year": 1950,
+   "first": 110,
+   "last": 289,
+   "length": 180,
+   "count": 79
+  },
+  {
+   "year": 1951,
+   "first": 145,
+   "last": 283,
+   "length": 139,
+   "count": 98
+  },
+  {
+   "year": 1952,
+   "first": 133,
+   "last": 280,
+   "length": 148,
+   "count": 103
+  },
+  {
+   "year": 1953,
+   "first": 161,
+   "last": 274,
+   "length": 114,
+   "count": 92
+  },
+  {
+   "year": 1954,
+   "first": 153,
+   "last": 264,
+   "length": 112,
+   "count": 73
+  },
+  {
+   "year": 1955,
+   "first": 149,
+   "last": 257,
+   "length": 109,
+   "count": 60
+  },
+  {
+   "year": 1956,
+   "first": 138,
+   "last": 272,
+   "length": 135,
+   "count": 70
+  },
+  {
+   "year": 1957,
+   "first": 152,
+   "last": 272,
+   "length": 121,
+   "count": 70
+  },
+  {
+   "year": 1958,
+   "first": 138,
+   "last": 264,
+   "length": 127,
+   "count": 110
+  },
+  {
+   "year": 1959,
+   "first": 133,
+   "last": 255,
+   "length": 123,
+   "count": 78
+  },
+  {
+   "year": 1960,
+   "first": 131,
+   "last": 272,
+   "length": 142,
+   "count": 98
+  },
+  {
+   "year": 1961,
+   "first": 129,
+   "last": 250,
+   "length": 122,
+   "count": 79
+  },
+  {
+   "year": 1962,
+   "first": 104,
+   "last": 264,
+   "length": 161,
+   "count": 100
+  },
+  {
+   "year": 1963,
+   "first": 126,
+   "last": 276,
+   "length": 151,
+   "count": 84
+  },
+  {
+   "year": 1964,
+   "first": 136,
+   "last": 256,
+   "length": 121,
+   "count": 68
+  },
+  {
+   "year": 1965,
+   "first": 138,
+   "last": 270,
+   "length": 133,
+   "count": 83
+  },
+  {
+   "year": 1966,
+   "first": 126,
+   "last": 267,
+   "length": 142,
+   "count": 104
+  },
+  {
+   "year": 1967,
+   "first": 136,
+   "last": 267,
+   "length": 132,
+   "count": 80
+  },
+  {
+   "year": 1968,
+   "first": 140,
+   "last": 271,
+   "length": 132,
+   "count": 87
+  },
+  {
+   "year": 1969,
+   "first": 137,
+   "last": 273,
+   "length": 137,
+   "count": 103
+  },
+  {
+   "year": 1970,
+   "first": 135,
+   "last": 255,
+   "length": 121,
+   "count": 94
+  },
+  {
+   "year": 1971,
+   "first": 164,
+   "last": 260,
+   "length": 97,
+   "count": 82
+  },
+  {
+   "year": 1972,
+   "first": 148,
+   "last": 276,
+   "length": 129,
+   "count": 89
+  },
+  {
+   "year": 1973,
+   "first": 130,
+   "last": 289,
+   "length": 160,
+   "count": 116
+  },
+  {
+   "year": 1974,
+   "first": 132,
+   "last": 275,
+   "length": 144,
+   "count": 107
+  },
+  {
+   "year": 1975,
+   "first": 130,
+   "last": 278,
+   "length": 149,
+   "count": 111
+  },
+  {
+   "year": 1976,
+   "first": 133,
+   "last": 274,
+   "length": 142,
+   "count": 82
+  },
+  {
+   "year": 1977,
+   "first": 150,
+   "last": 276,
+   "length": 127,
+   "count": 102
+  },
+  {
+   "year": 1978,
+   "first": 132,
+   "last": 288,
+   "length": 157,
+   "count": 116
+  },
+  {
+   "year": 1979,
+   "first": 133,
+   "last": 283,
+   "length": 151,
+   "count": 109
+  },
+  {
+   "year": 1980,
+   "first": 110,
+   "last": 281,
+   "length": 172,
+   "count": 107
+  },
+  {
+   "year": 1981,
+   "first": 119,
+   "last": 271,
+   "length": 153,
+   "count": 107
+  },
+  {
+   "year": 1982,
+   "first": 138,
+   "last": 269,
+   "length": 132,
+   "count": 98
+  },
+  {
+   "year": 1983,
+   "first": 142,
+   "last": 265,
+   "length": 124,
+   "count": 107
+  },
+  {
+   "year": 1984,
+   "first": 107,
+   "last": 265,
+   "length": 159,
+   "count": 109
+  },
+  {
+   "year": 1985,
+   "first": 104,
+   "last": 260,
+   "length": 157,
+   "count": 102
+  },
+  {
+   "year": 1986,
+   "first": 122,
+   "last": 252,
+   "length": 131,
+   "count": 101
+  },
+  {
+   "year": 1987,
+   "first": 106,
+   "last": 281,
+   "length": 176,
+   "count": 116
+  },
+  {
+   "year": 1988,
+   "first": 86,
+   "last": 280,
+   "length": 195,
+   "count": 122
+  },
+  {
+   "year": 1989,
+   "first": 96,
+   "last": 286,
+   "length": 191,
+   "count": 143
+  },
+  {
+   "year": 1990,
+   "first": 105,
+   "last": 268,
+   "length": 164,
+   "count": 94
+  },
+  {
+   "year": 1991,
+   "first": 128,
+   "last": 291,
+   "length": 164,
+   "count": 112
+  },
+  {
+   "year": 1992,
+   "first": 116,
+   "last": 286,
+   "length": 171,
+   "count": 120
+  },
+  {
+   "year": 1993,
+   "first": 130,
+   "last": 278,
+   "length": 149,
+   "count": 108
+  },
+  {
+   "year": 1994,
+   "first": 106,
+   "last": 271,
+   "length": 166,
+   "count": 106
+  },
+  {
+   "year": 1995,
+   "first": 151,
+   "last": 284,
+   "length": 134,
+   "count": 93
+  },
+  {
+   "year": 1996,
+   "first": 117,
+   "last": 286,
+   "length": 170,
+   "count": 107
+  },
+  {
+   "year": 1997,
+   "first": 125,
+   "last": 279,
+   "length": 155,
+   "count": 108
+  },
+  {
+   "year": 1998,
+   "first": 153,
+   "last": 262,
+   "length": 110,
+   "count": 88
+  },
+  {
+   "year": 1999,
+   "first": 141,
+   "last": 286,
+   "length": 146,
+   "count": 92
+  },
+  {
+   "year": 2000,
+   "first": 117,
+   "last": 276,
+   "length": 160,
+   "count": 119
+  },
+  {
+   "year": 2001,
+   "first": 115,
+   "last": 273,
+   "length": 159,
+   "count": 127
+  },
+  {
+   "year": 2002,
+   "first": 104,
+   "last": 270,
+   "length": 167,
+   "count": 115
+  },
+  {
+   "year": 2003,
+   "first": 136,
+   "last": 296,
+   "length": 161,
+   "count": 129
+  },
+  {
+   "year": 2004,
+   "first": 124,
+   "last": 272,
+   "length": 149,
+   "count": 109
+  },
+  {
+   "year": 2005,
+   "first": 135,
+   "last": 280,
+   "length": 146,
+   "count": 105
+  },
+  {
+   "year": 2006,
+   "first": 131,
+   "last": 278,
+   "length": 148,
+   "count": 105
+  },
+  {
+   "year": 2007,
+   "first": 118,
+   "last": 264,
+   "length": 147,
+   "count": 113
+  },
+  {
+   "year": 2008,
+   "first": 139,
+   "last": 276,
+   "length": 138,
+   "count": 106
+  },
+  {
+   "year": 2009,
+   "first": 111,
+   "last": 291,
+   "length": 181,
+   "count": 118
+  },
+  {
+   "year": 2010,
+   "first": 141,
+   "last": 287,
+   "length": 147,
+   "count": 108
+  },
+  {
+   "year": 2011,
+   "first": 91,
+   "last": 276,
+   "length": 186,
+   "count": 117
+  },
+  {
+   "year": 2012,
+   "first": 112,
+   "last": 278,
+   "length": 167,
+   "count": 117
+  },
+  {
+   "year": 2013,
+   "first": 118,
+   "last": 264,
+   "length": 147,
+   "count": 115
+  },
+  {
+   "year": 2014,
+   "first": 123,
+   "last": 269,
+   "length": 147,
+   "count": 110
+  },
+  {
+   "year": 2015,
+   "first": 121,
+   "last": 287,
+   "length": 167,
+   "count": 108
+  },
+  {
+   "year": 2016,
+   "first": 125,
+   "last": 301,
+   "length": 177,
+   "count": 99
+  },
+  {
+   "year": 2017,
+   "first": 123,
+   "last": 262,
+   "length": 140,
+   "count": 109
+  },
+  {
+   "year": 2018,
+   "first": 100,
+   "last": 272,
+   "length": 173,
+   "count": 128
+  },
+  {
+   "year": 2019,
+   "first": 116,
+   "last": 262,
+   "length": 147,
+   "count": 103
+  },
+  {
+   "year": 2020,
+   "first": 117,
+   "last": 290,
+   "length": 174,
+   "count": 145
+  },
+  {
+   "year": 2021,
+   "first": 125,
+   "last": 266,
+   "length": 142,
+   "count": 104
+  },
+  {
+   "year": 2022,
+   "first": 127,
+   "last": 272,
+   "length": 146,
+   "count": 113
+  },
+  {
+   "year": 2023,
+   "first": 120,
+   "last": 294,
+   "length": 175,
+   "count": 133
+  },
+  {
+   "year": 2024,
+   "first": 112,
+   "last": 300,
+   "length": 189,
+   "count": 143
+  },
+  {
+   "year": 2025,
+   "first": 100,
+   "last": 281,
+   "length": 182,
+   "count": 122
+  }
+ ]
+}
