@@ -1,7 +1,7 @@
 {
  "station": "Phoenix (ThreadEx PHXthr 9)",
  "source": "NOAA/NWS ACIS daily mint/maxt",
- "note": "streaks within calendar years; years missing >36 days excluded",
+ "note": "streaks within calendar years; years missing >36 days excluded. first80/last80 are day-of-year (first/last 80F+ night).",
  "years": [
   {
    "year": 1896,
@@ -9,7 +9,10 @@
    "streak90": 0,
    "streak110": 8,
    "frost": 9,
-   "cool60": 224
+   "cool60": 224,
+   "first80": 150,
+   "last80": 251,
+   "count80": 22
   },
   {
    "year": 1897,
@@ -17,7 +20,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 27,
-   "cool60": 216
+   "cool60": 216,
+   "first80": 192,
+   "last80": 231,
+   "count80": 14
   },
   {
    "year": 1898,
@@ -25,7 +31,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 26,
-   "cool60": 225
+   "cool60": 225,
+   "first80": 171,
+   "last80": 232,
+   "count80": 34
   },
   {
    "year": 1899,
@@ -33,7 +42,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 11,
-   "cool60": 227
+   "cool60": 227,
+   "first80": 168,
+   "last80": 248,
+   "count80": 23
   },
   {
    "year": 1900,
@@ -41,7 +53,10 @@
    "streak90": 0,
    "streak110": 4,
    "frost": 5,
-   "cool60": 218
+   "cool60": 218,
+   "first80": 181,
+   "last80": 215,
+   "count80": 14
   },
   {
    "year": 1901,
@@ -49,7 +64,10 @@
    "streak90": 0,
    "streak110": 8,
    "frost": 14,
-   "cool60": 228
+   "cool60": 228,
+   "first80": 188,
+   "last80": 239,
+   "count80": 29
   },
   {
    "year": 1902,
@@ -57,7 +75,10 @@
    "streak90": 0,
    "streak110": 5,
    "frost": 7,
-   "cool60": 229
+   "cool60": 229,
+   "first80": 173,
+   "last80": 250,
+   "count80": 19
   },
   {
    "year": 1903,
@@ -65,7 +86,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 14,
-   "cool60": 231
+   "cool60": 231,
+   "first80": 190,
+   "last80": 245,
+   "count80": 25
   },
   {
    "year": 1904,
@@ -73,7 +97,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 22,
-   "cool60": 217
+   "cool60": 217,
+   "first80": 167,
+   "last80": 224,
+   "count80": 10
   },
   {
    "year": 1905,
@@ -81,7 +108,10 @@
    "streak90": 0,
    "streak110": 5,
    "frost": 12,
-   "cool60": 234
+   "cool60": 234,
+   "first80": 190,
+   "last80": 245,
+   "count80": 8
   },
   {
    "year": 1906,
@@ -89,7 +119,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 10,
-   "cool60": 228
+   "cool60": 228,
+   "first80": 193,
+   "last80": 225,
+   "count80": 19
   },
   {
    "year": 1907,
@@ -97,7 +130,10 @@
    "streak90": 0,
    "streak110": 9,
    "frost": 6,
-   "cool60": 232
+   "cool60": 232,
+   "first80": 185,
+   "last80": 237,
+   "count80": 12
   },
   {
    "year": 1908,
@@ -105,7 +141,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 8,
-   "cool60": 249
+   "cool60": 249,
+   "first80": 177,
+   "last80": 219,
+   "count80": 10
   },
   {
    "year": 1909,
@@ -113,7 +152,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 6,
-   "cool60": 233
+   "cool60": 233,
+   "first80": 181,
+   "last80": 241,
+   "count80": 8
   },
   {
    "year": 1910,
@@ -121,7 +163,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 12,
-   "cool60": 204
+   "cool60": 204,
+   "first80": 177,
+   "last80": 238,
+   "count80": 15
   },
   {
    "year": 1911,
@@ -129,7 +174,10 @@
    "streak90": 0,
    "streak110": 0,
    "frost": 25,
-   "cool60": 230
+   "cool60": 230,
+   "first80": 195,
+   "last80": 232,
+   "count80": 5
   },
   {
    "year": 1912,
@@ -137,7 +185,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 17,
-   "cool60": 230
+   "cool60": 230,
+   "first80": 158,
+   "last80": 198,
+   "count80": 3
   },
   {
    "year": 1913,
@@ -145,7 +196,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 14,
-   "cool60": 241
+   "cool60": 241,
+   "first80": 187,
+   "last80": 235,
+   "count80": 8
   },
   {
    "year": 1914,
@@ -153,7 +207,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 3,
-   "cool60": 219
+   "cool60": 219,
+   "first80": 179,
+   "last80": 219,
+   "count80": 16
   },
   {
    "year": 1915,
@@ -161,7 +218,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 8,
-   "cool60": 236
+   "cool60": 236,
+   "first80": 182,
+   "last80": 234,
+   "count80": 7
   },
   {
    "year": 1916,
@@ -169,7 +229,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 28,
-   "cool60": 233
+   "cool60": 233,
+   "first80": 188,
+   "last80": 222,
+   "count80": 8
   },
   {
    "year": 1917,
@@ -177,7 +240,10 @@
    "streak90": 0,
    "streak110": 4,
    "frost": 15,
-   "cool60": 244
+   "cool60": 244,
+   "first80": 182,
+   "last80": 248,
+   "count80": 12
   },
   {
    "year": 1918,
@@ -185,7 +251,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 23,
-   "cool60": 233
+   "cool60": 233,
+   "first80": 164,
+   "last80": 215,
+   "count80": 8
   },
   {
    "year": 1919,
@@ -193,7 +262,10 @@
    "streak90": 0,
    "streak110": 4,
    "frost": 14,
-   "cool60": 228
+   "cool60": 228,
+   "first80": 176,
+   "last80": 227,
+   "count80": 11
   },
   {
    "year": 1920,
@@ -201,7 +273,10 @@
    "streak90": 0,
    "streak110": 5,
    "frost": 14,
-   "cool60": 230
+   "cool60": 230,
+   "first80": 197,
+   "last80": 220,
+   "count80": 13
   },
   {
    "year": 1921,
@@ -209,7 +284,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 11,
-   "cool60": 224
+   "cool60": 224,
+   "first80": 162,
+   "last80": 230,
+   "count80": 14
   },
   {
    "year": 1922,
@@ -217,7 +295,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 19,
-   "cool60": 223
+   "cool60": 223,
+   "first80": 173,
+   "last80": 241,
+   "count80": 14
   },
   {
    "year": 1923,
@@ -225,7 +306,10 @@
    "streak90": 0,
    "streak110": 5,
    "frost": 10,
-   "cool60": 237
+   "cool60": 237,
+   "first80": 192,
+   "last80": 251,
+   "count80": 7
   },
   {
    "year": 1924,
@@ -233,7 +317,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 16,
-   "cool60": 223
+   "cool60": 223,
+   "first80": 181,
+   "last80": 224,
+   "count80": 15
   },
   {
    "year": 1925,
@@ -241,7 +328,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 15,
-   "cool60": 212
+   "cool60": 212,
+   "first80": 171,
+   "last80": 230,
+   "count80": 24
   },
   {
    "year": 1926,
@@ -249,7 +339,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 22,
-   "cool60": 210
+   "cool60": 210,
+   "first80": 180,
+   "last80": 237,
+   "count80": 11
   },
   {
    "year": 1927,
@@ -257,7 +350,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 6,
-   "cool60": 228
+   "cool60": 228,
+   "first80": 176,
+   "last80": 215,
+   "count80": 16
   },
   {
    "year": 1928,
@@ -265,7 +361,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 16,
-   "cool60": 204
+   "cool60": 204,
+   "first80": 177,
+   "last80": 232,
+   "count80": 21
   },
   {
    "year": 1929,
@@ -273,7 +372,10 @@
    "streak90": 0,
    "streak110": 6,
    "frost": 13,
-   "cool60": 208
+   "cool60": 208,
+   "first80": 177,
+   "last80": 244,
+   "count80": 33
   },
   {
    "year": 1930,
@@ -281,7 +383,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 13,
-   "cool60": 227
+   "cool60": 227,
+   "first80": 183,
+   "last80": 248,
+   "count80": 25
   },
   {
    "year": 1931,
@@ -289,7 +394,10 @@
    "streak90": 0,
    "streak110": 4,
    "frost": 18,
-   "cool60": 198
+   "cool60": 198,
+   "first80": 176,
+   "last80": 239,
+   "count80": 38
   },
   {
    "year": 1932,
@@ -297,7 +405,10 @@
    "streak90": 0,
    "streak110": 7,
    "frost": 21,
-   "cool60": 215
+   "cool60": 215,
+   "first80": 186,
+   "last80": 250,
+   "count80": 35
   },
   {
    "year": 1933,
@@ -305,7 +416,10 @@
    "streak90": 0,
    "streak110": 5,
    "frost": 14,
-   "cool60": 216
+   "cool60": 216,
+   "first80": 164,
+   "last80": 250,
+   "count80": 53
   },
   {
    "year": 1934,
@@ -313,7 +427,10 @@
    "streak90": 1,
    "streak110": 4,
    "frost": 3,
-   "cool60": 190
+   "cool60": 190,
+   "first80": 131,
+   "last80": 250,
+   "count80": 41
   },
   {
    "year": 1935,
@@ -321,7 +438,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 3,
-   "cool60": 207
+   "cool60": 207,
+   "first80": 163,
+   "last80": 242,
+   "count80": 24
   },
   {
    "year": 1936,
@@ -329,7 +449,10 @@
    "streak90": 1,
    "streak110": 6,
    "frost": 6,
-   "cool60": 194
+   "cool60": 194,
+   "first80": 166,
+   "last80": 253,
+   "count80": 44
   },
   {
    "year": 1937,
@@ -337,7 +460,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 18,
-   "cool60": 213
+   "cool60": 213,
+   "first80": 174,
+   "last80": 257,
+   "count80": 34
   },
   {
    "year": 1938,
@@ -345,7 +471,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 3,
-   "cool60": 214
+   "cool60": 214,
+   "first80": 178,
+   "last80": 242,
+   "count80": 21
   },
   {
    "year": 1939,
@@ -353,7 +482,10 @@
    "streak90": 0,
    "streak110": 6,
    "frost": 6,
-   "cool60": 213
+   "cool60": 213,
+   "first80": 181,
+   "last80": 264,
+   "count80": 29
   },
   {
    "year": 1940,
@@ -361,7 +493,10 @@
    "streak90": 0,
    "streak110": 9,
    "frost": 2,
-   "cool60": 190
+   "cool60": 190,
+   "first80": 172,
+   "last80": 233,
+   "count80": 24
   },
   {
    "year": 1941,
@@ -369,7 +504,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 2,
-   "cool60": 225
+   "cool60": 225,
+   "first80": 188,
+   "last80": 203,
+   "count80": 9
   },
   {
    "year": 1942,
@@ -377,7 +515,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 4,
-   "cool60": 220
+   "cool60": 220,
+   "first80": 182,
+   "last80": 233,
+   "count80": 23
   },
   {
    "year": 1943,
@@ -385,7 +526,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 1,
-   "cool60": 197
+   "cool60": 197,
+   "first80": 178,
+   "last80": 240,
+   "count80": 28
   },
   {
    "year": 1944,
@@ -393,7 +537,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 5,
-   "cool60": 220
+   "cool60": 220,
+   "first80": 182,
+   "last80": 242,
+   "count80": 16
   },
   {
    "year": 1945,
@@ -401,7 +548,10 @@
    "streak90": 0,
    "streak110": 4,
    "frost": 7,
-   "cool60": 211
+   "cool60": 211,
+   "first80": 183,
+   "last80": 250,
+   "count80": 20
   },
   {
    "year": 1946,
@@ -409,7 +559,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 9,
-   "cool60": 206
+   "cool60": 206,
+   "first80": 168,
+   "last80": 257,
+   "count80": 22
   },
   {
    "year": 1947,
@@ -417,7 +570,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 9,
-   "cool60": 203
+   "cool60": 203,
+   "first80": 183,
+   "last80": 246,
+   "count80": 25
   },
   {
    "year": 1948,
@@ -425,7 +581,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 11,
-   "cool60": 205
+   "cool60": 205,
+   "first80": 182,
+   "last80": 245,
+   "count80": 23
   },
   {
    "year": 1949,
@@ -433,7 +592,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 24,
-   "cool60": 205
+   "cool60": 205,
+   "first80": 173,
+   "last80": 251,
+   "count80": 24
   },
   {
    "year": 1950,
@@ -441,7 +603,10 @@
    "streak90": 0,
    "streak110": 4,
    "frost": 6,
-   "cool60": 202
+   "cool60": 202,
+   "first80": 182,
+   "last80": 247,
+   "count80": 16
   },
   {
    "year": 1951,
@@ -449,7 +614,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 7,
-   "cool60": 214
+   "cool60": 214,
+   "first80": 171,
+   "last80": 232,
+   "count80": 25
   },
   {
    "year": 1952,
@@ -457,7 +625,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 5,
-   "cool60": 203
+   "cool60": 203,
+   "first80": 186,
+   "last80": 260,
+   "count80": 26
   },
   {
    "year": 1953,
@@ -465,7 +636,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 16,
-   "cool60": 221
+   "cool60": 221,
+   "first80": 163,
+   "last80": 234,
+   "count80": 33
   },
   {
    "year": 1954,
@@ -473,7 +647,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 10,
-   "cool60": 204
+   "cool60": 204,
+   "first80": 174,
+   "last80": 265,
+   "count80": 27
   },
   {
    "year": 1955,
@@ -481,7 +658,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 14,
-   "cool60": 204
+   "cool60": 204,
+   "first80": 193,
+   "last80": 222,
+   "count80": 5
   },
   {
    "year": 1956,
@@ -489,7 +669,10 @@
    "streak90": 0,
    "streak110": 1,
    "frost": 11,
-   "cool60": 217
+   "cool60": 217,
+   "first80": 180,
+   "last80": 250,
+   "count80": 10
   },
   {
    "year": 1957,
@@ -497,7 +680,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 1,
-   "cool60": 219
+   "cool60": 219,
+   "first80": 177,
+   "last80": 228,
+   "count80": 27
   },
   {
    "year": 1958,
@@ -505,7 +691,10 @@
    "streak90": 0,
    "streak110": 8,
    "frost": 2,
-   "cool60": 189
+   "cool60": 189,
+   "first80": 168,
+   "last80": 254,
+   "count80": 60
   },
   {
    "year": 1959,
@@ -513,7 +702,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 2,
-   "cool60": 194
+   "cool60": 194,
+   "first80": 164,
+   "last80": 254,
+   "count80": 47
   },
   {
    "year": 1960,
@@ -521,7 +713,10 @@
    "streak90": 0,
    "streak110": 5,
    "frost": 17,
-   "cool60": 205
+   "cool60": 205,
+   "first80": 171,
+   "last80": 244,
+   "count80": 35
   },
   {
    "year": 1961,
@@ -529,7 +724,10 @@
    "streak90": 0,
    "streak110": 5,
    "frost": 5,
-   "cool60": 239
+   "cool60": 239,
+   "first80": 167,
+   "last80": 233,
+   "count80": 24
   },
   {
    "year": 1962,
@@ -537,7 +735,10 @@
    "streak90": 0,
    "streak110": 7,
    "frost": 7,
-   "cool60": 238
+   "cool60": 238,
+   "first80": 184,
+   "last80": 247,
+   "count80": 14
   },
   {
    "year": 1963,
@@ -545,7 +746,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 18,
-   "cool60": 208
+   "cool60": 208,
+   "first80": 184,
+   "last80": 231,
+   "count80": 14
   },
   {
    "year": 1964,
@@ -553,7 +757,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 35,
-   "cool60": 228
+   "cool60": 228,
+   "first80": 178,
+   "last80": 224,
+   "count80": 14
   },
   {
    "year": 1965,
@@ -561,7 +768,10 @@
    "streak90": 0,
    "streak110": 6,
    "frost": 8,
-   "cool60": 258
+   "cool60": 258,
+   "first80": 187,
+   "last80": 241,
+   "count80": 14
   },
   {
    "year": 1966,
@@ -569,7 +779,10 @@
    "streak90": 0,
    "streak110": 4,
    "frost": 31,
-   "cool60": 219
+   "cool60": 219,
+   "first80": 180,
+   "last80": 226,
+   "count80": 29
   },
   {
    "year": 1967,
@@ -577,7 +790,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 18,
-   "cool60": 230
+   "cool60": 230,
+   "first80": 185,
+   "last80": 243,
+   "count80": 29
   },
   {
    "year": 1968,
@@ -585,7 +801,10 @@
    "streak90": 0,
    "streak110": 7,
    "frost": 13,
-   "cool60": 230
+   "cool60": 230,
+   "first80": 191,
+   "last80": 239,
+   "count80": 14
   },
   {
    "year": 1969,
@@ -593,7 +812,10 @@
    "streak90": 0,
    "streak110": 5,
    "frost": 7,
-   "cool60": 211
+   "cool60": 211,
+   "first80": 183,
+   "last80": 253,
+   "count80": 54
   },
   {
    "year": 1970,
@@ -601,7 +823,10 @@
    "streak90": 1,
    "streak110": 6,
    "frost": 11,
-   "cool60": 219
+   "cool60": 219,
+   "first80": 152,
+   "last80": 255,
+   "count80": 60
   },
   {
    "year": 1971,
@@ -609,7 +834,10 @@
    "streak90": 0,
    "streak110": 5,
    "frost": 17,
-   "cool60": 225
+   "cool60": 225,
+   "first80": 169,
+   "last80": 260,
+   "count80": 46
   },
   {
    "year": 1972,
@@ -617,7 +845,10 @@
    "streak90": 1,
    "streak110": 6,
    "frost": 13,
-   "cool60": 200
+   "cool60": 200,
+   "first80": 187,
+   "last80": 250,
+   "count80": 34
   },
   {
    "year": 1973,
@@ -625,7 +856,10 @@
    "streak90": 1,
    "streak110": 5,
    "frost": 3,
-   "cool60": 208
+   "cool60": 208,
+   "first80": 172,
+   "last80": 243,
+   "count80": 44
   },
   {
    "year": 1974,
@@ -633,7 +867,10 @@
    "streak90": 0,
    "streak110": 18,
    "frost": 5,
-   "cool60": 186
+   "cool60": 186,
+   "first80": 166,
+   "last80": 252,
+   "count80": 44
   },
   {
    "year": 1975,
@@ -641,7 +878,10 @@
    "streak90": 0,
    "streak110": 7,
    "frost": 7,
-   "cool60": 209
+   "cool60": 209,
+   "first80": 158,
+   "last80": 249,
+   "count80": 38
   },
   {
    "year": 1976,
@@ -649,7 +889,10 @@
    "streak90": 1,
    "streak110": 3,
    "frost": 4,
-   "cool60": 187
+   "cool60": 187,
+   "first80": 173,
+   "last80": 253,
+   "count80": 42
   },
   {
    "year": 1977,
@@ -657,7 +900,10 @@
    "streak90": 0,
    "streak110": 4,
    "frost": 4,
-   "cool60": 186
+   "cool60": 186,
+   "first80": 154,
+   "last80": 269,
+   "count80": 76
   },
   {
    "year": 1978,
@@ -665,7 +911,10 @@
    "streak90": 0,
    "streak110": 9,
    "frost": 4,
-   "cool60": 192
+   "cool60": 192,
+   "first80": 170,
+   "last80": 250,
+   "count80": 42
   },
   {
    "year": 1979,
@@ -673,7 +922,10 @@
    "streak90": 0,
    "streak110": 6,
    "frost": 5,
-   "cool60": 194
+   "cool60": 194,
+   "first80": 162,
+   "last80": 255,
+   "count80": 39
   },
   {
    "year": 1980,
@@ -681,7 +933,10 @@
    "streak90": 1,
    "streak110": 4,
    "frost": 0,
-   "cool60": 198
+   "cool60": 198,
+   "first80": 171,
+   "last80": 253,
+   "count80": 49
   },
   {
    "year": 1981,
@@ -689,7 +944,10 @@
    "streak90": 1,
    "streak110": 9,
    "frost": 0,
-   "cool60": 179
+   "cool60": 179,
+   "first80": 151,
+   "last80": 265,
+   "count80": 87
   },
   {
    "year": 1982,
@@ -697,7 +955,10 @@
    "streak90": 1,
    "streak110": 5,
    "frost": 0,
-   "cool60": 185
+   "cool60": 185,
+   "first80": 168,
+   "last80": 268,
+   "count80": 60
   },
   {
    "year": 1983,
@@ -705,7 +966,10 @@
    "streak90": 1,
    "streak110": 4,
    "frost": 0,
-   "cool60": 179
+   "cool60": 179,
+   "first80": 148,
+   "last80": 261,
+   "count80": 71
   },
   {
    "year": 1984,
@@ -713,7 +977,10 @@
    "streak90": 0,
    "streak110": 3,
    "frost": 0,
-   "cool60": 188
+   "cool60": 188,
+   "first80": 150,
+   "last80": 262,
+   "count80": 54
   },
   {
    "year": 1985,
@@ -721,7 +988,10 @@
    "streak90": 1,
    "streak110": 5,
    "frost": 3,
-   "cool60": 169
+   "cool60": 169,
+   "first80": 158,
+   "last80": 258,
+   "count80": 76
   },
   {
    "year": 1986,
@@ -729,7 +999,10 @@
    "streak90": 0,
    "streak110": 4,
    "frost": 0,
-   "cool60": 167
+   "cool60": 167,
+   "first80": 155,
+   "last80": 251,
+   "count80": 67
   },
   {
    "year": 1987,
@@ -737,7 +1010,10 @@
    "streak90": 1,
    "streak110": 3,
    "frost": 5,
-   "cool60": 155
+   "cool60": 155,
+   "first80": 134,
+   "last80": 276,
+   "count80": 48
   },
   {
    "year": 1988,
@@ -745,7 +1021,10 @@
    "streak90": 1,
    "streak110": 4,
    "frost": 4,
-   "cool60": 160
+   "cool60": 160,
+   "first80": 167,
+   "last80": 255,
+   "count80": 79
   },
   {
    "year": 1989,
@@ -753,7 +1032,10 @@
    "streak90": 2,
    "streak110": 10,
    "frost": 0,
-   "cool60": 155
+   "cool60": 155,
+   "first80": 129,
+   "last80": 269,
+   "count80": 72
   },
   {
    "year": 1990,
@@ -761,7 +1043,10 @@
    "streak90": 2,
    "streak110": 9,
    "frost": 4,
-   "cool60": 146
+   "cool60": 146,
+   "first80": 155,
+   "last80": 256,
+   "count80": 60
   },
   {
    "year": 1991,
@@ -769,7 +1054,10 @@
    "streak90": 0,
    "streak110": 2,
    "frost": 0,
-   "cool60": 174
+   "cool60": 174,
+   "first80": 162,
+   "last80": 270,
+   "count80": 66
   },
   {
    "year": 1992,
@@ -777,7 +1065,10 @@
    "streak90": 1,
    "streak110": 4,
    "frost": 0,
-   "cool60": 163
+   "cool60": 163,
+   "first80": 155,
+   "last80": 273,
+   "count80": 61
   },
   {
    "year": 1993,
@@ -785,7 +1076,10 @@
    "streak90": 1,
    "streak110": 4,
    "frost": 0,
-   "cool60": 173
+   "cool60": 173,
+   "first80": 166,
+   "last80": 278,
+   "count80": 57
   },
   {
    "year": 1994,
@@ -793,7 +1087,10 @@
    "streak90": 1,
    "streak110": 4,
    "frost": 0,
-   "cool60": 192
+   "cool60": 192,
+   "first80": 162,
+   "last80": 252,
+   "count80": 70
   },
   {
    "year": 1995,
@@ -801,7 +1098,10 @@
    "streak90": 2,
    "streak110": 17,
    "frost": 0,
-   "cool60": 185
+   "cool60": 185,
+   "first80": 179,
+   "last80": 261,
+   "count80": 59
   },
   {
    "year": 1996,
@@ -809,7 +1109,10 @@
    "streak90": 2,
    "streak110": 3,
    "frost": 0,
-   "cool60": 179
+   "cool60": 179,
+   "first80": 159,
+   "last80": 249,
+   "count80": 71
   },
   {
    "year": 1997,
@@ -817,7 +1120,10 @@
    "streak90": 1,
    "streak110": 4,
    "frost": 0,
-   "cool60": 171
+   "cool60": 171,
+   "first80": 135,
+   "last80": 275,
+   "count80": 66
   },
   {
    "year": 1998,
@@ -825,7 +1131,10 @@
    "streak90": 1,
    "streak110": 5,
    "frost": 1,
-   "cool60": 190
+   "cool60": 190,
+   "first80": 181,
+   "last80": 261,
+   "count80": 59
   },
   {
    "year": 1999,
@@ -833,7 +1142,10 @@
    "streak90": 1,
    "streak110": 2,
    "frost": 0,
-   "cool60": 176
+   "cool60": 176,
+   "first80": 165,
+   "last80": 252,
+   "count80": 62
   },
   {
    "year": 2000,
@@ -841,7 +1153,10 @@
    "streak90": 1,
    "streak110": 5,
    "frost": 1,
-   "cool60": 177
+   "cool60": 177,
+   "first80": 150,
+   "last80": 273,
+   "count80": 76
   },
   {
    "year": 2001,
@@ -849,7 +1164,10 @@
    "streak90": 1,
    "streak110": 5,
    "frost": 0,
-   "cool60": 152
+   "cool60": 152,
+   "first80": 142,
+   "last80": 268,
+   "count80": 88
   },
   {
    "year": 2002,
@@ -857,7 +1175,10 @@
    "streak90": 1,
    "streak110": 5,
    "frost": 0,
-   "cool60": 160
+   "cool60": 160,
+   "first80": 151,
+   "last80": 267,
+   "count80": 78
   },
   {
    "year": 2003,
@@ -865,7 +1186,10 @@
    "streak90": 6,
    "streak110": 5,
    "frost": 2,
-   "cool60": 169
+   "cool60": 169,
+   "first80": 148,
+   "last80": 275,
+   "count80": 81
   },
   {
    "year": 2004,
@@ -873,7 +1197,10 @@
    "streak90": 1,
    "streak110": 4,
    "frost": 0,
-   "cool60": 158
+   "cool60": 158,
+   "first80": 159,
+   "last80": 257,
+   "count80": 58
   },
   {
    "year": 2005,
@@ -881,7 +1208,10 @@
    "streak90": 2,
    "streak110": 9,
    "frost": 0,
-   "cool60": 168
+   "cool60": 168,
+   "first80": 143,
+   "last80": 271,
+   "count80": 76
   },
   {
    "year": 2006,
@@ -889,7 +1219,10 @@
    "streak90": 4,
    "streak110": 5,
    "frost": 0,
-   "cool60": 170
+   "cool60": 170,
+   "first80": 153,
+   "last80": 255,
+   "count80": 77
   },
   {
    "year": 2007,
@@ -897,7 +1230,10 @@
    "streak90": 3,
    "streak110": 12,
    "frost": 2,
-   "cool60": 153
+   "cool60": 153,
+   "first80": 156,
+   "last80": 275,
+   "count80": 91
   },
   {
    "year": 2008,
@@ -905,7 +1241,10 @@
    "streak90": 2,
    "streak110": 11,
    "frost": 0,
-   "cool60": 175
+   "cool60": 175,
+   "first80": 141,
+   "last80": 270,
+   "count80": 72
   },
   {
    "year": 2009,
@@ -913,7 +1252,10 @@
    "streak90": 5,
    "streak110": 6,
    "frost": 0,
-   "cool60": 167
+   "cool60": 167,
+   "first80": 138,
+   "last80": 262,
+   "count80": 77
   },
   {
    "year": 2010,
@@ -921,7 +1263,10 @@
    "streak90": 5,
    "streak110": 5,
    "frost": 1,
-   "cool60": 182
+   "cool60": 182,
+   "first80": 156,
+   "last80": 275,
+   "count80": 77
   },
   {
    "year": 2011,
@@ -929,7 +1274,10 @@
    "streak90": 4,
    "streak110": 8,
    "frost": 4,
-   "cool60": 164
+   "cool60": 164,
+   "first80": 168,
+   "last80": 274,
+   "count80": 74
   },
   {
    "year": 2012,
@@ -937,7 +1285,10 @@
    "streak90": 7,
    "streak110": 9,
    "frost": 0,
-   "cool60": 160
+   "cool60": 160,
+   "first80": 169,
+   "last80": 267,
+   "count80": 69
   },
   {
    "year": 2013,
@@ -945,7 +1296,10 @@
    "streak90": 3,
    "streak110": 6,
    "frost": 4,
-   "cool60": 160
+   "cool60": 160,
+   "first80": 152,
+   "last80": 264,
+   "count80": 83
   },
   {
    "year": 2014,
@@ -953,7 +1307,10 @@
    "streak90": 2,
    "streak110": 3,
    "frost": 0,
-   "cool60": 154
+   "cool60": 154,
+   "first80": 149,
+   "last80": 269,
+   "count80": 86
   },
   {
    "year": 2015,
@@ -961,7 +1318,10 @@
    "streak90": 4,
    "streak110": 6,
    "frost": 1,
-   "cool60": 148
+   "cool60": 148,
+   "first80": 160,
+   "last80": 271,
+   "count80": 88
   },
   {
    "year": 2016,
@@ -969,7 +1329,10 @@
    "streak90": 3,
    "streak110": 6,
    "frost": 0,
-   "cool60": 152
+   "cool60": 152,
+   "first80": 156,
+   "last80": 264,
+   "count80": 75
   },
   {
    "year": 2017,
@@ -977,7 +1340,10 @@
    "streak90": 2,
    "streak110": 11,
    "frost": 0,
-   "cool60": 142
+   "cool60": 142,
+   "first80": 155,
+   "last80": 257,
+   "count80": 79
   },
   {
    "year": 2018,
@@ -985,7 +1351,10 @@
    "streak90": 4,
    "streak110": 7,
    "frost": 0,
-   "cool60": 164
+   "cool60": 164,
+   "first80": 150,
+   "last80": 268,
+   "count80": 77
   },
   {
    "year": 2019,
@@ -993,7 +1362,10 @@
    "streak90": 4,
    "streak110": 4,
    "frost": 1,
-   "cool60": 170
+   "cool60": 170,
+   "first80": 161,
+   "last80": 261,
+   "count80": 79
   },
   {
    "year": 2020,
@@ -1001,7 +1373,10 @@
    "streak90": 7,
    "streak110": 11,
    "frost": 0,
-   "cool60": 164
+   "cool60": 164,
+   "first80": 131,
+   "last80": 266,
+   "count80": 89
   },
   {
    "year": 2021,
@@ -1009,7 +1384,10 @@
    "streak90": 4,
    "streak110": 9,
    "frost": 0,
-   "cool60": 161
+   "cool60": 161,
+   "first80": 153,
+   "last80": 260,
+   "count80": 75
   },
   {
    "year": 2022,
@@ -1017,7 +1395,10 @@
    "streak90": 4,
    "streak110": 10,
    "frost": 0,
-   "cool60": 164
+   "cool60": 164,
+   "first80": 159,
+   "last80": 271,
+   "count80": 83
   },
   {
    "year": 2023,
@@ -1025,7 +1406,10 @@
    "streak90": 16,
    "streak110": 31,
    "frost": 0,
-   "cool60": 151
+   "cool60": 151,
+   "first80": 136,
+   "last80": 280,
+   "count80": 75
   },
   {
    "year": 2024,
@@ -1033,7 +1417,10 @@
    "streak90": 12,
    "streak110": 12,
    "frost": 0,
-   "cool60": 167
+   "cool60": 167,
+   "first80": 157,
+   "last80": 282,
+   "count80": 116
   },
   {
    "year": 2025,
@@ -1041,7 +1428,10 @@
    "streak90": 9,
    "streak110": 14,
    "frost": 0,
-   "cool60": 136
+   "cool60": 136,
+   "first80": 132,
+   "last80": 268,
+   "count80": 97
   }
  ]
 }
