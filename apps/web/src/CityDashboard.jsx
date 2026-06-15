@@ -8,7 +8,7 @@ import { linreg, mean } from "./lib/stats.js";
 import {
   fetchCityYearly, fetchRural, fetchSeasonal, fetchDiurnal,
   fetchHeatSeason, fetchHeatDeaths, fetchStreaks, fetchGrid, fetchOpenMeteo,
-  fetchNormals, fetchLastNight,
+  fetchNormals, fetchLastNight, fetchCddSplit,
 } from "./lib/data.js";
 import LastNightHero from "./cards/LastNightHero.jsx";
 import UhiCard from "./cards/UhiCard.jsx";
@@ -26,6 +26,7 @@ import GrowthCard from "./cards/GrowthCard.jsx";
 import StreakCard from "./cards/StreakCard.jsx";
 import WinterCard from "./cards/WinterCard.jsx";
 import GridCard from "./cards/GridCard.jsx";
+import NightCoolingCard from "./cards/NightCoolingCard.jsx";
 import SourcesCard from "./cards/SourcesCard.jsx";
 
 export default function CityDashboard({ city }) {
@@ -39,6 +40,7 @@ export default function CityDashboard({ city }) {
   const [grid, setGrid] = useState(null);
   const [normals, setNormals] = useState(null);
   const [lastNight, setLastNight] = useState(null);
+  const [cddSplit, setCddSplit] = useState(null);
   const [windowStart, setWindowStart] = useState(city.baseline.start);
   const [view, setView] = useState("anom");
   const [reloadKey, setReloadKey] = useState(0);
@@ -55,12 +57,14 @@ export default function CityDashboard({ city }) {
     setGrid(null);
     setNormals(null);
     setLastNight(null);
+    setCddSplit(null);
     // these cards read static precomputed assets — independent of ACIS
     fetchDiurnal(city).then((d) => alive && setDiurnal(d)).catch(() => {});
     fetchHeatSeason(city).then((d) => alive && setHeatSeason(d)).catch(() => {});
     fetchHeatDeaths(city).then((d) => alive && setHeatDeaths(d)).catch(() => {});
     fetchStreaks(city).then((d) => alive && setStreaks(d)).catch(() => {});
     fetchGrid(city).then((d) => alive && setGrid(d)).catch(() => {});
+    fetchCddSplit(city).then((d) => alive && setCddSplit(d)).catch(() => {});
     // the live hero hook: last night's low (ACIS) vs the 1970s seasonal normal (asset)
     fetchNormals(city).then((d) => alive && setNormals(d)).catch(() => {});
     fetchLastNight(city).then((d) => alive && setLastNight(d)).catch(() => {});
@@ -419,6 +423,8 @@ export default function CityDashboard({ city }) {
                 </div>
               </Card>
             )}
+
+            {cddSplit && <NightCoolingCard city={city} cddSplit={cddSplit} />}
 
             <Card style={{ background: "transparent", border: `1px dashed ${C.line}` }}>
               <h3 className="text-sm uppercase tracking-widest mb-2" style={{ color: C.muted }}>How this works</h3>

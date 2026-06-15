@@ -20,8 +20,8 @@ verifies stats against NCEI GSOY.
 population-vs-night-gap growth · fixed-vs-rolling baseline goalposts · summer-night
 seasonal series · hour-by-hour diurnal (coolest-hour rise) · hours of overnight relief ·
 100°F-day season length · 80°F-night season span · 80°F-night streaks · vanished winter ·
-cooling degree days · heat deaths (human cost) · July grid demand · sources. Plus a live
-"last night vs the 1970s normal" hero above the stack.
+cooling degree days (total + day/night split) · heat deaths (human cost) · July grid demand ·
+sources. Plus a live "last night vs the 1970s normal" hero above the stack.
 
 The build is green and there is no half-finished work in the tree.
 
@@ -122,12 +122,16 @@ Threshold cited to Obradovich et al. (*Sci. Adv.* 2017) and Minor et al. (*One E
 framed as a published average effect (not Phoenix-specific causation). Differentiated from
 the 80°F-night card by the cited threshold and the sleep/health narrative.
 
-### 9. The thermostat that never turns off (overnight share of cooling demand)
+### 9. The thermostat that never turns off (overnight share of cooling demand) — ✅ SHIPPED (PR #5)
 **Claim:** A rising share of total cooling demand comes from the *night* — the hours that
-used to cost nothing to cool. **Data:** decompose annual CDD into a lows-driven vs
-highs-driven split from daily ACIS (station-only framing, to avoid overlapping the grid
-card). **Risk:** medium (defensible split method). **Verdict:** supportable; extends the
-shipped CDD card from "total" to "how much is the nights' fault."
+used to cost nothing to cool.
+**Built:** `NightCoolingCard.jsx`, fed by `analysis/build_cdd_split.py` → `phx-cdd-split.json`.
+The "defensible split method" risk is retired by using an **exact algebraic identity** rather
+than an attribution model: on cooling days (mean > 65°F), `mean−65 = (Tmax−65)/2 + (Tmin−65)/2`,
+so the day half and night half sum to the standard mean-based CDD the existing total-CDD card
+plots. The card stacks the two halves over time and reports the night's rising share. Station-only
+(no grid overlap); CI-guarded by a night-share-rising check in `verify_v0.py`. Renders only once
+the asset is rebuilt (M7 workflow), like the other daily-derived assets.
 
 *Researched and parked as risky/redundant:* frost-free-season length likely saturates
 against the vanished-winter card (Phoenix already near-zero frost); a "broken-AC / mobile

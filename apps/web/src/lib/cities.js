@@ -75,6 +75,8 @@ export const PHOENIX = {
   gridAsset: "data/phx-grid.json",
   // built by analysis/build_normals.py from ACIS 1970s daily lows/highs (hero baseline)
   normalsAsset: "data/phx-normals.json",
+  // built by analysis/build_cdd_split.py — annual CDD split into day/night halves
+  cddSplitAsset: "data/phx-cdd-split.json",
   // decennial census, Maricopa County (US Census Bureau)
   metroPopulation: {
     1950: 331770, 1960: 663510, 1970: 971228, 1980: 1509175,
