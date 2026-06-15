@@ -12,6 +12,7 @@ import {
 import UhiCard from "./cards/UhiCard.jsx";
 import GoalpostsCard from "./cards/GoalpostsCard.jsx";
 import SeasonsCard from "./cards/SeasonsCard.jsx";
+import ExtremesCard from "./cards/ExtremesCard.jsx";
 import DiurnalCard from "./cards/DiurnalCard.jsx";
 import SeasonLengthCard from "./cards/SeasonLengthCard.jsx";
 import HumanCostCard from "./cards/HumanCostCard.jsx";
@@ -121,6 +122,7 @@ export default function CityDashboard({ city }) {
   }, [decades]);
 
   const cddOk = useMemo(() => vis.filter((r) => r.cdd != null).length > vis.length * 0.7, [vis]);
+  const extremesOk = useMemo(() => vis.filter((r) => r.warmLow != null && r.coldLow != null).length > vis.length * 0.7, [vis]);
   const hotOk = useMemo(() => vis.filter((r) => r.hotNights != null).length > vis.length * 0.7, [vis]);
   const days110Ok = useMemo(() => vis.filter((r) => r.days110 != null).length > vis.length * 0.7, [vis]);
 
@@ -317,6 +319,8 @@ export default function CityDashboard({ city }) {
             {source === "acis" && <GoalpostsCard city={city} rows={rows} />}
 
             {source === "acis" && seasonal && <SeasonsCard city={city} seasonal={seasonal} />}
+
+            {extremesOk && <ExtremesCard city={city} rows={rows} windowStart={windowStart} />}
 
             {diurnal && <DiurnalCard city={city} diurnal={diurnal} />}
 

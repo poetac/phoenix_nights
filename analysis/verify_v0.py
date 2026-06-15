@@ -63,7 +63,10 @@ def main():
         tmin, tmax = fnum(row, "TMIN"), fnum(row, "TMAX")
         if tmin is None or tmax is None:
             continue
-        years[y] = {"tmin": tmin, "tmax": tmax, "cdsd": fnum(row, "CDSD")}
+        # EMNT = the year's single coldest daily low (the "floor" the
+        # extremes card plots); EMXT = the hottest daily high.
+        years[y] = {"tmin": tmin, "tmax": tmax, "cdsd": fnum(row, "CDSD"),
+                    "emnt": fnum(row, "EMNT")}
 
     print(f"GSOY rows with TMIN+TMAX: {len(years)} ({min(years)}-{max(years)})")
 
@@ -78,11 +81,16 @@ def main():
     tmax_slope = linreg([(y, v["tmax"]) for y, v in since70]) * 10
     ratio = tmin_slope / tmax_slope if abs(tmax_slope) > 0.05 else float("nan")
 
+    # Extremes card claim: even the year's coldest night (EMNT) is warming.
+    emnt70 = [(y, v["emnt"]) for y, v in since70 if v["emnt"] is not None]
+    emnt_slope = linreg(emnt70) * 10 if len(emnt70) >= 3 else float("nan")
+
     checks = [
         ("1970s avg low ~59F", low_70s, 57.0 <= low_70s <= 61.0),
         ("2010s avg low ~65F", low_10s, 63.0 <= low_10s <= 67.0),
         ("TMIN trend since 1970 (F/decade) positive", tmin_slope, tmin_slope > 0),
         ("TMIN/TMAX trend ratio in 1.5-5x", ratio, 1.5 <= ratio <= 5.0),
+        ("coldest-night (EMNT) trend since 1970 positive", emnt_slope, emnt_slope > 0),
     ]
 
     ok = True

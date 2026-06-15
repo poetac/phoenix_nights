@@ -49,15 +49,13 @@ The build is green and there is no half-finished work in the tree.
 Goal: make the single-city story undeniable. Backlog is ordered by impact ÷ risk;
 build top-down, but any item can be pulled forward.
 
-### 1. Extreme-minimum erosion — *recommended first*
+### 1. Extreme-minimum erosion — ✅ SHIPPED (PR #1)
 **Claim:** Even the *coldest* night of the year is warming, and the *hottest* night
-keeps setting records. Every existing card is a mean, a count, or a streak; none shows
+keeps setting records. Every other card is a mean, a count, or a streak; this one shows
 the single warmest and single coldest overnight low per year.
-**Data:** ACIS yearly reduce on TMIN (`reduce:"max"` and `reduce:"min"`) — one request,
-no new asset needed beyond extending `fetchCityYearly`. Trivially reproducible.
-**Why it lands:** "the floor is rising" is the thesis in its purest form — the desert's
-nightly reset is disappearing even on the year's best night.
-**Risk:** low. **Verdict:** supportable, build it.
+**Built:** `ExtremesCard.jsx`, fed by two extra ACIS yearly reduces (`mint` `max`/`min`)
+added to `fetchCityYearly` — no new asset. CI guards it via a GSOY `EMNT` (coldest-night)
+trend check in `verify_v0.py`.
 
 ### 2. Hot-night season calendar creep
 **Claim:** The first 80°F+ night arrives earlier and the last one ends later — the
@@ -93,6 +91,45 @@ cooler — shown across several ACIS stations on one chart or a small map.
 **Risk:** higher (station selection, record-length alignment, more UI). Conceptually
 adjacent to the multi-city work, so it may instead seed M5.
 **Verdict:** promising; revisit once 1–3 land.
+
+### 6. The collapsing day–night gap (diurnal temperature range) — *strong, nearly free*
+**Claim:** The desert's signature 30°F+ swing between afternoon and dawn is shrinking —
+the city is erasing the difference between day and night itself.
+**Data:** none new. DTR = `high − low` per year, already on every row from `fetchCityYearly`;
+plot annual/decade mean DTR over the full record.
+**Why it lands:** a falling DTR against flat highs *is* rising lows — the entire thesis as
+one collapsing line, and a textbook UHI/greenhouse fingerprint. Caveat to state: DTR is
+noisy and globally rebounded somewhat post-1980, so show the long record.
+**Risk:** low. **Verdict:** supportable; best next build after the human-cost work.
+
+### 7. The narrowing cool window (hours of overnight relief)
+**Claim:** The pre-dawn window cool enough to recover in has shrunk to almost nothing —
+not just a warmer minimum, but fewer hours below a comfort threshold.
+**Data:** `phx-diurnal.json` already holds 24 hourly temps per decade; derive hours/night
+below ~80–85°F per decade (extend `build_diurnal.py` if a per-year version is wanted).
+**Risk:** low–medium — lead with "hours of cool," not clock-time of the minimum (which
+barely drifts). **Verdict:** supportable; distinct from the diurnal card's curve compare.
+
+### 8. The night you can't sleep through (sleep-loss threshold)
+**Claim:** Phoenix now spends most of summer above the ~77°F (25°C) nighttime low where
+sleep measurably degrades — a human-physiology line, not just a statistical one.
+**Data:** ACIS daily `mint` (already in the streak pipeline); count nights/year ≥ 77°F.
+Cite Minor et al. (*One Earth* 2022) and Obradovich et al. (*Sci. Adv.* 2017) for the
+threshold; attribute it to the literature, don't assert Phoenix-specific causation.
+**Risk:** low on data, medium on framing rigor. **Verdict:** supportable; the best new
+*lived-experience* frame — differentiate from the 80°F-night card by the cited threshold.
+
+### 9. The thermostat that never turns off (overnight share of cooling demand)
+**Claim:** A rising share of total cooling demand comes from the *night* — the hours that
+used to cost nothing to cool. **Data:** decompose annual CDD into a lows-driven vs
+highs-driven split from daily ACIS (station-only framing, to avoid overlapping the grid
+card). **Risk:** medium (defensible split method). **Verdict:** supportable; extends the
+shipped CDD card from "total" to "how much is the nights' fault."
+
+*Researched and parked as risky/redundant:* frost-free-season length likely saturates
+against the vanished-winter card (Phoenix already near-zero frost); a "broken-AC / mobile
+home" angle should fold into item 3 (human-cost) rather than ship standalone; NWS
+heat-alert calendar creep has a product-criteria-change confound and is daytime-driven.
 
 **Cross-cutting for M4:**
 - Add a sanity check per new card to `analysis/verify_v0.py` so CI guards the claim.
