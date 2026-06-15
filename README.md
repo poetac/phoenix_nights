@@ -90,4 +90,6 @@ Any data pipeline must reproduce these (from the official record):
 - TMIN trend since 1970 roughly 2–3× the TMAX trend.
 - June normals (1991–2020, Sky Harbor): high ≈ 104.2°F, low ≈ 78.6°F.
 - First 90°F+ daily minimum was 1936; the next didn't occur until 1970 — now they're routine.
+- Even the year's *coldest* night warms: GSOY `EMNT` (annual extreme minimum) trends upward since 1970. (Verified in `analysis/verify_v0.py`; shown by the extremes card.)
+- The diurnal range (daily high − low) shrinks over the Sky Harbor era (1948+): lows rise faster than highs, so the desert's day–night swing narrows. (Verified against GSOY; shown by the gap card.)
 - The warm-night season is longer than it was in the 1970s: the span from the first to the last 80°F+ night now opens earlier in spring and closes later in fall (`verify_v0.py` re-derives this from ACIS daily lows).

@@ -12,6 +12,9 @@ import {
 import UhiCard from "./cards/UhiCard.jsx";
 import GoalpostsCard from "./cards/GoalpostsCard.jsx";
 import SeasonsCard from "./cards/SeasonsCard.jsx";
+import ExtremesCard from "./cards/ExtremesCard.jsx";
+import GapCard from "./cards/GapCard.jsx";
+import SleepCard from "./cards/SleepCard.jsx";
 import DiurnalCard from "./cards/DiurnalCard.jsx";
 import SeasonLengthCard from "./cards/SeasonLengthCard.jsx";
 import HotNightSeasonCard from "./cards/HotNightSeasonCard.jsx";
@@ -122,6 +125,8 @@ export default function CityDashboard({ city }) {
   }, [decades]);
 
   const cddOk = useMemo(() => vis.filter((r) => r.cdd != null).length > vis.length * 0.7, [vis]);
+  const extremesOk = useMemo(() => vis.filter((r) => r.warmLow != null && r.coldLow != null).length > vis.length * 0.7, [vis]);
+  const sleepOk = useMemo(() => vis.filter((r) => r.sleepNights != null).length > vis.length * 0.7, [vis]);
   const hotOk = useMemo(() => vis.filter((r) => r.hotNights != null).length > vis.length * 0.7, [vis]);
   const days110Ok = useMemo(() => vis.filter((r) => r.days110 != null).length > vis.length * 0.7, [vis]);
 
@@ -319,6 +324,10 @@ export default function CityDashboard({ city }) {
 
             {source === "acis" && seasonal && <SeasonsCard city={city} seasonal={seasonal} />}
 
+            {extremesOk && <ExtremesCard city={city} rows={rows} windowStart={windowStart} />}
+
+            {rows.length > 0 && <GapCard city={city} rows={rows} />}
+
             {diurnal && <DiurnalCard city={city} diurnal={diurnal} />}
 
             {heatSeason && <SeasonLengthCard city={city} heatSeason={heatSeason} />}
@@ -361,6 +370,8 @@ export default function CityDashboard({ city }) {
                 )}
               </Card>
             )}
+
+            {sleepOk && <SleepCard city={city} rows={rows} windowStart={windowStart} />}
 
             {streaks && <StreakCard city={city} streaks={streaks} />}
 
