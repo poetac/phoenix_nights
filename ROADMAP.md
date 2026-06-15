@@ -128,6 +128,23 @@ against the vanished-winter card (Phoenix already near-zero frost); a "broken-AC
 home" angle should fold into item 3 (human-cost) rather than ship standalone; NWS
 heat-alert calendar creep has a product-criteria-change confound and is daytime-driven.
 
+### Audit (June 2026)
+With 17 cards live, the lineup covers the trend, the attribution, the felt experience, and
+the human cost thoroughly. Two genuinely new angles the backlog above doesn't yet capture:
+
+- **10. "Last night vs the normal your grandparents knew"** — a live topical hook at the top
+  of the page: fetch the most recent night's low from ACIS and show it as an anomaly against
+  the fixed 1970s baseline ("last night was +N°F above the 1970s normal"). Makes the abstract
+  trend concrete and current; strong for a public-facing app. **Risk:** low–medium (handling
+  a single fresh observation, time zones, missing-data days). **Verdict:** supportable; the
+  best *engagement* card. Probably belongs near the hero, not in the card stack.
+- **Heat & equity / tree canopy** — overnight heat is not evenly distributed; canopy and
+  surface temperature track income. Powerful, but it rides a **different data spine**
+  (satellite land-surface temperature, American Forests Tree Equity, census tracts) rather
+  than the single-station thesis — treat as its own track, not a quick card. Parked.
+
+Everything else obvious is already covered above or shipped.
+
 **Cross-cutting for M4:**
 - Add a sanity check per new card to `analysis/verify_v0.py` so CI guards the claim.
 - Update the README "Sanity checks" list and card inventory as cards ship.
