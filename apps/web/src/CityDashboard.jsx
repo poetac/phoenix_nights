@@ -14,6 +14,7 @@ import GoalpostsCard from "./cards/GoalpostsCard.jsx";
 import SeasonsCard from "./cards/SeasonsCard.jsx";
 import DiurnalCard from "./cards/DiurnalCard.jsx";
 import SeasonLengthCard from "./cards/SeasonLengthCard.jsx";
+import HotNightSeasonCard from "./cards/HotNightSeasonCard.jsx";
 import HumanCostCard from "./cards/HumanCostCard.jsx";
 import GrowthCard from "./cards/GrowthCard.jsx";
 import StreakCard from "./cards/StreakCard.jsx";
@@ -321,6 +322,8 @@ export default function CityDashboard({ city }) {
             {diurnal && <DiurnalCard city={city} diurnal={diurnal} />}
 
             {heatSeason && <SeasonLengthCard city={city} heatSeason={heatSeason} />}
+
+            {streaks && <HotNightSeasonCard city={city} streaks={streaks} />}
 
             {hotOk && (
               <Card>

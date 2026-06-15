@@ -1,0 +1,73 @@
+name: Rebuild data assets
+
+# The precomputed JSON under apps/web/public/data/ is committed to the repo and
+# served verbatim, so it silently goes stale once a new year completes. This job
+# re-runs the analysis pipelines against the official record (ACIS / NCEI / EIA
+# are all reachable from Actions) and commits any refreshed assets. Run it by
+# hand after shipping a pipeline change, or let the monthly schedule catch the
+# year rollover.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 09:00 UTC on the 5th of each month — picks up the previous year a few days
+    # after it closes, and is a no-op (no commit) the rest of the time.
+    - cron: "0 9 5 * *"
+
+permissions:
+  contents: write   # push refreshed assets
+  actions: write    # dispatch the Pages deploy below
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    env:
+      EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # ACIS-only builders — no API key, cheap, the ones that go stale yearly.
+      - name: Rebuild ACIS-derived assets
+        run: |
+          python3 analysis/build_streaks.py
+          python3 analysis/build_heat_season.py
+
+      # Heavy NCEI hourly pull; rarely changes. Best-effort, never blocks.
+      - name: Rebuild diurnal asset (NCEI hourly)
+        continue-on-error: true
+        run: python3 analysis/build_diurnal.py
+
+      # Needs the EIA_API_KEY secret; skipped (not failed) when it isn't set.
+      - name: Rebuild grid asset (EIA-930)
+        if: ${{ env.EIA_API_KEY != '' }}
+        continue-on-error: true
+        run: python3 analysis/build_grid.py
+
+      # Gate: don't commit anything if the headline numbers stopped checking out.
+      - name: Verify statistics against the official record
+        run: python3 analysis/verify_v0.py
+
+      - name: Commit refreshed assets if changed
+        id: commit
+        run: |
+          git config user.name "phoenix-nights-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- apps/web/public/data; then
+            echo "No asset changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git add apps/web/public/data
+            git commit -m "Refresh precomputed data assets from the official record"
+            git push origin HEAD:${{ github.ref_name }}
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # A GITHUB_TOKEN push doesn't trigger pages.yml, so kick the deploy here.
+      - name: Deploy refreshed data to Pages
+        if: steps.commit.outputs.changed == 'true' && github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref main
