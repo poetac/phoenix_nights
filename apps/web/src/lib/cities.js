@@ -73,6 +73,8 @@ export const PHOENIX = {
   streaksAsset: "data/phx-streaks.json",
   // built by analysis/build_grid.py from EIA-930 hourly demand (needs EIA_API_KEY)
   gridAsset: "data/phx-grid.json",
+  // built by analysis/build_normals.py from ACIS 1970s daily lows/highs (hero baseline)
+  normalsAsset: "data/phx-normals.json",
   // decennial census, Maricopa County (US Census Bureau)
   metroPopulation: {
     1950: 331770, 1960: 663510, 1970: 971228, 1980: 1509175,

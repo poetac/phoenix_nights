@@ -134,12 +134,14 @@ heat-alert calendar creep has a product-criteria-change confound and is daytime-
 With 17 cards live, the lineup covers the trend, the attribution, the felt experience, and
 the human cost thoroughly. Two genuinely new angles the backlog above doesn't yet capture:
 
-- **10. "Last night vs the normal your grandparents knew"** — a live topical hook at the top
-  of the page: fetch the most recent night's low from ACIS and show it as an anomaly against
-  the fixed 1970s baseline ("last night was +N°F above the 1970s normal"). Makes the abstract
-  trend concrete and current; strong for a public-facing app. **Risk:** low–medium (handling
-  a single fresh observation, time zones, missing-data days). **Verdict:** supportable; the
-  best *engagement* card. Probably belongs near the hero, not in the card stack.
+- **10. "Last night vs the normal your grandparents knew"** — ✅ SHIPPED (PR #3). A live hook
+  at the top of the page: `LastNightHero.jsx` fetches the most recently reported night's low
+  from ACIS (a 2-week window; Phoenix-local date computed at UTC-7, no DST) and shows it as an
+  anomaly against a *seasonal* 1970s normal — so a June night is judged against a 1970s June
+  night, not the yearly average. The baseline is `analysis/build_normals.py` → `phx-normals.json`
+  (1970–1979 daily low/high, smoothed ±7 days, keyed `MM-DD`); CI-guarded by a mid-July/mid-Jan
+  normal-low sanity check in `verify_v0.py`. Honest on cool nights too (shows "below" when it is),
+  and captioned "one night is weather, not climate." Lives above the card stack, as planned.
 - **Heat & equity / tree canopy** — overnight heat is not evenly distributed; canopy and
   surface temperature track income. Powerful, but it rides a **different data spine**
   (satellite land-surface temperature, American Forests Tree Equity, census tracts) rather

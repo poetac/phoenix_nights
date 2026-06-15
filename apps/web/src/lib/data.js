@@ -168,6 +168,41 @@ export async function fetchGrid(city) {
   return j;
 }
 
+export async function fetchNormals(city) {
+  if (!city.normalsAsset) return null;
+  const j = await fetchAsset(city.normalsAsset);
+  if (!j.byDate || Object.keys(j.byDate).length < 300) throw new Error("normals asset too thin");
+  return j;
+}
+
+// Phoenix keeps UTC-7 all year (no DST). Shifting "now" by the offset and
+// reading the UTC date gives the station's local calendar date, so we never
+// ask ACIS for a day that hasn't started there yet.
+function phoenixDate(offsetDays = 0) {
+  const ms = Date.now() - 7 * 3600 * 1000 + offsetDays * 86400000;
+  return new Date(ms).toISOString().slice(0, 10);
+}
+
+// The most recent night the station actually reported a low. ACIS posts the
+// last day or two late (and current-year days can be flagged missing), so we
+// pull a two-week window and take the latest day with real data.
+export async function fetchLastNight(city) {
+  const j = await acis({
+    sid: city.threadSid,
+    sdate: phoenixDate(-14),
+    edate: phoenixDate(0),
+    elems: [{ name: "mint" }, { name: "maxt" }],
+  });
+  let latest = null;
+  for (const row of j.data) {
+    const low = num(row[1]);
+    if (low == null) continue;
+    latest = { date: row[0], low, high: num(row[2]) };
+  }
+  if (!latest) throw new Error("no recent low");
+  return latest;
+}
+
 export async function fetchOpenMeteo(city) {
   const endYear = lastCompleteYear();
   const [lat, lon] = city.latLon;
