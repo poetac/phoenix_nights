@@ -38,6 +38,7 @@ Also wired in:
 - **ACIS daily highs** — every daily max since 1896 (one ~1 MB request) feeds `analysis/build_heat_season.py` → the 100°F-season card.
 - **ACIS daily lows + highs** — `analysis/build_streaks.py` → per-year streak/threshold series (longest run of 80°F+ nights, 110°F+ days, frost nights, cool nights) plus the warm-night *season* span (day-of-year of the first and last 80°F+ night). Validation: 2023's nationally reported 31-day run of 110°F+ days falls out of the pipeline exactly.
 - **EIA-930 hourly grid demand** — `analysis/build_grid.py` fetches July hourly demand for AZPS + SRP (`api.eia.gov` v2; set the `EIA_API_KEY` env var — free key, never committed) and emits July demand-by-local-hour curves per year. The public API serves hourly data from 2019.
+- **ACIS 1970s seasonal normals + last night** — `analysis/build_normals.py` averages 1970–1979 daily lows/highs into a smoothed day-of-year baseline (`apps/web/public/data/phx-normals.json`, keyed `MM-DD`, ±7-day window). The page then fetches the most recently reported night live (a 2-week ACIS window; Phoenix is UTC-7 so the station's local date is computed without DST) and shows it as an anomaly against that fixed *seasonal* normal in the hero — a June night judged against a 1970s June night, not the yearly average.
 
 Tested and rejected: JJA dew-point trends from the hourly archive show no clean signal at decade resolution (monsoon variability dominates; 1950s mean 54.8°F vs 2020s 50.0°F with non-monotonic decades between) — the "drying city" story is not supportable from this station's record, so there is no card. The dew curves remain in `phx-diurnal.json` for future work.
 
@@ -93,3 +94,4 @@ Any data pipeline must reproduce these (from the official record):
 - Even the year's *coldest* night warms: GSOY `EMNT` (annual extreme minimum) trends upward since 1970. (Verified in `analysis/verify_v0.py`; shown by the extremes card.)
 - The diurnal range (daily high − low) shrinks over the Sky Harbor era (1948+): lows rise faster than highs, so the desert's day–night swing narrows. (Verified against GSOY; shown by the gap card.)
 - The warm-night season is longer than it was in the 1970s: the span from the first to the last 80°F+ night now opens earlier in spring and closes later in fall (`verify_v0.py` re-derives this from ACIS daily lows).
+- The live hero's 1970s seasonal-normal low (its fixed yardstick) is ≈ 80°F in mid-July and ≈ 40°F in mid-January. (Reproduced in `verify_v0.py` from ACIS 1970–1979 daily lows.)

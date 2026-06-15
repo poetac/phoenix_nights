@@ -8,7 +8,9 @@ import { linreg, mean } from "./lib/stats.js";
 import {
   fetchCityYearly, fetchRural, fetchSeasonal, fetchDiurnal,
   fetchHeatSeason, fetchHeatDeaths, fetchStreaks, fetchGrid, fetchOpenMeteo,
+  fetchNormals, fetchLastNight,
 } from "./lib/data.js";
+import LastNightHero from "./cards/LastNightHero.jsx";
 import UhiCard from "./cards/UhiCard.jsx";
 import GoalpostsCard from "./cards/GoalpostsCard.jsx";
 import SeasonsCard from "./cards/SeasonsCard.jsx";
@@ -34,6 +36,8 @@ export default function CityDashboard({ city }) {
   const [heatDeaths, setHeatDeaths] = useState(null);
   const [streaks, setStreaks] = useState(null);
   const [grid, setGrid] = useState(null);
+  const [normals, setNormals] = useState(null);
+  const [lastNight, setLastNight] = useState(null);
   const [windowStart, setWindowStart] = useState(city.baseline.start);
   const [view, setView] = useState("anom");
   const [reloadKey, setReloadKey] = useState(0);
@@ -48,12 +52,17 @@ export default function CityDashboard({ city }) {
     setHeatDeaths(null);
     setStreaks(null);
     setGrid(null);
+    setNormals(null);
+    setLastNight(null);
     // these cards read static precomputed assets — independent of ACIS
     fetchDiurnal(city).then((d) => alive && setDiurnal(d)).catch(() => {});
     fetchHeatSeason(city).then((d) => alive && setHeatSeason(d)).catch(() => {});
     fetchHeatDeaths(city).then((d) => alive && setHeatDeaths(d)).catch(() => {});
     fetchStreaks(city).then((d) => alive && setStreaks(d)).catch(() => {});
     fetchGrid(city).then((d) => alive && setGrid(d)).catch(() => {});
+    // the live hero hook: last night's low (ACIS) vs the 1970s seasonal normal (asset)
+    fetchNormals(city).then((d) => alive && setNormals(d)).catch(() => {});
+    fetchLastNight(city).then((d) => alive && setLastNight(d)).catch(() => {});
     (async () => {
       try {
         const res = await fetchCityYearly(city);
@@ -170,6 +179,8 @@ export default function CityDashboard({ city }) {
             <em> overnight lows</em> abandoning their history faster than its highs?
           </p>
         </header>
+
+        <LastNightHero city={city} lastNight={lastNight} normals={normals} />
 
         {state.loading && (
           <Card>

@@ -13,6 +13,8 @@ first->last 80F night span the streaks card draws) is re-derived
 straight from ACIS daily lows instead:
 
   - the 80F-night season is longer now than it was in the 1970s
+  - the 1970s seasonal "normal" low the live hero compares against is
+    seasonally sane (mid-July ~80F, mid-January ~40F)
 
 Stdlib only. Exit code 0 = all checks pass.
 """
@@ -82,6 +84,40 @@ def warm_night_spans(start_year):
     return {y: d["last"] - d["first"] + 1
             for y, d in years.items()
             if d["miss"] <= MAX_MISSING_DAYS and d["first"] is not None}
+
+
+def fetch_acis_daily_mint(start_year, end_year):
+    """Every daily low across a closed year range (one ACIS request)."""
+    body = json.dumps({
+        "sid": "PHXthr 9",
+        "sdate": f"{start_year}-01-01",
+        "edate": f"{end_year}-12-31",
+        "elems": [{"name": "mint"}],
+    }).encode()
+    req = urllib.request.Request(ACIS_URL, data=body,
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=120) as r:
+        return json.load(r)["data"]
+
+
+def seasonal_normal_low(rows, month, day, window=7):
+    """1970s mean daily low in a +/-window-day window around month/day.
+
+    Independently reproduces build_normals.py's seasonal baseline (the
+    yardstick the live hero compares last night against). The two test dates
+    (mid-July, mid-January) sit far from year boundaries, so no wrap needed.
+    """
+    lo = datetime.date(2000, month, day) - datetime.timedelta(days=window)
+    hi = datetime.date(2000, month, day) + datetime.timedelta(days=window)
+    vals = []
+    for date, val in rows:
+        try:
+            v = float(val)
+        except (TypeError, ValueError):
+            continue
+        if lo <= datetime.date(2000, int(date[5:7]), int(date[8:10])) <= hi:
+            vals.append(v)
+    return sum(vals) / len(vals) if vals else float("nan")
 
 
 def fnum(row, key):
@@ -163,6 +199,14 @@ def main():
     checks.append(
         ("80F-night season longer than the 1970s", span_recent, span_recent > span_70s))
 
+    # Hero baseline: the 1970s seasonal normal low the live "last night vs the
+    # 1970s normal" hook measures against — recomputed straight from ACIS.
+    base_rows = fetch_acis_daily_mint(1970, 1979)
+    july_norm = seasonal_normal_low(base_rows, 7, 15)
+    jan_norm = seasonal_normal_low(base_rows, 1, 15)
+    checks.append(("1970s mid-July normal low ~80F (hero baseline)", july_norm, 76.0 <= july_norm <= 84.0))
+    checks.append(("1970s mid-Jan normal low ~40F (hero baseline)", jan_norm, 34.0 <= jan_norm <= 46.0))
+
     ok = True
     for name, value, passed in checks:
         ok &= passed
@@ -170,6 +214,7 @@ def main():
 
     print(f"\nTMIN: +{tmin_slope:.2f} F/decade | TMAX: +{tmax_slope:.2f} F/decade | ratio {ratio:.1f}x")
     print(f"80F-night season: 1970s ~{span_70s:.0f} days vs last 10y ~{span_recent:.0f} days")
+    print(f"1970s normal low (hero baseline): mid-Jul ~{july_norm:.0f}F, mid-Jan ~{jan_norm:.0f}F")
     sys.exit(0 if ok else 1)
 
 
