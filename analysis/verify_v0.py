@@ -15,12 +15,15 @@ straight from ACIS daily lows instead:
   - the 80F-night season is longer now than it was in the 1970s
   - the 1970s seasonal "normal" low the live hero compares against is
     seasonally sane (mid-July ~80F, mid-January ~40F)
+  - the overnight "cool window" (hours/night below 85F in the committed
+    diurnal curve) is narrower now than in the 1970s
 
 Stdlib only. Exit code 0 = all checks pass.
 """
 
 import datetime
 import json
+import pathlib
 import sys
 import urllib.request
 
@@ -120,6 +123,25 @@ def seasonal_normal_low(rows, month, day, window=7):
     return sum(vals) / len(vals) if vals else float("nan")
 
 
+DIURNAL_ASSET = (pathlib.Path(__file__).resolve().parent.parent
+                 / "apps" / "web" / "public" / "data" / "phx-diurnal.json")
+
+
+def cool_window_hours():
+    """Hours/night below 85F in the committed JJA diurnal curve, 1970s vs the
+    latest solid decade — the 'narrowing cool window' card. Read from the asset
+    build_diurnal.py emits from NCEI hourly (re-deriving here would re-pull MB
+    across two station eras); the trend is the guard against a bad rebuild.
+    Returns (hrs_1970s, hrs_now, now_label) or None if the asset is absent.
+    """
+    if not DIURNAL_ASSET.exists():
+        return None
+    dec = json.loads(DIURNAL_ASSET.read_text())["decades"]
+    solid = sorted(k for k in dec if sum(dec[k]["nObs"]) / 24 >= 500)
+    below85 = lambda k: sum(1 for x in dec[k]["temp"] if x < 85)
+    return below85("1970"), below85(solid[-1]), f"{solid[-1]}s"
+
+
 def fnum(row, key):
     v = row.get(key)
     if v is None:
@@ -206,6 +228,13 @@ def main():
     jan_norm = seasonal_normal_low(base_rows, 1, 15)
     checks.append(("1970s mid-July normal low ~80F (hero baseline)", july_norm, 76.0 <= july_norm <= 84.0))
     checks.append(("1970s mid-Jan normal low ~40F (hero baseline)", jan_norm, 34.0 <= jan_norm <= 46.0))
+
+    # Narrowing cool window: hours/night below 85F shrink from the 1970s to now.
+    cw = cool_window_hours()
+    if cw is not None:
+        cw70, cw_now, cw_label = cw
+        checks.append((f"cool window <85F shrinks 1970s({cw70}h)->{cw_label}({cw_now}h)",
+                       cw70 - cw_now, cw_now < cw70))
 
     ok = True
     for name, value, passed in checks:

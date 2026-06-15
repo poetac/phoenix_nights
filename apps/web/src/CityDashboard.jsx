@@ -18,6 +18,7 @@ import ExtremesCard from "./cards/ExtremesCard.jsx";
 import GapCard from "./cards/GapCard.jsx";
 import SleepCard from "./cards/SleepCard.jsx";
 import DiurnalCard from "./cards/DiurnalCard.jsx";
+import CoolWindowCard from "./cards/CoolWindowCard.jsx";
 import SeasonLengthCard from "./cards/SeasonLengthCard.jsx";
 import HotNightSeasonCard from "./cards/HotNightSeasonCard.jsx";
 import HumanCostCard from "./cards/HumanCostCard.jsx";
@@ -340,6 +341,8 @@ export default function CityDashboard({ city }) {
             {rows.length > 0 && <GapCard city={city} rows={rows} />}
 
             {diurnal && <DiurnalCard city={city} diurnal={diurnal} />}
+
+            {diurnal && <CoolWindowCard city={city} diurnal={diurnal} />}
 
             {heatSeason && <SeasonLengthCard city={city} heatSeason={heatSeason} />}
 

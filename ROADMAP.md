@@ -18,9 +18,10 @@ verifies stats against NCEI GSOY.
 
 **Shipped cards:** night-warming trend & ratio · UHI city-vs-desert decomposition ·
 population-vs-night-gap growth · fixed-vs-rolling baseline goalposts · summer-night
-seasonal series · hour-by-hour diurnal (coolest-hour rise) · 100°F-day season length ·
-80°F-night season span · 80°F-night streaks · vanished winter · cooling degree days ·
-heat deaths (human cost) · July grid demand · sources.
+seasonal series · hour-by-hour diurnal (coolest-hour rise) · hours of overnight relief ·
+100°F-day season length · 80°F-night season span · 80°F-night streaks · vanished winter ·
+cooling degree days · heat deaths (human cost) · July grid demand · sources. Plus a live
+"last night vs the 1970s normal" hero above the stack.
 
 The build is green and there is no half-finished work in the tree.
 
@@ -102,13 +103,16 @@ is erasing the difference between day and night itself.
 suppressed DTR and confounds the urban signal. CI-guarded by a TMAX−TMIN since-1948
 negative-trend check in `verify_v0.py`.
 
-### 7. The narrowing cool window (hours of overnight relief)
+### 7. The narrowing cool window (hours of overnight relief) — ✅ SHIPPED (PR #4)
 **Claim:** The pre-dawn window cool enough to recover in has shrunk to almost nothing —
 not just a warmer minimum, but fewer hours below a comfort threshold.
-**Data:** `phx-diurnal.json` already holds 24 hourly temps per decade; derive hours/night
-below ~80–85°F per decade (extend `build_diurnal.py` if a per-year version is wanted).
-**Risk:** low–medium — lead with "hours of cool," not clock-time of the minimum (which
-barely drifts). **Verdict:** supportable; distinct from the diurnal card's curve compare.
+**Built:** `CoolWindowCard.jsx`, derived client-side from the committed `phx-diurnal.json`
+(no new asset): a stacked bar of hours/night below 85°F per decade, split out below the
+cited 77°F sleep-recovery line. A typical summer night gave ~6 h below 85°F in the 1970s →
+0 h in the 2020s; the deep 77°F recovery window closed after the 1960s. Caveat stated: it's
+the decade's *average* JJA night (mean hourly curve), not a per-night distribution.
+CI-guarded by a cool-window-shrinks check in `verify_v0.py`. Leads with "hours of cool,"
+not clock-time of the minimum, per the note below. Distinct from the diurnal curve compare.
 
 ### 8. The night you can't sleep through (sleep-loss threshold) — ✅ SHIPPED (PR #1)
 **Claim:** Phoenix now spends most of summer above the ~77°F (25°C) nighttime low where

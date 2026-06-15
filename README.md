@@ -95,3 +95,4 @@ Any data pipeline must reproduce these (from the official record):
 - The diurnal range (daily high − low) shrinks over the Sky Harbor era (1948+): lows rise faster than highs, so the desert's day–night swing narrows. (Verified against GSOY; shown by the gap card.)
 - The warm-night season is longer than it was in the 1970s: the span from the first to the last 80°F+ night now opens earlier in spring and closes later in fall (`verify_v0.py` re-derives this from ACIS daily lows).
 - The live hero's 1970s seasonal-normal low (its fixed yardstick) is ≈ 80°F in mid-July and ≈ 40°F in mid-January. (Reproduced in `verify_v0.py` from ACIS 1970–1979 daily lows.)
+- The overnight "cool window" is narrower than it was: hours per typical summer night below 85°F fall from ~6 in the 1970s to ~0 in the 2020s, and the deeper 77°F sleep-recovery window closed after the 1960s. (Derived from the committed diurnal curve; guarded in `verify_v0.py`.)
