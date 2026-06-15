@@ -85,12 +85,19 @@ def main():
     emnt70 = [(y, v["emnt"]) for y, v in since70 if v["emnt"] is not None]
     emnt_slope = linreg(emnt70) * 10 if len(emnt70) >= 3 else float("nan")
 
+    # Gap card claim: the diurnal range (TMAX - TMIN) is shrinking because lows
+    # rise faster than highs. Scoped to 1948+ (Sky Harbor modern era), matching
+    # the card, to avoid the earlier agricultural "oasis effect" confound.
+    since48 = sorted((y, v) for y, v in years.items() if y >= 1948)
+    dtr_slope = linreg([(y, v["tmax"] - v["tmin"]) for y, v in since48]) * 10
+
     checks = [
         ("1970s avg low ~59F", low_70s, 57.0 <= low_70s <= 61.0),
         ("2010s avg low ~65F", low_10s, 63.0 <= low_10s <= 67.0),
         ("TMIN trend since 1970 (F/decade) positive", tmin_slope, tmin_slope > 0),
         ("TMIN/TMAX trend ratio in 1.5-5x", ratio, 1.5 <= ratio <= 5.0),
         ("coldest-night (EMNT) trend since 1970 positive", emnt_slope, emnt_slope > 0),
+        ("diurnal range (TMAX-TMIN) shrinking since 1948", dtr_slope, dtr_slope < 0),
     ]
 
     ok = True

@@ -92,15 +92,13 @@ cooler — shown across several ACIS stations on one chart or a small map.
 adjacent to the multi-city work, so it may instead seed M5.
 **Verdict:** promising; revisit once 1–3 land.
 
-### 6. The collapsing day–night gap (diurnal temperature range) — *strong, nearly free*
-**Claim:** The desert's signature 30°F+ swing between afternoon and dawn is shrinking —
-the city is erasing the difference between day and night itself.
-**Data:** none new. DTR = `high − low` per year, already on every row from `fetchCityYearly`;
-plot annual/decade mean DTR over the full record.
-**Why it lands:** a falling DTR against flat highs *is* rising lows — the entire thesis as
-one collapsing line, and a textbook UHI/greenhouse fingerprint. Caveat to state: DTR is
-noisy and globally rebounded somewhat post-1980, so show the long record.
-**Risk:** low. **Verdict:** supportable; best next build after the human-cost work.
+### 6. The collapsing day–night gap (diurnal temperature range) — ✅ SHIPPED (PR #1)
+**Claim:** The desert's signature swing between afternoon and dawn is shrinking — the city
+is erasing the difference between day and night itself.
+**Built:** `GapCard.jsx`, DTR = `high − low` per year (no new data). Scoped to **1948+**
+(Sky Harbor modern era) to avoid the early-record agricultural "oasis effect" that
+suppressed DTR and confounds the urban signal. CI-guarded by a TMAX−TMIN since-1948
+negative-trend check in `verify_v0.py`.
 
 ### 7. The narrowing cool window (hours of overnight relief)
 **Claim:** The pre-dawn window cool enough to recover in has shrunk to almost nothing —
@@ -110,14 +108,13 @@ below ~80–85°F per decade (extend `build_diurnal.py` if a per-year version is
 **Risk:** low–medium — lead with "hours of cool," not clock-time of the minimum (which
 barely drifts). **Verdict:** supportable; distinct from the diurnal card's curve compare.
 
-### 8. The night you can't sleep through (sleep-loss threshold)
+### 8. The night you can't sleep through (sleep-loss threshold) — ✅ SHIPPED (PR #1)
 **Claim:** Phoenix now spends most of summer above the ~77°F (25°C) nighttime low where
 sleep measurably degrades — a human-physiology line, not just a statistical one.
-**Data:** ACIS daily `mint` (already in the streak pipeline); count nights/year ≥ 77°F.
-Cite Minor et al. (*One Earth* 2022) and Obradovich et al. (*Sci. Adv.* 2017) for the
-threshold; attribute it to the literature, don't assert Phoenix-specific causation.
-**Risk:** low on data, medium on framing rigor. **Verdict:** supportable; the best new
-*lived-experience* frame — differentiate from the 80°F-night card by the cited threshold.
+**Built:** `SleepCard.jsx`, fed by a new `mint cnt_ge_77` ACIS reduce on `fetchCityYearly`.
+Threshold cited to Obradovich et al. (*Sci. Adv.* 2017) and Minor et al. (*One Earth* 2022),
+framed as a published average effect (not Phoenix-specific causation). Differentiated from
+the 80°F-night card by the cited threshold and the sleep/health narrative.
 
 ### 9. The thermostat that never turns off (overnight share of cooling demand)
 **Claim:** A rising share of total cooling demand comes from the *night* — the hours that

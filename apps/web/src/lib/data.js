@@ -41,6 +41,7 @@ export async function fetchCityYearly(city) {
       yly("cdd", "sum"),
       yly("mint", "max"),
       yly("mint", "min"),
+      yly("mint", "cnt_ge_77"),
     ],
     meta: ["name"],
   });
@@ -53,6 +54,8 @@ export async function fetchCityYearly(city) {
       // the year's single warmest and coldest overnight lows — the ceiling and
       // floor of nighttime relief
       warmLow: num(d[7]), coldLow: num(d[8]),
+      // nights at/above the ~25°C (77°F) sleep-degradation threshold
+      sleepNights: num(d[9]),
     }))
     .filter((r2) => r2.year <= endYear && r2.high != null && r2.low != null
       && r2.highMiss <= MAX_MISSING_DAYS && r2.lowMiss <= MAX_MISSING_DAYS);
@@ -180,11 +183,12 @@ export async function fetchOpenMeteo(city) {
   for (let i = 0; i < t.length; i++) {
     if (mx[i] == null || mn[i] == null) continue;
     const y = +t[i].slice(0, 4);
-    if (!by[y]) by[y] = { hs: 0, ls: 0, n: 0, hot: 0, hot90: 0, d110: 0, cdd: 0, warm: -Infinity, cold: Infinity };
+    if (!by[y]) by[y] = { hs: 0, ls: 0, n: 0, hot: 0, hot90: 0, d110: 0, cdd: 0, warm: -Infinity, cold: Infinity, sleep: 0 };
     const b = by[y];
     b.hs += mx[i]; b.ls += mn[i]; b.n++;
     if (mn[i] >= 80) b.hot++;
     if (mn[i] >= 90) b.hot90++;
+    if (mn[i] >= 77) b.sleep++;
     if (mx[i] >= 110) b.d110++;
     if (mn[i] > b.warm) b.warm = mn[i];
     if (mn[i] < b.cold) b.cold = mn[i];
@@ -196,7 +200,7 @@ export async function fetchOpenMeteo(city) {
     return {
       year: +y, high: b.hs / b.n, low: b.ls / b.n,
       hotNights: b.hot, nights90: b.hot90, days110: b.d110, cdd: Math.round(b.cdd),
-      warmLow: b.warm, coldLow: b.cold,
+      warmLow: b.warm, coldLow: b.cold, sleepNights: b.sleep,
     };
   }).filter((r2) => r2.year <= endYear).sort((a, b) => a.year - b.year);
   return { rows, source: "openmeteo" };
