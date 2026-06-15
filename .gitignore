@@ -5,3 +5,5 @@ dist/
 .env
 .env.*
 analysis/cache/
+__pycache__/
+*.pyc
