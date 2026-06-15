@@ -19,8 +19,8 @@ verifies stats against NCEI GSOY.
 **Shipped cards:** night-warming trend & ratio · UHI city-vs-desert decomposition ·
 population-vs-night-gap growth · fixed-vs-rolling baseline goalposts · summer-night
 seasonal series · hour-by-hour diurnal (coolest-hour rise) · 100°F-day season length ·
-80°F-night streaks · vanished winter · cooling degree days · heat deaths (human cost) ·
-July grid demand · sources.
+80°F-night season span · 80°F-night streaks · vanished winter · cooling degree days ·
+heat deaths (human cost) · July grid demand · sources.
 
 The build is green and there is no half-finished work in the tree.
 
@@ -57,14 +57,16 @@ the single warmest and single coldest overnight low per year.
 added to `fetchCityYearly` — no new asset. CI guards it via a GSOY `EMNT` (coldest-night)
 trend check in `verify_v0.py`.
 
-### 2. Hot-night season calendar creep
+### 2. Hot-night season calendar creep — ✅ SHIPPED (PR #2)
 **Claim:** The first 80°F+ night arrives earlier and the last one ends later — the
-warm-night *season* is lengthening by weeks/decade. Distinct from the shipped 100°F-*day*
-season card (days vs nights, and a calendar-window framing vs a count).
-**Data:** ACIS daily TMIN; extend `build_streaks.py` (or a sibling builder) to emit
-first/last day-of-year crossing 80°F per year.
-**Risk:** low–medium (define the threshold and missing-data handling carefully).
-**Verdict:** supportable.
+warm-night *season* is lengthening. Distinct from the shipped 100°F-*day* season card
+(nights vs days) and from the streak/count cards (when in the year vs how long / how many).
+**Built:** `HotNightSeasonCard.jsx`, fed by `first80`/`last80`/`count80` per year (first/last
+day-of-year crossing 80°F) emitted by `build_streaks.py`, same DOY convention as the
+100°F-day builder. CI-guarded by a warm-night-season-span check in `verify_v0.py` that
+re-derives the lengthening from ACIS daily lows (GSOY has no per-day data). Result: the first
+80°F night now lands ~17 days earlier and the last ~14 days later than in the 1970s — a season
+~31 days longer (~85 such nights/year vs ~47). Asset refresh is automated (see M7).
 
 ### 3. Human-cost demographics
 **Claim:** Who the heat kills — unsheltered vs housed, indoors-with-AC-off vs outdoors,
@@ -168,8 +170,11 @@ Treat Phoenix as the flagship and get it in front of people: OG/meta tags, per-c
 share images, an about/methodology page, accessibility pass, performance budget.
 
 ### M7 — Automation & trust
-Scheduled GitHub Action to refresh data assets annually; grow `verify_v0.py` into a real
-sanity-check suite; make the hand-verified heat-death update path documented and repeatable.
+Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2
+(`.github/workflows/rebuild-data.yml`, PR #2): re-runs the `build_*.py` pipelines against the
+official record monthly (or on demand), gates on `verify_v0.py`, commits any refreshed JSON,
+and redeploys Pages. Still ahead: grow `verify_v0.py` into a real sanity-check suite; make the
+hand-verified heat-death update path documented and repeatable.
 
 ---
 
