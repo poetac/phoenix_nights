@@ -14,8 +14,31 @@ export function lastCompleteYear() {
 const yly = (name, reduce) => ({ name, interval: "yly", duration: "yly", reduce });
 const mly = (name) => ({ name, interval: "mly", duration: "mly", reduce: { reduce: "mean", add: "mcnt" } });
 
+// Fetch with an abort timeout and a couple of retries on a dropped connection
+// or 5xx, so a flaky network degrades gracefully (and falls back to Open-Meteo)
+// instead of hanging the page on a stalled socket.
+async function robustFetch(url, opts = {}, { timeout = 20000, retries = 2 } = {}) {
+  for (let attempt = 0; ; attempt++) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), timeout);
+    try {
+      const r = await fetch(url, { ...opts, signal: ctrl.signal });
+      clearTimeout(timer);
+      if (!r.ok && r.status >= 500 && attempt < retries) {
+        await new Promise((res) => setTimeout(res, 400 * (attempt + 1)));
+        continue;
+      }
+      return r;
+    } catch (e) {
+      clearTimeout(timer);
+      if (attempt >= retries) throw e;
+      await new Promise((res) => setTimeout(res, 400 * (attempt + 1)));
+    }
+  }
+}
+
 async function acis(body) {
-  const r = await fetch(ACIS_URL, {
+  const r = await robustFetch(ACIS_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -128,7 +151,7 @@ export async function fetchSeasonal(city) {
 }
 
 async function fetchAsset(path) {
-  const r = await fetch(import.meta.env.BASE_URL + path);
+  const r = await robustFetch(import.meta.env.BASE_URL + path);
   if (!r.ok) throw new Error("asset " + path + " " + r.status);
   return r.json();
 }
@@ -217,7 +240,7 @@ export async function fetchOpenMeteo(city) {
     `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}` +
     `&start_date=1948-01-01&end_date=${endYear}-12-31` +
     "&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto";
-  const r = await fetch(u);
+  const r = await robustFetch(u);
   if (!r.ok) throw new Error("Open-Meteo " + r.status);
   const j = await r.json();
   const t = j.daily.time, mx = j.daily.temperature_2m_max, mn = j.daily.temperature_2m_min;
