@@ -17,20 +17,21 @@ import json
 import pathlib
 import urllib.request
 
+from cities import data_path, get_city
+
 BASE_START, BASE_END = 1970, 1979
 WINDOW = 7  # days on each side of the target date
 DAYS_IN_YEAR = 366  # canonical (leap) calendar so Feb 29 has a slot
 
-OUT = (pathlib.Path(__file__).resolve().parent.parent
-       / "apps" / "web" / "public" / "data" / "phx-normals.json")
+# OUT is derived per-city in main() via data_path().
 
 # A leap year gives every (month, day) — including Feb 29 — a stable index.
 CANON = datetime.date(2000, 1, 1)
 
 
-def fetch_daily():
+def fetch_daily(city):
     body = json.dumps({
-        "sid": "PHXthr 9",
+        "sid": city["sid"],
         "sdate": f"{BASE_START}-01-01",
         "edate": f"{BASE_END}-12-31",
         "elems": [{"name": "mint"}, {"name": "maxt"}],
@@ -53,9 +54,11 @@ def fnum(v):
 
 
 def main():
+    city = get_city(__doc__)
+    OUT = data_path(city["prefix"], "normals")
     # buckets[i] = list of (low, high) observed on canonical day-of-year i
     buckets = [[] for _ in range(DAYS_IN_YEAR)]
-    for date, lo, hi in fetch_daily():
+    for date, lo, hi in fetch_daily(city):
         low, high = fnum(lo), fnum(hi)
         if low is None or high is None:
             continue
@@ -80,7 +83,7 @@ def main():
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({
-        "station": "Phoenix (ThreadEx PHXthr 9)",
+        "station": city["label"],
         "baseline": [BASE_START, BASE_END],
         "baselineLabel": "1970s",
         "window": f"centered +/-{WINDOW} days",

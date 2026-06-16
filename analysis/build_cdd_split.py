@@ -22,17 +22,18 @@ import json
 import pathlib
 import urllib.request
 
+from cities import data_path, get_city
+
 MAX_MISSING_DAYS = 36
 BASE = 65.0
 LAST_COMPLETE_YEAR = datetime.date.today().year - 1
 
-OUT = (pathlib.Path(__file__).resolve().parent.parent
-       / "apps" / "web" / "public" / "data" / "phx-cdd-split.json")
+# OUT is derived per-city in main() via data_path().
 
 
-def fetch_daily():
+def fetch_daily(city):
     body = json.dumps({
-        "sid": "PHXthr 9", "sdate": "1896-01-01",
+        "sid": city["sid"], "sdate": city["record_start"],
         "edate": f"{LAST_COMPLETE_YEAR}-12-31",
         "elems": [{"name": "mint"}, {"name": "maxt"}],
     }).encode()
@@ -43,8 +44,10 @@ def fetch_daily():
 
 
 def main():
+    city = get_city(__doc__)
+    OUT = data_path(city["prefix"], "cdd-split")
     years = {}
-    for date, lo, hi in fetch_daily():
+    for date, lo, hi in fetch_daily(city):
         y = int(date[:4])
         d = years.setdefault(y, {"day": 0.0, "night": 0.0, "miss": 0})
         if lo in ("M", None) or hi in ("M", None):
@@ -67,7 +70,7 @@ def main():
         })
 
     OUT.write_text(json.dumps({
-        "station": "Phoenix (ThreadEx PHXthr 9)",
+        "station": city["label"],
         "source": "NOAA/NWS ACIS daily mint/maxt",
         "base": BASE,
         "note": ("annual cooling degree days split by the identity "
