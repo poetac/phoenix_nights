@@ -167,15 +167,21 @@ export default function CityDashboard({ city }) {
         @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
         .pulse { animation: pulse 1.4s ease-in-out infinite; }
         @keyframes pulse { 0%,100% { opacity: .35 } 50% { opacity: 1 } }
-        button:focus-visible { outline: 2px solid ${C.gold}; outline-offset: 2px; }
+        button:focus-visible, a:focus-visible { outline: 2px solid ${C.gold}; outline-offset: 2px; }
+        .skip-link { position: absolute; left: 8px; top: -48px; z-index: 50; padding: 8px 14px;
+          border-radius: 8px; background: ${C.ember}; color: #1a0d06; font-weight: 600;
+          transition: top .15s ease; }
+        .skip-link:focus { top: 8px; }
       `}</style>
 
-      <div className="pointer-events-none fixed inset-0"
+      <a href="#content" className="skip-link">Skip to content</a>
+
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0"
         style={{ background:
           `radial-gradient(120% 60% at 50% -10%, rgba(255,107,61,.16), transparent 60%),` +
           `radial-gradient(90% 50% at 80% 0%, rgba(255,177,92,.08), transparent 55%)` }} />
 
-      <main className="relative max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <main id="content" tabIndex={-1} className="relative max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <header className="mb-8">
           <div className="text-xs tracking-widest uppercase mb-3" style={{ color: C.emberSoft }}>
             Live NOAA station record · {city.name}
@@ -291,7 +297,8 @@ export default function CityDashboard({ city }) {
                 sub={view === "anom"
                   ? `Each year's average low and high, shown as departure from this station's ${city.baseline.label} average. Watch the ember line climb away from zero while the blue line drifts.`
                   : "Each year's average low and high in °F. The gap between night and day is quietly narrowing."} />
-              <div style={{ width: "100%", height: 300 }}>
+              <div role="img" style={{ width: "100%", height: 300 }}
+                aria-label={`Line chart of ${city.shortName}'s average overnight low and daytime high each year from ${windowStart} to ${rows[rows.length - 1].year}; the overnight-low line rises faster than the daytime-high line.`}>
                 <ResponsiveContainer>
                   <LineChart data={chartData} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
                     <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
@@ -374,7 +381,8 @@ export default function CityDashboard({ city }) {
               <Card>
                 <CardHead kicker="What it feels like" title="Nights that never dropped below 80°F"
                   sub="Count of nights each year when the temperature stayed at or above 80°F — nights with no recovery for bodies, buildings, or power grids. The gold core counts nights that never even dropped below 90°F: once a once-a-decade freak event, now a summer routine." />
-                <div style={{ width: "100%", height: 240 }}>
+                <div role="img" style={{ width: "100%", height: 240 }}
+                  aria-label="Bar chart of the number of nights per year at or above 80°F, with the share at or above 90°F highlighted; both rise sharply over the record.">
                   <ResponsiveContainer>
                     <BarChart data={chartData} margin={{ top: 6, right: 8, left: -20, bottom: 0 }}>
                       <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
@@ -391,7 +399,8 @@ export default function CityDashboard({ city }) {
                     <div className="text-xs tracking-widest uppercase mt-6 mb-2" style={{ color: C.muted }}>
                       …and the days at 110°F or hotter
                     </div>
-                    <div style={{ width: "100%", height: 160 }}>
+                    <div role="img" style={{ width: "100%", height: 160 }}
+                      aria-label="Bar chart of the number of days per year reaching 110°F or hotter, by year.">
                       <ResponsiveContainer>
                         <BarChart data={chartData} margin={{ top: 6, right: 8, left: -20, bottom: 0 }}>
                           <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
@@ -421,7 +430,8 @@ export default function CityDashboard({ city }) {
               <Card>
                 <CardHead kicker="Area under the curve" title="Total yearly cooling demand"
                   sub="Cooling degree days — the standard proxy for air-conditioning load. Because each day's mean is (high + low) ÷ 2, warmer nights raise it exactly as much as hotter afternoons do." />
-                <div style={{ width: "100%", height: 240 }}>
+                <div role="img" style={{ width: "100%", height: 240 }}
+                  aria-label="Area chart of total annual cooling degree days over time, trending upward.">
                   <ResponsiveContainer>
                     <AreaChart data={chartData} margin={{ top: 6, right: 8, left: -8, bottom: 0 }}>
                       <defs>
