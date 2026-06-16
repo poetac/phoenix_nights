@@ -1,918 +1,1180 @@
 {
  "station": "Phoenix (ThreadEx PHXthr 9)",
  "thresholdF": 100,
- "note": "first/last are day-of-year; years missing >36 daily highs excluded",
+ "note": "first/last are day-of-year of the first/last single 100F day; firstRun/lastRun bound the sustained season (runs of >=3 consecutive 100F days); years missing >36 daily highs excluded",
  "source": "NOAA/NWS ACIS daily maxt",
+ "generated": "2026-06-16",
+ "throughYear": 2025,
  "years": [
   {
    "year": 1896,
    "first": 146,
    "last": 261,
    "length": 116,
-   "count": 81
+   "count": 81,
+   "firstRun": 146,
+   "lastRun": 261
   },
   {
    "year": 1897,
    "first": 148,
    "last": 279,
    "length": 132,
-   "count": 75
+   "count": 75,
+   "firstRun": 155,
+   "lastRun": 249
   },
   {
    "year": 1898,
    "first": 115,
    "last": 271,
    "length": 157,
-   "count": 76
+   "count": 76,
+   "firstRun": 167,
+   "lastRun": 263
   },
   {
    "year": 1899,
    "first": 133,
    "last": 271,
    "length": 139,
-   "count": 87
+   "count": 87,
+   "firstRun": 159,
+   "lastRun": 271
   },
   {
    "year": 1900,
    "first": 129,
    "last": 259,
    "length": 131,
-   "count": 77
+   "count": 77,
+   "firstRun": 146,
+   "lastRun": 242
   },
   {
    "year": 1901,
    "first": 167,
    "last": 274,
    "length": 108,
-   "count": 80
+   "count": 80,
+   "firstRun": 172,
+   "lastRun": 263
   },
   {
    "year": 1902,
    "first": 148,
    "last": 255,
    "length": 108,
-   "count": 86
+   "count": 86,
+   "firstRun": 156,
+   "lastRun": 255
   },
   {
    "year": 1903,
    "first": 132,
    "last": 253,
    "length": 122,
-   "count": 84
+   "count": 84,
+   "firstRun": 149,
+   "lastRun": 247
   },
   {
    "year": 1904,
    "first": 138,
    "last": 246,
    "length": 109,
-   "count": 66
+   "count": 66,
+   "firstRun": 161,
+   "lastRun": 228
   },
   {
    "year": 1905,
    "first": 136,
    "last": 264,
    "length": 129,
-   "count": 82
+   "count": 82,
+   "firstRun": 162,
+   "lastRun": 258
   },
   {
    "year": 1906,
    "first": 159,
    "last": 273,
    "length": 115,
-   "count": 71
+   "count": 71,
+   "firstRun": 159,
+   "lastRun": 273
   },
   {
    "year": 1907,
    "first": 140,
    "last": 268,
    "length": 129,
-   "count": 65
+   "count": 65,
+   "firstRun": 168,
+   "lastRun": 268
   },
   {
    "year": 1908,
    "first": 161,
    "last": 267,
    "length": 107,
-   "count": 62
+   "count": 62,
+   "firstRun": 161,
+   "lastRun": 258
   },
   {
    "year": 1909,
    "first": 152,
    "last": 267,
    "length": 116,
-   "count": 55
+   "count": 55,
+   "firstRun": 152,
+   "lastRun": 240
   },
   {
    "year": 1910,
    "first": 109,
    "last": 282,
    "length": 174,
-   "count": 101
+   "count": 101,
+   "firstRun": 147,
+   "lastRun": 267
   },
   {
    "year": 1911,
    "first": 155,
    "last": 267,
    "length": 113,
-   "count": 60
+   "count": 60,
+   "firstRun": 168,
+   "lastRun": 246
   },
   {
    "year": 1912,
    "first": 150,
    "last": 264,
    "length": 115,
-   "count": 53
+   "count": 53,
+   "firstRun": 153,
+   "lastRun": 264
   },
   {
    "year": 1913,
    "first": 169,
    "last": 264,
    "length": 96,
-   "count": 48
+   "count": 48,
+   "firstRun": 169,
+   "lastRun": 264
   },
   {
    "year": 1914,
    "first": 141,
    "last": 266,
    "length": 126,
-   "count": 76
+   "count": 76,
+   "firstRun": 161,
+   "lastRun": 262
   },
   {
    "year": 1915,
    "first": 132,
    "last": 282,
    "length": 151,
-   "count": 68
+   "count": 68,
+   "firstRun": 158,
+   "lastRun": 264
   },
   {
    "year": 1916,
    "first": 130,
    "last": 263,
    "length": 134,
-   "count": 77
+   "count": 77,
+   "firstRun": 157,
+   "lastRun": 250
   },
   {
    "year": 1917,
    "first": 159,
    "last": 283,
    "length": 125,
-   "count": 92
+   "count": 92,
+   "firstRun": 164,
+   "lastRun": 283
   },
   {
    "year": 1918,
    "first": 153,
    "last": 265,
    "length": 113,
-   "count": 76
+   "count": 76,
+   "firstRun": 153,
+   "lastRun": 265
   },
   {
    "year": 1919,
    "first": 147,
    "last": 265,
    "length": 119,
-   "count": 71
+   "count": 71,
+   "firstRun": 155,
+   "lastRun": 248
   },
   {
    "year": 1920,
    "first": 139,
    "last": 273,
    "length": 135,
-   "count": 78
+   "count": 78,
+   "firstRun": 148,
+   "lastRun": 264
   },
   {
    "year": 1921,
    "first": 133,
    "last": 293,
    "length": 161,
-   "count": 71
+   "count": 71,
+   "firstRun": 133,
+   "lastRun": 293
   },
   {
    "year": 1922,
    "first": 142,
    "last": 282,
    "length": 141,
-   "count": 97
+   "count": 97,
+   "firstRun": 142,
+   "lastRun": 268
   },
   {
    "year": 1923,
    "first": 127,
    "last": 252,
    "length": 126,
-   "count": 63
+   "count": 63,
+   "firstRun": 127,
+   "lastRun": 252
   },
   {
    "year": 1924,
    "first": 137,
    "last": 272,
    "length": 136,
-   "count": 98
+   "count": 98,
+   "firstRun": 137,
+   "lastRun": 268
   },
   {
    "year": 1925,
    "first": 104,
    "last": 258,
    "length": 155,
-   "count": 86
+   "count": 86,
+   "firstRun": 123,
+   "lastRun": 250
   },
   {
    "year": 1926,
    "first": 142,
    "last": 268,
    "length": 127,
-   "count": 95
+   "count": 95,
+   "firstRun": 150,
+   "lastRun": 268
   },
   {
    "year": 1927,
    "first": 133,
    "last": 253,
    "length": 121,
-   "count": 76
+   "count": 76,
+   "firstRun": 133,
+   "lastRun": 249
   },
   {
    "year": 1928,
    "first": 127,
    "last": 282,
    "length": 156,
-   "count": 96
+   "count": 96,
+   "firstRun": 146,
+   "lastRun": 265
   },
   {
    "year": 1929,
    "first": 139,
    "last": 280,
    "length": 142,
-   "count": 83
+   "count": 83,
+   "firstRun": 163,
+   "lastRun": 280
   },
   {
    "year": 1930,
    "first": 140,
    "last": 264,
    "length": 125,
-   "count": 85
+   "count": 85,
+   "firstRun": 144,
+   "lastRun": 264
   },
   {
    "year": 1931,
    "first": 133,
    "last": 273,
    "length": 141,
-   "count": 89
+   "count": 89,
+   "firstRun": 149,
+   "lastRun": 271
   },
   {
    "year": 1932,
    "first": 134,
    "last": 271,
    "length": 138,
-   "count": 93
+   "count": 93,
+   "firstRun": 137,
+   "lastRun": 262
   },
   {
    "year": 1933,
    "first": 146,
    "last": 271,
    "length": 126,
-   "count": 102
+   "count": 102,
+   "firstRun": 146,
+   "lastRun": 260
   },
   {
    "year": 1934,
    "first": 125,
    "last": 282,
    "length": 158,
-   "count": 105
+   "count": 105,
+   "firstRun": 128,
+   "lastRun": 282
   },
   {
    "year": 1935,
    "first": 143,
    "last": 259,
    "length": 117,
-   "count": 91
+   "count": 91,
+   "firstRun": 153,
+   "lastRun": 259
   },
   {
    "year": 1936,
    "first": 107,
    "last": 285,
    "length": 179,
-   "count": 106
+   "count": 106,
+   "firstRun": 132,
+   "lastRun": 253
   },
   {
    "year": 1937,
    "first": 123,
    "last": 275,
    "length": 153,
-   "count": 104
+   "count": 104,
+   "firstRun": 133,
+   "lastRun": 271
   },
   {
    "year": 1938,
    "first": 134,
    "last": 271,
    "length": 138,
-   "count": 99
+   "count": 99,
+   "firstRun": 144,
+   "lastRun": 271
   },
   {
    "year": 1939,
    "first": 147,
    "last": 266,
    "length": 120,
-   "count": 89
+   "count": 89,
+   "firstRun": 147,
+   "lastRun": 263
   },
   {
    "year": 1940,
    "first": 130,
    "last": 269,
    "length": 140,
-   "count": 95
+   "count": 95,
+   "firstRun": 133,
+   "lastRun": 260
   },
   {
    "year": 1941,
    "first": 127,
    "last": 262,
    "length": 136,
-   "count": 79
+   "count": 79,
+   "firstRun": 127,
+   "lastRun": 262
   },
   {
    "year": 1942,
    "first": 139,
    "last": 271,
    "length": 133,
-   "count": 91
+   "count": 91,
+   "firstRun": 139,
+   "lastRun": 271
   },
   {
    "year": 1943,
    "first": 120,
    "last": 273,
    "length": 154,
-   "count": 95
+   "count": 95,
+   "firstRun": 143,
+   "lastRun": 264
   },
   {
    "year": 1944,
    "first": 158,
    "last": 284,
    "length": 127,
-   "count": 81
+   "count": 81,
+   "firstRun": 158,
+   "lastRun": 267
   },
   {
    "year": 1945,
    "first": 163,
    "last": 260,
    "length": 98,
-   "count": 76
+   "count": 76,
+   "firstRun": 163,
+   "lastRun": 260
   },
   {
    "year": 1946,
    "first": 107,
    "last": 268,
    "length": 162,
-   "count": 98
+   "count": 98,
+   "firstRun": 152,
+   "lastRun": 258
   },
   {
    "year": 1947,
    "first": 121,
    "last": 277,
    "length": 157,
-   "count": 100
+   "count": 100,
+   "firstRun": 121,
+   "lastRun": 277
   },
   {
    "year": 1948,
    "first": 135,
    "last": 282,
    "length": 148,
-   "count": 95
+   "count": 95,
+   "firstRun": 135,
+   "lastRun": 258
   },
   {
    "year": 1949,
    "first": 113,
    "last": 271,
    "length": 159,
-   "count": 94
+   "count": 94,
+   "firstRun": 143,
+   "lastRun": 265
   },
   {
    "year": 1950,
    "first": 110,
    "last": 289,
    "length": 180,
-   "count": 79
+   "count": 79,
+   "firstRun": 169,
+   "lastRun": 286
   },
   {
    "year": 1951,
    "first": 145,
    "last": 283,
    "length": 139,
-   "count": 98
+   "count": 98,
+   "firstRun": 145,
+   "lastRun": 263
   },
   {
    "year": 1952,
    "first": 133,
    "last": 280,
    "length": 148,
-   "count": 103
+   "count": 103,
+   "firstRun": 133,
+   "lastRun": 280
   },
   {
    "year": 1953,
    "first": 161,
    "last": 274,
    "length": 114,
-   "count": 92
+   "count": 92,
+   "firstRun": 161,
+   "lastRun": 269
   },
   {
    "year": 1954,
    "first": 153,
    "last": 264,
    "length": 112,
-   "count": 73
+   "count": 73,
+   "firstRun": 153,
+   "lastRun": 259
   },
   {
    "year": 1955,
    "first": 149,
    "last": 257,
    "length": 109,
-   "count": 60
+   "count": 60,
+   "firstRun": 157,
+   "lastRun": 257
   },
   {
    "year": 1956,
    "first": 138,
    "last": 272,
    "length": 135,
-   "count": 70
+   "count": 70,
+   "firstRun": 153,
+   "lastRun": 263
   },
   {
    "year": 1957,
    "first": 152,
    "last": 272,
    "length": 121,
-   "count": 70
+   "count": 70,
+   "firstRun": 152,
+   "lastRun": 272
   },
   {
    "year": 1958,
    "first": 138,
    "last": 264,
    "length": 127,
-   "count": 110
+   "count": 110,
+   "firstRun": 141,
+   "lastRun": 264
   },
   {
    "year": 1959,
    "first": 133,
    "last": 255,
    "length": 123,
-   "count": 78
+   "count": 78,
+   "firstRun": 156,
+   "lastRun": 252
   },
   {
    "year": 1960,
    "first": 131,
    "last": 272,
    "length": 142,
-   "count": 98
+   "count": 98,
+   "firstRun": 131,
+   "lastRun": 272
   },
   {
    "year": 1961,
    "first": 129,
    "last": 250,
    "length": 122,
-   "count": 79
+   "count": 79,
+   "firstRun": 157,
+   "lastRun": 250
   },
   {
    "year": 1962,
    "first": 104,
    "last": 264,
    "length": 161,
-   "count": 100
+   "count": 100,
+   "firstRun": 126,
+   "lastRun": 264
   },
   {
    "year": 1963,
    "first": 126,
    "last": 276,
    "length": 151,
-   "count": 84
+   "count": 84,
+   "firstRun": 126,
+   "lastRun": 272
   },
   {
    "year": 1964,
    "first": 136,
    "last": 256,
    "length": 121,
-   "count": 68
+   "count": 68,
+   "firstRun": 140,
+   "lastRun": 249
   },
   {
    "year": 1965,
    "first": 138,
    "last": 270,
    "length": 133,
-   "count": 83
+   "count": 83,
+   "firstRun": 138,
+   "lastRun": 259
   },
   {
    "year": 1966,
    "first": 126,
    "last": 267,
    "length": 142,
-   "count": 104
+   "count": 104,
+   "firstRun": 138,
+   "lastRun": 267
   },
   {
    "year": 1967,
    "first": 136,
    "last": 267,
    "length": 132,
-   "count": 80
+   "count": 80,
+   "firstRun": 139,
+   "lastRun": 267
   },
   {
    "year": 1968,
    "first": 140,
    "last": 271,
    "length": 132,
-   "count": 87
+   "count": 87,
+   "firstRun": 140,
+   "lastRun": 271
   },
   {
    "year": 1969,
    "first": 137,
    "last": 273,
    "length": 137,
-   "count": 103
+   "count": 103,
+   "firstRun": 137,
+   "lastRun": 273
   },
   {
    "year": 1970,
    "first": 135,
    "last": 255,
    "length": 121,
-   "count": 94
+   "count": 94,
+   "firstRun": 135,
+   "lastRun": 255
   },
   {
    "year": 1971,
    "first": 164,
    "last": 260,
    "length": 97,
-   "count": 82
+   "count": 82,
+   "firstRun": 164,
+   "lastRun": 260
   },
   {
    "year": 1972,
    "first": 148,
    "last": 276,
    "length": 129,
-   "count": 89
+   "count": 89,
+   "firstRun": 163,
+   "lastRun": 276
   },
   {
    "year": 1973,
    "first": 130,
    "last": 289,
    "length": 160,
-   "count": 116
+   "count": 116,
+   "firstRun": 130,
+   "lastRun": 265
   },
   {
    "year": 1974,
    "first": 132,
    "last": 275,
    "length": 144,
-   "count": 107
+   "count": 107,
+   "firstRun": 145,
+   "lastRun": 275
   },
   {
    "year": 1975,
    "first": 130,
    "last": 278,
    "length": 149,
-   "count": 111
+   "count": 111,
+   "firstRun": 130,
+   "lastRun": 264
   },
   {
    "year": 1976,
    "first": 133,
    "last": 274,
    "length": 142,
-   "count": 82
+   "count": 82,
+   "firstRun": 133,
+   "lastRun": 245
   },
   {
    "year": 1977,
    "first": 150,
    "last": 276,
    "length": 127,
-   "count": 102
+   "count": 102,
+   "firstRun": 150,
+   "lastRun": 252
   },
   {
    "year": 1978,
    "first": 132,
    "last": 288,
    "length": 157,
-   "count": 116
+   "count": 116,
+   "firstRun": 132,
+   "lastRun": 277
   },
   {
    "year": 1979,
    "first": 133,
    "last": 283,
    "length": 151,
-   "count": 109
+   "count": 109,
+   "firstRun": 133,
+   "lastRun": 281
   },
   {
    "year": 1980,
    "first": 110,
    "last": 281,
    "length": 172,
-   "count": 107
+   "count": 107,
+   "firstRun": 140,
+   "lastRun": 281
   },
   {
    "year": 1981,
    "first": 119,
    "last": 271,
    "length": 153,
-   "count": 107
+   "count": 107,
+   "firstRun": 155,
+   "lastRun": 264
   },
   {
    "year": 1982,
    "first": 138,
    "last": 269,
    "length": 132,
-   "count": 98
+   "count": 98,
+   "firstRun": 143,
+   "lastRun": 269
   },
   {
    "year": 1983,
    "first": 142,
    "last": 265,
    "length": 124,
-   "count": 107
+   "count": 107,
+   "firstRun": 142,
+   "lastRun": 262
   },
   {
    "year": 1984,
    "first": 107,
    "last": 265,
    "length": 159,
-   "count": 109
+   "count": 109,
+   "firstRun": 129,
+   "lastRun": 265
   },
   {
    "year": 1985,
    "first": 104,
    "last": 260,
    "length": 157,
-   "count": 102
+   "count": 102,
+   "firstRun": 121,
+   "lastRun": 260
   },
   {
    "year": 1986,
    "first": 122,
    "last": 252,
    "length": 131,
-   "count": 101
+   "count": 101,
+   "firstRun": 144,
+   "lastRun": 252
   },
   {
    "year": 1987,
    "first": 106,
    "last": 281,
    "length": 176,
-   "count": 116
+   "count": 116,
+   "firstRun": 132,
+   "lastRun": 281
   },
   {
    "year": 1988,
    "first": 86,
    "last": 280,
    "length": 195,
-   "count": 122
+   "count": 122,
+   "firstRun": 131,
+   "lastRun": 280
   },
   {
    "year": 1989,
    "first": 96,
    "last": 286,
    "length": 191,
-   "count": 143
+   "count": 143,
+   "firstRun": 96,
+   "lastRun": 286
   },
   {
    "year": 1990,
    "first": 105,
    "last": 268,
    "length": 164,
-   "count": 94
+   "count": 94,
+   "firstRun": 153,
+   "lastRun": 257
   },
   {
    "year": 1991,
    "first": 128,
    "last": 291,
    "length": 164,
-   "count": 112
+   "count": 112,
+   "firstRun": 144,
+   "lastRun": 291
   },
   {
    "year": 1992,
    "first": 116,
    "last": 286,
    "length": 171,
-   "count": 120
+   "count": 120,
+   "firstRun": 116,
+   "lastRun": 276
   },
   {
    "year": 1993,
    "first": 130,
    "last": 278,
    "length": 149,
-   "count": 108
+   "count": 108,
+   "firstRun": 145,
+   "lastRun": 278
   },
   {
    "year": 1994,
    "first": 106,
    "last": 271,
    "length": 166,
-   "count": 106
+   "count": 106,
+   "firstRun": 148,
+   "lastRun": 263
   },
   {
    "year": 1995,
    "first": 151,
    "last": 284,
    "length": 134,
-   "count": 93
+   "count": 93,
+   "firstRun": 162,
+   "lastRun": 264
   },
   {
    "year": 1996,
    "first": 117,
    "last": 286,
    "length": 170,
-   "count": 107
+   "count": 107,
+   "firstRun": 132,
+   "lastRun": 286
   },
   {
    "year": 1997,
    "first": 125,
    "last": 279,
    "length": 155,
-   "count": 108
+   "count": 108,
+   "firstRun": 125,
+   "lastRun": 275
   },
   {
    "year": 1998,
    "first": 153,
    "last": 262,
    "length": 110,
-   "count": 88
+   "count": 88,
+   "firstRun": 170,
+   "lastRun": 262
   },
   {
    "year": 1999,
    "first": 141,
    "last": 286,
    "length": 146,
-   "count": 92
+   "count": 92,
+   "firstRun": 147,
+   "lastRun": 286
   },
   {
    "year": 2000,
    "first": 117,
    "last": 276,
    "length": 160,
-   "count": 119
+   "count": 119,
+   "firstRun": 141,
+   "lastRun": 276
   },
   {
    "year": 2001,
    "first": 115,
    "last": 273,
    "length": 159,
-   "count": 127
+   "count": 127,
+   "firstRun": 127,
+   "lastRun": 273
   },
   {
    "year": 2002,
    "first": 104,
    "last": 270,
    "length": 167,
-   "count": 115
+   "count": 115,
+   "firstRun": 133,
+   "lastRun": 270
   },
   {
    "year": 2003,
    "first": 136,
    "last": 296,
    "length": 161,
-   "count": 129
+   "count": 129,
+   "firstRun": 139,
+   "lastRun": 296
   },
   {
    "year": 2004,
    "first": 124,
    "last": 272,
    "length": 149,
-   "count": 109
+   "count": 109,
+   "firstRun": 124,
+   "lastRun": 262
   },
   {
    "year": 2005,
    "first": 135,
    "last": 280,
    "length": 146,
-   "count": 105
+   "count": 105,
+   "firstRun": 139,
+   "lastRun": 270
   },
   {
    "year": 2006,
    "first": 131,
    "last": 278,
    "length": 148,
-   "count": 105
+   "count": 105,
+   "firstRun": 131,
+   "lastRun": 275
   },
   {
    "year": 2007,
    "first": 118,
    "last": 264,
    "length": 147,
-   "count": 113
+   "count": 113,
+   "firstRun": 130,
+   "lastRun": 259
   },
   {
    "year": 2008,
    "first": 139,
    "last": 276,
    "length": 138,
-   "count": 106
+   "count": 106,
+   "firstRun": 139,
+   "lastRun": 276
   },
   {
    "year": 2009,
    "first": 111,
    "last": 291,
    "length": 181,
-   "count": 118
+   "count": 118,
+   "firstRun": 126,
+   "lastRun": 291
   },
   {
    "year": 2010,
    "first": 141,
    "last": 287,
    "length": 147,
-   "count": 108
+   "count": 108,
+   "firstRun": 154,
+   "lastRun": 275
   },
   {
    "year": 2011,
    "first": 91,
    "last": 276,
    "length": 186,
-   "count": 117
+   "count": 117,
+   "firstRun": 146,
+   "lastRun": 270
   },
   {
    "year": 2012,
    "first": 112,
    "last": 278,
    "length": 167,
-   "count": 117
+   "count": 117,
+   "firstRun": 112,
+   "lastRun": 278
   },
   {
    "year": 2013,
    "first": 118,
    "last": 264,
    "length": 147,
-   "count": 115
+   "count": 115,
+   "firstRun": 118,
+   "lastRun": 264
   },
   {
    "year": 2014,
    "first": 123,
    "last": 269,
    "length": 147,
-   "count": 110
+   "count": 110,
+   "firstRun": 136,
+   "lastRun": 269
   },
   {
    "year": 2015,
    "first": 121,
    "last": 287,
    "length": 167,
-   "count": 108
+   "count": 108,
+   "firstRun": 149,
+   "lastRun": 274
   },
   {
    "year": 2016,
    "first": 125,
    "last": 301,
    "length": 177,
-   "count": 99
+   "count": 99,
+   "firstRun": 133,
+   "lastRun": 263
   },
   {
    "year": 2017,
    "first": 123,
    "last": 262,
    "length": 140,
-   "count": 109
+   "count": 109,
+   "firstRun": 123,
+   "lastRun": 257
   },
   {
    "year": 2018,
    "first": 100,
    "last": 272,
    "length": 173,
-   "count": 128
+   "count": 128,
+   "firstRun": 125,
+   "lastRun": 272
   },
   {
    "year": 2019,
    "first": 116,
    "last": 262,
    "length": 147,
-   "count": 103
+   "count": 103,
+   "firstRun": 156,
+   "lastRun": 257
   },
   {
    "year": 2020,
    "first": 117,
    "last": 290,
    "length": 174,
-   "count": 145
+   "count": 145,
+   "firstRun": 117,
+   "lastRun": 283
   },
   {
    "year": 2021,
    "first": 125,
    "last": 266,
    "length": 142,
-   "count": 104
+   "count": 104,
+   "firstRun": 132,
+   "lastRun": 266
   },
   {
    "year": 2022,
    "first": 127,
    "last": 272,
    "length": 146,
-   "count": 113
+   "count": 113,
+   "firstRun": 134,
+   "lastRun": 272
   },
   {
    "year": 2023,
    "first": 120,
    "last": 294,
    "length": 175,
-   "count": 133
+   "count": 133,
+   "firstRun": 133,
+   "lastRun": 294
   },
   {
    "year": 2024,
    "first": 112,
    "last": 300,
    "length": 189,
-   "count": 143
+   "count": 143,
+   "firstRun": 148,
+   "lastRun": 288
   },
   {
    "year": 2025,
    "first": 100,
    "last": 281,
    "length": 182,
-   "count": 122
+   "count": 122,
+   "firstRun": 129,
+   "lastRun": 268
   }
  ]
 }

@@ -1,7 +1,9 @@
 {
  "station": "Phoenix (ThreadEx PHXthr 9)",
  "source": "NOAA/NWS ACIS daily mint/maxt",
- "note": "streaks within calendar years; years missing >36 days excluded. first80/last80 are day-of-year (first/last 80F+ night).",
+ "note": "streaks within calendar years; years missing >36 days excluded. first80/last80 are day-of-year of the first/last single 80F+ night; firstSus/lastSus use a 5-of-7-night rule (outlier-robust season).",
+ "generated": "2026-06-16",
+ "throughYear": 2025,
  "years": [
   {
    "year": 1896,
@@ -12,7 +14,9 @@
    "cool60": 224,
    "first80": 150,
    "last80": 251,
-   "count80": 22
+   "count80": 22,
+   "firstSus": 188,
+   "lastSus": 228
   },
   {
    "year": 1897,
@@ -23,7 +27,9 @@
    "cool60": 216,
    "first80": 192,
    "last80": 231,
-   "count80": 14
+   "count80": 14,
+   "firstSus": 195,
+   "lastSus": 211
   },
   {
    "year": 1898,
@@ -34,7 +40,9 @@
    "cool60": 225,
    "first80": 171,
    "last80": 232,
-   "count80": 34
+   "count80": 34,
+   "firstSus": 193,
+   "lastSus": 231
   },
   {
    "year": 1899,
@@ -45,7 +53,9 @@
    "cool60": 227,
    "first80": 168,
    "last80": 248,
-   "count80": 23
+   "count80": 23,
+   "firstSus": 181,
+   "lastSus": 208
   },
   {
    "year": 1900,
@@ -56,7 +66,9 @@
    "cool60": 218,
    "first80": 181,
    "last80": 215,
-   "count80": 14
+   "count80": 14,
+   "firstSus": 191,
+   "lastSus": 196
   },
   {
    "year": 1901,
@@ -67,7 +79,9 @@
    "cool60": 228,
    "first80": 188,
    "last80": 239,
-   "count80": 29
+   "count80": 29,
+   "firstSus": 189,
+   "lastSus": 206
   },
   {
    "year": 1902,
@@ -78,7 +92,9 @@
    "cool60": 229,
    "first80": 173,
    "last80": 250,
-   "count80": 19
+   "count80": 19,
+   "firstSus": 214,
+   "lastSus": 218
   },
   {
    "year": 1903,
@@ -89,7 +105,9 @@
    "cool60": 231,
    "first80": 190,
    "last80": 245,
-   "count80": 25
+   "count80": 25,
+   "firstSus": 191,
+   "lastSus": 235
   },
   {
    "year": 1904,
@@ -100,7 +118,9 @@
    "cool60": 217,
    "first80": 167,
    "last80": 224,
-   "count80": 10
+   "count80": 10,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1905,
@@ -111,7 +131,9 @@
    "cool60": 234,
    "first80": 190,
    "last80": 245,
-   "count80": 8
+   "count80": 8,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1906,
@@ -122,7 +144,9 @@
    "cool60": 228,
    "first80": 193,
    "last80": 225,
-   "count80": 19
+   "count80": 19,
+   "firstSus": 201,
+   "lastSus": 210
   },
   {
    "year": 1907,
@@ -133,7 +157,9 @@
    "cool60": 232,
    "first80": 185,
    "last80": 237,
-   "count80": 12
+   "count80": 12,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1908,
@@ -144,7 +170,9 @@
    "cool60": 249,
    "first80": 177,
    "last80": 219,
-   "count80": 10
+   "count80": 10,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1909,
@@ -155,7 +183,9 @@
    "cool60": 233,
    "first80": 181,
    "last80": 241,
-   "count80": 8
+   "count80": 8,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1910,
@@ -166,7 +196,9 @@
    "cool60": 204,
    "first80": 177,
    "last80": 238,
-   "count80": 15
+   "count80": 15,
+   "firstSus": 232,
+   "lastSus": 236
   },
   {
    "year": 1911,
@@ -177,7 +209,9 @@
    "cool60": 230,
    "first80": 195,
    "last80": 232,
-   "count80": 5
+   "count80": 5,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1912,
@@ -188,7 +222,9 @@
    "cool60": 230,
    "first80": 158,
    "last80": 198,
-   "count80": 3
+   "count80": 3,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1913,
@@ -199,7 +235,9 @@
    "cool60": 241,
    "first80": 187,
    "last80": 235,
-   "count80": 8
+   "count80": 8,
+   "firstSus": 188,
+   "lastSus": 191
   },
   {
    "year": 1914,
@@ -210,7 +248,9 @@
    "cool60": 219,
    "first80": 179,
    "last80": 219,
-   "count80": 16
+   "count80": 16,
+   "firstSus": 213,
+   "lastSus": 218
   },
   {
    "year": 1915,
@@ -221,7 +261,9 @@
    "cool60": 236,
    "first80": 182,
    "last80": 234,
-   "count80": 7
+   "count80": 7,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1916,
@@ -232,7 +274,9 @@
    "cool60": 233,
    "first80": 188,
    "last80": 222,
-   "count80": 8
+   "count80": 8,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1917,
@@ -243,7 +287,9 @@
    "cool60": 244,
    "first80": 182,
    "last80": 248,
-   "count80": 12
+   "count80": 12,
+   "firstSus": 196,
+   "lastSus": 196
   },
   {
    "year": 1918,
@@ -254,7 +300,9 @@
    "cool60": 233,
    "first80": 164,
    "last80": 215,
-   "count80": 8
+   "count80": 8,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1919,
@@ -265,7 +313,9 @@
    "cool60": 228,
    "first80": 176,
    "last80": 227,
-   "count80": 11
+   "count80": 11,
+   "firstSus": 179,
+   "lastSus": 182
   },
   {
    "year": 1920,
@@ -276,7 +326,9 @@
    "cool60": 230,
    "first80": 197,
    "last80": 220,
-   "count80": 13
+   "count80": 13,
+   "firstSus": 200,
+   "lastSus": 210
   },
   {
    "year": 1921,
@@ -287,7 +339,9 @@
    "cool60": 224,
    "first80": 162,
    "last80": 230,
-   "count80": 14
+   "count80": 14,
+   "firstSus": 199,
+   "lastSus": 203
   },
   {
    "year": 1922,
@@ -298,7 +352,9 @@
    "cool60": 223,
    "first80": 173,
    "last80": 241,
-   "count80": 14
+   "count80": 14,
+   "firstSus": 185,
+   "lastSus": 186
   },
   {
    "year": 1923,
@@ -309,7 +365,9 @@
    "cool60": 237,
    "first80": 192,
    "last80": 251,
-   "count80": 7
+   "count80": 7,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1924,
@@ -320,7 +378,9 @@
    "cool60": 223,
    "first80": 181,
    "last80": 224,
-   "count80": 15
+   "count80": 15,
+   "firstSus": 182,
+   "lastSus": 184
   },
   {
    "year": 1925,
@@ -331,7 +391,9 @@
    "cool60": 212,
    "first80": 171,
    "last80": 230,
-   "count80": 24
+   "count80": 24,
+   "firstSus": 176,
+   "lastSus": 202
   },
   {
    "year": 1926,
@@ -342,7 +404,9 @@
    "cool60": 210,
    "first80": 180,
    "last80": 237,
-   "count80": 11
+   "count80": 11,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1927,
@@ -353,7 +417,9 @@
    "cool60": 228,
    "first80": 176,
    "last80": 215,
-   "count80": 16
+   "count80": 16,
+   "firstSus": 190,
+   "lastSus": 213
   },
   {
    "year": 1928,
@@ -364,7 +430,9 @@
    "cool60": 204,
    "first80": 177,
    "last80": 232,
-   "count80": 21
+   "count80": 21,
+   "firstSus": 195,
+   "lastSus": 210
   },
   {
    "year": 1929,
@@ -375,7 +443,9 @@
    "cool60": 208,
    "first80": 177,
    "last80": 244,
-   "count80": 33
+   "count80": 33,
+   "firstSus": 179,
+   "lastSus": 204
   },
   {
    "year": 1930,
@@ -386,7 +456,9 @@
    "cool60": 227,
    "first80": 183,
    "last80": 248,
-   "count80": 25
+   "count80": 25,
+   "firstSus": 195,
+   "lastSus": 236
   },
   {
    "year": 1931,
@@ -397,7 +469,9 @@
    "cool60": 198,
    "first80": 176,
    "last80": 239,
-   "count80": 38
+   "count80": 38,
+   "firstSus": 184,
+   "lastSus": 238
   },
   {
    "year": 1932,
@@ -408,7 +482,9 @@
    "cool60": 215,
    "first80": 186,
    "last80": 250,
-   "count80": 35
+   "count80": 35,
+   "firstSus": 191,
+   "lastSus": 236
   },
   {
    "year": 1933,
@@ -419,7 +495,9 @@
    "cool60": 216,
    "first80": 164,
    "last80": 250,
-   "count80": 53
+   "count80": 53,
+   "firstSus": 186,
+   "lastSus": 248
   },
   {
    "year": 1934,
@@ -430,7 +508,9 @@
    "cool60": 190,
    "first80": 131,
    "last80": 250,
-   "count80": 41
+   "count80": 41,
+   "firstSus": 181,
+   "lastSus": 230
   },
   {
    "year": 1935,
@@ -441,7 +521,9 @@
    "cool60": 207,
    "first80": 163,
    "last80": 242,
-   "count80": 24
+   "count80": 24,
+   "firstSus": 192,
+   "lastSus": 204
   },
   {
    "year": 1936,
@@ -452,7 +534,9 @@
    "cool60": 194,
    "first80": 166,
    "last80": 253,
-   "count80": 44
+   "count80": 44,
+   "firstSus": 173,
+   "lastSus": 244
   },
   {
    "year": 1937,
@@ -463,7 +547,9 @@
    "cool60": 213,
    "first80": 174,
    "last80": 257,
-   "count80": 34
+   "count80": 34,
+   "firstSus": 200,
+   "lastSus": 241
   },
   {
    "year": 1938,
@@ -474,7 +560,9 @@
    "cool60": 214,
    "first80": 178,
    "last80": 242,
-   "count80": 21
+   "count80": 21,
+   "firstSus": 198,
+   "lastSus": 214
   },
   {
    "year": 1939,
@@ -485,7 +573,9 @@
    "cool60": 213,
    "first80": 181,
    "last80": 264,
-   "count80": 29
+   "count80": 29,
+   "firstSus": 191,
+   "lastSus": 205
   },
   {
    "year": 1940,
@@ -496,7 +586,9 @@
    "cool60": 190,
    "first80": 172,
    "last80": 233,
-   "count80": 24
+   "count80": 24,
+   "firstSus": 220,
+   "lastSus": 228
   },
   {
    "year": 1941,
@@ -507,7 +599,9 @@
    "cool60": 225,
    "first80": 188,
    "last80": 203,
-   "count80": 9
+   "count80": 9,
+   "firstSus": 198,
+   "lastSus": 200
   },
   {
    "year": 1942,
@@ -518,7 +612,9 @@
    "cool60": 220,
    "first80": 182,
    "last80": 233,
-   "count80": 23
+   "count80": 23,
+   "firstSus": 185,
+   "lastSus": 205
   },
   {
    "year": 1943,
@@ -529,7 +625,9 @@
    "cool60": 197,
    "first80": 178,
    "last80": 240,
-   "count80": 28
+   "count80": 28,
+   "firstSus": 192,
+   "lastSus": 224
   },
   {
    "year": 1944,
@@ -540,7 +638,9 @@
    "cool60": 220,
    "first80": 182,
    "last80": 242,
-   "count80": 16
+   "count80": 16,
+   "firstSus": 227,
+   "lastSus": 228
   },
   {
    "year": 1945,
@@ -551,7 +651,9 @@
    "cool60": 211,
    "first80": 183,
    "last80": 250,
-   "count80": 20
+   "count80": 20,
+   "firstSus": 197,
+   "lastSus": 236
   },
   {
    "year": 1946,
@@ -562,7 +664,9 @@
    "cool60": 206,
    "first80": 168,
    "last80": 257,
-   "count80": 22
+   "count80": 22,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1947,
@@ -573,7 +677,9 @@
    "cool60": 203,
    "first80": 183,
    "last80": 246,
-   "count80": 25
+   "count80": 25,
+   "firstSus": 185,
+   "lastSus": 216
   },
   {
    "year": 1948,
@@ -584,7 +690,9 @@
    "cool60": 205,
    "first80": 182,
    "last80": 245,
-   "count80": 23
+   "count80": 23,
+   "firstSus": 199,
+   "lastSus": 230
   },
   {
    "year": 1949,
@@ -595,7 +703,9 @@
    "cool60": 205,
    "first80": 173,
    "last80": 251,
-   "count80": 24
+   "count80": 24,
+   "firstSus": 188,
+   "lastSus": 214
   },
   {
    "year": 1950,
@@ -606,7 +716,9 @@
    "cool60": 202,
    "first80": 182,
    "last80": 247,
-   "count80": 16
+   "count80": 16,
+   "firstSus": 196,
+   "lastSus": 199
   },
   {
    "year": 1951,
@@ -617,7 +729,9 @@
    "cool60": 214,
    "first80": 171,
    "last80": 232,
-   "count80": 25
+   "count80": 25,
+   "firstSus": 201,
+   "lastSus": 231
   },
   {
    "year": 1952,
@@ -628,7 +742,9 @@
    "cool60": 203,
    "first80": 186,
    "last80": 260,
-   "count80": 26
+   "count80": 26,
+   "firstSus": 201,
+   "lastSus": 225
   },
   {
    "year": 1953,
@@ -639,7 +755,9 @@
    "cool60": 221,
    "first80": 163,
    "last80": 234,
-   "count80": 33
+   "count80": 33,
+   "firstSus": 182,
+   "lastSus": 229
   },
   {
    "year": 1954,
@@ -650,7 +768,9 @@
    "cool60": 204,
    "first80": 174,
    "last80": 265,
-   "count80": 27
+   "count80": 27,
+   "firstSus": 185,
+   "lastSus": 213
   },
   {
    "year": 1955,
@@ -661,7 +781,9 @@
    "cool60": 204,
    "first80": 193,
    "last80": 222,
-   "count80": 5
+   "count80": 5,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1956,
@@ -672,7 +794,9 @@
    "cool60": 217,
    "first80": 180,
    "last80": 250,
-   "count80": 10
+   "count80": 10,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1957,
@@ -683,7 +807,9 @@
    "cool60": 219,
    "first80": 177,
    "last80": 228,
-   "count80": 27
+   "count80": 27,
+   "firstSus": 186,
+   "lastSus": 215
   },
   {
    "year": 1958,
@@ -694,7 +820,9 @@
    "cool60": 189,
    "first80": 168,
    "last80": 254,
-   "count80": 60
+   "count80": 60,
+   "firstSus": 171,
+   "lastSus": 253
   },
   {
    "year": 1959,
@@ -705,7 +833,9 @@
    "cool60": 194,
    "first80": 164,
    "last80": 254,
-   "count80": 47
+   "count80": 47,
+   "firstSus": 166,
+   "lastSus": 207
   },
   {
    "year": 1960,
@@ -716,7 +846,9 @@
    "cool60": 205,
    "first80": 171,
    "last80": 244,
-   "count80": 35
+   "count80": 35,
+   "firstSus": 187,
+   "lastSus": 220
   },
   {
    "year": 1961,
@@ -727,7 +859,9 @@
    "cool60": 239,
    "first80": 167,
    "last80": 233,
-   "count80": 24
+   "count80": 24,
+   "firstSus": 174,
+   "lastSus": 201
   },
   {
    "year": 1962,
@@ -738,7 +872,9 @@
    "cool60": 238,
    "first80": 184,
    "last80": 247,
-   "count80": 14
+   "count80": 14,
+   "firstSus": 226,
+   "lastSus": 230
   },
   {
    "year": 1963,
@@ -749,7 +885,9 @@
    "cool60": 208,
    "first80": 184,
    "last80": 231,
-   "count80": 14
+   "count80": 14,
+   "firstSus": 200,
+   "lastSus": 205
   },
   {
    "year": 1964,
@@ -760,7 +898,9 @@
    "cool60": 228,
    "first80": 178,
    "last80": 224,
-   "count80": 14
+   "count80": 14,
+   "firstSus": null,
+   "lastSus": null
   },
   {
    "year": 1965,
@@ -771,7 +911,9 @@
    "cool60": 258,
    "first80": 187,
    "last80": 241,
-   "count80": 14
+   "count80": 14,
+   "firstSus": 189,
+   "lastSus": 190
   },
   {
    "year": 1966,
@@ -782,7 +924,9 @@
    "cool60": 219,
    "first80": 180,
    "last80": 226,
-   "count80": 29
+   "count80": 29,
+   "firstSus": 191,
+   "lastSus": 223
   },
   {
    "year": 1967,
@@ -793,7 +937,9 @@
    "cool60": 230,
    "first80": 185,
    "last80": 243,
-   "count80": 29
+   "count80": 29,
+   "firstSus": 193,
+   "lastSus": 223
   },
   {
    "year": 1968,
@@ -804,7 +950,9 @@
    "cool60": 230,
    "first80": 191,
    "last80": 239,
-   "count80": 14
+   "count80": 14,
+   "firstSus": 200,
+   "lastSus": 205
   },
   {
    "year": 1969,
@@ -815,7 +963,9 @@
    "cool60": 211,
    "first80": 183,
    "last80": 253,
-   "count80": 54
+   "count80": 54,
+   "firstSus": 192,
+   "lastSus": 250
   },
   {
    "year": 1970,
@@ -826,7 +976,9 @@
    "cool60": 219,
    "first80": 152,
    "last80": 255,
-   "count80": 60
+   "count80": 60,
+   "firstSus": 175,
+   "lastSus": 241
   },
   {
    "year": 1971,
@@ -837,7 +989,9 @@
    "cool60": 225,
    "first80": 169,
    "last80": 260,
-   "count80": 46
+   "count80": 46,
+   "firstSus": 192,
+   "lastSus": 253
   },
   {
    "year": 1972,
@@ -848,7 +1002,9 @@
    "cool60": 200,
    "first80": 187,
    "last80": 250,
-   "count80": 34
+   "count80": 34,
+   "firstSus": 188,
+   "lastSus": 217
   },
   {
    "year": 1973,
@@ -859,7 +1015,9 @@
    "cool60": 208,
    "first80": 172,
    "last80": 243,
-   "count80": 44
+   "count80": 44,
+   "firstSus": 180,
+   "lastSus": 235
   },
   {
    "year": 1974,
@@ -870,7 +1028,9 @@
    "cool60": 186,
    "first80": 166,
    "last80": 252,
-   "count80": 44
+   "count80": 44,
+   "firstSus": 175,
+   "lastSus": 249
   },
   {
    "year": 1975,
@@ -881,7 +1041,9 @@
    "cool60": 209,
    "first80": 158,
    "last80": 249,
-   "count80": 38
+   "count80": 38,
+   "firstSus": 185,
+   "lastSus": 222
   },
   {
    "year": 1976,
@@ -892,7 +1054,9 @@
    "cool60": 187,
    "first80": 173,
    "last80": 253,
-   "count80": 42
+   "count80": 42,
+   "firstSus": 181,
+   "lastSus": 244
   },
   {
    "year": 1977,
@@ -903,7 +1067,9 @@
    "cool60": 186,
    "first80": 154,
    "last80": 269,
-   "count80": 76
+   "count80": 76,
+   "firstSus": 156,
+   "lastSus": 251
   },
   {
    "year": 1978,
@@ -914,7 +1080,9 @@
    "cool60": 192,
    "first80": 170,
    "last80": 250,
-   "count80": 42
+   "count80": 42,
+   "firstSus": 190,
+   "lastSus": 248
   },
   {
    "year": 1979,
@@ -925,7 +1093,9 @@
    "cool60": 194,
    "first80": 162,
    "last80": 255,
-   "count80": 39
+   "count80": 39,
+   "firstSus": 180,
+   "lastSus": 254
   },
   {
    "year": 1980,
@@ -936,7 +1106,9 @@
    "cool60": 198,
    "first80": 171,
    "last80": 253,
-   "count80": 49
+   "count80": 49,
+   "firstSus": 189,
+   "lastSus": 239
   },
   {
    "year": 1981,
@@ -947,7 +1119,9 @@
    "cool60": 179,
    "first80": 151,
    "last80": 265,
-   "count80": 87
+   "count80": 87,
+   "firstSus": 158,
+   "lastSus": 262
   },
   {
    "year": 1982,
@@ -958,7 +1132,9 @@
    "cool60": 185,
    "first80": 168,
    "last80": 268,
-   "count80": 60
+   "count80": 60,
+   "firstSus": 192,
+   "lastSus": 250
   },
   {
    "year": 1983,
@@ -969,7 +1145,9 @@
    "cool60": 179,
    "first80": 148,
    "last80": 261,
-   "count80": 71
+   "count80": 71,
+   "firstSus": 188,
+   "lastSus": 260
   },
   {
    "year": 1984,
@@ -980,7 +1158,9 @@
    "cool60": 188,
    "first80": 150,
    "last80": 262,
-   "count80": 54
+   "count80": 54,
+   "firstSus": 177,
+   "lastSus": 261
   },
   {
    "year": 1985,
@@ -991,7 +1171,9 @@
    "cool60": 169,
    "first80": 158,
    "last80": 258,
-   "count80": 76
+   "count80": 76,
+   "firstSus": 159,
+   "lastSus": 244
   },
   {
    "year": 1986,
@@ -1002,7 +1184,9 @@
    "cool60": 167,
    "first80": 155,
    "last80": 251,
-   "count80": 67
+   "count80": 67,
+   "firstSus": 166,
+   "lastSus": 250
   },
   {
    "year": 1987,
@@ -1013,7 +1197,9 @@
    "cool60": 155,
    "first80": 134,
    "last80": 276,
-   "count80": 48
+   "count80": 48,
+   "firstSus": 163,
+   "lastSus": 244
   },
   {
    "year": 1988,
@@ -1024,7 +1210,9 @@
    "cool60": 160,
    "first80": 167,
    "last80": 255,
-   "count80": 79
+   "count80": 79,
+   "firstSus": 168,
+   "lastSus": 248
   },
   {
    "year": 1989,
@@ -1035,7 +1223,9 @@
    "cool60": 155,
    "first80": 129,
    "last80": 269,
-   "count80": 72
+   "count80": 72,
+   "firstSus": 166,
+   "lastSus": 248
   },
   {
    "year": 1990,
@@ -1046,7 +1236,9 @@
    "cool60": 146,
    "first80": 155,
    "last80": 256,
-   "count80": 60
+   "count80": 60,
+   "firstSus": 173,
+   "lastSus": 255
   },
   {
    "year": 1991,
@@ -1057,7 +1249,9 @@
    "cool60": 174,
    "first80": 162,
    "last80": 270,
-   "count80": 66
+   "count80": 66,
+   "firstSus": 183,
+   "lastSus": 244
   },
   {
    "year": 1992,
@@ -1068,7 +1262,9 @@
    "cool60": 163,
    "first80": 155,
    "last80": 273,
-   "count80": 61
+   "count80": 61,
+   "firstSus": 177,
+   "lastSus": 266
   },
   {
    "year": 1993,
@@ -1079,7 +1275,9 @@
    "cool60": 173,
    "first80": 166,
    "last80": 278,
-   "count80": 57
+   "count80": 57,
+   "firstSus": 177,
+   "lastSus": 251
   },
   {
    "year": 1994,
@@ -1090,7 +1288,9 @@
    "cool60": 192,
    "first80": 162,
    "last80": 252,
-   "count80": 70
+   "count80": 70,
+   "firstSus": 171,
+   "lastSus": 243
   },
   {
    "year": 1995,
@@ -1101,7 +1301,9 @@
    "cool60": 185,
    "first80": 179,
    "last80": 261,
-   "count80": 59
+   "count80": 59,
+   "firstSus": 180,
+   "lastSus": 250
   },
   {
    "year": 1996,
@@ -1112,7 +1314,9 @@
    "cool60": 179,
    "first80": 159,
    "last80": 249,
-   "count80": 71
+   "count80": 71,
+   "firstSus": 162,
+   "lastSus": 246
   },
   {
    "year": 1997,
@@ -1123,7 +1327,9 @@
    "cool60": 171,
    "first80": 135,
    "last80": 275,
-   "count80": 66
+   "count80": 66,
+   "firstSus": 187,
+   "lastSus": 262
   },
   {
    "year": 1998,
@@ -1134,7 +1340,9 @@
    "cool60": 190,
    "first80": 181,
    "last80": 261,
-   "count80": 59
+   "count80": 59,
+   "firstSus": 191,
+   "lastSus": 259
   },
   {
    "year": 1999,
@@ -1145,7 +1353,9 @@
    "cool60": 176,
    "first80": 165,
    "last80": 252,
-   "count80": 62
+   "count80": 62,
+   "firstSus": 166,
+   "lastSus": 239
   },
   {
    "year": 2000,
@@ -1156,7 +1366,9 @@
    "cool60": 177,
    "first80": 150,
    "last80": 273,
-   "count80": 76
+   "count80": 76,
+   "firstSus": 167,
+   "lastSus": 264
   },
   {
    "year": 2001,
@@ -1167,7 +1379,9 @@
    "cool60": 152,
    "first80": 142,
    "last80": 268,
-   "count80": 88
+   "count80": 88,
+   "firstSus": 170,
+   "lastSus": 259
   },
   {
    "year": 2002,
@@ -1178,7 +1392,9 @@
    "cool60": 160,
    "first80": 151,
    "last80": 267,
-   "count80": 78
+   "count80": 78,
+   "firstSus": 168,
+   "lastSus": 247
   },
   {
    "year": 2003,
@@ -1189,7 +1405,9 @@
    "cool60": 169,
    "first80": 148,
    "last80": 275,
-   "count80": 81
+   "count80": 81,
+   "firstSus": 149,
+   "lastSus": 252
   },
   {
    "year": 2004,
@@ -1200,7 +1418,9 @@
    "cool60": 158,
    "first80": 159,
    "last80": 257,
-   "count80": 58
+   "count80": 58,
+   "firstSus": 176,
+   "lastSus": 256
   },
   {
    "year": 2005,
@@ -1211,7 +1431,9 @@
    "cool60": 168,
    "first80": 143,
    "last80": 271,
-   "count80": 76
+   "count80": 76,
+   "firstSus": 172,
+   "lastSus": 251
   },
   {
    "year": 2006,
@@ -1222,7 +1444,9 @@
    "cool60": 170,
    "first80": 153,
    "last80": 255,
-   "count80": 77
+   "count80": 77,
+   "firstSus": 154,
+   "lastSus": 242
   },
   {
    "year": 2007,
@@ -1233,7 +1457,9 @@
    "cool60": 153,
    "first80": 156,
    "last80": 275,
-   "count80": 91
+   "count80": 91,
+   "firstSus": 167,
+   "lastSus": 259
   },
   {
    "year": 2008,
@@ -1244,7 +1470,9 @@
    "cool60": 175,
    "first80": 141,
    "last80": 270,
-   "count80": 72
+   "count80": 72,
+   "firstSus": 169,
+   "lastSus": 252
   },
   {
    "year": 2009,
@@ -1255,7 +1483,9 @@
    "cool60": 167,
    "first80": 138,
    "last80": 262,
-   "count80": 77
+   "count80": 77,
+   "firstSus": 175,
+   "lastSus": 256
   },
   {
    "year": 2010,
@@ -1266,7 +1496,9 @@
    "cool60": 182,
    "first80": 156,
    "last80": 275,
-   "count80": 77
+   "count80": 77,
+   "firstSus": 157,
+   "lastSus": 272
   },
   {
    "year": 2011,
@@ -1277,7 +1509,9 @@
    "cool60": 164,
    "first80": 168,
    "last80": 274,
-   "count80": 74
+   "count80": 74,
+   "firstSus": 174,
+   "lastSus": 250
   },
   {
    "year": 2012,
@@ -1288,7 +1522,9 @@
    "cool60": 160,
    "first80": 169,
    "last80": 267,
-   "count80": 69
+   "count80": 69,
+   "firstSus": 171,
+   "lastSus": 249
   },
   {
    "year": 2013,
@@ -1299,7 +1535,9 @@
    "cool60": 160,
    "first80": 152,
    "last80": 264,
-   "count80": 83
+   "count80": 83,
+   "firstSus": 160,
+   "lastSus": 261
   },
   {
    "year": 2014,
@@ -1310,7 +1548,9 @@
    "cool60": 154,
    "first80": 149,
    "last80": 269,
-   "count80": 86
+   "count80": 86,
+   "firstSus": 162,
+   "lastSus": 266
   },
   {
    "year": 2015,
@@ -1321,7 +1561,9 @@
    "cool60": 148,
    "first80": 160,
    "last80": 271,
-   "count80": 88
+   "count80": 88,
+   "firstSus": 162,
+   "lastSus": 253
   },
   {
    "year": 2016,
@@ -1332,7 +1574,9 @@
    "cool60": 152,
    "first80": 156,
    "last80": 264,
-   "count80": 75
+   "count80": 75,
+   "firstSus": 157,
+   "lastSus": 246
   },
   {
    "year": 2017,
@@ -1343,7 +1587,9 @@
    "cool60": 142,
    "first80": 155,
    "last80": 257,
-   "count80": 79
+   "count80": 79,
+   "firstSus": 170,
+   "lastSus": 256
   },
   {
    "year": 2018,
@@ -1354,7 +1600,9 @@
    "cool60": 164,
    "first80": 150,
    "last80": 268,
-   "count80": 77
+   "count80": 77,
+   "firstSus": 173,
+   "lastSus": 258
   },
   {
    "year": 2019,
@@ -1365,7 +1613,9 @@
    "cool60": 170,
    "first80": 161,
    "last80": 261,
-   "count80": 79
+   "count80": 79,
+   "firstSus": 164,
+   "lastSus": 256
   },
   {
    "year": 2020,
@@ -1376,7 +1626,9 @@
    "cool60": 164,
    "first80": 131,
    "last80": 266,
-   "count80": 89
+   "count80": 89,
+   "firstSus": 151,
+   "lastSus": 251
   },
   {
    "year": 2021,
@@ -1387,7 +1639,9 @@
    "cool60": 161,
    "first80": 153,
    "last80": 260,
-   "count80": 75
+   "count80": 75,
+   "firstSus": 166,
+   "lastSus": 258
   },
   {
    "year": 2022,
@@ -1398,7 +1652,9 @@
    "cool60": 164,
    "first80": 159,
    "last80": 271,
-   "count80": 83
+   "count80": 83,
+   "firstSus": 160,
+   "lastSus": 250
   },
   {
    "year": 2023,
@@ -1409,7 +1665,9 @@
    "cool60": 151,
    "first80": 136,
    "last80": 280,
-   "count80": 75
+   "count80": 75,
+   "firstSus": 180,
+   "lastSus": 255
   },
   {
    "year": 2024,
@@ -1420,7 +1678,9 @@
    "cool60": 167,
    "first80": 157,
    "last80": 282,
-   "count80": 116
+   "count80": 116,
+   "firstSus": 158,
+   "lastSus": 281
   },
   {
    "year": 2025,
@@ -1431,7 +1691,9 @@
    "cool60": 136,
    "first80": 132,
    "last80": 268,
-   "count80": 97
+   "count80": 97,
+   "firstSus": 159,
+   "lastSus": 266
   }
  ]
 }
