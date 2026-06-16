@@ -175,6 +175,13 @@ export async function fetchNormals(city) {
   return j;
 }
 
+export async function fetchCddSplit(city) {
+  if (!city.cddSplitAsset) return null;
+  const j = await fetchAsset(city.cddSplitAsset);
+  if (!j.years || j.years.length < 30) throw new Error("cdd-split asset too thin");
+  return j;
+}
+
 // Phoenix keeps UTC-7 all year (no DST). Shifting "now" by the offset and
 // reading the UTC date gives the station's local calendar date, so we never
 // ask ACIS for a day that hasn't started there yet.

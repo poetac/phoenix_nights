@@ -17,6 +17,8 @@ straight from ACIS daily lows instead:
     seasonally sane (mid-July ~80F, mid-January ~40F)
   - the overnight "cool window" (hours/night below 85F in the committed
     diurnal curve) is narrower now than in the 1970s
+  - the night half of cooling degree-days ((low-65)/2 over cooling days) is a
+    rising share of the total compared with the 1970s
 
 Stdlib only. Exit code 0 = all checks pass.
 """
@@ -101,6 +103,43 @@ def fetch_acis_daily_mint(start_year, end_year):
                                  headers={"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=120) as r:
         return json.load(r)["data"]
+
+
+def fetch_acis_daily_minmax(start_year, end_year):
+    """Every daily low and high across a closed year range (one request)."""
+    body = json.dumps({
+        "sid": "PHXthr 9",
+        "sdate": f"{start_year}-01-01",
+        "edate": f"{end_year}-12-31",
+        "elems": [{"name": "mint"}, {"name": "maxt"}],
+    }).encode()
+    req = urllib.request.Request(ACIS_URL, data=body,
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=120) as r:
+        return json.load(r)["data"]
+
+
+def cdd_night_share(rows, y0, y1):
+    """Night half's share of cooling degree-days over [y0, y1].
+
+    Reproduces build_cdd_split.py's identity decomposition: on cooling days
+    (mean > 65F) the degree-days split exactly into (high-65)/2 + (low-65)/2.
+    Returns the night half as a percentage of the total.
+    """
+    night = day = 0.0
+    for date, lo, hi in rows:
+        y = int(date[:4])
+        if not (y0 <= y <= y1):
+            continue
+        try:
+            lo, hi = float(lo), float(hi)
+        except (TypeError, ValueError):
+            continue
+        if (lo + hi) / 2 > 65:
+            night += (lo - 65) / 2
+            day += (hi - 65) / 2
+    t = night + day
+    return 100 * night / t if t else float("nan")
 
 
 def seasonal_normal_low(rows, month, day, window=7):
@@ -236,6 +275,14 @@ def main():
         checks.append((f"cool window <85F shrinks 1970s({cw70}h)->{cw_label}({cw_now}h)",
                        cw70 - cw_now, cw_now < cw70))
 
+    # Night share of cooling demand rising: the night half of CDD grows faster
+    # than the day half (the "thermostat that never turns off" card).
+    split_rows = fetch_acis_daily_minmax(1970, LAST_COMPLETE_YEAR)
+    share_70s = cdd_night_share(split_rows, 1970, 1979)
+    share_now = cdd_night_share(split_rows, LAST_COMPLETE_YEAR - 9, LAST_COMPLETE_YEAR)
+    checks.append((f"night share of CDD rising {share_70s:.0f}%->{share_now:.0f}%",
+                   share_now - share_70s, share_now > share_70s))
+
     ok = True
     for name, value, passed in checks:
         ok &= passed
@@ -244,6 +291,7 @@ def main():
     print(f"\nTMIN: +{tmin_slope:.2f} F/decade | TMAX: +{tmax_slope:.2f} F/decade | ratio {ratio:.1f}x")
     print(f"80F-night season: 1970s ~{span_70s:.0f} days vs last 10y ~{span_recent:.0f} days")
     print(f"1970s normal low (hero baseline): mid-Jul ~{july_norm:.0f}F, mid-Jan ~{jan_norm:.0f}F")
+    print(f"night share of cooling demand: 1970s ~{share_70s:.0f}% vs last 10y ~{share_now:.0f}%")
     sys.exit(0 if ok else 1)
 
 

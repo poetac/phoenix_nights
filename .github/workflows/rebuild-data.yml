@@ -35,6 +35,7 @@ jobs:
           python3 analysis/build_streaks.py
           python3 analysis/build_heat_season.py
           python3 analysis/build_normals.py
+          python3 analysis/build_cdd_split.py
 
       # Heavy NCEI hourly pull; rarely changes. Best-effort, never blocks.
       - name: Rebuild diurnal asset (NCEI hourly)
