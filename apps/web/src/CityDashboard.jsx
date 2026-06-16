@@ -164,7 +164,6 @@ export default function CityDashboard({ city }) {
   return (
     <div className="min-h-screen" style={{ background: C.bg, color: C.text, fontFamily: BODY }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&display=swap');
         @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
         .pulse { animation: pulse 1.4s ease-in-out infinite; }
         @keyframes pulse { 0%,100% { opacity: .35 } 50% { opacity: 1 } }
@@ -176,7 +175,7 @@ export default function CityDashboard({ city }) {
           `radial-gradient(120% 60% at 50% -10%, rgba(255,107,61,.16), transparent 60%),` +
           `radial-gradient(90% 50% at 80% 0%, rgba(255,177,92,.08), transparent 55%)` }} />
 
-      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <main className="relative max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <header className="mb-8">
           <div className="text-xs tracking-widest uppercase mb-3" style={{ color: C.emberSoft }}>
             Live NOAA station record · {city.name}
@@ -465,7 +464,7 @@ export default function CityDashboard({ city }) {
             <SourcesCard city={city} />
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

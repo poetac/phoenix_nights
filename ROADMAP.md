@@ -179,9 +179,17 @@ streak builders, source local heat-death data. Candidates: Las Vegas or Tucson (
 desert-UHI thesis, easy validation) or a humid city like Houston (does the thesis
 travel out of the desert?). Spatial work from M4-5 may fold in here.
 
-### M6 — Launch & polish
-Treat Phoenix as the flagship and get it in front of people: OG/meta tags, per-card
-share images, an about/methodology page, accessibility pass, performance budget.
+### M6 — Launch & polish (IN PROGRESS)
+Treat Phoenix as the flagship and get it in front of people.
+- ✅ **Shipped (PR #10):** Open Graph + Twitter card meta and a `theme-color`/canonical; an
+  on-brand social card (`public/og.svg`); display font moved out of a render-blocking runtime
+  `@import` into a non-blocking `<head>` load with a system-serif fallback; a `<main>` landmark;
+  and fetch timeouts + retry/backoff in `data.js` so a flaky network degrades to the Open-Meteo
+  fallback instead of hanging. The in-app methodology section already shipped with the audit work.
+- ⏳ **Remaining:** a rasterized **PNG** OG image (the SVG renders on Slack/Discord/LinkedIn but
+  Facebook/Twitter ignore SVG — needs one `rsvg-convert`/`resvg` pass, no tool available in this
+  sandbox); per-card share images + shareable deep links; a fuller accessibility audit; and a
+  performance budget (the recharts vendor chunk is ~560 KB / 159 KB gzip — lazy-load or trim).
 
 ### M7 — Automation & trust
 Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2

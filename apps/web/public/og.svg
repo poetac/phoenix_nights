@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Georgia, 'Times New Roman', serif">
+  <defs>
+    <radialGradient id="g1" cx="50%" cy="-10%" r="75%">
+      <stop offset="0%" stop-color="#ff6b3d" stop-opacity="0.20"/>
+      <stop offset="60%" stop-color="#ff6b3d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="85%" cy="0%" r="60%">
+      <stop offset="0%" stop-color="#ffb15c" stop-opacity="0.10"/>
+      <stop offset="55%" stop-color="#ffb15c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#141021"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+
+  <text x="80" y="118" fill="#ffb15c" font-family="ui-sans-serif, system-ui, sans-serif"
+        font-size="22" letter-spacing="6" font-weight="600">LIVE NOAA STATION RECORD · PHOENIX</text>
+
+  <text x="76" y="252" fill="#f2ecdf" font-size="84" font-weight="600">The desert still cools</text>
+  <text x="76" y="346" fill="#f2ecdf" font-size="84" font-weight="600">off at night. <tspan fill="#ff6b3d">The city</tspan></text>
+  <text x="76" y="440" fill="#ff6b3d" font-size="84" font-weight="600">doesn't.</text>
+
+  <text x="80" y="528" fill="#9b93ae" font-family="ui-sans-serif, system-ui, sans-serif" font-size="27">
+    Phoenix overnight lows are abandoning their history faster than its highs —
+  </text>
+  <text x="80" y="566" fill="#9b93ae" font-family="ui-sans-serif, system-ui, sans-serif" font-size="27">
+    measured against a fixed 1970s baseline, not a rolling &#8220;normal.&#8221;
+  </text>
+
+  <text x="1120" y="566" fill="#ffd9a0" text-anchor="end"
+        font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" letter-spacing="2">poetac.github.io/phoenix_nights</text>
+</svg>
