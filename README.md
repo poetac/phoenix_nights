@@ -4,6 +4,8 @@
 
 A public-facing app that shows the *true* local climate trajectory — especially the divergence of **overnight low temperatures** from their historical norms — using official NOAA station data.
 
+> Picking up this project in a new session? Start with [`HANDOFF.md`](HANDOFF.md) (current state, in-flight PRs, environment requirements) and [`CLAUDE.md`](CLAUDE.md) (commands + conventions).
+
 ## Why this exists
 
 Mainstream weather apps grade each day against a "normal range" and spotlight the afternoon high. That framing hides the real story in heat-island cities:
