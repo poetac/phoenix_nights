@@ -70,15 +70,18 @@ re-derives the lengthening from ACIS daily lows (GSOY has no per-day data). Resu
 80°F night now lands ~17 days earlier and the last ~14 days later than in the 1970s — a season
 ~31 days longer (~85 such nights/year vs ~47). Asset refresh is automated (see M7).
 
-### 3. Human-cost demographics
-**Claim:** Who the heat kills — unsheltered vs housed, indoors-with-AC-off vs outdoors,
-by age. The current card *asserts* "roughly half were unsheltered" in prose but shows no
-breakdown.
-**Data:** Maricopa County heat-surveillance reports (same hand-verified source as
-`phx-heat-deaths.json`); add structured fields with per-figure citations.
-**Risk:** medium — hand extraction, and the data is sensitive; cite every number and
-keep the framing about systems, not blame.
-**Verdict:** high impact, supportable; sequence after 1–2 so it gets proper care.
+### 3. Human-cost demographics — ✅ SHIPPED (PR #11)
+**Claim:** Who the heat kills — unsheltered vs housed, indoors-with-AC-off vs outdoors, by age.
+Replaces the card's old "roughly half were unsheltered" prose with a real breakdown.
+**Built:** a `demographics` block in `phx-heat-deaths.json` (2024 final report — the most recent
+complete demographic report) drives a "Who the heat finds" grid in `HumanCostCard.jsx`: 49%
+homeless, 77% outdoors, 70% of indoor A/C units not working (of the 88% of indoor deaths where a
+unit was present), ~60% aged 50+, 78% men, 57% substance-involved (≈9 in 10 of those stimulants) —
+each with its denominator, framed as systems failures (missing shelter bed, shut-off utility,
+unfixable unit), not personal fault. Hand-curated asset, so it ships without a rebuild.
+**Provenance:** every figure was read from the primary Maricopa County DPH *2024 Heat-Related
+Deaths Report* (May 2025) PDF, not secondary reporting — the hand-verification the
+`HEAT_DEATHS.md` runbook requires (CI shape-checks the JSON but can't check these values).
 
 ### 4. Global / national context — ✅ SHIPPED (PR #6)
 **Claim:** Even the desert control warms faster than the global average; the city faster still.

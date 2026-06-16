@@ -44,12 +44,37 @@ export default function HumanCostCard({ city, heatDeaths, rows }) {
         the summer that set records for both 110°F days and 90°F nights —{" "}
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{model.peak.deaths} people died</span>. Heat kills at
         night as much as at noon: when the air never drops below 90°F, bodies without shelter or working AC never get
-        to reset. Roughly half of recent victims were people experiencing homelessness.
+        to reset.
       </p>
+
+      {heatDeaths.demographics?.factors?.length > 0 && (
+        <div className="mt-5">
+          <div className="text-xs tracking-widest uppercase mb-3" style={{ color: C.muted }}>
+            Who the heat finds · {heatDeaths.demographics.year} ({heatDeaths.demographics.total} deaths)
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {heatDeaths.demographics.factors.map((f, i) => (
+              <div key={i} className="rounded-xl p-3" style={{ background: C.panel2, border: `1px solid ${C.line}` }}>
+                <div style={{ fontFamily: DISPLAY, color: C.rose, fontSize: "1.6rem", lineHeight: 1.1 }}>{f.display}</div>
+                <div className="text-sm mt-1" style={{ color: C.text }}>{f.label}</div>
+                {f.sub && <div className="text-xs mt-1 leading-snug" style={{ color: C.muted }}>{f.sub}</div>}
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-base leading-relaxed">
+            Heat is not a random killer. It finds the people with the least protection from it: those with no home, those
+            whose cooling has failed, those already medically fragile. Each figure points at a system, not a fault — a
+            missing shelter bed, a shut-off utility, a unit no one could afford to fix.
+          </p>
+        </div>
+      )}
       <ul className="text-xs mt-3 space-y-1 leading-relaxed" style={{ color: C.muted }}>
         <li>Deaths have fallen two years running ({model.data[model.data.length - 2].deaths} in {model.data[model.data.length - 2].year}, {model.last.deaths} in {model.last.year}) — milder summers than {model.peak.year}, plus expanded county cooling centers and outreach. Lives saved by response, not by the trend reversing.</li>
         <li>Counts include heat-caused and heat-contributed deaths as classified by the county; part of the rise in early years reflects surveillance improving as well as heat worsening.</li>
         <li>The hot-nights line is shown as context, not causal proof — both series are driven by the same summers.</li>
+        {heatDeaths.demographics && (
+          <li>The breakdown is from the {heatDeaths.demographics.source}; {heatDeaths.demographics.note}</li>
+        )}
         <li>Source: <a href={heatDeaths.url} style={{ color: C.day }} target="_blank" rel="noreferrer">{heatDeaths.source}</a>.</li>
       </ul>
     </Card>
