@@ -196,8 +196,13 @@ Treat Phoenix as the flagship and get it in front of people.
   each card already states the finding, so these are concise chart descriptors).
 - ✅ **Shipped (PR #15):** `role="img"` + a descriptive `aria-label` on every remaining per-card
   chart (15 cards), so each visualization has a text alternative for assistive tech.
-- ⏳ **Remaining:** per-card share images + shareable deep links; and a performance budget (the
-  recharts vendor chunk is ~560 KB / 159 KB gzip — lazy-load or trim).
+- ✅ **Shipped (PR #17):** shareable deep links — every `CardHead` heading is now a slug `id` with a
+  hover-revealed `#` permalink, so any section is linkable/shareable by URL hash (centralized in
+  `ui.jsx`, no per-card edits).
+- 🔄 **In review (PR #14):** performance budget — lazy-load the chart body so recharts (~125 KB gzip)
+  leaves the critical path; needs a live smoke-test before merge.
+- ⏳ **Remaining:** per-card share *images* (needs the SVG→PNG render path the OG card uses, applied
+  per chart).
 
 ### M7 — Automation & trust
 Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2

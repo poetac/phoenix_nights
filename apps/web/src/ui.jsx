@@ -19,11 +19,20 @@ export function Card({ children, style, id }) {
   );
 }
 
-export function CardHead({ kicker, title, sub }) {
+const slugify = (s) =>
+  String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
+
+export function CardHead({ kicker, title, sub, id }) {
+  const anchor = id || slugify(title);
   return (
     <div className="mb-4">
       {kicker && <div className="text-xs tracking-widest uppercase mb-1" style={{ color: C.muted }}>{kicker}</div>}
-      <h2 className="text-xl sm:text-2xl" style={{ fontFamily: DISPLAY, color: C.text, fontWeight: 600 }}>{title}</h2>
+      <h2 id={anchor} className="group text-xl sm:text-2xl" style={{ fontFamily: DISPLAY, color: C.text, fontWeight: 600, scrollMarginTop: "1rem" }}>
+        {title}
+        <a href={`#${anchor}`} aria-label={`Permalink to “${title}”`}
+          className="ml-2 text-base opacity-0 group-hover:opacity-50 focus:opacity-100"
+          style={{ color: C.muted, textDecoration: "none" }}>#</a>
+      </h2>
       {sub && <p className="text-sm mt-1 leading-relaxed" style={{ color: C.muted }}>{sub}</p>}
     </div>
   );
