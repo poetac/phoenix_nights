@@ -23,7 +23,9 @@ export default function HumanCostCard({ city, heatDeaths, rows }) {
     <Card>
       <CardHead kicker="The human cost" title="When the night stops cooling, people die"
         sub={`${heatDeaths.place} medical examiners investigate every suspected heat death. Bars are confirmed heat-related deaths; the gold line is the year's count of nights that never dropped below 90°F at ${city.urbanShort}.`} />
-      <div style={{ width: "100%", height: 280 }}>
+      <div role="img" style={{ width: "100%", height: 280 }}
+        aria-label="Bar chart of confirmed heat-related deaths per year with a line for the count of nights at or above 90°F.">
+
         <ResponsiveContainer>
           <ComposedChart data={model.data} margin={{ top: 6, right: -8, left: -14, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />

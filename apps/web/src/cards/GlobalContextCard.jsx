@@ -51,7 +51,9 @@ export default function GlobalContextCard({ city, cityRows, ruralRows }) {
     <Card>
       <CardHead kicker="Against the whole planet" title="The desert is outrunning the Earth — the city, the desert"
         sub={`Warming isn't spread evenly. Lined up the same way — degrees per decade since ${first} — here is how ${city.shortName}'s nights and the open desert's nights compare with the background rates for the United States and the planet as a whole.`} />
-      <div style={{ width: "100%", height: 200 }}>
+      <div role="img" style={{ width: "100%", height: 200 }}
+        aria-label="Horizontal bar chart comparing warming rates in degrees Fahrenheit per decade: the global average and the United States average against Phoenix and open-desert overnight lows, which are several times the global rate.">
+
         <ResponsiveContainer>
           <BarChart data={bars} layout="vertical" margin={{ top: 4, right: 44, left: 8, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" horizontal={false} />

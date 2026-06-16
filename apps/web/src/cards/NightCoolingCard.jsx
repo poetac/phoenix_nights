@@ -41,7 +41,9 @@ export default function NightCoolingCard({ city, cddSplit }) {
     <Card>
       <CardHead kicker="Whose fault is the cooling bill" title="The thermostat that never turns off"
         sub={`The same yearly cooling demand as above, split into the half the afternoon high is responsible for and the half the overnight low is. As lows pull away from highs, a rising share of the load comes from the hours that once cost nothing to cool.`} />
-      <div style={{ width: "100%", height: 260 }}>
+      <div role="img" style={{ width: "100%", height: 260 }}
+        aria-label="Stacked area chart of the day and night halves of annual cooling degree days; the night half's share rises over time.">
+
         <ResponsiveContainer>
           <AreaChart data={data} margin={{ top: 6, right: 8, left: -8, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />

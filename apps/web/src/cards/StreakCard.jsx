@@ -28,7 +28,9 @@ export default function StreakCard({ city, streaks }) {
     <Card>
       <CardHead kicker="The unbroken stretch" title="How long the night heat holds you"
         sub="The longest run of consecutive nights each year that never dropped below 80°F. Heat illness compounds with each night the body can't reset — streaks, not averages, are what kill." />
-      <div style={{ width: "100%", height: 260 }}>
+      <div role="img" style={{ width: "100%", height: 260 }}
+        aria-label="Chart of the longest run of consecutive 80°F-plus nights each year, lengthening over the record.">
+
         <ResponsiveContainer>
           <BarChart data={model.data} margin={{ top: 6, right: 8, left: -20, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />

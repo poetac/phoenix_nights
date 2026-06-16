@@ -67,7 +67,8 @@ export default function UhiCard({ city, cityRows, ruralRows }) {
           <div className="text-sm mt-1" style={{ color: C.sage }}>open-desert lows ({city.rural.short})</div>
         </div>
       </div>
-      <div style={{ width: "100%", height: 280 }}>
+      <div role="img" style={{ width: "100%", height: 280 }}
+        aria-label={`Line chart of ${city.shortName}'s versus the open desert's average overnight low each year; the city line rises faster, and the gap between them widens.`}>
         <ResponsiveContainer>
           <LineChart data={data} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />

@@ -33,7 +33,9 @@ export default function SleepCard({ city, rows, windowStart }) {
     <Card>
       <CardHead kicker="The body keeps score" title="Nights too warm to sleep through"
         sub={`Nights each year that stayed at or above ${THRESHOLD}°F (25°C) — the point where studies find human sleep starts to measurably fray. Above it, people fall asleep later and wake earlier, and the effect hits hardest in already-hot, lower-income places.`} />
-      <div style={{ width: "100%", height: 250 }}>
+      <div role="img" style={{ width: "100%", height: 250 }}
+        aria-label="Chart of the number of nights per year at or above the 77°F sleep-disruption threshold, rising over the record.">
+
         <ResponsiveContainer>
           <AreaChart data={model.data} margin={{ top: 6, right: 8, left: -20, bottom: 0 }}>
             <defs>

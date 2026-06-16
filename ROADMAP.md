@@ -194,9 +194,10 @@ Treat Phoenix as the flagship and get it in front of people.
   `<main>`, the decorative background marked `aria-hidden`, `color-scheme: dark`, link focus
   outlines, and `role="img"` + descriptive `aria-label`s on the headline charts (the prose under
   each card already states the finding, so these are concise chart descriptors).
-- ⏳ **Remaining:** `role="img"`/`aria-label` on the remaining per-card charts (same pattern);
-  per-card share images + shareable deep links; and a performance budget (the recharts vendor
-  chunk is ~560 KB / 159 KB gzip — lazy-load or trim).
+- ✅ **Shipped (PR #15):** `role="img"` + a descriptive `aria-label` on every remaining per-card
+  chart (15 cards), so each visualization has a text alternative for assistive tech.
+- ⏳ **Remaining:** per-card share images + shareable deep links; and a performance budget (the
+  recharts vendor chunk is ~560 KB / 159 KB gzip — lazy-load or trim).
 
 ### M7 — Automation & trust
 Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2

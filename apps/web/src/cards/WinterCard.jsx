@@ -31,7 +31,9 @@ export default function WinterCard({ city, streaks }) {
       <CardHead kicker="The other end of the year" title="Winter left first"
         sub="Frost is the desert winter's signature — and the same warming that keeps summer nights hot has all but erased it. Blue bars: nights at or below freezing. Gold line: nights at or below a crisp 60°F."
       />
-      <div style={{ width: "100%", height: 260 }}>
+      <div role="img" style={{ width: "100%", height: 260 }}
+        aria-label="Chart of nights per year at or below freezing and at or below 60°F, both dwindling over the record.">
+
         <ResponsiveContainer>
           <ComposedChart data={model.data} margin={{ top: 6, right: -8, left: -20, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />

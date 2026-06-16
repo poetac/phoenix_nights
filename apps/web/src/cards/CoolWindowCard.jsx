@@ -45,7 +45,9 @@ export default function CoolWindowCard({ city, diurnal }) {
       <CardHead kicker="Hours of relief"
         title="The night stopped giving you a break"
         sub={`How many hours a typical ${city.shortName} summer night spends cool enough to shed the day's heat — below ${RELIEF}°F — by decade, and how many reach the deeper ${RECOVERY}°F line where sleep can recover. A warmer minimum is only half the story; this is the relief that vanished with it.`} />
-      <div style={{ width: "100%", height: 280 }}>
+      <div role="img" style={{ width: "100%", height: 280 }}
+        aria-label="Stacked bar chart of hours per night below 85°F and below 77°F by decade, shrinking toward zero.">
+
         <ResponsiveContainer>
           <BarChart data={data} margin={{ top: 6, right: 8, left: -22, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />

@@ -33,7 +33,9 @@ export default function GridCard({ city, grid }) {
     <Card>
       <CardHead kicker="The grid feels it too" title="The night shift the power grid lost"
         sub={`Average July electricity demand by hour of day for metro Phoenix's two big utilities (APS + SRP), ${model.thenK} vs ${model.nowK}. Overnight used to be when the grid caught its breath.`} />
-      <div style={{ width: "100%", height: 280 }}>
+      <div role="img" style={{ width: "100%", height: 280 }}
+        aria-label="Line chart comparing average July electricity demand by hour of day in an earlier period versus recently; the overnight dip has largely disappeared.">
+
         <ResponsiveContainer>
           <ComposedChart data={model.data} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
