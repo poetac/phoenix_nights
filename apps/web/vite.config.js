@@ -5,12 +5,18 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
-    // one rarely-changing vendor chunk so app-code deploys don't bust the big cache entry
+    // recharts is the heavy dependency; keep it in its own chunk separate from
+    // react so it is pulled only by the lazy DashboardBody, not the shell.
     chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "recharts"],
+        manualChunks(id) {
+          // Pin react into an eager, rarely-changing chunk. recharts is left
+          // unpinned so it auto-splits into the dynamically-imported
+          // DashboardBody chunk — off the initial critical path.
+          if (id.includes("node_modules/react") || id.includes("node_modules/scheduler")) {
+            return "react";
+          }
         },
       },
     },

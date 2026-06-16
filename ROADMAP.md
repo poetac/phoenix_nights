@@ -199,8 +199,12 @@ Treat Phoenix as the flagship and get it in front of people.
 - ✅ **Shipped (PR #17):** shareable deep links — every `CardHead` heading is now a slug `id` with a
   hover-revealed `#` permalink, so any section is linkable/shareable by URL hash (centralized in
   `ui.jsx`, no per-card edits).
-- 🔄 **In review (PR #14):** performance budget — lazy-load the chart body so recharts (~125 KB gzip)
-  leaves the critical path; needs a live smoke-test before merge.
+- ✅ **Shipped (PR #14):** performance budget — the whole chart body (`DashboardBody.jsx`, every
+  recharts card + the trend math) is now a `React.lazy` chunk, warmed in parallel with the ACIS
+  fetch, so recharts leaves the critical path. Build: the eager shell drops to ~9 KB gzip (was a
+  ~159 KB-gzip combined vendor chunk); recharts now ships in a ~126 KB-gzip chunk loaded after
+  first paint. `vite.config.js` pins only react/scheduler into an eager chunk and lets recharts
+  auto-split into the dynamic import.
 - ⏳ **Remaining:** per-card share *images* (needs the SVG→PNG render path the OG card uses, applied
   per chart).
 
