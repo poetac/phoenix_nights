@@ -203,8 +203,8 @@ Treat Phoenix as the flagship and get it in front of people.
 Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2
 (`.github/workflows/rebuild-data.yml`, PR #2): re-runs the `build_*.py` pipelines against the
 official record monthly (or on demand), gates on `verify_v0.py`, commits any refreshed JSON,
-and redeploys Pages. Still ahead: make the hand-verified heat-death update path documented and
-repeatable.
+and redeploys Pages. The hand-verified heat-death update path is now documented as a repeatable
+runbook (`analysis/HEAT_DEATHS.md`, PR #16) — the one dataset that isn't pipeline-generated.
 
 **Season-metric robustness + transparency (PR #9, from the external audit):** the 100°F-day and
 80°F-night pipelines now also emit *sustained*-season boundaries (runs of 3+ 100°F days; a
