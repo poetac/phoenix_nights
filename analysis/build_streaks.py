@@ -109,6 +109,8 @@ def main():
         "source": "NOAA/NWS ACIS daily mint/maxt",
         "note": ("streaks within calendar years; years missing >36 days excluded. "
                  "first80/last80 are day-of-year (first/last 80F+ night)."),
+        "generated": datetime.date.today().isoformat(),
+        "throughYear": rows[-1]["year"] if rows else None,
         "years": rows,
     }, indent=1))
 

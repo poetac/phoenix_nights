@@ -22,6 +22,10 @@ straight from ACIS daily lows instead:
   - the city's and the open desert's overnight-low trends since 1970 both
     outrun the published global background-warming rate
 
+It also shape-checks every committed JSON asset (structure, not just values)
+so a malformed or truncated dataset fails CI instead of silently breaking a
+card. The latest-complete-year cutoff is derived, never hardcoded.
+
 Stdlib only. Exit code 0 = all checks pass.
 """
 
@@ -31,17 +35,18 @@ import pathlib
 import sys
 import urllib.request
 
+ACIS_URL = "https://data.rcc-acis.org/StnData"
+MAX_MISSING_DAYS = 36
+# Derived, not hardcoded: the most recent fully-elapsed calendar year.
+LAST_COMPLETE_YEAR = datetime.date.today().year - 1
+
 GSOY_URL = (
     "https://www.ncei.noaa.gov/access/services/data/v1"
     "?dataset=global-summary-of-the-year"
     "&stations=USW00023183"
-    "&startDate=1933-01-01&endDate=2025-12-31"
+    f"&startDate=1933-01-01&endDate={LAST_COMPLETE_YEAR}-12-31"
     "&units=standard&format=json"
 )
-
-ACIS_URL = "https://data.rcc-acis.org/StnData"
-MAX_MISSING_DAYS = 36
-LAST_COMPLETE_YEAR = 2025
 
 # Published global background-warming rate (F/decade) the global-context card
 # compares the local night-low trends against — see GlobalContextCard.jsx.
@@ -218,6 +223,48 @@ def cool_window_hours():
     return below85("1970"), below85(solid[-1]), f"{solid[-1]}s"
 
 
+DATA_DIR = pathlib.Path(__file__).resolve().parent.parent / "apps" / "web" / "public" / "data"
+
+# (collection key, expected container type, required fields on a list row).
+ASSET_SCHEMAS = {
+    "phx-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "phx-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "phx-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "phx-heat-deaths.json": ("series", list, ("year", "deaths")),
+    "phx-grid.json": ("years", dict, None),
+    "phx-diurnal.json": ("decades", dict, None),
+    "phx-normals.json": ("byDate", dict, None),
+}
+
+
+def validate_assets():
+    """Shape-check every committed JSON asset a card consumes.
+
+    Catches the failure verify's value checks can't: a malformed, truncated, or
+    empty asset that would silently break a card. Assets not yet rebuilt (no
+    file on disk) are skipped. Yields (name, ok, count, detail).
+    """
+    for fname, (key, typ, fields) in ASSET_SCHEMAS.items():
+        path = DATA_DIR / fname
+        if not path.exists():
+            yield (fname, True, 0, "absent (not yet rebuilt) — skipped")
+            continue
+        try:
+            j = json.loads(path.read_text())
+        except (ValueError, OSError) as e:
+            yield (fname, False, 0, f"unreadable: {e}")
+            continue
+        coll = j.get(key)
+        if not isinstance(coll, typ) or len(coll) == 0:
+            yield (fname, False, 0, f"missing/empty '{key}'")
+            continue
+        if fields and typ is list:
+            missing = [f for f in fields if f not in coll[0]]
+            yield (fname, not missing, len(coll), "ok" if not missing else f"row missing {missing}")
+        else:
+            yield (fname, True, len(coll), "ok")
+
+
 def fnum(row, key):
     v = row.get(key)
     if v is None:
@@ -327,6 +374,10 @@ def main():
                    tmin_slope, tmin_slope > GLOBAL_BENCH))
     checks.append((f"desert (Casa Grande) night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
                    desert_trend, desert_trend > GLOBAL_BENCH))
+
+    # Shape-check every committed asset (structure, not just values).
+    for name, ok_a, count, detail in validate_assets():
+        checks.append((f"asset {name}: {detail}", float(count), ok_a))
 
     ok = True
     for name, value, passed in checks:

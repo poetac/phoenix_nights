@@ -86,6 +86,7 @@ def main():
         "window": f"centered +/-{WINDOW} days",
         "note": "byDate is keyed MM-DD; low/high are 1970-1979 means over the window",
         "source": "NOAA/NWS ACIS daily mint/maxt",
+        "generated": datetime.date.today().isoformat(),
         "byDate": by_date,
     }, indent=1))
 

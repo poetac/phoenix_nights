@@ -95,6 +95,8 @@ def main():
         "hours": "local (UTC-7, no DST)",
         "units": "average MW demand by hour of day",
         "source": "US EIA Hourly Electric Grid Monitor (api.eia.gov v2)",
+        "generated": datetime.date.today().isoformat(),
+        "throughYear": max((int(k) for k in years), default=None),
         "years": years,
     }, indent=1))
     print(f"wrote {OUT} ({len(years)} years)")
