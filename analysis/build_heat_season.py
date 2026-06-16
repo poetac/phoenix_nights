@@ -66,6 +66,8 @@ def main():
         "thresholdF": THRESHOLD,
         "note": "first/last are day-of-year; years missing >36 daily highs excluded",
         "source": "NOAA/NWS ACIS daily maxt",
+        "generated": datetime.date.today().isoformat(),
+        "throughYear": years[-1]["year"] if years else None,
         "years": years,
     }, indent=1))
 

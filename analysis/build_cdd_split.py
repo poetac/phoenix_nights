@@ -73,6 +73,8 @@ def main():
         "note": ("annual cooling degree days split by the identity "
                  "mean-65 = (Tmax-65)/2 + (Tmin-65)/2 over cooling days "
                  "(mean>65F); years missing >36 days excluded."),
+        "generated": datetime.date.today().isoformat(),
+        "throughYear": rows[-1]["year"] if rows else None,
         "years": rows,
     }, indent=1))
 

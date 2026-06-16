@@ -11,6 +11,7 @@ Stdlib only. Usage: python3 analysis/build_diurnal.py
 """
 
 import csv
+import datetime
 import json
 import pathlib
 import sys
@@ -21,7 +22,8 @@ BASE = ("https://www.ncei.noaa.gov/access/services/data/v1"
         "?dataset=global-hourly&stations={sid}"
         "&startDate={y}-06-01&endDate={y}-08-31&dataTypes=TMP,DEW&format=csv")
 SIDS = ("99999923183", "72278023183")
-FIRST_YEAR, LAST_YEAR = 1948, 2025
+FIRST_YEAR = 1948
+LAST_YEAR = datetime.date.today().year - 1  # last complete year
 UTC_OFFSET = -7  # Phoenix has no DST
 BAD_QUALITY = {"2", "3", "6", "7"}  # ISD suspect/erroneous codes
 MIN_OBS_PER_HOUR = 150  # per decade; drops the 3-hourly-era gaps
@@ -113,6 +115,8 @@ def main():
         "hours": "local (UTC-7, no DST)",
         "source": "NCEI global-hourly (ISD), station ids 999999-23183 / 722780-23183",
         "yearsCovered": [FIRST_YEAR, LAST_YEAR],
+        "generated": datetime.date.today().isoformat(),
+        "throughYear": LAST_YEAR,
         "decades": decades,
     }, indent=1))
     print(f"\nwrote {OUT} with decades: {', '.join(decades)}")
