@@ -190,9 +190,13 @@ Treat Phoenix as the flagship and get it in front of people.
   Facebook/Twitter/X render a preview, not just text — generated from `og.svg` by
   `apps/web/scripts/make-og.mjs` (resvg; the dep is intentionally not in `package.json`, the PNG is
   committed). Meta now points at the PNG with `og:image:width/height/type/alt`.
-- ⏳ **Remaining:** per-card share images + shareable deep links; a fuller accessibility audit
-  (chart text alternatives, skip link); and a performance budget (the recharts vendor chunk is
-  ~560 KB / 159 KB gzip — lazy-load or trim).
+- ✅ **Shipped (PR #13):** accessibility pass — a skip-to-content link, a focusable `#content`
+  `<main>`, the decorative background marked `aria-hidden`, `color-scheme: dark`, link focus
+  outlines, and `role="img"` + descriptive `aria-label`s on the headline charts (the prose under
+  each card already states the finding, so these are concise chart descriptors).
+- ⏳ **Remaining:** `role="img"`/`aria-label` on the remaining per-card charts (same pattern);
+  per-card share images + shareable deep links; and a performance budget (the recharts vendor
+  chunk is ~560 KB / 159 KB gzip — lazy-load or trim).
 
 ### M7 — Automation & trust
 Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2
