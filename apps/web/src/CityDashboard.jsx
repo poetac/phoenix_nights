@@ -12,6 +12,7 @@ import {
 } from "./lib/data.js";
 import LastNightHero from "./cards/LastNightHero.jsx";
 import UhiCard from "./cards/UhiCard.jsx";
+import GlobalContextCard from "./cards/GlobalContextCard.jsx";
 import GoalpostsCard from "./cards/GoalpostsCard.jsx";
 import SeasonsCard from "./cards/SeasonsCard.jsx";
 import ExtremesCard from "./cards/ExtremesCard.jsx";
@@ -333,6 +334,8 @@ export default function CityDashboard({ city }) {
             )}
 
             {source === "acis" && rural && <UhiCard city={city} cityRows={rows} ruralRows={rural} />}
+
+            {source === "acis" && rural && <GlobalContextCard city={city} cityRows={rows} ruralRows={rural} />}
 
             {source === "acis" && rural && <GrowthCard city={city} cityRows={rows} ruralRows={rural} />}
 
