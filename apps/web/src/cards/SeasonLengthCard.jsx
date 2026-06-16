@@ -46,7 +46,9 @@ export default function SeasonLengthCard({ city, heatSeason }) {
     <Card>
       <CardHead kicker="The expanding season" title="Summer is annexing spring and fall"
         sub={`Each year's band runs from the first 100°F day to the last. Watch the bottom edge sink toward spring while the top edge pushes into fall.`} />
-      <div style={{ width: "100%", height: 300 }}>
+      <div role="img" style={{ width: "100%", height: 300 }}
+        aria-label="Chart of each year's first-to-last 100°F day; the band widens into spring and fall over time.">
+
         <ResponsiveContainer>
           <ComposedChart data={model.data} margin={{ top: 6, right: 8, left: -18, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />

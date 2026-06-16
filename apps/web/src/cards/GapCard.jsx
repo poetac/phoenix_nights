@@ -56,7 +56,9 @@ export default function GapCard({ city, rows }) {
     <Card>
       <CardHead kicker="Day minus night" title="The desert's daily swing is collapsing"
         sub={`A desert day is built on a huge gap between the afternoon high and the pre-dawn low. That gap — the diurnal range — is what air conditioning, bodies, and the landscape lean on for relief. Here it is for every year since ${DTR_START} at ${city.urbanShort}.`} />
-      <div style={{ width: "100%", height: 280 }}>
+      <div role="img" style={{ width: "100%", height: 280 }}
+        aria-label="Line chart of the daily high-minus-low temperature range each year at Sky Harbor, narrowing over time.">
+
         <ResponsiveContainer>
           <ComposedChart data={model.data} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
             <defs>

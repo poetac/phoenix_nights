@@ -44,7 +44,9 @@ export default function ExtremesCard({ city, rows, windowStart }) {
     <Card>
       <CardHead kicker="The year's two extremes" title="Even the coldest night is warming"
         sub={`Every year has one night that gets coldest and one that stays hottest. Here are both, since ${model.startYear} — the floor and the ceiling of ${city.shortName}'s overnight lows. The story isn't just that the middle moved; the floor is coming up underneath it.`} />
-      <div style={{ width: "100%", height: 280 }}>
+      <div role="img" style={{ width: "100%", height: 280 }}
+        aria-label="Line chart of each year's single coldest and single hottest overnight low; both rise, the coldest-night floor lifting fastest.">
+
         <ResponsiveContainer>
           <LineChart data={model.data} margin={{ top: 6, right: 8, left: -16, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />

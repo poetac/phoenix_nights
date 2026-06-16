@@ -33,7 +33,9 @@ export default function GrowthCard({ city, cityRows, ruralRows }) {
     <Card>
       <CardHead kicker="Dose and response" title="The gap grew with the city"
         sub={`Each point is a decade: the county's census population against how much hotter ${city.shortName} nights ran than the open desert that decade. More city, hotter nights.`} />
-      <div style={{ width: "100%", height: 280 }}>
+      <div role="img" style={{ width: "100%", height: 280 }}
+        aria-label="Chart of the county's decade-by-decade population against how much hotter Phoenix nights ran than the open desert; both rise together.">
+
         <ResponsiveContainer>
           <ScatterChart margin={{ top: 18, right: 24, left: -8, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" />

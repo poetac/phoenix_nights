@@ -42,7 +42,9 @@ export default function DiurnalCard({ city, diurnal }) {
     <Card>
       <CardHead kicker="Hour by hour" title="A summer day, then and now"
         sub={`Average June–August temperature at each hour of the day at ${city.urbanShort}: the ${model.thenK}s against the ${model.nowK}s. The shaded band is the heat the decades added — and it is widest in the middle of the night.`} />
-      <div style={{ width: "100%", height: 300 }}>
+      <div role="img" style={{ width: "100%", height: 300 }}
+        aria-label="Line chart comparing the average summer temperature at each hour of day in an earlier decade versus the most recent; the gap is widest overnight.">
+
         <ResponsiveContainer>
           <ComposedChart data={model.data} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
