@@ -4,7 +4,7 @@ import {
   ResponsiveContainer, BarChart, Bar, ReferenceLine, AreaChart, Area,
 } from "recharts";
 import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick } from "./ui.jsx";
-import { linreg, mean } from "./lib/stats.js";
+import { linreg, mean, blockBootstrapCI } from "./lib/stats.js";
 import {
   fetchCityYearly, fetchRural, fetchSeasonal, fetchDiurnal,
   fetchHeatSeason, fetchHeatDeaths, fetchStreaks, fetchGrid, fetchOpenMeteo,
@@ -29,6 +29,7 @@ import StreakCard from "./cards/StreakCard.jsx";
 import WinterCard from "./cards/WinterCard.jsx";
 import GridCard from "./cards/GridCard.jsx";
 import NightCoolingCard from "./cards/NightCoolingCard.jsx";
+import MethodologyCard from "./cards/MethodologyCard.jsx";
 import SourcesCard from "./cards/SourcesCard.jsx";
 
 export default function CityDashboard({ city }) {
@@ -99,8 +100,8 @@ export default function CityDashboard({ city }) {
     return { low: mean(b.map((r) => r.low)), high: mean(b.map((r) => r.high)) };
   }, [rows, city]);
 
-  const fitLow = useMemo(() => linreg(vis.map((r) => ({ x: r.year, y: r.low }))), [vis]);
-  const fitHigh = useMemo(() => linreg(vis.map((r) => ({ x: r.year, y: r.high }))), [vis]);
+  const fitLow = useMemo(() => blockBootstrapCI(vis.map((r) => ({ x: r.year, y: r.low }))), [vis]);
+  const fitHigh = useMemo(() => blockBootstrapCI(vis.map((r) => ({ x: r.year, y: r.high }))), [vis]);
   const lowPerDecade = fitLow ? fitLow.slope * 10 : null;
   const highPerDecade = fitHigh ? fitHigh.slope * 10 : null;
   const ratio = lowPerDecade != null && highPerDecade != null && Math.abs(highPerDecade) > 0.05
@@ -448,7 +449,7 @@ export default function CityDashboard({ city }) {
               <h3 className="text-sm uppercase tracking-widest mb-2" style={{ color: C.muted }}>How this works</h3>
               <ul className="text-sm space-y-2 leading-relaxed" style={{ color: C.muted }}>
                 <li>Data: {sourceLabel}, fetched live each time this page loads. Years missing more than 36 days of observations are excluded, as is the still-incomplete current year; {rows[rows.length - 1].year} is the last complete year shown.</li>
-                <li>Trends are ordinary least-squares fits to yearly means over the selected window, expressed per decade. The small ± figures are 95% confidence intervals on those trends.</li>
+                <li>Trends are ordinary least-squares fits to yearly means over the selected window, expressed per decade. The ± is a 95% interval from a moving-block bootstrap (residuals resampled in multi-year blocks), which widens it to allow for year-to-year autocorrelation — so it runs wider than a textbook OLS error and is best read as a floor on the uncertainty, not a full accounting of climate persistence.</li>
                 <li>"Departure" compares every year with the same station's {city.baseline.start}–{city.baseline.end} average — a fixed baseline, unlike rolling "normals" that quietly absorb past warming.</li>
                 <li>The {city.urbanShort} station sits inside the urban heat island it measures — that's the point. The control-experiment card pairs it with an open-desert station to separate the city's contribution from the global trend.</li>
                 <li>The hour-by-hour card is precomputed from NOAA's hourly archive (NCEI ISD); everything else is computed in your browser from the raw yearly and monthly station records.</li>
@@ -458,6 +459,8 @@ export default function CityDashboard({ city }) {
                 )}
               </ul>
             </Card>
+
+            <MethodologyCard city={city} />
 
             <SourcesCard city={city} />
           </div>

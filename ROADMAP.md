@@ -190,6 +190,13 @@ official record monthly (or on demand), gates on `verify_v0.py`, commits any ref
 and redeploys Pages. Still ahead: make the hand-verified heat-death update path documented and
 repeatable.
 
+**Statistical honesty (PR #8, from the external audit):** trend ± is now a deterministic
+moving-block bootstrap (autocorrelation-aware, wider than OLS) instead of a fixed-t interval; a
+new in-app methodology section documents the trend method and its limits, the 1970s-baseline
+rationale, ThreadEx/diurnal station-continuity, data hygiene, and a combined-effects (climate +
+UHI + land use + measurement) attribution statement so the page never implies bare climate
+attribution.
+
 **Data-trust hardening (PR #7, from the external audit):** every precomputed asset is now stamped
 with `generated` + `throughYear`; the UI shows a "precomputed series through YYYY" line and a
 staleness banner when a static dataset trails the live record; `verify_v0.py` shape-checks every
