@@ -1,11 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import CityDashboard from "./CityDashboard.jsx";
-import { PHOENIX } from "./lib/cities.js";
+import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <CityDashboard city={PHOENIX} />
+    <App />
   </StrictMode>
 );
