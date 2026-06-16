@@ -187,8 +187,15 @@ share images, an about/methodology page, accessibility pass, performance budget.
 Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2
 (`.github/workflows/rebuild-data.yml`, PR #2): re-runs the `build_*.py` pipelines against the
 official record monthly (or on demand), gates on `verify_v0.py`, commits any refreshed JSON,
-and redeploys Pages. Still ahead: grow `verify_v0.py` into a real sanity-check suite; make the
-hand-verified heat-death update path documented and repeatable.
+and redeploys Pages. Still ahead: make the hand-verified heat-death update path documented and
+repeatable.
+
+**Data-trust hardening (PR #7, from the external audit):** every precomputed asset is now stamped
+with `generated` + `throughYear`; the UI shows a "precomputed series through YYYY" line and a
+staleness banner when a static dataset trails the live record; `verify_v0.py` shape-checks every
+committed JSON (not just its values), so a malformed/empty asset fails CI; and the last-complete-year
+cutoff is derived everywhere (the remaining hardcoded `2025` in `verify_v0.py` and `build_diurnal.py`
+are gone).
 
 ---
 

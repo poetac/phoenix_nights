@@ -10,6 +10,7 @@ import {
   fetchHeatSeason, fetchHeatDeaths, fetchStreaks, fetchGrid, fetchOpenMeteo,
   fetchNormals, fetchLastNight, fetchCddSplit,
 } from "./lib/data.js";
+import { assetFreshness } from "./lib/freshness.js";
 import LastNightHero from "./cards/LastNightHero.jsx";
 import UhiCard from "./cards/UhiCard.jsx";
 import GlobalContextCard from "./cards/GlobalContextCard.jsx";
@@ -150,6 +151,11 @@ export default function CityDashboard({ city }) {
     ...(minYear < Math.min(...city.windows.map((w) => w.y)) ? [{ y: minYear, label: "Full record" }] : []),
   ];
 
+  const freshness = useMemo(
+    () => assetFreshness({ diurnal, heatSeason, streaks, grid, cddSplit, heatDeaths }),
+    [diurnal, heatSeason, streaks, grid, cddSplit, heatDeaths],
+  );
+
   const sourceLabel = source === "acis"
     ? `NOAA / NWS ACIS · ${city.stationLabel}`
     : "Open-Meteo ERA5 reanalysis (modeled estimate — station data unavailable right now)";
@@ -187,6 +193,15 @@ export default function CityDashboard({ city }) {
         </header>
 
         <LastNightHero city={city} lastNight={lastNight} normals={normals} />
+
+        {freshness?.stale?.length > 0 && (
+          <div className="rounded-xl px-4 py-3 mb-6 text-sm" role="status"
+            style={{ background: "rgba(255,177,92,.08)", border: `1px solid ${C.gold}`, color: C.gold }}>
+            Some precomputed series only run through {Math.min(...freshness.stale.map((s) => s.year))} — the live trend,
+            anomaly, and hero cards are current through {freshness.target}. The static datasets refresh on the next
+            scheduled data rebuild.
+          </div>
+        )}
 
         {state.loading && (
           <Card>
@@ -437,6 +452,10 @@ export default function CityDashboard({ city }) {
                 <li>"Departure" compares every year with the same station's {city.baseline.start}–{city.baseline.end} average — a fixed baseline, unlike rolling "normals" that quietly absorb past warming.</li>
                 <li>The {city.urbanShort} station sits inside the urban heat island it measures — that's the point. The control-experiment card pairs it with an open-desert station to separate the city's contribution from the global trend.</li>
                 <li>The hour-by-hour card is precomputed from NOAA's hourly archive (NCEI ISD); everything else is computed in your browser from the raw yearly and monthly station records.</li>
+                {freshness && (
+                  <li>Precomputed series (hourly curves, seasons, streaks, grid, cooling split) are current through {freshness.through}
+                    {freshness.generated ? `, last regenerated ${freshness.generated}` : ""}; the live cards always reflect the latest reported day. They refresh on a scheduled job — see the rebuild workflow.</li>
+                )}
               </ul>
             </Card>
 
