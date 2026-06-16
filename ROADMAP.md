@@ -17,7 +17,8 @@ city={…} />`). Python stdlib pipelines precompute static JSON; CI builds the a
 verifies stats against NCEI GSOY.
 
 **Shipped cards:** night-warming trend & ratio · UHI city-vs-desert decomposition ·
-population-vs-night-gap growth · fixed-vs-rolling baseline goalposts · summer-night
+global/national warming-rate context · population-vs-night-gap growth ·
+fixed-vs-rolling baseline goalposts · summer-night
 seasonal series · hour-by-hour diurnal (coolest-hour rise) · hours of overnight relief ·
 100°F-day season length · 80°F-night season span · 80°F-night streaks · vanished winter ·
 cooling degree days (total + day/night split) · heat deaths (human cost) · July grid demand ·
@@ -79,13 +80,16 @@ breakdown.
 keep the framing about systems, not blame.
 **Verdict:** high impact, supportable; sequence after 1–2 so it gets proper care.
 
-### 4. Global / national context
-**Claim:** This is *extra*. Even the desert control warms faster than the global average;
-the city faster still. Quantifies the gap between Phoenix nights and background warming.
-**Data:** reuse the existing rural pair; add cited benchmark reference lines
-(global/CONUS °F/decade) rather than fetching a new series, to keep risk low.
-**Risk:** medium (sourcing an honest, defensible benchmark constant).
-**Verdict:** supportable as a framing card; lower priority than 1–3.
+### 4. Global / national context — ✅ SHIPPED (PR #6)
+**Claim:** Even the desert control warms faster than the global average; the city faster still.
+**Built:** `GlobalContextCard.jsx`, reusing the existing city + rural pair (no new fetch): a
+°F/decade ladder of Phoenix night lows and Casa Grande desert night lows (computed live, since
+1970) against published global (~0.36) and contiguous-U.S. (~0.50) background rates as cited
+reference lines. The "defensible benchmark" risk is handled by **stating the metric mismatch in
+the card**: the benchmarks are all-hours annual means while the local figures are overnight lows,
+so they're framed as a *conservative floor*, and the like-for-like city-vs-desert claim is left to
+the control card. CI-guarded in `verify_v0.py`: both the city's and the desert's night-low trends
+since 1970 are checked to exceed the global rate, reproduced from ACIS.
 
 ### 5. Intra-metro spatial gradient — *stretch*
 **Claim:** The heat island is geographic — downtown/Sky Harbor hot, the valley fringe

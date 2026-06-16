@@ -19,6 +19,8 @@ straight from ACIS daily lows instead:
     diurnal curve) is narrower now than in the 1970s
   - the night half of cooling degree-days ((low-65)/2 over cooling days) is a
     rising share of the total compared with the 1970s
+  - the city's and the open desert's overnight-low trends since 1970 both
+    outrun the published global background-warming rate
 
 Stdlib only. Exit code 0 = all checks pass.
 """
@@ -40,6 +42,11 @@ GSOY_URL = (
 ACIS_URL = "https://data.rcc-acis.org/StnData"
 MAX_MISSING_DAYS = 36
 LAST_COMPLETE_YEAR = 2025
+
+# Published global background-warming rate (F/decade) the global-context card
+# compares the local night-low trends against — see GlobalContextCard.jsx.
+GLOBAL_BENCH = 0.36
+CASA_GRANDE_SID = "USC00021314"  # the open-desert control (cities.js rural.sid)
 
 
 def fetch_gsoy():
@@ -117,6 +124,36 @@ def fetch_acis_daily_minmax(start_year, end_year):
                                  headers={"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=120) as r:
         return json.load(r)["data"]
+
+
+def acis_yearly_low_trend(sid, start_year):
+    """OLS trend (F/decade) of a station's annual mean low since start_year.
+
+    Backs the global-context card's claim that the local night-low trends
+    outrun the published global rate. Years missing >36 days are dropped.
+    """
+    body = json.dumps({
+        "sid": sid,
+        "sdate": f"{start_year}-01-01",
+        "edate": f"{LAST_COMPLETE_YEAR}-12-31",
+        "elems": [{"name": "mint", "interval": "yly", "duration": "yly",
+                   "reduce": {"reduce": "mean", "add": "mcnt"}}],
+    }).encode()
+    req = urllib.request.Request(ACIS_URL, data=body,
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=120) as r:
+        data = json.load(r)["data"]
+    pts = []
+    for row in data:
+        y = int(row[0])
+        val, mcnt = row[1]
+        try:
+            v, m = float(val), float(mcnt)
+        except (TypeError, ValueError):
+            continue
+        if m <= MAX_MISSING_DAYS and y <= LAST_COMPLETE_YEAR:
+            pts.append((y, v))
+    return linreg(pts) * 10
 
 
 def cdd_night_share(rows, y0, y1):
@@ -283,6 +320,14 @@ def main():
     checks.append((f"night share of CDD rising {share_70s:.0f}%->{share_now:.0f}%",
                    share_now - share_70s, share_now > share_70s))
 
+    # Global context: both the city's and the open desert's overnight-low trends
+    # since 1970 outrun the published global background rate.
+    desert_trend = acis_yearly_low_trend(CASA_GRANDE_SID, 1970)
+    checks.append((f"Phoenix night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   tmin_slope, tmin_slope > GLOBAL_BENCH))
+    checks.append((f"desert (Casa Grande) night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   desert_trend, desert_trend > GLOBAL_BENCH))
+
     ok = True
     for name, value, passed in checks:
         ok &= passed
@@ -292,6 +337,8 @@ def main():
     print(f"80F-night season: 1970s ~{span_70s:.0f} days vs last 10y ~{span_recent:.0f} days")
     print(f"1970s normal low (hero baseline): mid-Jul ~{july_norm:.0f}F, mid-Jan ~{jan_norm:.0f}F")
     print(f"night share of cooling demand: 1970s ~{share_70s:.0f}% vs last 10y ~{share_now:.0f}%")
+    print(f"night-low trend since 1970 vs global ~{GLOBAL_BENCH}/dec: "
+          f"Phoenix +{tmin_slope:.2f}, desert +{desert_trend:.2f}")
     sys.exit(0 if ok else 1)
 
 
