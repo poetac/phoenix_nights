@@ -10,9 +10,9 @@ export const BODY = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-s
 
 export const axisTick = { fill: C.muted, fontSize: 11, fontFamily: BODY };
 
-export function Card({ children, style }) {
+export function Card({ children, style, id }) {
   return (
-    <div className="rounded-2xl p-4 sm:p-6"
+    <div id={id} className="rounded-2xl p-4 sm:p-6"
       style={{ background: C.panel, border: `1px solid ${C.line}`, ...style }}>
       {children}
     </div>

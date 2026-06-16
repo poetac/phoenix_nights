@@ -45,7 +45,7 @@ Tested and rejected: JJA dew-point trends from the hourly archive show no clean 
 
 ## Methodology
 
-- **Trends:** ordinary least-squares on yearly means, reported as °F/decade with 95% confidence intervals, computed separately for lows and highs over a selectable window (default since 1970). Headline = the ratio (lows warming N× faster than highs).
+- **Trends:** ordinary least-squares on yearly means, reported as °F/decade, computed separately for lows and highs over a selectable window (default since 1970). Headline = the ratio (lows warming N× faster than highs). The ± is a 95% interval from a **moving-block bootstrap** (residuals resampled in multi-year blocks, deterministic so it doesn't jitter), which runs wider than a textbook OLS standard error because consecutive years aren't independent; it's stated as a floor on the uncertainty, not a full accounting of climate autocorrelation. An in-app methodology section spells this out alongside the baseline rationale, station-continuity notes, and the combined-effects (climate + UHI + land use + measurement) attribution statement.
 - **Baseline:** fixed 1970–1979 station average for anomaly views, explicitly contrasted with rolling 30-year "normals."
 - **Felt metrics:** nights/year with min ≥ 80°F; annual cooling degree days.
 - **Hygiene:** years missing more than 36 days of observations (ACIS `mcnt`) are excluded, as is the still-incomplete current year (computed dynamically).
