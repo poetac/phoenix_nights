@@ -14,7 +14,9 @@
   <rect width="1200" height="630" fill="url(#g2)"/>
 
   <text x="80" y="118" fill="#ffb15c" font-family="ui-sans-serif, system-ui, sans-serif"
-        font-size="22" letter-spacing="6" font-weight="600">LIVE NOAA STATION RECORD · PHOENIX</text>
+        font-size="22" letter-spacing="6" font-weight="600">LIVE NOAA STATION RECORD</text>
+  <text x="1120" y="118" fill="#ffd9a0" text-anchor="end"
+        font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" letter-spacing="2">poetac.github.io/phoenix_nights</text>
 
   <text x="76" y="252" fill="#f2ecdf" font-size="84" font-weight="600">The desert still cools</text>
   <text x="76" y="346" fill="#f2ecdf" font-size="84" font-weight="600">off at night. <tspan fill="#ff6b3d">The city</tspan></text>
@@ -26,7 +28,4 @@
   <text x="80" y="566" fill="#9b93ae" font-family="ui-sans-serif, system-ui, sans-serif" font-size="27">
     measured against a fixed 1970s baseline, not a rolling &#8220;normal.&#8221;
   </text>
-
-  <text x="1120" y="566" fill="#ffd9a0" text-anchor="end"
-        font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" letter-spacing="2">poetac.github.io/phoenix_nights</text>
 </svg>
