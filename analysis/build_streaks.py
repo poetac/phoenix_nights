@@ -73,6 +73,24 @@ def season_span(vals, pred):
     return first, last, count
 
 
+def sustained_span(vals, pred, win=7, need=5):
+    """First and last day-of-year inside a 'sustained' stretch: a day counts
+    only if >=`need` of the `win` days centered on it match `pred`. This is the
+    outlier-robust companion to season_span — one isolated warm night can't open
+    or close the season on its own. Returns (first_doy, last_doy), None if none.
+    """
+    half = win // 2
+    n = len(vals)
+    first = last = None
+    for i in range(n):
+        lo, hi = max(0, i - half), min(n, i + half + 1)
+        if sum(1 for v in vals[lo:hi] if v is not None and pred(v)) >= need:
+            if first is None:
+                first = i + 1
+            last = i + 1
+    return first, last
+
+
 def main():
     years = {}
     for date, lo, hi in fetch_daily():
@@ -92,6 +110,7 @@ def main():
         if d["miss"] > MAX_MISSING_DAYS:
             continue
         first80, last80, count80 = season_span(d["lo"], lambda v: v >= 80)
+        firstSus, lastSus = sustained_span(d["lo"], lambda v: v >= 80)
         rows.append({
             "year": y,
             "streak80": max_streak(d["lo"], lambda v: v >= 80),
@@ -102,13 +121,17 @@ def main():
             "first80": first80,
             "last80": last80,
             "count80": count80,
+            # outlier-robust boundaries: 5-of-7 nights >=80F (vs a lone night)
+            "firstSus": firstSus,
+            "lastSus": lastSus,
         })
 
     OUT.write_text(json.dumps({
         "station": "Phoenix (ThreadEx PHXthr 9)",
         "source": "NOAA/NWS ACIS daily mint/maxt",
         "note": ("streaks within calendar years; years missing >36 days excluded. "
-                 "first80/last80 are day-of-year (first/last 80F+ night)."),
+                 "first80/last80 are day-of-year of the first/last single 80F+ night; "
+                 "firstSus/lastSus use a 5-of-7-night rule (outlier-robust season)."),
         "generated": datetime.date.today().isoformat(),
         "throughYear": rows[-1]["year"] if rows else None,
         "years": rows,

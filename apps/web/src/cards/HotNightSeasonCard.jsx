@@ -23,19 +23,25 @@ export default function HotNightSeasonCard({ city, streaks }) {
       .map((r) => ({
         year: r.year, first: r.first80, last: r.last80, band: [r.first80, r.last80],
         length: r.last80 - r.first80 + 1, count: r.count80,
+        susLen: r.firstSus != null && r.lastSus != null ? r.lastSus - r.firstSus + 1 : null,
       }));
     if (data.length < 30) return null;
     const early = data.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
     const lastYear = data[data.length - 1].year;
     const late = data.filter((r) => r.year > lastYear - 10);
     if (early.length < 7 || late.length < 7) return null;
+    const eSus = early.map((r) => r.susLen).filter((v) => v != null);
+    const lSus = late.map((r) => r.susLen).filter((v) => v != null);
     return {
       data,
+      nYears: data.length, minYear: data[0].year, lastYear,
       firstShift: mean(early.map((r) => r.first)) - mean(late.map((r) => r.first)),
       lastShift: mean(late.map((r) => r.last)) - mean(early.map((r) => r.last)),
       lengthGain: mean(late.map((r) => r.length)) - mean(early.map((r) => r.length)),
       countEarly: mean(early.map((r) => r.count)),
       countLate: mean(late.map((r) => r.count)),
+      // sustained season (5-of-7 nights >=80F) — present only after a rebuild
+      susGain: eSus.length >= 5 && lSus.length >= 5 ? mean(lSus) - mean(eSus) : null,
     };
   }, [streaks, city]);
 
@@ -83,12 +89,20 @@ export default function HotNightSeasonCard({ city, streaks }) {
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.lengthGain)} days longer</span> on the
         calendar, holding {Math.round(model.countLate)} such nights a year now against {Math.round(model.countEarly)} then.
         The relief window at both ends of summer is closing.
+        {model.susGain != null && <>
+          {" "}On a stricter rule that ignores lone warm nights — at least five of any seven nights ≥ 80°F — the
+          season still stretched about{" "}
+          <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.susGain)} days</span>.
+        </>}
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
-        Computed from every daily low since 1896 (NOAA/NWS ACIS); years missing more than 36 daily lows are excluded.
-        The {city.urbanShort} gauge sits inside the urban heat island it measures, so part of this lengthening is the
-        city itself, not the climate alone; the threaded record splices downtown (pre-1933) onto Sky Harbor. Rebuild
-        with <code>analysis/build_streaks.py</code>.
+        The count of 80°F nights (in the tooltip) is the outlier-robust headline; the band marks the first and last
+        <em> single</em> 80°F night, so its edges jump year to year, and the shifts above are {city.baseline.label}-vs-recent
+        decade <em>averages</em>. {model.nYears} years on record ({model.minYear}–{model.lastYear}). Computed from every
+        daily low since 1896 (NOAA/NWS ACIS); years missing more than 36 daily lows are excluded. The {city.urbanShort}
+        gauge sits inside the urban heat island it measures, so part of this lengthening is the city itself, not the
+        climate alone; the threaded record splices downtown (pre-1933) onto Sky Harbor. Rebuild with
+        <code>analysis/build_streaks.py</code>.
       </p>
     </Card>
   );

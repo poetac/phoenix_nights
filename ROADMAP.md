@@ -190,6 +190,15 @@ official record monthly (or on demand), gates on `verify_v0.py`, commits any ref
 and redeploys Pages. Still ahead: make the hand-verified heat-death update path documented and
 repeatable.
 
+**Season-metric robustness + transparency (PR #9, from the external audit):** the 100°F-day and
+80°F-night pipelines now also emit *sustained*-season boundaries (runs of 3+ 100°F days; a
+5-of-7-night rule for 80°F nights), so a lone freak day can't move a season edge; the cards lead
+with the outlier-robust day/night count, quote the sustained season alongside the single-day
+headline, disclose that the per-year band traces single days (noisy edges) while the shifts are
+decade averages, and show how many complete years are on record. `verify_v0.py` reproduces the
+sustained lengthening from ACIS daily (reusing data it already fetches). Still deferred: a full
+data-quality scorecard and an in-UI dataset download (assets are already committed JSON).
+
 **Statistical honesty (PR #8, from the external audit):** trend ± is now a deterministic
 moving-block bootstrap (autocorrelation-aware, wider than OLS) instead of a fixed-t interval; a
 new in-app methodology section documents the trend method and its limits, the 1970s-baseline
