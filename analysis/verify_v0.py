@@ -12,7 +12,8 @@ GSOY has no per-day data, so the warm-night *season* claim (the
 first->last 80F night span the streaks card draws) is re-derived
 straight from ACIS daily lows instead:
 
-  - the 80F-night season is longer now than it was in the 1970s
+  - the 80F-night season is longer now than it was in the 1970s, and stays
+    longer under an outlier-robust definition (5-of-7 nights; 3-day 100F runs)
   - the 1970s seasonal "normal" low the live hero compares against is
     seasonally sane (mid-July ~80F, mid-January ~40F)
   - the overnight "cool window" (hours/night below 85F in the committed
@@ -182,6 +183,53 @@ def cdd_night_share(rows, y0, y1):
             day += (hi - 65) / 2
     t = night + day
     return 100 * night / t if t else float("nan")
+
+
+def _daily_by_year(rows, idx):
+    """Date-ordered daily values (idx 1=low, 2=high) grouped by year."""
+    by_year = {}
+    for r in rows:
+        try:
+            v = float(r[idx])
+        except (TypeError, ValueError):
+            v = None
+        by_year.setdefault(int(r[0][:4]), []).append(v)
+    return by_year
+
+
+def sustained_window_span(vals, pred, win=7, need=5):
+    """Season length where >=need of any win consecutive days match (5-of-7)."""
+    half, n = win // 2, len(vals)
+    first = last = None
+    for i in range(n):
+        lo, hi = max(0, i - half), min(n, i + half + 1)
+        if sum(1 for v in vals[lo:hi] if v is not None and pred(v)) >= need:
+            if first is None:
+                first = i + 1
+            last = i + 1
+    return (last - first + 1) if first is not None else None
+
+
+def sustained_run_span(vals, pred, run=3):
+    """Season length bounded by runs of >=run consecutive matching days."""
+    first = last = cur = None
+    cur = 0
+    for i, v in enumerate(vals):
+        if v is not None and pred(v):
+            cur += 1
+            if cur >= run:
+                if first is None:
+                    first = i - run + 2
+                last = i + 1
+        else:
+            cur = 0
+    return (last - first + 1) if first is not None else None
+
+
+def mean_season_len(by_year, fn, y0, y1):
+    vals = [fn(by_year[y]) for y in range(y0, y1 + 1) if y in by_year]
+    vals = [v for v in vals if v is not None]
+    return sum(vals) / len(vals) if vals else float("nan")
 
 
 def seasonal_normal_low(rows, month, day, window=7):
@@ -374,6 +422,22 @@ def main():
                    tmin_slope, tmin_slope > GLOBAL_BENCH))
     checks.append((f"desert (Casa Grande) night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
                    desert_trend, desert_trend > GLOBAL_BENCH))
+
+    # Season cards' outlier-robust definitions: the *sustained* warm-night
+    # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of
+    # >=3 days) are both longer now than in the 1970s, so the lengthening isn't
+    # an artifact of lone freak days at the edges. Reuses split_rows (no fetch).
+    low_by_year = _daily_by_year(split_rows, 1)
+    high_by_year = _daily_by_year(split_rows, 2)
+    recent0 = LAST_COMPLETE_YEAR - 9
+    sus80_70s = mean_season_len(low_by_year, lambda v: sustained_window_span(v, lambda x: x >= 80), 1970, 1979)
+    sus80_now = mean_season_len(low_by_year, lambda v: sustained_window_span(v, lambda x: x >= 80), recent0, LAST_COMPLETE_YEAR)
+    sus100_70s = mean_season_len(high_by_year, lambda v: sustained_run_span(v, lambda x: x >= 100), 1970, 1979)
+    sus100_now = mean_season_len(high_by_year, lambda v: sustained_run_span(v, lambda x: x >= 100), recent0, LAST_COMPLETE_YEAR)
+    checks.append((f"sustained 80F-night season (5/7) longer than 1970s ({sus80_70s:.0f}->{sus80_now:.0f}d)",
+                   sus80_now - sus80_70s, sus80_now > sus80_70s))
+    checks.append((f"sustained 100F-day season (3-run) longer than 1970s ({sus100_70s:.0f}->{sus100_now:.0f}d)",
+                   sus100_now - sus100_70s, sus100_now > sus100_70s))
 
     # Shape-check every committed asset (structure, not just values).
     for name, ok_a, count, detail in validate_assets():

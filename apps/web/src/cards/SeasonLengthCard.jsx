@@ -20,17 +20,23 @@ export default function SeasonLengthCard({ city, heatSeason }) {
     const data = heatSeason.years.map((r) => ({
       year: r.year, first: r.first, last: r.last, band: [r.first, r.last],
       length: r.length, count: r.count,
+      susLen: r.firstRun != null && r.lastRun != null ? r.lastRun - r.firstRun + 1 : null,
     }));
     const early = data.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
     const lastYear = data[data.length - 1].year;
     const late = data.filter((r) => r.year > lastYear - 10);
     if (early.length < 7 || late.length < 7) return null;
+    const eSus = early.map((r) => r.susLen).filter((v) => v != null);
+    const lSus = late.map((r) => r.susLen).filter((v) => v != null);
     return {
       data,
+      nYears: data.length, minYear: data[0].year, lastYear,
       firstShift: mean(early.map((r) => r.first)) - mean(late.map((r) => r.first)),
       lengthGain: mean(late.map((r) => r.length)) - mean(early.map((r) => r.length)),
       countEarly: mean(early.map((r) => r.count)),
       countLate: mean(late.map((r) => r.count)),
+      // sustained (3+ consecutive 100F days) gain — present only after a rebuild
+      susGain: eSus.length >= 5 && lSus.length >= 5 ? mean(lSus) - mean(eSus) : null,
     };
   }, [heatSeason, city]);
 
@@ -75,10 +81,18 @@ export default function SeasonLengthCard({ city, heatSeason }) {
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.lengthGain)} days longer</span> —{" "}
         {Math.round(model.countLate)} triple-digit days a year now, against {Math.round(model.countEarly)} then.
         That's most of an extra month of summer on each end of the calendar.
+        {model.susGain != null && <>
+          {" "}Counting only <em>sustained</em> heat — runs of three or more 100°F days, which a single freak
+          spring scorcher can't trigger — the season still grew about{" "}
+          <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.susGain)} days</span>.
+        </>}
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
-        Computed from every daily high since 1896 (NOAA/NWS ACIS); years missing more than 36 daily highs are
-        excluded. Rebuild with <code>analysis/build_heat_season.py</code>.
+        The count of 100°F days (in the tooltip) is the outlier-robust headline; the band traces the first and last
+        <em> single</em> day to reach 100°F, so its edges are noisier year to year, and the shifts quoted above are
+        {city.baseline.label}-vs-recent decade <em>averages</em>, not single years. {model.nYears} sufficiently complete
+        years on record ({model.minYear}–{model.lastYear}). Computed from every daily high since 1896 (NOAA/NWS ACIS);
+        years missing more than 36 daily highs are excluded. Rebuild with <code>analysis/build_heat_season.py</code>.
       </p>
     </Card>
   );

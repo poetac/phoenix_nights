@@ -39,9 +39,11 @@ def main():
     by_year = {}
     for date, val in fetch_daily_maxt():
         y = int(date[:4])
-        d = by_year.setdefault(y, {"missing": 0, "first": None, "last": None, "count": 0})
+        d = by_year.setdefault(y, {"missing": 0, "first": None, "last": None,
+                                   "count": 0, "run": 0, "firstRun": None, "lastRun": None})
         if val in ("M", "T") or val is None:
             d["missing"] += 1
+            d["run"] = 0  # a missing day breaks a run
             continue
         if float(val) >= THRESHOLD:
             doy = (datetime.date.fromisoformat(date) - datetime.date(y, 1, 1)).days + 1
@@ -49,6 +51,15 @@ def main():
                 d["first"] = doy
             d["last"] = doy
             d["count"] += 1
+            # SUSTAINED season: only days inside a run of >=3 consecutive 100F
+            # days count, so one freak hot day in spring can't move the boundary.
+            d["run"] += 1
+            if d["run"] >= 3:
+                if d["firstRun"] is None:
+                    d["firstRun"] = doy - 2
+                d["lastRun"] = doy
+        else:
+            d["run"] = 0
 
     years = []
     for y in sorted(by_year):
@@ -58,13 +69,16 @@ def main():
         years.append({
             "year": y, "first": d["first"], "last": d["last"],
             "length": d["last"] - d["first"] + 1, "count": d["count"],
+            "firstRun": d["firstRun"], "lastRun": d["lastRun"],
         })
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({
         "station": "Phoenix (ThreadEx PHXthr 9)",
         "thresholdF": THRESHOLD,
-        "note": "first/last are day-of-year; years missing >36 daily highs excluded",
+        "note": ("first/last are day-of-year of the first/last single 100F day; "
+                 "firstRun/lastRun bound the sustained season (runs of >=3 "
+                 "consecutive 100F days); years missing >36 daily highs excluded"),
         "source": "NOAA/NWS ACIS daily maxt",
         "generated": datetime.date.today().isoformat(),
         "throughYear": years[-1]["year"] if years else None,
