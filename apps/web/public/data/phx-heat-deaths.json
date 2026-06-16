@@ -15,5 +15,20 @@
   { "year": 2023, "deaths": 645 },
   { "year": 2024, "deaths": 608 },
   { "year": 2025, "deaths": 430 }
- ]
+ ],
+ "demographics": {
+  "year": 2024,
+  "total": 608,
+  "source": "Maricopa County Department of Public Health, 2024 Heat-Related Deaths Report (May 2025)",
+  "url": "https://www.maricopa.gov/Archive.aspx?ADID=5934",
+  "note": "Figures are from the final 2024 report (the most recent complete demographic year). Percentages stated as the county reports them; the A/C figure is among indoor deaths where a unit was present.",
+  "factors": [
+   { "display": "49%", "label": "were experiencing homelessness", "sub": "no shelter from the heat, day or night (299 of 608 deaths)" },
+   { "display": "77%", "label": "died outdoors", "sub": "exposed — not in a home whose cooling failed" },
+   { "display": "70%", "label": "of indoor A/C units weren't working", "sub": "an air conditioner was present in 88% of indoor deaths; in 70% of those it wasn't functioning — power shutoffs, cost, disrepair" },
+   { "display": "Nearly 60%", "label": "were 50 or older", "sub": "older bodies shed heat less efficiently" },
+   { "display": "78%", "label": "were men", "sub": "" },
+   { "display": "57%", "label": "involved substance use", "sub": "nearly 9 in 10 of those involved stimulants" }
+  ]
+ }
 }
