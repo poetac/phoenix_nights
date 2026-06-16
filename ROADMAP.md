@@ -186,10 +186,13 @@ Treat Phoenix as the flagship and get it in front of people.
   `@import` into a non-blocking `<head>` load with a system-serif fallback; a `<main>` landmark;
   and fetch timeouts + retry/backoff in `data.js` so a flaky network degrades to the Open-Meteo
   fallback instead of hanging. The in-app methodology section already shipped with the audit work.
-- ⏳ **Remaining:** a rasterized **PNG** OG image (the SVG renders on Slack/Discord/LinkedIn but
-  Facebook/Twitter ignore SVG — needs one `rsvg-convert`/`resvg` pass, no tool available in this
-  sandbox); per-card share images + shareable deep links; a fuller accessibility audit; and a
-  performance budget (the recharts vendor chunk is ~560 KB / 159 KB gzip — lazy-load or trim).
+- ✅ **Shipped (PR #12):** a rasterized **PNG** social card (`public/og.png`, 1200×630) so
+  Facebook/Twitter/X render a preview, not just text — generated from `og.svg` by
+  `apps/web/scripts/make-og.mjs` (resvg; the dep is intentionally not in `package.json`, the PNG is
+  committed). Meta now points at the PNG with `og:image:width/height/type/alt`.
+- ⏳ **Remaining:** per-card share images + shareable deep links; a fuller accessibility audit
+  (chart text alternatives, skip link); and a performance budget (the recharts vendor chunk is
+  ~560 KB / 159 KB gzip — lazy-load or trim).
 
 ### M7 — Automation & trust
 Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2
