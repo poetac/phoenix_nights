@@ -175,12 +175,24 @@ Everything else obvious is already covered above or shipped.
 
 ## Parked milestones (sequenced, not started)
 
-### M5 — Second city
-Exercise the generalized engine: wire a second city into `lib/cities.js` (ThreadEx sid,
-rural pair, baseline decade), add a city picker / route, re-run the diurnal/heat-season/
-streak builders, source local heat-death data. Candidates: Las Vegas or Tucson (same
-desert-UHI thesis, easy validation) or a humid city like Houston (does the thesis
-travel out of the desert?). Spatial work from M4-5 may fold in here.
+### M5 — Second city (Tucson) — IN PROGRESS (branch `claude/m5-tucson`)
+Exercise the generalized engine with a second desert-UHI city.
+**Built:** `analysis/cities.py` (a Python registry mirroring `lib/cities.js`) + a `--city`
+flag on the four ACIS builders (`build_streaks/heat_season/normals/cdd_split`), default
+`phx` so Phoenix output is byte-identical; a `TUCSON` entry in `lib/cities.js` and a
+`CITIES` registry driving a new in-app city picker (`App.jsx`); the rebuild workflow now
+loops `phx`+`tus` for the ACIS assets; and `verify_v0.py` reproduces Tucson's city-vs-desert
+UHI signal live from ACIS (Tucson night-low trend since 1970 > global rate, and > its desert
+pair Sasabe). **Station validation (live ACIS / NCEI):** city = `TUSthr 9` ("Tucson Area",
+record from 1894); overnight lows +~4°F since the 1970s (airport USW00023160 GSOY). Desert
+pair = **Sasabe** `USC00027619` (+~0.75°F over the same span — a clear, growing gap); chosen
+over the nearer Anvil Ranch, whose COOP record is too gappy for a 1970s baseline. Sasabe sits
+~1,040 ft above the airport, so the card states the elevation caveat (signal = the gap's
+*growth*).
+**Remaining:** generate the `tus-*.json` assets by running the *Rebuild data assets* workflow
+(needs open egress — Actions has it); generalize the diurnal (Tucson ISD), grid (TEP balancing
+authority), and heat-death (Pima County) builders, which are still Phoenix-only; live render
+check of the Tucson view once its assets exist. Spatial work from M4-5 may fold in here.
 
 ### M6 — Launch & polish (IN PROGRESS)
 Treat Phoenix as the flagship and get it in front of people.

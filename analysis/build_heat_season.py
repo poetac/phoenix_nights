@@ -14,18 +14,19 @@ import json
 import pathlib
 import urllib.request
 
+from cities import data_path, get_city
+
 THRESHOLD = 100
 MAX_MISSING_DAYS = 36
 LAST_COMPLETE_YEAR = datetime.date.today().year - 1
 
-OUT = (pathlib.Path(__file__).resolve().parent.parent
-       / "apps" / "web" / "public" / "data" / "phx-heat-season.json")
+# OUT is derived per-city in main() via data_path().
 
 
-def fetch_daily_maxt():
+def fetch_daily_maxt(city):
     body = json.dumps({
-        "sid": "PHXthr 9",
-        "sdate": "1896-01-01",
+        "sid": city["sid"],
+        "sdate": city["record_start"],
         "edate": f"{LAST_COMPLETE_YEAR}-12-31",
         "elems": [{"name": "maxt"}],
     }).encode()
@@ -36,8 +37,10 @@ def fetch_daily_maxt():
 
 
 def main():
+    city = get_city(__doc__)
+    OUT = data_path(city["prefix"], "heat-season")
     by_year = {}
-    for date, val in fetch_daily_maxt():
+    for date, val in fetch_daily_maxt(city):
         y = int(date[:4])
         d = by_year.setdefault(y, {"missing": 0, "first": None, "last": None,
                                    "count": 0, "run": 0, "firstRun": None, "lastRun": None})
@@ -74,7 +77,7 @@ def main():
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({
-        "station": "Phoenix (ThreadEx PHXthr 9)",
+        "station": city["label"],
         "thresholdF": THRESHOLD,
         "note": ("first/last are day-of-year of the first/last single 100F day; "
                  "firstRun/lastRun bound the sustained season (runs of >=3 "

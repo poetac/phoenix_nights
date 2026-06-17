@@ -24,16 +24,17 @@ import json
 import pathlib
 import urllib.request
 
+from cities import data_path, get_city
+
 MAX_MISSING_DAYS = 36
 LAST_COMPLETE_YEAR = datetime.date.today().year - 1
 
-OUT = (pathlib.Path(__file__).resolve().parent.parent
-       / "apps" / "web" / "public" / "data" / "phx-streaks.json")
+# OUT is derived per-city in main() via data_path().
 
 
-def fetch_daily():
+def fetch_daily(city):
     body = json.dumps({
-        "sid": "PHXthr 9", "sdate": "1896-01-01",
+        "sid": city["sid"], "sdate": city["record_start"],
         "edate": f"{LAST_COMPLETE_YEAR}-12-31",
         "elems": [{"name": "mint"}, {"name": "maxt"}],
     }).encode()
@@ -92,8 +93,10 @@ def sustained_span(vals, pred, win=7, need=5):
 
 
 def main():
+    city = get_city(__doc__)
+    OUT = data_path(city["prefix"], "streaks")
     years = {}
-    for date, lo, hi in fetch_daily():
+    for date, lo, hi in fetch_daily(city):
         y = int(date[:4])
         d = years.setdefault(y, {"lo": [], "hi": [], "miss": 0})
         if lo in ("M", None) or hi in ("M", None):
@@ -127,7 +130,7 @@ def main():
         })
 
     OUT.write_text(json.dumps({
-        "station": "Phoenix (ThreadEx PHXthr 9)",
+        "station": city["label"],
         "source": "NOAA/NWS ACIS daily mint/maxt",
         "note": ("streaks within calendar years; years missing >36 days excluded. "
                  "first80/last80 are day-of-year of the first/last single 80F+ night; "
