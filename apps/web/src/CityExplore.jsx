@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CITIES } from "./lib/cities.js";
 import { fetchFacts } from "./lib/data.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
+import CityMap from "./CityMap.jsx";
 
 // The cross-city explorer / landing: every computed city, ranked by how fast its
 // summer nights are warming, each a click into its own page. The shareable hook
@@ -46,7 +47,9 @@ export default function CityExplore({ onPick }) {
           summer nights are warming. Pick a city to see its full story.
         </p>
 
-        <ol className="mt-8 space-y-3" aria-label="Cities ranked by overnight-low warming">
+        <CityMap onPick={onPick} />
+
+        <ol className="mt-4 space-y-3" aria-label="Cities ranked by overnight-low warming">
           {rows.map((r, i) => (
             <li key={r.city.id}>
               <button onClick={() => onPick(r.city.id)}
@@ -79,8 +82,7 @@ export default function CityExplore({ onPick }) {
         </ol>
         <p className="mt-8 text-xs leading-relaxed" style={{ color: C.muted }}>
           Overnight-low warming since 1970, vs the ~0.36 °F/decade global background rate. Phoenix is
-          the flagship narrative; every city is computed live from the NOAA (ACIS) station record. A
-          map view is coming next.
+          the flagship narrative; every city is computed live from the NOAA (ACIS) station record. The map above and the list share one ranking.
         </p>
       </main>
     </div>
