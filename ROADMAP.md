@@ -284,6 +284,30 @@ are gone).
 
 ---
 
+## Breadth — vetted desert-UHI city pipeline
+
+The multi-city engine is registry-driven, DST-aware, and render-tested, so the cost of a new city
+is no longer plumbing — it's *data integrity*. `analysis/city_audit.py` makes that a fast, repeatable
+yes/no: for a candidate metro it checks the city's night-low trend vs the global rate, auto-suggests
+an arid rural pair (ranked by record length, distance, and slower warming), and reports elevation,
+ISD (diurnal), and EIA balancing-authority (grid) availability → PASS / REVISE / REJECT.
+
+Scope is deliberately the **arid interior West**, where the control experiment ("city vs nearby open
+desert") is valid — not "every US city" (humid/coastal metros break the framing and would need a
+product rethink). First audit pass (June 2026):
+
+| Metro | City night-low /dec | Suggested rural pair (gap) | Grid BA | Verdict |
+|---|---|---|---|---|
+| El Paso, TX | +1.50 | NMSU State University, same elev (+0.46) | EPE | **PASS** (cleanest) |
+| Reno, NV | +2.16 | Tahoe stations — high-elev caveat (+1.9) | NEVP | PASS* |
+| Albuquerque, NM | +1.09 | Los Lunas / Santa Fe (+1.0–1.4) | PNM | **PASS** |
+| Salt Lake City, UT | +1.05 | Vernon (+0.90) | PACE | **PASS** |
+| Boise, ID | +0.94 | Emmett 2 E (+0.61) | IPCO | **PASS** |
+| Yuma, AZ | +0.84 | Yuma Proving Ground, same elev (+0.28); no DST | WALC | **PASS** |
+| Bakersfield, CA | +0.22 | pairs warm faster (−0.17) | CISO (statewide) | **REJECT** |
+
+Adding a vetted city is then two registry entries (`cities.py` + `cities.js`) + an asset rebuild.
+
 ## Rejected / not pursuing (don't re-open without new data)
 
 - **Dew-point / "drying city" trend** — no clean signal at decade resolution; monsoon
