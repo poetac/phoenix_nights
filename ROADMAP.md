@@ -175,7 +175,7 @@ Everything else obvious is already covered above or shipped.
 
 ## Parked milestones (sequenced, not started)
 
-### M5 — Second city (Tucson) — IN PROGRESS (branch `claude/m5-tucson`)
+### M5 — Second city (Tucson) — ✅ SHIPPED (PR #19)
 Exercise the generalized engine with a second desert-UHI city.
 **Built:** `analysis/cities.py` (a Python registry mirroring `lib/cities.js`) + a `--city`
 flag on the four ACIS builders (`build_streaks/heat_season/normals/cdd_split`), default
@@ -189,10 +189,12 @@ pair = **Sasabe** `USC00027619` (+~0.75°F over the same span — a clear, growi
 over the nearer Anvil Ranch, whose COOP record is too gappy for a 1970s baseline. Sasabe sits
 ~1,040 ft above the airport, so the card states the elevation caveat (signal = the gap's
 *growth*).
-**Remaining:** generate the `tus-*.json` assets by running the *Rebuild data assets* workflow
-(needs open egress — Actions has it); generalize the diurnal (Tucson ISD), grid (TEP balancing
-authority), and heat-death (Pima County) builders, which are still Phoenix-only; live render
-check of the Tucson view once its assets exist. Spatial work from M4-5 may fold in here.
+**Shipped (PR #19):** the four ACIS `tus-*.json` assets, generated from live ACIS and committed;
+Tucson view live on the deployed site. **Grid generalized (this PR):** `build_grid.py` is now
+city-aware (Tucson = the **TEPC** balancing authority), with `tus-grid.json` committed and the
+rebuild workflow looping `phx`+`tus` for the grid asset too. **Remaining:** generalize the
+diurnal (Tucson ISD) and heat-death (Pima County) builders, still Phoenix-only. Spatial work
+from M4-5 may fold in here.
 
 ### M6 — Launch & polish (IN PROGRESS)
 Treat Phoenix as the flagship and get it in front of people.

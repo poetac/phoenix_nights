@@ -288,6 +288,7 @@ ASSET_SCHEMAS = {
     "tus-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
     "tus-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
     "tus-normals.json": ("byDate", dict, None),
+    "tus-grid.json": ("years", dict, None),
 }
 
 
