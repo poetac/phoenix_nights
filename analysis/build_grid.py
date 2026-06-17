@@ -4,7 +4,7 @@
 Fetches EIA-930 hourly demand (UTC periods) for the city's balancing
 authorities (Phoenix = AZPS + SRP; Tucson = TEPC) for every July since the
 dataset began (2015), sums the utilities, averages by local hour
-(Arizona = UTC-7, no DST), and writes per-year curves plus each year's
+(DST-aware via the city's IANA tz), and writes per-year curves plus each year's
 overnight-trough-to-evening-peak ratio.
 
 Takes ``--city`` (default ``phx``; Phoenix output byte-identical apart from the
@@ -20,12 +20,13 @@ import time
 import urllib.parse
 import urllib.request
 
+from zoneinfo import ZoneInfo
+
 from cities import data_path, get_city
 
 API = "https://api.eia.gov/v2/electricity/rto/region-data/data/"
 FIRST_YEAR = 2015
 LAST_YEAR = datetime.date.today().year - 1
-UTC_OFFSET = -7
 
 
 def fetch_july(key, respondent, year):
@@ -49,6 +50,9 @@ def main():
     city = get_city(__doc__)
     respondents = tuple(city["grid"]["respondents"])
     OUT = data_path(city["prefix"], "grid")
+    utc_offset = city.get("utc_offset")
+    tz = city.get("tz")  # if set, DST-aware (zoneinfo); else fixed offset (no-DST AZ)
+    zone = ZoneInfo(tz) if tz else None
 
     key = os.environ.get("EIA_API_KEY")
     if not key:
@@ -79,8 +83,13 @@ def main():
         for ts, vals in by_ts.items():
             if len(vals) != len(respondents):
                 continue  # only hours where every utility reported
-            utc_h = int(ts[11:13])
-            hours[(utc_h + UTC_OFFSET) % 24].append(sum(vals.values()))
+            if zone is None:
+                local_h = (int(ts[11:13]) + utc_offset) % 24
+            else:
+                local_h = datetime.datetime(
+                    int(ts[0:4]), int(ts[5:7]), int(ts[8:10]), int(ts[11:13]),
+                    tzinfo=datetime.timezone.utc).astimezone(zone).hour
+            hours[local_h].append(sum(vals.values()))
         if any(len(v) < 15 for v in hours.values()):
             print(f"  {year}: thin coverage, skipping")
             continue
@@ -94,7 +103,8 @@ def main():
     OUT.write_text(json.dumps({
         "respondents": city["grid"]["label"],
         "month": "July",
-        "hours": "local (UTC-7, no DST)",
+        "hours": (f"local (UTC{utc_offset}, no DST)" if zone is None
+                  else f"local time, DST-aware ({tz})"),
         "units": "average MW demand by hour of day",
         "source": "US EIA Hourly Electric Grid Monitor (api.eia.gov v2)",
         "generated": datetime.date.today().isoformat(),
