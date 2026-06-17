@@ -73,6 +73,13 @@ await checkCity("phx", "Phoenix");
 await checkCity("lv", "Las Vegas");
 await checkCity("ep", "El Paso");
 
+// Phase 4 cities: each vetted addition mounts, deep-links, and shows its facts.
+await checkCity("yum", "Yuma");
+await checkCity("rno", "Reno");
+await checkCity("abq", "Albuquerque");
+await checkCity("slc", "Salt Lake City");
+await checkCity("boi", "Boise");
+
 // per-card share landing page must redirect to the right city + card anchor
 await page.goto(`${BASE}/share/phx-hot-nights.html`, { waitUntil: "domcontentloaded", timeout: 20000 });
 await page.waitForTimeout(2000);

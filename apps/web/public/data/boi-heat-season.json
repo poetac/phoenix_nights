@@ -1,0 +1,1135 @@
+{
+ "station": "Boise (ThreadEx BOIthr 9)",
+ "thresholdF": 100,
+ "note": "first/last are day-of-year of the first/last single 100F day; firstRun/lastRun bound the sustained season (runs of >=3 consecutive 100F days); years missing >36 daily highs excluded",
+ "source": "NOAA/NWS ACIS daily maxt",
+ "generated": "2026-06-17",
+ "throughYear": 2025,
+ "years": [
+  {
+   "year": 1893,
+   "first": 199,
+   "last": 217,
+   "length": 19,
+   "count": 6,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1894,
+   "first": 236,
+   "last": 236,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1895,
+   "first": 204,
+   "last": 204,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1896,
+   "first": 180,
+   "last": 193,
+   "length": 14,
+   "count": 7,
+   "firstRun": 190,
+   "lastRun": 193
+  },
+  {
+   "year": 1897,
+   "first": 149,
+   "last": 236,
+   "length": 88,
+   "count": 14,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1898,
+   "first": 170,
+   "last": 224,
+   "length": 55,
+   "count": 10,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1899,
+   "first": 198,
+   "last": 200,
+   "length": 3,
+   "count": 3,
+   "firstRun": 198,
+   "lastRun": 200
+  },
+  {
+   "year": 1900,
+   "first": 171,
+   "last": 212,
+   "length": 42,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1901,
+   "first": 187,
+   "last": 235,
+   "length": 49,
+   "count": 6,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1902,
+   "first": 195,
+   "last": 201,
+   "length": 7,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1903,
+   "first": 230,
+   "last": 230,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1904,
+   "first": 203,
+   "last": 227,
+   "length": 25,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1905,
+   "first": 202,
+   "last": 220,
+   "length": 19,
+   "count": 6,
+   "firstRun": 202,
+   "lastRun": 205
+  },
+  {
+   "year": 1906,
+   "first": 201,
+   "last": 222,
+   "length": 22,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1907,
+   "first": 213,
+   "last": 213,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1908,
+   "first": 213,
+   "last": 214,
+   "length": 2,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1909,
+   "first": 183,
+   "last": 203,
+   "length": 21,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1910,
+   "first": 177,
+   "last": 194,
+   "length": 18,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1914,
+   "first": 226,
+   "last": 226,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1915,
+   "first": 202,
+   "last": 202,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1916,
+   "first": 194,
+   "last": 194,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1917,
+   "first": 188,
+   "last": 207,
+   "length": 20,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1918,
+   "first": 163,
+   "last": 210,
+   "length": 48,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1919,
+   "first": 170,
+   "last": 197,
+   "length": 28,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1920,
+   "first": 227,
+   "last": 229,
+   "length": 3,
+   "count": 3,
+   "firstRun": 227,
+   "lastRun": 229
+  },
+  {
+   "year": 1921,
+   "first": 189,
+   "last": 205,
+   "length": 17,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1922,
+   "first": 184,
+   "last": 194,
+   "length": 11,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1923,
+   "first": 208,
+   "last": 208,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1924,
+   "first": 182,
+   "last": 248,
+   "length": 67,
+   "count": 6,
+   "firstRun": 182,
+   "lastRun": 184
+  },
+  {
+   "year": 1925,
+   "first": 171,
+   "last": 212,
+   "length": 42,
+   "count": 6,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1926,
+   "first": 177,
+   "last": 236,
+   "length": 60,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1928,
+   "first": 195,
+   "last": 223,
+   "length": 29,
+   "count": 8,
+   "firstRun": 206,
+   "lastRun": 210
+  },
+  {
+   "year": 1929,
+   "first": 225,
+   "last": 239,
+   "length": 15,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1930,
+   "first": 195,
+   "last": 195,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1931,
+   "first": 201,
+   "last": 246,
+   "length": 46,
+   "count": 10,
+   "firstRun": 201,
+   "lastRun": 207
+  },
+  {
+   "year": 1932,
+   "first": 220,
+   "last": 220,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1933,
+   "first": 165,
+   "last": 226,
+   "length": 62,
+   "count": 7,
+   "firstRun": 205,
+   "lastRun": 207
+  },
+  {
+   "year": 1934,
+   "first": 207,
+   "last": 228,
+   "length": 22,
+   "count": 5,
+   "firstRun": 207,
+   "lastRun": 210
+  },
+  {
+   "year": 1935,
+   "first": 194,
+   "last": 221,
+   "length": 28,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1936,
+   "first": 174,
+   "last": 229,
+   "length": 56,
+   "count": 9,
+   "firstRun": 201,
+   "lastRun": 203
+  },
+  {
+   "year": 1937,
+   "first": 184,
+   "last": 185,
+   "length": 2,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1938,
+   "first": 203,
+   "last": 203,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1939,
+   "first": 190,
+   "last": 215,
+   "length": 26,
+   "count": 7,
+   "firstRun": 207,
+   "lastRun": 209
+  },
+  {
+   "year": 1940,
+   "first": 164,
+   "last": 225,
+   "length": 62,
+   "count": 5,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1941,
+   "first": 198,
+   "last": 198,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1942,
+   "first": 185,
+   "last": 235,
+   "length": 51,
+   "count": 6,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1943,
+   "first": 206,
+   "last": 206,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1945,
+   "first": 172,
+   "last": 244,
+   "length": 73,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1946,
+   "first": 201,
+   "last": 231,
+   "length": 31,
+   "count": 5,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1947,
+   "first": 195,
+   "last": 214,
+   "length": 20,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1949,
+   "first": 196,
+   "last": 215,
+   "length": 20,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1950,
+   "first": 181,
+   "last": 245,
+   "length": 65,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1951,
+   "first": 198,
+   "last": 214,
+   "length": 17,
+   "count": 5,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1953,
+   "first": 188,
+   "last": 231,
+   "length": 44,
+   "count": 5,
+   "firstRun": 192,
+   "lastRun": 194
+  },
+  {
+   "year": 1954,
+   "first": 185,
+   "last": 185,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1955,
+   "first": 172,
+   "last": 242,
+   "length": 71,
+   "count": 6,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1956,
+   "first": 191,
+   "last": 206,
+   "length": 16,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1957,
+   "first": 206,
+   "last": 206,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1958,
+   "first": 209,
+   "last": 209,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1959,
+   "first": 201,
+   "last": 212,
+   "length": 12,
+   "count": 5,
+   "firstRun": 201,
+   "lastRun": 204
+  },
+  {
+   "year": 1960,
+   "first": 194,
+   "last": 211,
+   "length": 18,
+   "count": 11,
+   "firstRun": 197,
+   "lastRun": 203
+  },
+  {
+   "year": 1961,
+   "first": 168,
+   "last": 216,
+   "length": 49,
+   "count": 9,
+   "firstRun": 214,
+   "lastRun": 216
+  },
+  {
+   "year": 1962,
+   "first": 176,
+   "last": 176,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1963,
+   "first": 218,
+   "last": 248,
+   "length": 31,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1964,
+   "first": 189,
+   "last": 230,
+   "length": 42,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1965,
+   "first": 213,
+   "last": 221,
+   "length": 9,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1966,
+   "first": 214,
+   "last": 236,
+   "length": 23,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1967,
+   "first": 183,
+   "last": 232,
+   "length": 50,
+   "count": 6,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1968,
+   "first": 178,
+   "last": 211,
+   "length": 34,
+   "count": 8,
+   "firstRun": 188,
+   "lastRun": 211
+  },
+  {
+   "year": 1969,
+   "first": 216,
+   "last": 236,
+   "length": 21,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1970,
+   "first": 174,
+   "last": 235,
+   "length": 62,
+   "count": 10,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1971,
+   "first": 211,
+   "last": 231,
+   "length": 21,
+   "count": 10,
+   "firstRun": 211,
+   "lastRun": 214
+  },
+  {
+   "year": 1972,
+   "first": 221,
+   "last": 224,
+   "length": 4,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1973,
+   "first": 173,
+   "last": 197,
+   "length": 25,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1974,
+   "first": 165,
+   "last": 199,
+   "length": 35,
+   "count": 6,
+   "firstRun": 167,
+   "lastRun": 170
+  },
+  {
+   "year": 1975,
+   "first": 184,
+   "last": 208,
+   "length": 25,
+   "count": 10,
+   "firstRun": 184,
+   "lastRun": 191
+  },
+  {
+   "year": 1976,
+   "first": 180,
+   "last": 245,
+   "length": 66,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1977,
+   "first": 157,
+   "last": 213,
+   "length": 57,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1978,
+   "first": 204,
+   "last": 216,
+   "length": 13,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1979,
+   "first": 179,
+   "last": 200,
+   "length": 22,
+   "count": 4,
+   "firstRun": 198,
+   "lastRun": 200
+  },
+  {
+   "year": 1980,
+   "first": 204,
+   "last": 204,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1981,
+   "first": 185,
+   "last": 225,
+   "length": 41,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1983,
+   "first": 218,
+   "last": 219,
+   "length": 2,
+   "count": 2,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1984,
+   "first": 180,
+   "last": 222,
+   "length": 43,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1985,
+   "first": 184,
+   "last": 208,
+   "length": 25,
+   "count": 6,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1986,
+   "first": 222,
+   "last": 239,
+   "length": 18,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1987,
+   "first": 165,
+   "last": 244,
+   "length": 80,
+   "count": 5,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1988,
+   "first": 168,
+   "last": 237,
+   "length": 70,
+   "count": 9,
+   "firstRun": 173,
+   "lastRun": 175
+  },
+  {
+   "year": 1989,
+   "first": 188,
+   "last": 210,
+   "length": 23,
+   "count": 5,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1990,
+   "first": 173,
+   "last": 226,
+   "length": 54,
+   "count": 15,
+   "firstRun": 192,
+   "lastRun": 221
+  },
+  {
+   "year": 1991,
+   "first": 185,
+   "last": 221,
+   "length": 37,
+   "count": 5,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1992,
+   "first": 175,
+   "last": 232,
+   "length": 58,
+   "count": 9,
+   "firstRun": 213,
+   "lastRun": 227
+  },
+  {
+   "year": 1993,
+   "first": 209,
+   "last": 209,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1994,
+   "first": 173,
+   "last": 226,
+   "length": 54,
+   "count": 14,
+   "firstRun": 202,
+   "lastRun": 205
+  },
+  {
+   "year": 1995,
+   "first": 209,
+   "last": 209,
+   "length": 1,
+   "count": 1,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1996,
+   "first": 184,
+   "last": 239,
+   "length": 56,
+   "count": 7,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1997,
+   "first": 202,
+   "last": 232,
+   "length": 31,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 1998,
+   "first": 197,
+   "last": 246,
+   "length": 50,
+   "count": 10,
+   "firstRun": 216,
+   "lastRun": 218
+  },
+  {
+   "year": 1999,
+   "first": 166,
+   "last": 209,
+   "length": 44,
+   "count": 4,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 2000,
+   "first": 194,
+   "last": 258,
+   "length": 65,
+   "count": 10,
+   "firstRun": 210,
+   "lastRun": 213
+  },
+  {
+   "year": 2001,
+   "first": 183,
+   "last": 238,
+   "length": 56,
+   "count": 9,
+   "firstRun": 183,
+   "lastRun": 220
+  },
+  {
+   "year": 2002,
+   "first": 177,
+   "last": 197,
+   "length": 21,
+   "count": 7,
+   "firstRun": 191,
+   "lastRun": 195
+  },
+  {
+   "year": 2003,
+   "first": 169,
+   "last": 231,
+   "length": 63,
+   "count": 20,
+   "firstRun": 191,
+   "lastRun": 213
+  },
+  {
+   "year": 2004,
+   "first": 196,
+   "last": 244,
+   "length": 49,
+   "count": 6,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 2005,
+   "first": 172,
+   "last": 233,
+   "length": 62,
+   "count": 12,
+   "firstRun": 200,
+   "lastRun": 203
+  },
+  {
+   "year": 2006,
+   "first": 178,
+   "last": 233,
+   "length": 56,
+   "count": 16,
+   "firstRun": 201,
+   "lastRun": 209
+  },
+  {
+   "year": 2007,
+   "first": 185,
+   "last": 246,
+   "length": 62,
+   "count": 16,
+   "firstRun": 185,
+   "lastRun": 210
+  },
+  {
+   "year": 2008,
+   "first": 173,
+   "last": 231,
+   "length": 59,
+   "count": 8,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 2009,
+   "first": 197,
+   "last": 240,
+   "length": 44,
+   "count": 8,
+   "firstRun": 197,
+   "lastRun": 199
+  },
+  {
+   "year": 2010,
+   "first": 179,
+   "last": 238,
+   "length": 60,
+   "count": 6,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 2011,
+   "first": 198,
+   "last": 240,
+   "length": 43,
+   "count": 5,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 2012,
+   "first": 189,
+   "last": 220,
+   "length": 32,
+   "count": 12,
+   "firstRun": 189,
+   "lastRun": 220
+  },
+  {
+   "year": 2013,
+   "first": 179,
+   "last": 226,
+   "length": 48,
+   "count": 14,
+   "firstRun": 179,
+   "lastRun": 201
+  },
+  {
+   "year": 2014,
+   "first": 183,
+   "last": 223,
+   "length": 41,
+   "count": 8,
+   "firstRun": 192,
+   "lastRun": 195
+  },
+  {
+   "year": 2015,
+   "first": 177,
+   "last": 225,
+   "length": 49,
+   "count": 14,
+   "firstRun": 177,
+   "lastRun": 225
+  },
+  {
+   "year": 2016,
+   "first": 160,
+   "last": 212,
+   "length": 53,
+   "count": 9,
+   "firstRun": 179,
+   "lastRun": 181
+  },
+  {
+   "year": 2017,
+   "first": 185,
+   "last": 214,
+   "length": 30,
+   "count": 11,
+   "firstRun": 187,
+   "lastRun": 196
+  },
+  {
+   "year": 2018,
+   "first": 186,
+   "last": 223,
+   "length": 38,
+   "count": 14,
+   "firstRun": 204,
+   "lastRun": 223
+  },
+  {
+   "year": 2019,
+   "first": 203,
+   "last": 218,
+   "length": 16,
+   "count": 3,
+   "firstRun": null,
+   "lastRun": null
+  },
+  {
+   "year": 2020,
+   "first": 193,
+   "last": 249,
+   "length": 57,
+   "count": 10,
+   "firstRun": 212,
+   "lastRun": 231
+  },
+  {
+   "year": 2021,
+   "first": 154,
+   "last": 224,
+   "length": 71,
+   "count": 18,
+   "firstRun": 179,
+   "lastRun": 187
+  },
+  {
+   "year": 2022,
+   "first": 178,
+   "last": 250,
+   "length": 73,
+   "count": 27,
+   "firstRun": 193,
+   "lastRun": 213
+  },
+  {
+   "year": 2023,
+   "first": 190,
+   "last": 229,
+   "length": 40,
+   "count": 11,
+   "firstRun": 200,
+   "lastRun": 229
+  },
+  {
+   "year": 2024,
+   "first": 174,
+   "last": 230,
+   "length": 57,
+   "count": 20,
+   "firstRun": 190,
+   "lastRun": 206
+  },
+  {
+   "year": 2025,
+   "first": 151,
+   "last": 245,
+   "length": 95,
+   "count": 7,
+   "firstRun": null,
+   "lastRun": null
+  }
+ ]
+}

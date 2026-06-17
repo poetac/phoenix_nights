@@ -1,0 +1,70 @@
+{
+ "city": "boi",
+ "name": "Boise (ThreadEx BOIthr 9)",
+ "generated": "2026-06-17",
+ "facts": [
+  {
+   "key": "coldest_night",
+   "score": 1.0,
+   "crossCityPercentile": 1.0,
+   "label": "Even the coldest night of the year is warming +2.73\u00b0F per decade",
+   "value": 2.73,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 1
+  },
+  {
+   "key": "night_warming",
+   "score": 0.595,
+   "crossCityPercentile": 0.33,
+   "label": "Summer nights are warming +0.94\u00b0F per decade",
+   "value": 0.94,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "bench": 0.36,
+   "rank": 2
+  },
+  {
+   "key": "urban_excess",
+   "score": 0.585,
+   "crossCityPercentile": 0.33,
+   "label": "City nights are warming +0.61\u00b0F/decade faster than the nearby open desert",
+   "value": 0.61,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "vs_reference": 0.33,
+   "rank": 3
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 0.376,
+   "crossCityPercentile": 0.22,
+   "label": "Overnight lows are rising 1.4\u00d7 as fast as afternoon highs",
+   "value": 1.4,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 4
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.376,
+   "crossCityPercentile": 0.22,
+   "label": "The day\u2013night temperature gap is shrinking 0.29\u00b0F per decade",
+   "value": 0.29,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 5
+  },
+  {
+   "key": "hot_day_season",
+   "score": 0.29,
+   "crossCityPercentile": 0.25,
+   "label": "13 days a year now reach 100\u00b0F (was 6 in the 1970s)",
+   "value": 13,
+   "unit": "days",
+   "baseline": 6,
+   "significant": true,
+   "rank": 6
+  }
+ ]
+}

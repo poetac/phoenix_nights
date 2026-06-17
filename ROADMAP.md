@@ -292,7 +292,8 @@ Evolving the registry-driven engine into a generalized city-climate explorer whe
 - ✅ **Phase 2 — per-city page + auto hero:** generic ranked-facts page; non-flagship cities get an auto hero from their top fact, Phoenix keeps its curated `featured` overlay.
 - ✅ **Phase 3a — explore landing + ranking:** the root ranks every city by overnight-low warming → click into its page (`?city=<id>`).
 - ✅ **Phase 3b — the literal map (this PR):** the explore landing now leads with a clickable US map of the interior West. A committed build script (`apps/web/scripts/build-map.mjs`) projects us-atlas `states-10m` and each city's `latLon` with one shared d3 `geoAlbersUsa`, validates each city falls inside its state, and emits `src/lib/usMap.js` (committed; no runtime map deps). City dots → `?city=<id>`; the ranked list stays beneath as the ordered, accessible fallback. Render smoke test asserts the map + a dot-click deep-link.
-- ⏳ Phase 4: scale vetted cities · Phase 5: honest forward extrapolation.
+- ✅ **Phase 4 — scale cities (this PR):** the five vetted-PASS metros (Yuma, Reno, Albuquerque, Salt Lake City, Boise) are live — registry entries in `analysis/cities.py` + `cities.js`, committed ACIS assets, and verify + render + map coverage. The four high-elevation additions inherit the card-fit guards (night-cooling-share, and where applicable tropical-nights / 100°F-days, omit cleanly).
+- ⏳ Phase 5: honest forward extrapolation.
 
 ## Breadth — vetted desert-UHI city pipeline
 
@@ -319,6 +320,8 @@ product rethink). First audit pass (June 2026):
 | Bakersfield, CA | +0.22 | pairs warm faster (−0.17) | CISO (statewide) | **REJECT** |
 
 Adding a vetted city is then two registry entries (`cities.py` + `cities.js`) + an asset rebuild.
+
+**Shipped (Phase 4): Yuma, Reno, Albuquerque, Salt Lake City, Boise** — the full vetted set is now live (**nine cities**). Yuma is a second clean low-desert control; the four interior-West cities surface their own leaders (Reno the fastest night-warming in the set at **+2.16°F/decade**; Boise and Salt Lake led by their fast-warming *coldest* nights, +2.7 / +2.6°F/decade) and omit the cards whose premise fails — flagged up front by the new card-fit audit, not discovered at build time. Grid (EIA) and diurnal (NCEI hourly) assets are deferred for the five and their cards omit until a validated single-utility balancing authority + hourly pull land in a follow-up.
 
 **Shipped: El Paso (4th city, PR #30)** — `ELPthr 9`, pair White Sands `USC00299686` at
 near-identical elevation (the cleanest control in the set), grid EPE, diurnal El Paso Intl,

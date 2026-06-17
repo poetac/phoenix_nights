@@ -307,4 +307,279 @@ export const ELPASO = {
   },
 };
 
-export const CITIES = [PHOENIX, TUCSON, LASVEGAS, ELPASO];
+const YUMA = {
+  id: "yum",
+  name: "Yuma, AZ",
+  shortName: "Yuma",
+  threadSid: "YUMthr 9",
+  recordStart: "1893-01-01",
+  stationLabel:
+    "Yuma Area ThreadEx record (Yuma MCAS / Yuma Intl)",
+  urbanShort: "Yuma Intl",
+  baseline: { start: 1970, end: 1979, label: "1970s" },
+  windows: [
+    { y: 1970, label: "Since 1970" },
+    { y: 1948, label: "Since 1948" },
+  ],
+  latLon: [32.6927, -114.6277],
+  rural: {
+    sid: "USW00003125",
+    name: "Yuma Proving Ground",
+    short: "Yuma Proving Ground",
+    firstYear: 1955,
+    distance: "~19 miles NE",
+    elevationNote:
+      "Yuma Proving Ground sits within ~110 ft of the Yuma stations' elevation, so this gap is essentially free of the elevation confound — a clean low-desert control like El Paso's White Sands.",
+    growthCaveat:
+      "The Proving Ground is sparsely developed federal desert, so the reference stays genuinely rural; the city-vs-desert read is like-for-like.",
+    robustnessNote:
+      "The COOP record runs from 1955; the gap and its growth are computed from complete years and re-checked from ACIS in verify_v0.py.",
+  },
+  citations: [
+    {
+      label: "NOAA/NWS ACIS web services",
+      url: "https://www.rcc-acis.org/docs_webservices.html",
+      note: "The official station record this page queries live in your browser.",
+    },
+    {
+      label: "NWS Phoenix (Weather Forecast Office, PSR) — serves Yuma County",
+      url: "https://www.weather.gov/psr/",
+      note: "Local climate normals and records for the Yuma area.",
+    },
+    {
+      label: "Climate Central, \"Warm Summer Nights\" (2025)",
+      url: "https://www.climatecentral.org/climate-matters/warm-summer-nights-2025",
+      note: "Summer nights across the interior West have warmed sharply since 1970; Yuma's overnight lows are rising about +0.8°F/decade in the ACIS record.",
+    },
+  ],
+  repoUrl: "https://github.com/poetac/phoenix_nights",
+  heatSeasonAsset: "data/yum-heat-season.json",
+  streaksAsset: "data/yum-streaks.json",
+  normalsAsset: "data/yum-normals.json",
+  cddSplitAsset: "data/yum-cdd-split.json",
+  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
+  // validated single-utility EIA balancing authority are a follow-up; both
+  // cards omit cleanly until their assets are committed.
+};
+
+const RENO = {
+  id: "rno",
+  name: "Reno, NV",
+  shortName: "Reno",
+  threadSid: "RNOthr 9",
+  recordStart: "1893-01-01",
+  stationLabel:
+    "Reno Area ThreadEx record (downtown record spliced to Reno-Tahoe Intl, KRNO)",
+  urbanShort: "Reno-Tahoe Intl",
+  baseline: { start: 1970, end: 1979, label: "1970s" },
+  windows: [
+    { y: 1970, label: "Since 1970" },
+    { y: 1948, label: "Since 1948" },
+  ],
+  latLon: [39.4985, -119.7681],
+  rural: {
+    sid: "USC00048758",
+    name: "Tahoe City",
+    short: "Tahoe City",
+    firstYear: 1909,
+    distance: "~34 miles SW",
+    elevationNote:
+      "Tahoe City sits ~1,800 ft ABOVE Reno, so much of the absolute night-low gap is elevation, not city heat — the honest signal here is the gap's GROWTH over time, not its size. Reno's mountain basin has no low-elevation long-record rural neighbor.",
+    growthCaveat:
+      "Tahoe City is a small lakeshore community that has grown over the record; if anything that warms the reference, so the city's excess night warming is understated rather than inflated.",
+    robustnessNote:
+      "Reno's +2.16°F/decade overnight-low trend is the fastest in the set and far outruns Tahoe City's +0.27; reproduce with analysis/city_audit.py.",
+  },
+  citations: [
+    {
+      label: "NOAA/NWS ACIS web services",
+      url: "https://www.rcc-acis.org/docs_webservices.html",
+      note: "The official station record this page queries live in your browser.",
+    },
+    {
+      label: "NWS Reno (Weather Forecast Office, REV)",
+      url: "https://www.weather.gov/rev/",
+      note: "Local climate normals and records for the Reno area.",
+    },
+    {
+      label: "Climate Central, \"Warm Summer Nights\" (2025)",
+      url: "https://www.climatecentral.org/climate-matters/warm-summer-nights-2025",
+      note: "Summer nights across the interior West have warmed sharply since 1970; Reno's overnight lows are rising about +2.2°F/decade in the ACIS record.",
+    },
+  ],
+  repoUrl: "https://github.com/poetac/phoenix_nights",
+  heatSeasonAsset: "data/rno-heat-season.json",
+  streaksAsset: "data/rno-streaks.json",
+  normalsAsset: "data/rno-normals.json",
+  cddSplitAsset: "data/rno-cdd-split.json",
+  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
+  // validated single-utility EIA balancing authority are a follow-up; both
+  // cards omit cleanly until their assets are committed.
+};
+
+const ALBUQUERQUE = {
+  id: "abq",
+  name: "Albuquerque, NM",
+  shortName: "Albuquerque",
+  threadSid: "ABQthr 9",
+  recordStart: "1893-01-01",
+  stationLabel:
+    "Albuquerque Area ThreadEx record (Albuquerque Intl Sunport, KABQ)",
+  urbanShort: "Sunport",
+  baseline: { start: 1970, end: 1979, label: "1970s" },
+  windows: [
+    { y: 1970, label: "Since 1970" },
+    { y: 1948, label: "Since 1948" },
+  ],
+  latLon: [35.0844, -106.6504],
+  rural: {
+    sid: "USC00295150",
+    name: "Los Lunas 3 SSW",
+    short: "Los Lunas",
+    firstYear: 1923,
+    distance: "~25 miles S",
+    elevationNote:
+      "Los Lunas sits ~500 ft BELOW the Sunport, so the elevation confound runs the other way — the city is higher yet its nights warm faster, which strengthens rather than inflates the urban signal.",
+    growthCaveat:
+      "Los Lunas has suburbanized along the Rio Grande; a warming reference understates the city's excess, not the reverse.",
+    robustnessNote:
+      "Swapping in higher, slower Santa Fe widens the gap; this card uses the closer, lower Los Lunas as the more conservative control. Reproduce with analysis/city_audit.py.",
+  },
+  citations: [
+    {
+      label: "NOAA/NWS ACIS web services",
+      url: "https://www.rcc-acis.org/docs_webservices.html",
+      note: "The official station record this page queries live in your browser.",
+    },
+    {
+      label: "NWS Albuquerque (Weather Forecast Office, ABQ)",
+      url: "https://www.weather.gov/abq/",
+      note: "Local climate normals and records for the Albuquerque area.",
+    },
+    {
+      label: "Climate Central, \"Warm Summer Nights\" (2025)",
+      url: "https://www.climatecentral.org/climate-matters/warm-summer-nights-2025",
+      note: "Summer nights across the interior West have warmed sharply since 1970; Albuquerque's overnight lows are rising about +1.1°F/decade in the ACIS record.",
+    },
+  ],
+  repoUrl: "https://github.com/poetac/phoenix_nights",
+  heatSeasonAsset: "data/abq-heat-season.json",
+  streaksAsset: "data/abq-streaks.json",
+  normalsAsset: "data/abq-normals.json",
+  cddSplitAsset: "data/abq-cdd-split.json",
+  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
+  // validated single-utility EIA balancing authority are a follow-up; both
+  // cards omit cleanly until their assets are committed.
+};
+
+const SALTLAKE = {
+  id: "slc",
+  name: "Salt Lake City, UT",
+  shortName: "Salt Lake City",
+  threadSid: "SLCthr 9",
+  recordStart: "1893-01-01",
+  stationLabel:
+    "Salt Lake City Area ThreadEx record (Salt Lake City Intl, KSLC)",
+  urbanShort: "SLC Intl",
+  baseline: { start: 1970, end: 1979, label: "1970s" },
+  windows: [
+    { y: 1970, label: "Since 1970" },
+    { y: 1948, label: "Since 1948" },
+  ],
+  latLon: [40.7608, -111.8910],
+  rural: {
+    sid: "USC00429133",
+    name: "Vernon",
+    short: "Vernon",
+    firstYear: 1953,
+    distance: "~60 miles SW",
+    elevationNote:
+      "Vernon sits ~1,200 ft above Salt Lake City, so part of the absolute gap is elevation; the honest signal is the gap's growth, not its size. Vernon is the longest slow-warming rural record within the basin's reach.",
+    growthCaveat:
+      "Vernon is tiny high-desert ranchland with negligible development, so it stays a genuinely rural reference.",
+    robustnessNote:
+      "Salt Lake's +1.05°F/decade overnight-low trend outruns Vernon's +0.15; the gap and its growth are re-checked from ACIS in verify_v0.py.",
+  },
+  citations: [
+    {
+      label: "NOAA/NWS ACIS web services",
+      url: "https://www.rcc-acis.org/docs_webservices.html",
+      note: "The official station record this page queries live in your browser.",
+    },
+    {
+      label: "NWS Salt Lake City (Weather Forecast Office, SLC)",
+      url: "https://www.weather.gov/slc/",
+      note: "Local climate normals and records for the Salt Lake City area.",
+    },
+    {
+      label: "Climate Central, \"Warm Summer Nights\" (2025)",
+      url: "https://www.climatecentral.org/climate-matters/warm-summer-nights-2025",
+      note: "Summer nights across the interior West have warmed sharply since 1970; Salt Lake City's overnight lows are rising about +1.1°F/decade in the ACIS record.",
+    },
+  ],
+  repoUrl: "https://github.com/poetac/phoenix_nights",
+  heatSeasonAsset: "data/slc-heat-season.json",
+  streaksAsset: "data/slc-streaks.json",
+  normalsAsset: "data/slc-normals.json",
+  cddSplitAsset: "data/slc-cdd-split.json",
+  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
+  // validated single-utility EIA balancing authority are a follow-up; both
+  // cards omit cleanly until their assets are committed.
+};
+
+const BOISE = {
+  id: "boi",
+  name: "Boise, ID",
+  shortName: "Boise",
+  threadSid: "BOIthr 9",
+  recordStart: "1893-01-01",
+  stationLabel:
+    "Boise Area ThreadEx record (Boise Air Terminal, KBOI)",
+  urbanShort: "Boise Air Terminal",
+  baseline: { start: 1970, end: 1979, label: "1970s" },
+  windows: [
+    { y: 1970, label: "Since 1970" },
+    { y: 1948, label: "Since 1948" },
+  ],
+  latLon: [43.6150, -116.2023],
+  rural: {
+    sid: "USC00102942",
+    name: "Emmett 2 E",
+    short: "Emmett",
+    firstYear: 1906,
+    distance: "~25 miles NW",
+    elevationNote:
+      "Emmett sits ~300 ft below Boise, so the elevation confound is small and runs toward the city being cooler at baseline — the city's faster night warming is not an elevation artifact.",
+    growthCaveat:
+      "Emmett is a small agricultural town; any modest growth there would understate the city's excess warming.",
+    robustnessNote:
+      "Boise's +0.94°F/decade overnight-low trend outruns Emmett's +0.33; reproduce with analysis/city_audit.py.",
+  },
+  citations: [
+    {
+      label: "NOAA/NWS ACIS web services",
+      url: "https://www.rcc-acis.org/docs_webservices.html",
+      note: "The official station record this page queries live in your browser.",
+    },
+    {
+      label: "NWS Boise (Weather Forecast Office, BOI)",
+      url: "https://www.weather.gov/boi/",
+      note: "Local climate normals and records for the Boise area.",
+    },
+    {
+      label: "Climate Central, \"Warm Summer Nights\" (2025)",
+      url: "https://www.climatecentral.org/climate-matters/warm-summer-nights-2025",
+      note: "Summer nights across the interior West have warmed sharply since 1970; Boise's overnight lows are rising about +0.9°F/decade in the ACIS record.",
+    },
+  ],
+  repoUrl: "https://github.com/poetac/phoenix_nights",
+  heatSeasonAsset: "data/boi-heat-season.json",
+  streaksAsset: "data/boi-streaks.json",
+  normalsAsset: "data/boi-normals.json",
+  cddSplitAsset: "data/boi-cdd-split.json",
+  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
+  // validated single-utility EIA balancing authority are a follow-up; both
+  // cards omit cleanly until their assets are committed.
+};
+
+export const CITIES = [PHOENIX, TUCSON, LASVEGAS, ELPASO, YUMA, RENO, ALBUQUERQUE, SALTLAKE, BOISE];
