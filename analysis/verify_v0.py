@@ -290,6 +290,13 @@ ASSET_SCHEMAS = {
     "tus-normals.json": ("byDate", dict, None),
     "tus-grid.json": ("years", dict, None),
     "tus-diurnal.json": ("decades", dict, None),
+    # Third city (Las Vegas)
+    "lv-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "lv-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "lv-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "lv-normals.json": ("byDate", dict, None),
+    "lv-grid.json": ("years", dict, None),
+    "lv-diurnal.json": ("decades", dict, None),
 }
 
 
@@ -440,6 +447,16 @@ def main():
                    tucson_trend, tucson_trend > GLOBAL_BENCH))
     checks.append((f"Tucson night-low trend > its desert pair Sasabe ({tucson_trend:.2f} vs {sasabe_trend:.2f}/dec)",
                    tucson_trend - sasabe_trend, tucson_trend > sasabe_trend))
+
+    # Third city (Las Vegas): same desert-UHI signal — McCarran/Harry Reid's
+    # overnight-low trend since 1970 outruns the global rate and its desert pair
+    # (Desert National Wildlife Refuge). Live from ACIS; sids match cities.js.
+    lv_trend = acis_yearly_low_trend("LASthr 9", 1970)
+    dnwr_trend = acis_yearly_low_trend("USC00262243", 1970)
+    checks.append((f"Las Vegas night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   lv_trend, lv_trend > GLOBAL_BENCH))
+    checks.append((f"Las Vegas night-low trend > its desert pair Desert NWR ({lv_trend:.2f} vs {dnwr_trend:.2f}/dec)",
+                   lv_trend - dnwr_trend, lv_trend > dnwr_trend))
 
     # Season cards' outlier-robust definitions: the *sustained* warm-night
     # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of

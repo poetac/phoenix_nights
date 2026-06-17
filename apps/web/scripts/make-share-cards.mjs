@@ -25,6 +25,7 @@ const C = { bg: "#141021", text: "#f2ecdf", muted: "#9b93ae", ember: "#ff6b3d",
 const CITIES = {
   phx: { name: "Phoenix", kicker: "PHOENIX · LIVE NOAA STATION RECORD" },
   tus: { name: "Tucson", kicker: "TUCSON · LIVE NOAA STATION RECORD" },
+  lv: { name: "Las Vegas", kicker: "LAS VEGAS · LIVE NOAA STATION RECORD" },
 };
 
 // Each flagship card: pull (1970s, recent) from a committed asset. Only counts and
