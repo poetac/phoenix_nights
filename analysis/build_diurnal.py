@@ -9,8 +9,11 @@ apps/web/public/data/<prefix>-diurnal.json for the app to plot.
 Takes ``--city`` (default ``phx``; Phoenix output byte-identical apart from the
 ``generated`` date). The station ids, label, first year, and UTC offset come
 from analysis/cities.py, so adding a city is a registry entry, not a code edit.
-(Hour bucketing uses a fixed UTC offset — correct for Arizona, which keeps no
-DST; a DST-observing city would need offset-by-date handling here.)
+Hour bucketing: a no-DST city (no ``tz``) uses its fixed ``utc_offset`` (so
+Arizona output is byte-identical to before); a DST-observing city sets ``tz``
+(an IANA zone) and each UTC observation is converted through it, so DST is
+handled correctly. (Arizona's own ``America/Phoenix`` zone encodes a 1967 DST
+blip, so we keep the fixed offset for AZ rather than the zone.)
 
 Raw CSVs are cached under analysis/cache/hourly/ so re-runs are cheap.
 Stdlib only. Usage: python3 analysis/build_diurnal.py [--city phx|tus]
@@ -23,6 +26,8 @@ import pathlib
 import sys
 import time
 import urllib.request
+
+from zoneinfo import ZoneInfo
 
 from cities import data_path, get_city
 
@@ -77,7 +82,9 @@ def main():
     cfg = city["diurnal"]
     sids = tuple(cfg["sids"])
     first_year = cfg.get("first_year", 1948)
-    utc_offset = city["utc_offset"]
+    utc_offset = city.get("utc_offset")
+    tz = city.get("tz")  # if set, DST-aware (zoneinfo); else fixed offset (no-DST AZ)
+    zone = ZoneInfo(tz) if tz else None
     source = ("NCEI global-hourly (ISD), station ids "
               + " / ".join(f"{s[:6]}-{s[6:]}" for s in sids))
     OUT = data_path(city["prefix"], "diurnal")
@@ -95,7 +102,12 @@ def main():
                 date = row.get("DATE", "")
                 if len(date) < 13:
                     continue
-                hour = (int(date[11:13]) + utc_offset) % 24
+                if zone is None:
+                    hour = (int(date[11:13]) + utc_offset) % 24
+                else:
+                    hour = datetime.datetime(
+                        int(date[0:4]), int(date[5:7]), int(date[8:10]), int(date[11:13]),
+                        tzinfo=datetime.timezone.utc).astimezone(zone).hour
                 slot = acc.setdefault(decade, {}).setdefault(hour, [0.0, 0, 0.0, 0])
                 t = parse_scaled(row.get("TMP", ""))
                 if t is not None:
@@ -125,7 +137,8 @@ def main():
     OUT.write_text(json.dumps({
         "station": cfg["station"],
         "months": "June-August",
-        "hours": f"local (UTC{utc_offset}, no DST)",
+        "hours": (f"local (UTC{utc_offset}, no DST)" if zone is None
+                  else f"local time, DST-aware ({tz})"),
         "source": source,
         "yearsCovered": [first_year, LAST_YEAR],
         "generated": datetime.date.today().isoformat(),
