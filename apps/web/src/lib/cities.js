@@ -10,6 +10,13 @@ export const PHOENIX = {
   stationLabel:
     "Phoenix ThreadEx station record (downtown 1896–1933, Sky Harbor 1933–present)",
   urbanShort: "Sky Harbor",
+  // Curated flagship overlay: Phoenix keeps its hand-written hero; other cities
+  // get an auto hero built from their top-ranked fact (see CityDashboard).
+  featured: {
+    line1: "The desert still cools off at night.",
+    line2: "The city doesn\u2019t.",
+    sub: "Weather apps grade each day against a \"normal range\" and spotlight the afternoon high. This page tests a different question with the official record: are Phoenix\u2019s overnight lows abandoning their history faster than its highs?",
+  },
   baseline: { start: 1970, end: 1979, label: "1970s" },
   // window choices offered in the UI; the full record is appended dynamically
   windows: [

@@ -177,6 +177,13 @@ export async function fetchHeatDeaths(city) {
   return j;
 }
 
+export async function fetchFacts(city) {
+  const path = city.factsAsset ?? `data/${city.id}-facts.json`;
+  const j = await fetchAsset(path);
+  if (!j.facts || !j.facts.length) throw new Error("facts asset empty");
+  return j;
+}
+
 export async function fetchStreaks(city) {
   if (!city.streaksAsset) return null;
   const j = await fetchAsset(city.streaksAsset);
