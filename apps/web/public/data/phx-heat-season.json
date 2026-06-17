@@ -3,7 +3,7 @@
  "thresholdF": 100,
  "note": "first/last are day-of-year of the first/last single 100F day; firstRun/lastRun bound the sustained season (runs of >=3 consecutive 100F days); years missing >36 daily highs excluded",
  "source": "NOAA/NWS ACIS daily maxt",
- "generated": "2026-06-16",
+ "generated": "2026-06-17",
  "throughYear": 2025,
  "years": [
   {
