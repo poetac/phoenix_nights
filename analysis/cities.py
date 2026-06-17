@@ -88,6 +88,65 @@ CITIES = {
         "diurnal": {"sids": ("72270023044",),
                     "station": "El Paso Intl", "first_year": 1948},
     },
+    "yum": {
+        "key": "yum",
+        "prefix": "yum",
+        "sid": "YUMthr 9",
+        "label": "Yuma (ThreadEx YUMthr 9)",
+        "record_start": "1893-01-01",
+        # Yuma keeps Arizona standard time (no DST), like phx/tus -> fixed offset.
+        "utc_offset": -7,
+        "diurnal": {"sids": ("99999923195", "69002003145"),
+                    "station": "Yuma MCAS / Intl", "first_year": 1948},
+    },
+    "rno": {
+        "key": "rno",
+        "prefix": "rno",
+        "sid": "RNOthr 9",
+        "label": "Reno (ThreadEx RNOthr 9)",
+        "record_start": "1893-01-01",
+        # Reno observes Pacific DST -> tz-aware hour bucketing.
+        "utc_offset": -8,
+        "tz": "America/Los_Angeles",
+        "diurnal": {"sids": ("99999923185", "72488023185"),
+                    "station": "Reno-Tahoe Intl", "first_year": 1948},
+    },
+    "abq": {
+        "key": "abq",
+        "prefix": "abq",
+        "sid": "ABQthr 9",
+        "label": "Albuquerque (ThreadEx ABQthr 9)",
+        "record_start": "1893-01-01",
+        # Albuquerque observes Mountain DST -> tz-aware hour bucketing.
+        "utc_offset": -7,
+        "tz": "America/Denver",
+        "diurnal": {"sids": ("99999923050", "72365023050"),
+                    "station": "Albuquerque Intl Sunport", "first_year": 1948},
+    },
+    "slc": {
+        "key": "slc",
+        "prefix": "slc",
+        "sid": "SLCthr 9",
+        "label": "Salt Lake City (ThreadEx SLCthr 9)",
+        "record_start": "1893-01-01",
+        # Salt Lake City observes Mountain DST -> tz-aware hour bucketing.
+        "utc_offset": -7,
+        "tz": "America/Denver",
+        "diurnal": {"sids": ("99999924127", "72572024127"),
+                    "station": "Salt Lake City Intl", "first_year": 1948},
+    },
+    "boi": {
+        "key": "boi",
+        "prefix": "boi",
+        "sid": "BOIthr 9",
+        "label": "Boise (ThreadEx BOIthr 9)",
+        "record_start": "1893-01-01",
+        # Boise observes Mountain DST -> tz-aware hour bucketing.
+        "utc_offset": -7,
+        "tz": "America/Boise",
+        "diurnal": {"sids": ("99999924131", "72681024131"),
+                    "station": "Boise Air Terminal", "first_year": 1948},
+    },
 }
 
 DATA_DIR = (pathlib.Path(__file__).resolve().parent.parent

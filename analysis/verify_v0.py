@@ -305,6 +305,32 @@ ASSET_SCHEMAS = {
     "ep-grid.json": ("years", dict, None),
     "ep-diurnal.json": ("decades", dict, None),
     # Salience engine output (one ranked fact list per city)
+    # Phase 4 cities (diurnal + grid assets deferred -> absent -> skipped).
+    "yum-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "yum-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "yum-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "yum-normals.json": ("byDate", dict, None),
+    "rno-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "rno-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "rno-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "rno-normals.json": ("byDate", dict, None),
+    "abq-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "abq-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "abq-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "abq-normals.json": ("byDate", dict, None),
+    "slc-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "slc-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "slc-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "slc-normals.json": ("byDate", dict, None),
+    "boi-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "boi-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "boi-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "boi-normals.json": ("byDate", dict, None),
+    "yum-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "rno-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "abq-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "slc-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "boi-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "phx-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "tus-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "lv-facts.json": ("facts", list, ("key", "rank", "score", "label")),
@@ -478,6 +504,49 @@ def main():
                    elp_trend, elp_trend > GLOBAL_BENCH))
     checks.append((f"El Paso night-low trend > its desert pair White Sands ({elp_trend:.2f} vs {wsnm_trend:.2f}/dec)",
                    elp_trend - wsnm_trend, elp_trend > wsnm_trend))
+
+    # Fifth city (Yuma): low-desert AZ, no DST; pair Yuma Proving Ground sits at
+    # nearly the same elevation (the cleanest control after El Paso).
+    yuma_trend = acis_yearly_low_trend("YUMthr 9", 1970)
+    ypg_trend = acis_yearly_low_trend("USW00003125", 1970)
+    checks.append((f"Yuma night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   yuma_trend, yuma_trend > GLOBAL_BENCH))
+    checks.append((f"Yuma night-low trend > its desert pair Yuma Proving Ground ({yuma_trend:.2f} vs {ypg_trend:.2f}/dec)",
+                   yuma_trend - ypg_trend, yuma_trend > ypg_trend))
+
+    # Sixth city (Reno): fastest night-warming in the set; pair Tahoe City warms
+    # far slower (the absolute gap carries an elevation caveat, stated in-card).
+    reno_trend = acis_yearly_low_trend("RNOthr 9", 1970)
+    tahoe_trend = acis_yearly_low_trend("USC00048758", 1970)
+    checks.append((f"Reno night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   reno_trend, reno_trend > GLOBAL_BENCH))
+    checks.append((f"Reno night-low trend > its rural pair Tahoe City ({reno_trend:.2f} vs {tahoe_trend:.2f}/dec)",
+                   reno_trend - tahoe_trend, reno_trend > tahoe_trend))
+
+    # Seventh city (Albuquerque): pair Los Lunas sits ~500 ft below the city, so
+    # the elevation confound runs toward understating (not inflating) the signal.
+    abq_trend = acis_yearly_low_trend("ABQthr 9", 1970)
+    loslunas_trend = acis_yearly_low_trend("USC00295150", 1970)
+    checks.append((f"Albuquerque night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   abq_trend, abq_trend > GLOBAL_BENCH))
+    checks.append((f"Albuquerque night-low trend > its rural pair Los Lunas ({abq_trend:.2f} vs {loslunas_trend:.2f}/dec)",
+                   abq_trend - loslunas_trend, abq_trend > loslunas_trend))
+
+    # Eighth city (Salt Lake City): pair Vernon (high-desert ranchland).
+    slc_trend = acis_yearly_low_trend("SLCthr 9", 1970)
+    vernon_trend = acis_yearly_low_trend("USC00429133", 1970)
+    checks.append((f"Salt Lake City night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   slc_trend, slc_trend > GLOBAL_BENCH))
+    checks.append((f"Salt Lake City night-low trend > its rural pair Vernon ({slc_trend:.2f} vs {vernon_trend:.2f}/dec)",
+                   slc_trend - vernon_trend, slc_trend > vernon_trend))
+
+    # Ninth city (Boise): pair Emmett 2 E sits ~300 ft below the city (clean).
+    boise_trend = acis_yearly_low_trend("BOIthr 9", 1970)
+    emmett_trend = acis_yearly_low_trend("USC00102942", 1970)
+    checks.append((f"Boise night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   boise_trend, boise_trend > GLOBAL_BENCH))
+    checks.append((f"Boise night-low trend > its rural pair Emmett ({boise_trend:.2f} vs {emmett_trend:.2f}/dec)",
+                   boise_trend - emmett_trend, boise_trend > emmett_trend))
 
     # Season cards' outlier-robust definitions: the *sustained* warm-night
     # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of

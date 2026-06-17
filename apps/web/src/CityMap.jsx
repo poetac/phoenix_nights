@@ -5,10 +5,15 @@ import { C, DISPLAY, BODY } from "./ui.jsx";
 // Per-city label placement (viewBox units) so the clustered SW labels don't
 // collide. Unknown ids fall back to a label set to the right of the dot.
 const LABEL = {
-  phx: { dx: -10, dy: -7, anchor: "end" },
+  phx: { dx: -11, dy: -7, anchor: "end" },
   tus: { dx: 9, dy: 16, anchor: "start" },
   lv: { dx: -10, dy: 4, anchor: "end" },
   ep: { dx: 9, dy: 5, anchor: "start" },
+  yum: { dx: -10, dy: 6, anchor: "end" },
+  rno: { dx: 9, dy: 4, anchor: "start" },
+  abq: { dx: -10, dy: 5, anchor: "end" },
+  slc: { dx: 9, dy: -7, anchor: "start" },
+  boi: { dx: 9, dy: 4, anchor: "start" },
 };
 const FALLBACK = { dx: 9, dy: 5, anchor: "start" };
 
