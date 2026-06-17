@@ -3,10 +3,11 @@ import { C, DISPLAY, BODY, Card } from "./ui.jsx";
 import {
   fetchCityYearly, fetchRural, fetchSeasonal, fetchDiurnal,
   fetchHeatSeason, fetchHeatDeaths, fetchStreaks, fetchGrid, fetchOpenMeteo,
-  fetchNormals, fetchLastNight, fetchCddSplit,
+  fetchNormals, fetchLastNight, fetchCddSplit, fetchFacts,
 } from "./lib/data.js";
 import { assetFreshness } from "./lib/freshness.js";
 import LastNightHero from "./cards/LastNightHero.jsx";
+import CityFacts from "./cards/CityFacts.jsx";
 
 // The chart-heavy body — and the ~160 KB-gzip recharts dependency it pulls in —
 // is a lazy chunk, so it loads after this shell paints and in parallel with the
@@ -25,6 +26,7 @@ export default function CityDashboard({ city }) {
   const [normals, setNormals] = useState(null);
   const [lastNight, setLastNight] = useState(null);
   const [cddSplit, setCddSplit] = useState(null);
+  const [facts, setFacts] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -40,6 +42,7 @@ export default function CityDashboard({ city }) {
     setNormals(null);
     setLastNight(null);
     setCddSplit(null);
+    setFacts(null);
     // these cards read static precomputed assets — independent of ACIS
     fetchDiurnal(city).then((d) => alive && setDiurnal(d)).catch(() => {});
     fetchHeatSeason(city).then((d) => alive && setHeatSeason(d)).catch(() => {});
@@ -47,6 +50,7 @@ export default function CityDashboard({ city }) {
     fetchStreaks(city).then((d) => alive && setStreaks(d)).catch(() => {});
     fetchGrid(city).then((d) => alive && setGrid(d)).catch(() => {});
     fetchCddSplit(city).then((d) => alive && setCddSplit(d)).catch(() => {});
+    fetchFacts(city).then((d) => alive && setFacts(d)).catch(() => {});
     // the live hero hook: last night's low (ACIS) vs the 1970s seasonal normal (asset)
     fetchNormals(city).then((d) => alive && setNormals(d)).catch(() => {});
     fetchLastNight(city).then((d) => alive && setLastNight(d)).catch(() => {});
@@ -105,19 +109,37 @@ export default function CityDashboard({ city }) {
           <div className="text-xs tracking-widest uppercase mb-3" style={{ color: C.emberSoft }}>
             Live NOAA station record · {city.name}
           </div>
-          <h1 className="text-3xl sm:text-5xl leading-tight" style={{ fontFamily: DISPLAY, fontWeight: 650 }}>
-            The desert still cools off at night.
-            <br />
-            <span style={{ color: C.ember }}>The city doesn't.</span>
-          </h1>
-          <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: C.muted }}>
-            Weather apps grade each day against a "normal range" and spotlight the afternoon high.
-            This page tests a different question with the official record: are {city.shortName}'s
-            <em> overnight lows</em> abandoning their history faster than its highs?
-          </p>
+          {city.featured ? (
+            <>
+              <h1 className="text-3xl sm:text-5xl leading-tight" style={{ fontFamily: DISPLAY, fontWeight: 650 }}>
+                {city.featured.line1}
+                {city.featured.line2 && (
+                  <>
+                    <br />
+                    <span style={{ color: C.ember }}>{city.featured.line2}</span>
+                  </>
+                )}
+              </h1>
+              <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: C.muted }}>
+                {city.featured.sub}
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-3xl sm:text-5xl leading-tight" style={{ fontFamily: DISPLAY, fontWeight: 650 }}>
+                {facts?.facts?.[0]?.label ?? `How ${city.shortName}'s climate is changing`}
+              </h1>
+              <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: C.muted }}>
+                The official station record for {city.name}, ranked by what stands out from the
+                last half-century{city.rural ? ` — overnight lows measured against ${city.rural.short}, its nearby open-desert reference` : ""}.
+              </p>
+            </>
+          )}
         </header>
 
         <LastNightHero city={city} lastNight={lastNight} normals={normals} />
+
+      <CityFacts facts={facts?.facts} city={city} />
 
         {freshness?.stale?.length > 0 && (
           <div className="rounded-xl px-4 py-3 mb-6 text-sm" role="status"
