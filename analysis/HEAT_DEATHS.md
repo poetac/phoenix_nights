@@ -68,3 +68,49 @@ read, so the provenance is reviewable.
 > unreachable, say so explicitly in the PR and flag it for a primary-source
 > re-check before merge — these are sensitive public-health numbers and the page
 > holds them to the same "reproduce or reject" bar as everything else.
+
+## Second city (Tucson / Pima County) — intentionally omitted, and why
+
+The heat-death card is the one card that is **not** generalized to Tucson, and that is a
+deliberate data-integrity decision, not an oversight. The front end already treats the asset as
+optional (`fetchHeatDeaths` returns `null` when a city has no `heatDeathsAsset`, and
+`HumanCostCard` renders nothing without a `series`), so a city opts in only when it has a
+defensible source. Pima County does not, today, for three compounding reasons:
+
+1. **The only primary caused+contributed series is confounded by border-crossing deaths.**
+   The one source with a Maricopa-comparable *heat-related (caused + contributed)* number for
+   every year is AZDHS, *Heat-Caused & Heat-Related Deaths from Exposure to Excessive Natural
+   Heat in Arizona (2013–2024)* — but it counts by **county of occurrence including non-residents**,
+   and roughly **half** of Pima's heat-related deaths over 2013–2024 (~354 of ~701) are
+   undocumented border-crossers who die of exposure in the remote Altar Valley desert. That is a
+   humanitarian-crisis signal, *not* the urban heat-island / vulnerable-resident mortality this
+   card is about. Putting it on the same axis as Phoenix would misrepresent both.
+2. **A 2023 surveillance-method break.** The AZDHS Pima series jumps 58 (2022) → 173 (2023),
+   partly a real surge but partly a retroactive ICD-10 "wildcard" matching change (AZDHS report,
+   p.21) and improved certification — so the pre/post-2023 trend isn't clean.
+3. **No comparable demographic breakdown.** Pima County / AZDHS publish no recurring annual table
+   of the homeless / outdoors / A-C-not-working / age / sex / substance factors that make the
+   Maricopa "who the heat finds" grid meaningful. The closest is a one-time 2023 University of
+   Arizona white-paper analysis of Pima ME data — a single year, not an official annual series.
+
+The locally-counted, border-crosser-excluded *heat-related* figure that would actually be
+comparable only exists for **2023 (126)** and an interim **2024 (91)** — two points, not a trend.
+
+**Primary sources reviewed:**
+- AZDHS surveillance report 2013–2024 (the caused+contributed county series):
+  <https://www.azdhs.gov/documents/preparedness/epidemiology-disease-control/extreme-weather/pubs/heat-related-mortality-year-2013-2024.pdf>
+- Pima County Office of the Medical Examiner — Data Dashboards & Reports:
+  <https://www.pima.gov/216/Data-Dashboards-Reports>
+- University of Arizona / MAP AZ Dashboard, *Arizona Heat-Related Death White Paper* (Aug 2024):
+  <https://www.mapazdashboard.arizona.edu/sites/default/files/2024-08/Heat-Related%20Deaths%20White%20Paper.pdf>
+
+### Bar for a city to get this card (so the next city is a yes/no, not a debate)
+
+Add a `heatDeathsAsset` for a city only when **all** hold:
+- a **year-by-year, single-metric** series (heat-related = caused + contributed) of at least ~8
+  years from a **primary** vital-records / medical-examiner source;
+- the series reflects the **resident urban population** the rest of the dashboard is about (no
+  large exogenous population — e.g. border-crossing exposure deaths — dominating the count);
+- a stated, stable counting method (flag any retroactive redefinition as a caveat in the card).
+A demographic breakdown is a bonus, not a requirement (the grid is optional). If a city clears the
+series bar but not demographics, ship series-only with the demographics block omitted.

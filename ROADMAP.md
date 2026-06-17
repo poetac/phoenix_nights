@@ -192,8 +192,12 @@ over the nearer Anvil Ranch, whose COOP record is too gappy for a 1970s baseline
 **Shipped (PR #19):** the four ACIS `tus-*.json` assets, generated from live ACIS and committed;
 Tucson view live on the deployed site. **Grid generalized (this PR):** `build_grid.py` is now
 city-aware (Tucson = the **TEPC** balancing authority), with `tus-grid.json` committed and the
-rebuild workflow looping `phx`+`tus` for the grid asset too. **Remaining:** generalize the
-heat-death (Pima County) builder, still Phoenix-only (grid TEPC + diurnal ISD now city-aware). Spatial work
+rebuild workflow looping `phx`+`tus` for the grid asset too. **Heat-deaths — intentionally Phoenix-only (documented reject):** the only primary
+year-by-year Pima County heat-related (caused+contributed) series (AZDHS) is ~half
+undocumented border-crossing desert deaths plus a 2023 surveillance-method break, with no
+demographic breakdown comparable to Maricopa's — so it fails the reproduce-or-reject bar and
+the card omits for Tucson (rationale in `analysis/HEAT_DEATHS.md`). Every other Tucson card
+(ACIS suite, grid TEPC, diurnal ISD) is live; **M5 is complete.** Spatial work
 from M4-5 may fold in here.
 
 ### M6 — Launch & polish (IN PROGRESS)
