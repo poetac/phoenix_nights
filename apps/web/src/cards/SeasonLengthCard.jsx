@@ -45,6 +45,7 @@ export default function SeasonLengthCard({ city, heatSeason }) {
   return (
     <Card>
       <CardHead kicker="The expanding season" title="Summer is annexing spring and fall"
+        shareCity={city.id} shareSlug="hundred-days"
         sub={`Each year's band runs from the first 100°F day to the last. Watch the bottom edge sink toward spring while the top edge pushes into fall.`} />
       <div role="img" style={{ width: "100%", height: 300 }}
         aria-label="Chart of each year's first-to-last 100°F day; the band widens into spring and fall over time.">

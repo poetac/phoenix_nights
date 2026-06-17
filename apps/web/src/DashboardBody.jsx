@@ -251,6 +251,7 @@ export default function DashboardBody({
       {hotOk && (
         <Card>
           <CardHead kicker="What it feels like" title="Nights that never dropped below 80°F"
+            shareCity={city.id} shareSlug="hot-nights"
             sub="Count of nights each year when the temperature stayed at or above 80°F — nights with no recovery for bodies, buildings, or power grids. The gold core counts nights that never even dropped below 90°F: once a once-a-decade freak event, now a summer routine." />
           <div role="img" style={{ width: "100%", height: 240 }}
             aria-label="Bar chart of the number of nights per year at or above 80°F, with the share at or above 90°F highlighted; both rise sharply over the record.">
