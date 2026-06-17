@@ -78,7 +78,10 @@ The precomputed assets under `apps/web/public/data/` are committed and served as
 **Social images.** The page OG card is `apps/web/scripts/make-og.mjs`; per-card share
 images (one 1200×630 PNG per flagship metric per city, in `apps/web/public/share/`) are
 `apps/web/scripts/make-share-cards.mjs`. Both rasterize hand-built SVG via resvg — install
-the dep `--no-save` and re-run after the numbers change; the PNGs are committed.
+the dep `--no-save` and re-run after the numbers change; the PNGs are committed. The same
+script emits a static share landing page per flagship card (`public/share/<city>-<slug>.html`)
+with that card's `og:image`; each card's hover **“↗ share”** button copies its URL, and the app
+honors `?city=` + a `#card` hash so the link opens to the right city and scrolls to the card.
 
 ```sh
 cd apps/web

@@ -242,6 +242,13 @@ Treat Phoenix as the flagship and get it in front of people.
   data assets so a share card can't drift from the cards. Only count/share metrics get the
   two-bar treatment; temperature deltas are deliberately excluded — a zero-baseline bar would make
   a real +5°F shift look negligible.
+- ✅ **Shipped (PR #25):** the share UX is wired end-to-end — `make-share-cards.mjs` also emits
+  a static **share landing page** per flagship card (`public/share/<city>-<slug>.html`) carrying
+  that card's `og:image`/Twitter meta and redirecting humans into the app; `App.jsx` honors
+  `?city=` (kept in sync by the picker) and scrolls to a deep-linked `#card` once the lazy body
+  mounts; and every flagship `CardHead` gains a hover **“↗ share”** button (Web Share API, clipboard
+  fallback) that copies the card's landing URL. So a single card now unfurls with its own image
+  when shared, and opens to the right city + card.
 
 ### M7 — Automation & trust
 Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2

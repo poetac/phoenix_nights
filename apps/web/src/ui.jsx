@@ -1,3 +1,4 @@
+import { useState } from "react";
 export const C = {
   bg: "#141021", panel: "#1d1832", panel2: "#251e3e", line: "#2f2750",
   grid: "#2a2347", text: "#f2ecdf", muted: "#9b93ae",
@@ -22,8 +23,18 @@ export function Card({ children, style, id }) {
 const slugify = (s) =>
   String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
 
-export function CardHead({ kicker, title, sub, id }) {
+export function CardHead({ kicker, title, sub, id, shareCity, shareSlug }) {
   const anchor = id || slugify(title);
+  const [copied, setCopied] = useState(false);
+  const canShare = shareCity && shareSlug;
+  function share() {
+    const url = new URL(`share/${shareCity}-${shareSlug}.html`, document.baseURI).href;
+    if (navigator.share) { navigator.share({ url, title }).catch(() => {}); return; }
+    navigator.clipboard?.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    });
+  }
   return (
     <div className="mb-4">
       {kicker && <div className="text-xs tracking-widest uppercase mb-1" style={{ color: C.muted }}>{kicker}</div>}
@@ -32,6 +43,13 @@ export function CardHead({ kicker, title, sub, id }) {
         <a href={`#${anchor}`} aria-label={`Permalink to “${title}”`}
           className="ml-2 text-base opacity-0 group-hover:opacity-50 focus:opacity-100"
           style={{ color: C.muted, textDecoration: "none" }}>#</a>
+        {canShare && (
+          <button type="button" onClick={share} aria-label={`Share “${title}”`}
+            className="ml-1 align-middle opacity-0 group-hover:opacity-70 focus:opacity-100"
+            style={{ fontFamily: BODY, fontSize: 13, color: C.muted, background: "none", border: "none", cursor: "pointer" }}>
+            {copied ? "✓ link copied" : "↗ share"}
+          </button>
+        )}
       </h2>
       {sub && <p className="text-sm mt-1 leading-relaxed" style={{ color: C.muted }}>{sub}</p>}
     </div>
