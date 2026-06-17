@@ -289,8 +289,9 @@ are gone).
 Evolving the registry-driven engine into a generalized city-climate explorer where each city surfaces *its own* most interesting trends, fronted by a map. Phoenix Nights is preserved as the curated flagship. Decision: hybrid salience (auto-rank + optional curated overlay).
 
 - ✅ **Phase 1 — fact engine (this PR):** `analysis/build_facts.py` ranks each city's facts (magnitude × significance + cross-city rank), with per-fact applicability guards; emits a committed, CI-shape-checked `<city>-facts.json`. No UI yet. Sanity: Tucson tops on its 100°F season doubling, Las Vegas/El Paso on night-warming, Phoenix's night facts cluster at the top.
-- ⏳ Phase 2: generic city page (ranked facts + applicable cards); Phoenix Nights = curated overlay.
-- ⏳ Phase 3: US map / explorer + cross-city ranking hook.
+- ✅ **Phase 2 — per-city page + auto hero:** generic ranked-facts page; non-flagship cities get an auto hero from their top fact, Phoenix keeps its curated `featured` overlay.
+- ✅ **Phase 3a — explore landing + ranking:** the root ranks every city by overnight-low warming → click into its page (`?city=<id>`).
+- ✅ **Phase 3b — the literal map (this PR):** the explore landing now leads with a clickable US map of the interior West. A committed build script (`apps/web/scripts/build-map.mjs`) projects us-atlas `states-10m` and each city's `latLon` with one shared d3 `geoAlbersUsa`, validates each city falls inside its state, and emits `src/lib/usMap.js` (committed; no runtime map deps). City dots → `?city=<id>`; the ranked list stays beneath as the ordered, accessible fallback. Render smoke test asserts the map + a dot-click deep-link.
 - ⏳ Phase 4: scale vetted cities · Phase 5: honest forward extrapolation.
 
 ## Breadth — vetted desert-UHI city pipeline

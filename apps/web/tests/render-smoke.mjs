@@ -52,6 +52,22 @@ try {
   else console.log(`\u2713 explore landing: ${cities} cities ranked`);
 } catch (e) { fail("explore landing did not render: " + e.message.split("\n")[0]); }
 
+
+// Phase 3b: the explore landing renders a clickable US map of the cities
+try {
+  await page.waitForSelector('[data-testid="us-map"]', { timeout: 15000 });
+  const dots = await page.$$eval('[data-testid="us-map"] [data-city]',
+    (els) => els.map((e) => e.getAttribute("data-city")));
+  if (dots.length < 4) fail(`map: expected >=4 city dots, got ${dots.length} (${dots})`);
+  else console.log(`\u2713 explore map: ${dots.length} city dots (${dots.join(",")})`);
+  await page.click('[data-testid="us-map"] [data-city="ep"]');
+  await page.waitForSelector('nav[aria-label="Choose city"] button', { timeout: 15000 });
+  const active = await page.$$eval('nav[aria-label="Choose city"] button',
+    (bs) => bs.filter((b) => b.getAttribute("aria-current") === "true").map((b) => b.textContent.trim()));
+  if (!active.includes("El Paso")) fail(`map dot click: expected El Paso active, got ${JSON.stringify(active)}`);
+  else console.log("\u2713 explore map: dot click deep-links to El Paso");
+} catch (e) { fail("explore map did not render/behave: " + e.message.split("\n")[0]); }
+
 await checkCity("tus", "Tucson");
 await checkCity("phx", "Phoenix");
 await checkCity("lv", "Las Vegas");
