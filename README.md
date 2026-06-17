@@ -75,6 +75,11 @@ The precomputed assets under `apps/web/public/data/` are committed and served as
 
 ## Development
 
+**Social images.** The page OG card is `apps/web/scripts/make-og.mjs`; per-card share
+images (one 1200×630 PNG per flagship metric per city, in `apps/web/public/share/`) are
+`apps/web/scripts/make-share-cards.mjs`. Both rasterize hand-built SVG via resvg — install
+the dep `--no-save` and re-run after the numbers change; the PNGs are committed.
+
 ```sh
 cd apps/web
 npm install
