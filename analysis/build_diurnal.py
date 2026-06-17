@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
-"""Build the decade-by-decade summer diurnal curve for Sky Harbor.
+"""Build the decade-by-decade summer diurnal curve for a city.
 
-Downloads NCEI global-hourly observations for June-August of every year
-since 1948 (two station ids: 999999-23183 pre-1973, 722780-23183 after),
-buckets temperatures by local hour of day, and writes per-decade mean
-curves to apps/web/public/data/phx-diurnal.json for the app to plot.
+Downloads NCEI global-hourly observations for June-August of every year since
+the city's hourly record begins (Phoenix 1948, Tucson 1949), buckets
+temperatures by local hour of day, and writes per-decade mean curves to
+apps/web/public/data/<prefix>-diurnal.json for the app to plot.
+
+Takes ``--city`` (default ``phx``; Phoenix output byte-identical apart from the
+``generated`` date). The station ids, label, first year, and UTC offset come
+from analysis/cities.py, so adding a city is a registry entry, not a code edit.
+(Hour bucketing uses a fixed UTC offset — correct for Arizona, which keeps no
+DST; a DST-observing city would need offset-by-date handling here.)
 
 Raw CSVs are cached under analysis/cache/hourly/ so re-runs are cheap.
-Stdlib only. Usage: python3 analysis/build_diurnal.py
+Stdlib only. Usage: python3 analysis/build_diurnal.py [--city phx|tus]
 """
 
 import csv
@@ -18,19 +24,17 @@ import sys
 import time
 import urllib.request
 
+from cities import data_path, get_city
+
 BASE = ("https://www.ncei.noaa.gov/access/services/data/v1"
         "?dataset=global-hourly&stations={sid}"
         "&startDate={y}-06-01&endDate={y}-08-31&dataTypes=TMP,DEW&format=csv")
-SIDS = ("99999923183", "72278023183")
-FIRST_YEAR = 1948
 LAST_YEAR = datetime.date.today().year - 1  # last complete year
-UTC_OFFSET = -7  # Phoenix has no DST
 BAD_QUALITY = {"2", "3", "6", "7"}  # ISD suspect/erroneous codes
 MIN_OBS_PER_HOUR = 150  # per decade; drops the 3-hourly-era gaps
 
 ROOT = pathlib.Path(__file__).resolve().parent
 CACHE = ROOT / "cache" / "hourly"
-OUT = ROOT.parent / "apps" / "web" / "public" / "data" / "phx-diurnal.json"
 
 
 def fetch_year(sid, year):
@@ -69,12 +73,21 @@ def parse_scaled(field):
 
 
 def main():
+    city = get_city(__doc__)
+    cfg = city["diurnal"]
+    sids = tuple(cfg["sids"])
+    first_year = cfg.get("first_year", 1948)
+    utc_offset = city["utc_offset"]
+    source = ("NCEI global-hourly (ISD), station ids "
+              + " / ".join(f"{s[:6]}-{s[6:]}" for s in sids))
+    OUT = data_path(city["prefix"], "diurnal")
+
     CACHE.mkdir(parents=True, exist_ok=True)
     # acc[decade][hour] = [sum_t, n_t, sum_d, n_d]
     acc = {}
-    for year in range(FIRST_YEAR, LAST_YEAR + 1):
+    for year in range(first_year, LAST_YEAR + 1):
         decade = year // 10 * 10
-        for sid in SIDS:
+        for sid in sids:
             text = fetch_year(sid, year)
             if not text or "\n" not in text:
                 continue
@@ -82,7 +95,7 @@ def main():
                 date = row.get("DATE", "")
                 if len(date) < 13:
                     continue
-                hour = (int(date[11:13]) + UTC_OFFSET) % 24
+                hour = (int(date[11:13]) + utc_offset) % 24
                 slot = acc.setdefault(decade, {}).setdefault(hour, [0.0, 0, 0.0, 0])
                 t = parse_scaled(row.get("TMP", ""))
                 if t is not None:
@@ -110,11 +123,11 @@ def main():
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({
-        "station": "Phoenix Sky Harbor",
+        "station": cfg["station"],
         "months": "June-August",
-        "hours": "local (UTC-7, no DST)",
-        "source": "NCEI global-hourly (ISD), station ids 999999-23183 / 722780-23183",
-        "yearsCovered": [FIRST_YEAR, LAST_YEAR],
+        "hours": f"local (UTC{utc_offset}, no DST)",
+        "source": source,
+        "yearsCovered": [first_year, LAST_YEAR],
         "generated": datetime.date.today().isoformat(),
         "throughYear": LAST_YEAR,
         "decades": decades,

@@ -30,6 +30,13 @@ CITIES = {
         # EIA-930 balancing authorities summed for the July grid-demand card.
         "grid": {"respondents": ("AZPS", "SRP"),
                  "label": "AZPS + SRP (EIA-930 balancing authorities)"},
+        # Local standard-time offset (Arizona keeps no DST) — used by the
+        # hour-of-day builders (diurnal, grid).
+        "utc_offset": -7,
+        # NCEI global-hourly (ISD) station ids for the summer diurnal curve:
+        # pre-1973 (999999 USAF) then the modern pair.
+        "diurnal": {"sids": ("99999923183", "72278023183"),
+                    "station": "Phoenix Sky Harbor", "first_year": 1948},
     },
     "tus": {
         "key": "tus",
@@ -42,6 +49,10 @@ CITIES = {
         # Tucson Electric Power is the metro's balancing authority (EIA-930).
         "grid": {"respondents": ("TEPC",),
                  "label": "TEPC (Tucson Electric Power, EIA-930)"},
+        "utc_offset": -7,
+        # Tucson Int'l Airport ISD (WBAN 23160); hourly record begins 1949.
+        "diurnal": {"sids": ("99999923160", "72274023160"),
+                    "station": "Tucson Int'l Airport", "first_year": 1949},
     },
 }
 

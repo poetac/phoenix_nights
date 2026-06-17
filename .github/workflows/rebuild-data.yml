@@ -42,7 +42,10 @@ jobs:
       # Heavy NCEI hourly pull; rarely changes. Best-effort, never blocks.
       - name: Rebuild diurnal asset (NCEI hourly)
         continue-on-error: true
-        run: python3 analysis/build_diurnal.py
+        run: |
+          for city in phx tus; do
+            python3 analysis/build_diurnal.py --city "$city"
+          done
 
       # Needs the EIA_API_KEY secret; skipped (not failed) when it isn't set.
       - name: Rebuild grid asset (EIA-930)
