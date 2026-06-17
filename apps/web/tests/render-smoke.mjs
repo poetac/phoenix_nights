@@ -37,6 +37,7 @@ async function checkCity(cityId, label) {
 
 await checkCity("tus", "Tucson");
 await checkCity("phx", "Phoenix");
+await checkCity("lv", "Las Vegas");
 
 // per-card share landing page must redirect to the right city + card anchor
 await page.goto(`${BASE}/share/phx-hot-nights.html`, { waitUntil: "domcontentloaded", timeout: 20000 });

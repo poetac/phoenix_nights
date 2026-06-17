@@ -54,6 +54,24 @@ CITIES = {
         "diurnal": {"sids": ("99999923160", "72274023160"),
                     "station": "Tucson Int'l Airport", "first_year": 1949},
     },
+    "lv": {
+        "key": "lv",
+        "prefix": "lv",
+        "sid": "LASthr 9",
+        "label": "Las Vegas (ThreadEx LASthr 9)",
+        # ACIS reports the Las Vegas Area thread from 1937.
+        "record_start": "1937-01-01",
+        # Nevada Power Company is the Las Vegas balancing authority (EIA-930).
+        "grid": {"respondents": ("NEVP",),
+                 "label": "NEVP (Nevada Power Company, EIA-930)"},
+        # Las Vegas observes Pacific DST, so the hour-of-day builders bucket via
+        # the IANA tz (not a fixed offset). utc_offset is kept only as a fallback.
+        "utc_offset": -8,
+        "tz": "America/Los_Angeles",
+        # McCarran / Harry Reid Intl ISD (WBAN 23169); hourly record begins 1949.
+        "diurnal": {"sids": ("99999923169", "72386023169"),
+                    "station": "Las Vegas (Harry Reid Intl)", "first_year": 1949},
+    },
 }
 
 DATA_DIR = (pathlib.Path(__file__).resolve().parent.parent

@@ -209,6 +209,8 @@ the card omits for Tucson (rationale in `analysis/HEAT_DEATHS.md`). Every other 
 (ACIS suite, grid TEPC, diurnal ISD) is live; **M5 is complete.** Spatial work
 from M4-5 may fold in here.
 
+**Third city — Las Vegas (validates the engine).** `LASthr 9`, desert pair Desert NWR `USC00262243`, grid = NEVP (Nevada Power), diurnal = Harry Reid ISD. Las Vegas observes Pacific DST, which forced — and proved — a robustness fix: the hour-of-day builders now bucket DST cities through an IANA `tz` (`zoneinfo`) while AZ keeps its fixed offset (byte-identical). Las Vegas is the **fastest-warming of the three at night** (+1.68 °F/decade since 1970 vs its desert pair's +0.62), reproduced live in `verify_v0.py`. Heat-deaths deferred (Clark County data not yet verified to the bar). Adding a fourth city is now two registry entries (`cities.py` + `cities.js`) plus an asset rebuild.
+
 ### M6 — Launch & polish (IN PROGRESS)
 Treat Phoenix as the flagship and get it in front of people.
 - ✅ **Shipped (PR #10):** Open Graph + Twitter card meta and a `theme-color`/canonical; an
