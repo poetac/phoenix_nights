@@ -1,0 +1,53 @@
+// CI render smoke test: load the built app in a real browser, assert both city
+// views mount, the ?city= deep-link selects the right city, and a per-card share
+// landing page redirects to the right city + card anchor. Screenshots are written
+// to tests/__screens__/ and uploaded as a CI artifact. Run after `npm run build`,
+// serving dist/ (default root base). Usage: BASE_URL=http://localhost:8099 node tests/render-smoke.mjs
+import { chromium } from "playwright";
+import { mkdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+
+const BASE = process.env.BASE_URL || "http://localhost:8099";
+const SHOTS = fileURLToPath(new URL("./__screens__/", import.meta.url));
+mkdirSync(SHOTS, { recursive: true });
+
+let failed = false;
+const fail = (m) => { console.error("✗ FAIL:", m); failed = true; };
+const pageErrors = [];
+
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1280, height: 2200 } });
+page.on("pageerror", (e) => pageErrors.push(e.message));
+// caught fetch errors are handled in-app; we only fail on uncaught exceptions
+
+async function checkCity(cityId, label) {
+  await page.goto(`${BASE}/?city=${cityId}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+  await page.waitForSelector('nav[aria-label="Choose city"] button', { timeout: 15000 });
+  const active = await page.$$eval('nav[aria-label="Choose city"] button',
+    (bs) => bs.filter((b) => b.getAttribute("aria-current") === "true").map((b) => b.textContent.trim()));
+  if (!active.includes(label)) fail(`?city=${cityId}: expected active "${label}", got ${JSON.stringify(active)}`);
+  // asset-backed cards render from committed JSON (no live data needed) — expect several headings
+  try {
+    await page.waitForFunction(() => document.querySelectorAll("h2, h3").length >= 3, { timeout: 40000 });
+  } catch { fail(`${cityId}: dashboard cards did not render within 40s`); }
+  const n = await page.$$eval("h2, h3", (e) => e.length);
+  console.log(`✓ ${cityId}: active=${JSON.stringify(active)} headings=${n}`);
+  await page.screenshot({ path: `${SHOTS}${cityId}.png`, fullPage: true });
+}
+
+await checkCity("tus", "Tucson");
+await checkCity("phx", "Phoenix");
+
+// per-card share landing page must redirect to the right city + card anchor
+await page.goto(`${BASE}/share/phx-hot-nights.html`, { waitUntil: "domcontentloaded", timeout: 20000 });
+await page.waitForTimeout(2000);
+const url = page.url();
+if (!url.includes("city=phx") || !url.includes("#nights-that-never-dropped-below-80-f"))
+  fail(`share landing redirect went to ${url}`);
+else console.log("✓ share landing redirect ->", url);
+
+if (pageErrors.length) fail("uncaught page errors: " + JSON.stringify([...new Set(pageErrors)].slice(0, 8)));
+
+await browser.close();
+console.log(failed ? "RENDER SMOKE FAILED" : "RENDER SMOKE PASSED");
+process.exit(failed ? 1 : 0);
