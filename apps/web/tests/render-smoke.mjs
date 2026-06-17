@@ -40,6 +40,18 @@ async function checkCity(cityId, label) {
   await page.screenshot({ path: `${SHOTS}${cityId}.png`, fullPage: true });
 }
 
+// Phase 3: the cross-city explore landing renders at the root
+await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
+try {
+  await page.waitForFunction(() => {
+    const t = document.body.textContent || "";
+    return t.includes("Where the desert is losing") && t.includes("Phoenix");
+  }, undefined, { timeout: 30000 });
+  const cities = await page.$$eval('ol[aria-label="Cities ranked by overnight-low warming"] button', (b) => b.length);
+  if (cities < 4) fail(`explore: expected >=4 city rows, got ${cities}`);
+  else console.log(`\u2713 explore landing: ${cities} cities ranked`);
+} catch (e) { fail("explore landing did not render: " + e.message.split("\n")[0]); }
+
 await checkCity("tus", "Tucson");
 await checkCity("phx", "Phoenix");
 await checkCity("lv", "Las Vegas");
