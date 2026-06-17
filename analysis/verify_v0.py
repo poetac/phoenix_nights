@@ -297,6 +297,13 @@ ASSET_SCHEMAS = {
     "lv-normals.json": ("byDate", dict, None),
     "lv-grid.json": ("years", dict, None),
     "lv-diurnal.json": ("decades", dict, None),
+    # Fourth city (El Paso)
+    "ep-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "ep-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "ep-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "ep-normals.json": ("byDate", dict, None),
+    "ep-grid.json": ("years", dict, None),
+    "ep-diurnal.json": ("decades", dict, None),
 }
 
 
@@ -457,6 +464,15 @@ def main():
                    lv_trend, lv_trend > GLOBAL_BENCH))
     checks.append((f"Las Vegas night-low trend > its desert pair Desert NWR ({lv_trend:.2f} vs {dnwr_trend:.2f}/dec)",
                    lv_trend - dnwr_trend, lv_trend > dnwr_trend))
+
+    # Fourth city (El Paso): same desert-UHI signal with the cleanest control —
+    # its open-desert pair (White Sands) is at nearly the same elevation.
+    elp_trend = acis_yearly_low_trend("ELPthr 9", 1970)
+    wsnm_trend = acis_yearly_low_trend("USC00299686", 1970)
+    checks.append((f"El Paso night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   elp_trend, elp_trend > GLOBAL_BENCH))
+    checks.append((f"El Paso night-low trend > its desert pair White Sands ({elp_trend:.2f} vs {wsnm_trend:.2f}/dec)",
+                   elp_trend - wsnm_trend, elp_trend > wsnm_trend))
 
     # Season cards' outlier-robust definitions: the *sustained* warm-night
     # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of

@@ -308,6 +308,17 @@ product rethink). First audit pass (June 2026):
 
 Adding a vetted city is then two registry entries (`cities.py` + `cities.js`) + an asset rebuild.
 
+**Shipped: El Paso (4th city, PR #30)** — `ELPthr 9`, pair White Sands `USC00299686` at
+near-identical elevation (the cleanest control in the set), grid EPE, diurnal El Paso Intl,
+tz `America/Denver`. **Lesson surfaced:** the audit checks the *warming signal*, but generating a
+high-elevation city's cards revealed the suite is implicitly calibrated for *low-elevation*
+extreme-heat desert — at 3,900 ft El Paso's nights are warming fast but from a cool base, so its
+1970s night-cooling share is net-negative and it has few 80°F nights. Fixed by graceful per-card
+omission (the night-cooling card and degenerate share images now omit when their premise fails),
+so high-elevation cities ship their working cards (UHI control, diurnal, normals, season, grid…).
+**Follow-up:** add a card-fit dimension to `city_audit.py` (positive night-CDD baseline, meaningful
+80°F-night count) so the next high-elevation candidate is flagged up front.
+
 ## Rejected / not pursuing (don't re-open without new data)
 
 - **Dew-point / "drying city" trend** — no clean signal at decade resolution; monsoon

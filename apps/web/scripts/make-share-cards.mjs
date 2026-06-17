@@ -26,6 +26,7 @@ const CITIES = {
   phx: { name: "Phoenix", kicker: "PHOENIX · LIVE NOAA STATION RECORD" },
   tus: { name: "Tucson", kicker: "TUCSON · LIVE NOAA STATION RECORD" },
   lv: { name: "Las Vegas", kicker: "LAS VEGAS · LIVE NOAA STATION RECORD" },
+  ep: { name: "El Paso", kicker: "EL PASO · LIVE NOAA STATION RECORD" },
 };
 
 // Each flagship card: pull (1970s, recent) from a committed asset. Only counts and
@@ -149,6 +150,7 @@ function landingHtml(city, m) {
 let n = 0;
 for (const city of Object.keys(CITIES)) {
   for (const m of metrics(city)) {
+    if (!(m.v70 > 0) || !(m.now > 0)) continue; // skip degenerate metrics (e.g. high-elev night-cooling)
     const s = svg(city, m);
     const png = new Resvg(s, { fitTo: { mode: "width", value: 1200 },
       font: { loadSystemFonts: true, defaultFontFamily: "DejaVu Serif" } }).render().asPng();

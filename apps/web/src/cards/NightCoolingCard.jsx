@@ -16,6 +16,13 @@ export default function NightCoolingCard({ city, cddSplit }) {
     const lastYear = data[data.length - 1].year;
     const late = data.filter((r) => r.year > lastYear - 10);
     if (base.length < 5 || late.length < 5) return null;
+    // Premise check: the 'night's share of cooling demand' is only meaningful
+    // where the baseline night share is positive. High-elevation desert cities
+    // (e.g. El Paso) had net-negative overnight cooling demand in the 1970s —
+    // their nights are warming fast but from a cool base, so this card omits.
+    const baseShare = base.reduce((s, r) => s + r.night, 0) /
+      Math.max(1, base.reduce((s, r) => s + r.night + r.day, 0));
+    if (!(baseShare > 0)) return null;
 
     const sumShare = (rows) => {
       const n = rows.reduce((s, r) => s + r.night, 0);
