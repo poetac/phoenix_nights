@@ -299,8 +299,10 @@ Evolving the registry-driven engine into a generalized city-climate explorer whe
 The multi-city engine is registry-driven, DST-aware, and render-tested, so the cost of a new city
 is no longer plumbing — it's *data integrity*. `analysis/city_audit.py` makes that a fast, repeatable
 yes/no: for a candidate metro it checks the city's night-low trend vs the global rate, auto-suggests
-an arid rural pair (ranked by record length, distance, and slower warming), and reports elevation,
-ISD (diurnal), and EIA balancing-authority (grid) availability → PASS / REVISE / REJECT.
+an arid rural pair (ranked by record length, distance, and slower warming), reports elevation,
+ISD (diurnal), and EIA balancing-authority (grid) availability, and predicts **card-fit** — which
+premise-gated cards (tropical-nights, the 100°F-day season, night-cooling-share) will actually apply,
+using the same thresholds as `build_facts.py` → PASS / REVISE / REJECT.
 
 Scope is deliberately the **arid interior West**, where the control experiment ("city vs nearby open
 desert") is valid — not "every US city" (humid/coastal metros break the framing and would need a
@@ -326,8 +328,12 @@ extreme-heat desert — at 3,900 ft El Paso's nights are warming fast but from a
 1970s night-cooling share is net-negative and it has few 80°F nights. Fixed by graceful per-card
 omission (the night-cooling card and degenerate share images now omit when their premise fails),
 so high-elevation cities ship their working cards (UHI control, diurnal, normals, season, grid…).
-**Follow-up:** add a card-fit dimension to `city_audit.py` (positive night-CDD baseline, meaningful
-80°F-night count) so the next high-elevation candidate is flagged up front.
+**Done (this PR):** `city_audit.py` now reports a **card-fit** dimension — for each candidate it
+recomputes the 80°F-night count, the 100°F-day count, and the 1970s night-CDD baseline share from
+ACIS and flags which cards will omit (the same premises `build_facts.py`, `NightCoolingCard`, and the
+share generator enforce), so the next high-elevation candidate is flagged up front rather than at
+asset-build time. Validated against El Paso (night-cooling baseline −11.6% → omits; tropical-nights
+~8/yr, 100°F-days ~43/yr → fit).
 
 ## Rejected / not pursuing (don't re-open without new data)
 

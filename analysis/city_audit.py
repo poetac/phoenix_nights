@@ -12,6 +12,11 @@ a vetted decision rather than a manual slog:
      night-low warms slower than the city's, so the control experiment holds;
   4. it reports the elevation delta (a caveat, not a blocker), and whether an ISD
      station (diurnal card) and an EIA balancing authority (grid card) are wired.
+  5. it predicts CARD-FIT: which premise-gated cards (tropical-nights, the 100F-day
+     season, night-cooling-share) will actually apply, using the SAME thresholds as
+     analysis/build_facts.py and the card guards — the El Paso lesson made a
+     checklist (high-elevation cities have cool 1970s nights, so night-cooling-share
+     goes <=0 and that card, plus its share image, must omit).
 
 Auto-suggests the rural pair by scanning a ring around the city for long TMIN
 records and ranking by record length, distance, and (slower) warming.
@@ -145,6 +150,46 @@ def check_eia(ba):
         return False
 
 
+def card_fit(city_sid):
+    """Predict which premise-gated cards will apply for a candidate, using the
+    SAME thresholds as analysis/build_facts.py + the live card guards. One daily
+    ACIS request; mirrors build_streaks (count80/count100) and build_cdd_split
+    (the day/night CDD identity over cooling days, mean>65F)."""
+    body = {"sid": city_sid, "sdate": "1970-01-01", "edate": "2025-12-31",
+            "elems": [{"name": "mint"}, {"name": "maxt"}]}
+    years = {}
+    for date, lo, hi in _post("/StnData", body).get("data", []):
+        y = int(date[:4])
+        d = years.setdefault(y, dict(c80=0, c100=0, day=0.0, night=0.0, miss=0))
+        if lo in ("M", "T", None) or hi in ("M", "T", None):
+            d["miss"] += 1
+            continue
+        lo, hi = float(lo), float(hi)
+        if lo >= 80:
+            d["c80"] += 1
+        if hi >= 100:
+            d["c100"] += 1
+        if (lo + hi) / 2 > 65:            # a cooling day (matches build_cdd_split)
+            d["day"] += (hi - 65) / 2
+            d["night"] += (lo - 65) / 2
+    good = {y: d for y, d in years.items() if d["miss"] <= 36}
+
+    def dec_mean(y0, y1, k):
+        v = [good[y][k] for y in good if y0 <= y <= y1]
+        return sum(v) / len(v) if v else None
+
+    def night_share(y0, y1):
+        rows = [good[y] for y in good if y0 <= y <= y1]
+        tot = sum(r["day"] + r["night"] for r in rows)
+        return 100 * sum(r["night"] for r in rows) / tot if tot else None
+
+    return dict(
+        trop_now=dec_mean(2016, 2025, "c80"), trop_70s=dec_mean(1970, 1979, "c80"),
+        hot_now=dec_mean(2016, 2025, "c100"), hot_70s=dec_mean(1970, 1979, "c100"),
+        nshare_70s=night_share(1970, 1979), nshare_now=night_share(2016, 2025),
+    )
+
+
 def audit(name, c):
     out = [f"\n=== {name} ==="]
     cs = record_start(c["city"])
@@ -168,6 +213,23 @@ def audit(name, c):
     out.append(f"  diurnal ISD: {'yes' if isd_ok else 'NO'} | grid EIA {c['ba']}: "
                f"{'yes' if eia_ok else ('no' if eia_ok is False else 'unknown(no key)')} "
                f"| DST: {c['dst']}")
+    # card-fit: which premise-gated cards this city's page will actually show
+    cf = card_fit(c["city"])
+    trop_ok = cf["trop_now"] is not None and cf["trop_now"] >= 5
+    hot_ok = cf["hot_now"] is not None and cf["hot_now"] >= 10
+    nc_ok = cf["nshare_70s"] is not None and cf["nshare_70s"] > 0
+    pf = lambda v, s="%.0f": "n/a" if v is None else (s % v)
+    out.append("  card-fit (build_facts thresholds + card guards):")
+    out.append(f"    tropical-nights {'fits ' if trop_ok else 'OMITS'} ~{pf(cf['trop_now'])}/yr now "
+               f"(1970s ~{pf(cf['trop_70s'])}; needs >=5)")
+    out.append(f"    100F-day-season {'fits ' if hot_ok else 'OMITS'} ~{pf(cf['hot_now'])}/yr now "
+               f"(1970s ~{pf(cf['hot_70s'])}; needs >=10)")
+    out.append(f"    night-cooling   {'fits ' if nc_ok else 'OMITS'} baseline share "
+               f"{pf(cf['nshare_70s'], '%+.1f')}%, now {pf(cf['nshare_now'], '%+.1f')}% (needs 1970s>0)")
+    omit = [n for n, ok in (("tropical-nights", trop_ok), ("100F-day-season", hot_ok),
+                            ("night-cooling", nc_ok)) if not ok]
+    if omit:
+        out.append(f"    -> page omits: {', '.join(omit)} (engine guards handle this automatically)")
     # verdict
     signal = ct > GLOBAL_BENCH
     control = best is not None and ct > best["trend"]
