@@ -143,7 +143,14 @@ export const TUCSON = {
   repoUrl: "https://github.com/poetac/phoenix_nights",
   diurnalAsset: "data/tus-diurnal.json",
   heatSeasonAsset: "data/tus-heat-season.json",
-  heatDeathsAsset: "data/tus-heat-deaths.json",
+  // heatDeathsAsset intentionally omitted — see analysis/HEAT_DEATHS.md
+  // "Second city (Tucson / Pima County)". The only primary year-by-year
+  // heat-related (caused+contributed) series for Pima (AZDHS) is ~half
+  // undocumented border-crossing deaths in the remote desert — a different
+  // phenomenon from the urban heat-mortality this card shows — plus a 2023
+  // surveillance-method break, and Pima publishes no demographic breakdown
+  // comparable to Maricopa's. The fetcher returns null when this is absent,
+  // so the card simply omits for Tucson (reproduce-or-reject => reject).
   streaksAsset: "data/tus-streaks.json",
   gridAsset: "data/tus-grid.json",
   normalsAsset: "data/tus-normals.json",
