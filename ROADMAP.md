@@ -94,13 +94,22 @@ so they're framed as a *conservative floor*, and the like-for-like city-vs-deser
 the control card. CI-guarded in `verify_v0.py`: both the city's and the desert's night-low trends
 since 1970 are checked to exceed the global rate, reproduced from ACIS.
 
-### 5. Intra-metro spatial gradient — *stretch*
+### 5. Intra-metro spatial gradient — *investigated, deferred (June 2026)*
 **Claim:** The heat island is geographic — downtown/Sky Harbor hot, the valley fringe
 cooler — shown across several ACIS stations on one chart or a small map.
 **Data:** multiple ACIS station records across Maricopa County.
 **Risk:** higher (station selection, record-length alignment, more UI). Conceptually
 adjacent to the multi-city work, so it may instead seed M5.
-**Verdict:** promising; revisit once 1–3 land.
+**Verdict: deferred — the readily-available stations don't support a clean, non-redundant
+card.** `analysis/spatial_gradient_probe.py` reproduces the scan: long *complete* records exist
+almost only at the airports (COOP sites are gappy under any reasonable missing-data filter);
+overnight-low warming *rates* are near-uniform across the metro (~1.1–1.4 °F/dec, no rate
+gradient); and recent absolute night-lows are confounded by elevation, which varies
+non-monotonically with distance from the core (Goodyear at 968 ft is the 2nd-warmest station,
+Youngtown at 1135 ft the coolest). The one clean *same-elevation* contrast (Sky Harbor vs the NW
+valley) just restates the city-vs-desert UHI control card (Principle 4: no redundant cards).
+Revisit if a denser, elevation-matched, record-aligned set becomes available (e.g. an urban
+mesonet). M5's second city already delivered the spatial-breadth value this card was chasing.
 
 ### 6. The collapsing day–night gap (diurnal temperature range) — ✅ SHIPPED (PR #1)
 **Claim:** The desert's signature swing between afternoon and dawn is shrinking — the city
