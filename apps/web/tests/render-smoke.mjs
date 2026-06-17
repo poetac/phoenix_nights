@@ -34,7 +34,7 @@ async function checkCity(cityId, label) {
   console.log(`✓ ${cityId}: active=${JSON.stringify(active)} headings=${n}`);
   // Phase 2: the salience "what stands out" facts section renders per city
   try {
-    await page.waitForFunction((lbl) => document.body.textContent.includes("What stands out in " + lbl), { timeout: 20000 }, label);
+    await page.waitForFunction((lbl) => document.body.textContent.includes("What stands out in " + lbl), label, { timeout: 20000 });
     console.log(`\u2713 ${cityId}: facts section present`);
   } catch { fail(`${cityId}: facts section ("What stands out in ${label}") missing`); }
   await page.screenshot({ path: `${SHOTS}${cityId}.png`, fullPage: true });
