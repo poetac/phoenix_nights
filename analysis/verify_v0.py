@@ -289,6 +289,7 @@ ASSET_SCHEMAS = {
     "tus-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
     "tus-normals.json": ("byDate", dict, None),
     "tus-grid.json": ("years", dict, None),
+    "tus-diurnal.json": ("decades", dict, None),
 }
 
 

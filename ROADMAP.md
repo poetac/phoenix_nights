@@ -193,7 +193,7 @@ over the nearer Anvil Ranch, whose COOP record is too gappy for a 1970s baseline
 Tucson view live on the deployed site. **Grid generalized (this PR):** `build_grid.py` is now
 city-aware (Tucson = the **TEPC** balancing authority), with `tus-grid.json` committed and the
 rebuild workflow looping `phx`+`tus` for the grid asset too. **Remaining:** generalize the
-diurnal (Tucson ISD) and heat-death (Pima County) builders, still Phoenix-only. Spatial work
+heat-death (Pima County) builder, still Phoenix-only (grid TEPC + diurnal ISD now city-aware). Spatial work
 from M4-5 may fold in here.
 
 ### M6 — Launch & polish (IN PROGRESS)
