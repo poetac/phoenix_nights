@@ -235,8 +235,13 @@ Treat Phoenix as the flagship and get it in front of people.
   ~159 KB-gzip combined vendor chunk); recharts now ships in a ~126 KB-gzip chunk loaded after
   first paint. `vite.config.js` pins only react/scheduler into an eager chunk and lets recharts
   auto-split into the dynamic import.
-- ⏳ **Remaining:** per-card share *images* (needs the SVG→PNG render path the OG card uses, applied
-  per chart).
+- ✅ **Shipped (PR #24):** per-card share *images* — `apps/web/scripts/make-share-cards.mjs`
+  reuses the OG SVG→PNG path (resvg, dep `--no-save`, PNGs committed) to emit a 1200×630 share
+  card per flagship metric per city to `public/share/<city>-<slug>.png` (6 cards: hot-nights,
+  night-cooling, 100°F-days × Phoenix + Tucson). Headline numbers are read live from the committed
+  data assets so a share card can't drift from the cards. Only count/share metrics get the
+  two-bar treatment; temperature deltas are deliberately excluded — a zero-baseline bar would make
+  a real +5°F shift look negligible.
 
 ### M7 — Automation & trust
 Scheduled GitHub Action to refresh data assets annually — ✅ **shipped early** with M4-2
