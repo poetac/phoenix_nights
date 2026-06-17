@@ -1,0 +1,92 @@
+{
+ "city": "phx",
+ "name": "Phoenix (ThreadEx PHXthr 9)",
+ "generated": "2026-06-17",
+ "facts": [
+  {
+   "key": "coldest_night",
+   "score": 0.765,
+   "crossCityPercentile": 0.5,
+   "label": "Even the coldest night of the year is warming +1.27\u00b0F per decade",
+   "value": 1.27,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 1
+  },
+  {
+   "key": "night_warming",
+   "score": 0.727,
+   "crossCityPercentile": 0.5,
+   "label": "Summer nights are warming +1.16\u00b0F per decade",
+   "value": 1.16,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "bench": 0.36,
+   "rank": 2
+  },
+  {
+   "key": "night_cooling_share",
+   "score": 0.639,
+   "crossCityPercentile": 0.67,
+   "label": "19% of cooling demand now falls after dark (was 11% in the 1970s)",
+   "value": 19,
+   "unit": "%",
+   "baseline": 11,
+   "significant": true,
+   "rank": 3
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 0.637,
+   "crossCityPercentile": 0.5,
+   "label": "Overnight lows are rising 2.1\u00d7 as fast as afternoon highs",
+   "value": 2.1,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 4
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.637,
+   "crossCityPercentile": 0.5,
+   "label": "The day\u2013night temperature gap is shrinking 0.61\u00b0F per decade",
+   "value": 0.61,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 5
+  },
+  {
+   "key": "tropical_nights",
+   "score": 0.636,
+   "crossCityPercentile": 0.75,
+   "label": "84 nights a year now stay at or above 80\u00b0F (was 46 in the 1970s)",
+   "value": 84,
+   "unit": "nights",
+   "baseline": 46,
+   "significant": true,
+   "rank": 6
+  },
+  {
+   "key": "hot_day_season",
+   "score": 0.475,
+   "crossCityPercentile": 0.5,
+   "label": "120 days a year now reach 100\u00b0F (was 101 in the 1970s)",
+   "value": 120,
+   "unit": "days",
+   "baseline": 101,
+   "significant": true,
+   "rank": 7
+  },
+  {
+   "key": "urban_excess",
+   "score": 0.276,
+   "crossCityPercentile": 0.25,
+   "label": "City nights are warming +0.09\u00b0F/decade faster than the nearby open desert",
+   "value": 0.09,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "vs_reference": 1.07,
+   "rank": 8
+  }
+ ]
+}

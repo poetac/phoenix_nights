@@ -56,6 +56,10 @@ jobs:
             python3 analysis/build_grid.py --city "$city"
           done
 
+      # Rank each city's facts (reads the committed assets + live ACIS); one run, all cities.
+      - name: Rebuild per-city facts (salience engine)
+        run: python3 analysis/build_facts.py
+
       # Gate: don't commit anything if the headline numbers stopped checking out.
       - name: Verify statistics against the official record
         run: python3 analysis/verify_v0.py

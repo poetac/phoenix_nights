@@ -304,6 +304,11 @@ ASSET_SCHEMAS = {
     "ep-normals.json": ("byDate", dict, None),
     "ep-grid.json": ("years", dict, None),
     "ep-diurnal.json": ("decades", dict, None),
+    # Salience engine output (one ranked fact list per city)
+    "phx-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "tus-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "lv-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "ep-facts.json": ("facts", list, ("key", "rank", "score", "label")),
 }
 
 

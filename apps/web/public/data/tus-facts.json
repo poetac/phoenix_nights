@@ -1,0 +1,92 @@
+{
+ "city": "tus",
+ "name": "Tucson (ThreadEx TUSthr 9)",
+ "generated": "2026-06-17",
+ "facts": [
+  {
+   "key": "hot_day_season",
+   "score": 0.816,
+   "crossCityPercentile": 1.0,
+   "label": "79 days a year now reach 100\u00b0F (was 39 in the 1970s)",
+   "value": 79,
+   "unit": "days",
+   "baseline": 39,
+   "significant": true,
+   "rank": 1
+  },
+  {
+   "key": "urban_excess",
+   "score": 0.702,
+   "crossCityPercentile": 0.5,
+   "label": "City nights are warming +0.73\u00b0F/decade faster than the nearby open desert",
+   "value": 0.73,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "vs_reference": 0.13,
+   "rank": 2
+  },
+  {
+   "key": "night_warming",
+   "score": 0.542,
+   "crossCityPercentile": 0.25,
+   "label": "Summer nights are warming +0.86\u00b0F per decade",
+   "value": 0.86,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "bench": 0.36,
+   "rank": 3
+  },
+  {
+   "key": "night_cooling_share",
+   "score": 0.438,
+   "crossCityPercentile": 0.33,
+   "label": "6% of cooling demand now falls after dark (was 1% in the 1970s)",
+   "value": 6,
+   "unit": "%",
+   "baseline": 1,
+   "significant": true,
+   "rank": 4
+  },
+  {
+   "key": "tropical_nights",
+   "score": 0.426,
+   "crossCityPercentile": 0.5,
+   "label": "22 nights a year now stay at or above 80\u00b0F (was 4 in the 1970s)",
+   "value": 22,
+   "unit": "nights",
+   "baseline": 4,
+   "significant": true,
+   "rank": 5
+  },
+  {
+   "key": "coldest_night",
+   "score": 0.252,
+   "crossCityPercentile": 0.25,
+   "label": "Even the coldest night of the year is warming +0.48\u00b0F per decade",
+   "value": 0.48,
+   "unit": "\u00b0F/decade",
+   "significant": false,
+   "rank": 6
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 0.251,
+   "crossCityPercentile": 0.25,
+   "label": "Overnight lows are rising 0.9\u00d7 as fast as afternoon highs",
+   "value": 0.9,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 7
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.251,
+   "crossCityPercentile": 0.25,
+   "label": "The day\u2013night temperature gap is shrinking 0.05\u00b0F per decade",
+   "value": -0.05,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 8
+  }
+ ]
+}
