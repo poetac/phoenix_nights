@@ -32,7 +32,7 @@ jobs:
       # ACIS-only builders — no API key, cheap, the ones that go stale yearly.
       - name: Rebuild ACIS-derived assets
         run: |
-          for city in phx tus lv; do
+          for city in phx tus lv ep; do
             python3 analysis/build_streaks.py --city "$city"
             python3 analysis/build_heat_season.py --city "$city"
             python3 analysis/build_normals.py --city "$city"
@@ -43,7 +43,7 @@ jobs:
       - name: Rebuild diurnal asset (NCEI hourly)
         continue-on-error: true
         run: |
-          for city in phx tus lv; do
+          for city in phx tus lv ep; do
             python3 analysis/build_diurnal.py --city "$city"
           done
 
@@ -52,7 +52,7 @@ jobs:
         if: ${{ env.EIA_API_KEY != '' }}
         continue-on-error: true
         run: |
-          for city in phx tus lv; do
+          for city in phx tus lv ep; do
             python3 analysis/build_grid.py --city "$city"
           done
 

@@ -72,6 +72,22 @@ CITIES = {
         "diurnal": {"sids": ("99999923169", "72386023169"),
                     "station": "Las Vegas (Harry Reid Intl)", "first_year": 1949},
     },
+    "ep": {
+        "key": "ep",
+        "prefix": "ep",
+        "sid": "ELPthr 9",
+        "label": "El Paso (ThreadEx ELPthr 9)",
+        "record_start": "1887-01-01",
+        # El Paso Electric is the metro's balancing authority (EIA-930).
+        "grid": {"respondents": ("EPE",),
+                 "label": "EPE (El Paso Electric, EIA-930)"},
+        # El Paso observes Mountain DST -> tz-aware hour bucketing.
+        "utc_offset": -7,
+        "tz": "America/Denver",
+        # El Paso Intl ISD (WBAN 23044) is a single continuous id back to ~1949.
+        "diurnal": {"sids": ("72270023044",),
+                    "station": "El Paso Intl", "first_year": 1948},
+    },
 }
 
 DATA_DIR = (pathlib.Path(__file__).resolve().parent.parent
