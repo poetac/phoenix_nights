@@ -48,7 +48,10 @@ jobs:
       - name: Rebuild grid asset (EIA-930)
         if: ${{ env.EIA_API_KEY != '' }}
         continue-on-error: true
-        run: python3 analysis/build_grid.py
+        run: |
+          for city in phx tus; do
+            python3 analysis/build_grid.py --city "$city"
+          done
 
       # Gate: don't commit anything if the headline numbers stopped checking out.
       - name: Verify statistics against the official record

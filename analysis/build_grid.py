@@ -1,33 +1,31 @@
 #!/usr/bin/env python3
-"""Build July electricity-demand-by-hour curves for metro Phoenix utilities.
+"""Build July electricity-demand-by-hour curves for a city's grid utilities.
 
-Fetches EIA-930 hourly demand (UTC periods) for AZPS (Arizona Public
-Service) and SRP (Salt River Project) for every July since the dataset
-began (2015), sums the two utilities, averages by local hour
-(Phoenix = UTC-7, no DST), and writes per-year curves plus each year's
+Fetches EIA-930 hourly demand (UTC periods) for the city's balancing
+authorities (Phoenix = AZPS + SRP; Tucson = TEPC) for every July since the
+dataset began (2015), sums the utilities, averages by local hour
+(Arizona = UTC-7, no DST), and writes per-year curves plus each year's
 overnight-trough-to-evening-peak ratio.
 
-Requires the EIA_API_KEY environment variable (free key: eia.gov/opendata).
-The key stays out of the repo; only the derived JSON is committed.
-Output: apps/web/public/data/phx-grid.json. Stdlib only.
+Takes ``--city`` (default ``phx``; Phoenix output byte-identical apart from the
+``generated`` date). Requires the EIA_API_KEY environment variable (free key:
+eia.gov/opendata). The key stays out of the repo; only the derived JSON is
+committed. Output: apps/web/public/data/<prefix>-grid.json. Stdlib only.
 """
 
 import datetime
 import json
 import os
-import pathlib
 import time
 import urllib.parse
 import urllib.request
 
+from cities import data_path, get_city
+
 API = "https://api.eia.gov/v2/electricity/rto/region-data/data/"
-RESPONDENTS = ("AZPS", "SRP")
 FIRST_YEAR = 2015
 LAST_YEAR = datetime.date.today().year - 1
 UTC_OFFSET = -7
-
-OUT = (pathlib.Path(__file__).resolve().parent.parent
-       / "apps" / "web" / "public" / "data" / "phx-grid.json")
 
 
 def fetch_july(key, respondent, year):
@@ -41,23 +39,27 @@ def fetch_july(key, respondent, year):
         try:
             with urllib.request.urlopen(url, timeout=60) as r:
                 return json.load(r)["response"]["data"]
-        except Exception as e:
+        except Exception:
             if attempt == 2:
                 raise
             time.sleep(3 * (attempt + 1))
 
 
 def main():
+    city = get_city(__doc__)
+    respondents = tuple(city["grid"]["respondents"])
+    OUT = data_path(city["prefix"], "grid")
+
     key = os.environ.get("EIA_API_KEY")
     if not key:
         raise SystemExit("set EIA_API_KEY (free key: https://www.eia.gov/opendata/)")
 
     years = {}
     for year in range(FIRST_YEAR, LAST_YEAR + 1):
-        # hour -> {timestamp -> summed MW}; sum utilities per timestamp first
+        # period -> {respondent -> MW}; sum the utilities per timestamp first
         by_ts = {}
         ok = True
-        for resp in RESPONDENTS:
+        for resp in respondents:
             rows = fetch_july(key, resp, year)
             if len(rows) < 600:
                 print(f"  {year} {resp}: only {len(rows)} rows, skipping year")
@@ -75,8 +77,8 @@ def main():
             continue
         hours = {h: [] for h in range(24)}
         for ts, vals in by_ts.items():
-            if len(vals) != len(RESPONDENTS):
-                continue  # only hours where both utilities reported
+            if len(vals) != len(respondents):
+                continue  # only hours where every utility reported
             utc_h = int(ts[11:13])
             hours[(utc_h + UTC_OFFSET) % 24].append(sum(vals.values()))
         if any(len(v) < 15 for v in hours.values()):
@@ -90,7 +92,7 @@ def main():
         print(f"{year}: trough {min(mw)} MW, peak {max(mw)} MW, trough/peak {years[str(year)]['troughPct']}%")
 
     OUT.write_text(json.dumps({
-        "respondents": "AZPS + SRP (EIA-930 balancing authorities)",
+        "respondents": city["grid"]["label"],
         "month": "July",
         "hours": "local (UTC-7, no DST)",
         "units": "average MW demand by hour of day",

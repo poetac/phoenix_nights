@@ -27,6 +27,9 @@ CITIES = {
         "sid": "PHXthr 9",
         "label": "Phoenix (ThreadEx PHXthr 9)",
         "record_start": "1896-01-01",
+        # EIA-930 balancing authorities summed for the July grid-demand card.
+        "grid": {"respondents": ("AZPS", "SRP"),
+                 "label": "AZPS + SRP (EIA-930 balancing authorities)"},
     },
     "tus": {
         "key": "tus",
@@ -36,6 +39,9 @@ CITIES = {
         # ACIS reports the Tucson Area thread valid from 1894-09-01; start at the
         # first full calendar year so partial-1894 doesn't skew a yearly reduce.
         "record_start": "1895-01-01",
+        # Tucson Electric Power is the metro's balancing authority (EIA-930).
+        "grid": {"respondents": ("TEPC",),
+                 "label": "TEPC (Tucson Electric Power, EIA-930)"},
     },
 }
 
