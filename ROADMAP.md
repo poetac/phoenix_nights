@@ -284,6 +284,15 @@ are gone).
 
 ---
 
+## City-climate engine (generalization — in progress)
+
+Evolving the registry-driven engine into a generalized city-climate explorer where each city surfaces *its own* most interesting trends, fronted by a map. Phoenix Nights is preserved as the curated flagship. Decision: hybrid salience (auto-rank + optional curated overlay).
+
+- ✅ **Phase 1 — fact engine (this PR):** `analysis/build_facts.py` ranks each city's facts (magnitude × significance + cross-city rank), with per-fact applicability guards; emits a committed, CI-shape-checked `<city>-facts.json`. No UI yet. Sanity: Tucson tops on its 100°F season doubling, Las Vegas/El Paso on night-warming, Phoenix's night facts cluster at the top.
+- ⏳ Phase 2: generic city page (ranked facts + applicable cards); Phoenix Nights = curated overlay.
+- ⏳ Phase 3: US map / explorer + cross-city ranking hook.
+- ⏳ Phase 4: scale vetted cities · Phase 5: honest forward extrapolation.
+
 ## Breadth — vetted desert-UHI city pipeline
 
 The multi-city engine is registry-driven, DST-aware, and render-tested, so the cost of a new city

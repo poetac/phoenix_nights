@@ -1,0 +1,81 @@
+{
+ "city": "ep",
+ "name": "El Paso (ThreadEx ELPthr 9)",
+ "generated": "2026-06-17",
+ "facts": [
+  {
+   "key": "night_warming",
+   "score": 0.925,
+   "crossCityPercentile": 0.75,
+   "label": "Summer nights are warming +1.50\u00b0F per decade",
+   "value": 1.5,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "bench": 0.36,
+   "rank": 1
+  },
+  {
+   "key": "coldest_night",
+   "score": 0.925,
+   "crossCityPercentile": 0.75,
+   "label": "Even the coldest night of the year is warming +1.86\u00b0F per decade",
+   "value": 1.86,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 2
+  },
+  {
+   "key": "urban_excess",
+   "score": 0.925,
+   "crossCityPercentile": 0.75,
+   "label": "City nights are warming +1.02\u00b0F/decade faster than the nearby open desert",
+   "value": 1.02,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "vs_reference": 0.48,
+   "rank": 3
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 0.862,
+   "crossCityPercentile": 0.75,
+   "label": "Overnight lows are rising 2.4\u00d7 as fast as afternoon highs",
+   "value": 2.4,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 4
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.862,
+   "crossCityPercentile": 0.75,
+   "label": "The day\u2013night temperature gap is shrinking 0.89\u00b0F per decade",
+   "value": 0.89,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 5
+  },
+  {
+   "key": "hot_day_season",
+   "score": 0.597,
+   "crossCityPercentile": 0.75,
+   "label": "43 days a year now reach 100\u00b0F (was 18 in the 1970s)",
+   "value": 43,
+   "unit": "days",
+   "baseline": 18,
+   "significant": true,
+   "rank": 6
+  },
+  {
+   "key": "tropical_nights",
+   "score": 0.281,
+   "crossCityPercentile": 0.25,
+   "label": "8 nights a year now stay at or above 80\u00b0F (was 0 in the 1970s)",
+   "value": 8,
+   "unit": "nights",
+   "baseline": 0,
+   "significant": true,
+   "rank": 7
+  }
+ ]
+}

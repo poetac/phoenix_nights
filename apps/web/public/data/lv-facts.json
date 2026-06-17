@@ -1,0 +1,92 @@
+{
+ "city": "lv",
+ "name": "Las Vegas (ThreadEx LASthr 9)",
+ "generated": "2026-06-17",
+ "facts": [
+  {
+   "key": "night_warming",
+   "score": 1.0,
+   "crossCityPercentile": 1.0,
+   "label": "Summer nights are warming +1.68\u00b0F per decade",
+   "value": 1.68,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "bench": 0.36,
+   "rank": 1
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 1.0,
+   "crossCityPercentile": 1.0,
+   "label": "Overnight lows are rising 3.6\u00d7 as fast as afternoon highs",
+   "value": 3.6,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 2
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 1.0,
+   "crossCityPercentile": 1.0,
+   "label": "The day\u2013night temperature gap is shrinking 1.21\u00b0F per decade",
+   "value": 1.21,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 3
+  },
+  {
+   "key": "coldest_night",
+   "score": 1.0,
+   "crossCityPercentile": 1.0,
+   "label": "Even the coldest night of the year is warming +2.58\u00b0F per decade",
+   "value": 2.58,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 4
+  },
+  {
+   "key": "urban_excess",
+   "score": 1.0,
+   "crossCityPercentile": 1.0,
+   "label": "City nights are warming +1.15\u00b0F/decade faster than the nearby open desert",
+   "value": 1.15,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "vs_reference": 0.53,
+   "rank": 5
+  },
+  {
+   "key": "night_cooling_share",
+   "score": 0.92,
+   "crossCityPercentile": 1.0,
+   "label": "20% of cooling demand now falls after dark (was 7% in the 1970s)",
+   "value": 20,
+   "unit": "%",
+   "baseline": 7,
+   "significant": true,
+   "rank": 6
+  },
+  {
+   "key": "tropical_nights",
+   "score": 0.796,
+   "crossCityPercentile": 1.0,
+   "label": "67 nights a year now stay at or above 80\u00b0F (was 17 in the 1970s)",
+   "value": 67,
+   "unit": "nights",
+   "baseline": 17,
+   "significant": true,
+   "rank": 7
+  },
+  {
+   "key": "hot_day_season",
+   "score": 0.321,
+   "crossCityPercentile": 0.25,
+   "label": "85 days a year now reach 100\u00b0F (was 75 in the 1970s)",
+   "value": 85,
+   "unit": "days",
+   "baseline": 75,
+   "significant": true,
+   "rank": 8
+  }
+ ]
+}
