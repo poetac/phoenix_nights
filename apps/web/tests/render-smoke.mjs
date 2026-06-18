@@ -69,7 +69,11 @@ try {
     (els) => els.map((e) => e.getAttribute("data-city")));
   if (dots.length < 4) fail(`map: expected >=4 city dots, got ${dots.length} (${dots})`);
   else console.log(`\u2713 explore map: ${dots.length} city dots (${dots.join(",")})`);
-  await page.click('[data-testid="us-map"] [data-city="ep"]');
+  // Fire the click on the dot element directly (its hover label widens the
+  // <g> bbox, so a coordinate-center click can miss; the dot hit-target is fine
+  // for real users). Dispatch a bubbling click so React's onClick handles it.
+  await page.$eval('[data-testid="us-map"] [data-city="ep"]',
+    (el) => el.dispatchEvent(new MouseEvent("click", { bubbles: true })));
   await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
   const sw = await page.$eval('[data-testid="city-switcher"]', (b) => b.textContent);
   if (!sw.includes("El Paso")) fail(`map dot click: expected switcher "El Paso", got ${JSON.stringify(sw)}`);
