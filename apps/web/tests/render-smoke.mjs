@@ -46,7 +46,7 @@ await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
 try {
   await page.waitForFunction(() => {
     const t = document.body.textContent || "";
-    return t.includes("Where the desert is losing") && t.includes("Phoenix");
+    return t.includes("Cities are losing") && t.includes("Phoenix");
   }, undefined, { timeout: 30000 });
   const cities = await page.$$eval('ol[aria-label="Cities ranked by overnight-low warming"] button', (b) => b.length);
   if (cities < 4) fail(`explore: expected >=4 city rows, got ${cities}`);
@@ -106,6 +106,7 @@ await checkCity("rno", "Reno");
 await checkCity("abq", "Albuquerque");
 await checkCity("slc", "Salt Lake City");
 await checkCity("boi", "Boise");
+await checkCity("atl", "Atlanta");  // first humid-climate city
 
 // Phase 5: the honest-extrapolation card renders for a warming city, clearly labeled.
 await page.goto(`${BASE}/?city=phx`, { waitUntil: "domcontentloaded", timeout: 30000 });

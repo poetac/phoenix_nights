@@ -306,9 +306,15 @@ ISD (diurnal), and EIA balancing-authority (grid) availability, and predicts **c
 premise-gated cards (tropical-nights, the 100°F-day season, night-cooling-share) will actually apply,
 using the same thresholds as `build_facts.py` → PASS / REVISE / REJECT.
 
-Scope is deliberately the **arid interior West**, where the control experiment ("city vs nearby open
-desert") is valid — not "every US city" (humid/coastal metros break the framing and would need a
-product rethink). First audit pass (June 2026):
+Scope began as the **arid interior West**, where the control experiment ("city vs nearby open desert")
+is cleanest. A June 2026 probe of humid metros showed the city-vs-rural control **transfers** to humid
+*continental/Gulf* cities (Atlanta nights +0.92°F/dec, 1.6× their days, vs rural Gainesville +0.38;
+Houston and New Orleans similar) — so the engine is generalizing beyond the desert. **Maritime tropical**
+cities are the exception and **reject**: Miami's nights warm *slower* than its days and it has no clean
+rural reference (the ocean moderates the night, and SE-Florida "rural" stations are themselves
+urbanized). So the bar is now "any continental-US metro with a clean, slower-warming rural control,"
+not just the desert. **Atlanta is the first humid-climate city shipped** (pilot); the landing is reframed
+around the *universal* UHI fingerprint (every climate), with Phoenix still the curated flagship. First audit pass (June 2026):
 
 | Metro | City night-low /dec | Suggested rural pair (gap) | Grid BA | Verdict |
 |---|---|---|---|---|

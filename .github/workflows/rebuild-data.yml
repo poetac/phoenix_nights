@@ -32,7 +32,7 @@ jobs:
       # ACIS-only builders — no API key, cheap, the ones that go stale yearly.
       - name: Rebuild ACIS-derived assets
         run: |
-          for city in phx tus lv ep yum rno abq slc boi; do
+          for city in phx tus lv ep yum rno abq slc boi atl; do
             python3 analysis/build_streaks.py --city "$city"
             python3 analysis/build_heat_season.py --city "$city"
             python3 analysis/build_normals.py --city "$city"

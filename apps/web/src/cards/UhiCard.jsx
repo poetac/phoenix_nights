@@ -48,11 +48,12 @@ export default function UhiCard({ city, cityRows, ruralRows }) {
   const g0 = stats.gaps[0];
   const gMax = stats.gaps.reduce((m, g) => (g.gap > m.gap ? g : m), stats.gaps[0]);
   const gLast = stats.gaps[stats.gaps.length - 1];
+  const kind = city.rural.kind || "open desert";
 
   return (
     <Card>
       <CardHead kicker="The control experiment" title="How much of this is the city itself?"
-        sub={`Same desert, two thermometers ${city.rural.distance} apart. ${city.urbanShort} sits in the middle of the metro; ${city.rural.name} sits in open desert. Both are warming — the climate is shifting everywhere — but only one is wrapped in a metro area's worth of asphalt.`} />
+        sub={`Two thermometers ${city.rural.distance} apart: ${city.urbanShort} sits in the middle of the metro, ${city.rural.name} in ${kind}. Both are warming — the climate is shifting everywhere — but only one is wrapped in a metro area's worth of asphalt.`} />
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <div className="text-3xl sm:text-4xl" style={{ fontFamily: DISPLAY, color: C.ember, fontVariantNumeric: "tabular-nums" }}>
@@ -64,11 +65,11 @@ export default function UhiCard({ city, cityRows, ruralRows }) {
           <div className="text-3xl sm:text-4xl" style={{ fontFamily: DISPLAY, color: C.sage, fontVariantNumeric: "tabular-nums" }}>
             +{stats.desertTrend.toFixed(1)}°
           </div>
-          <div className="text-sm mt-1" style={{ color: C.sage }}>open-desert lows ({city.rural.short})</div>
+          <div className="text-sm mt-1" style={{ color: C.sage }}>{kind} lows ({city.rural.short})</div>
         </div>
       </div>
       <div role="img" style={{ width: "100%", height: 280 }}
-        aria-label={`Line chart of ${city.shortName}'s versus the open desert's average overnight low each year; the city line rises faster, and the gap between them widens.`}>
+        aria-label={`Line chart of ${city.shortName}'s versus its rural reference's average overnight low each year; the city line rises faster, and the gap between them widens.`}>
         <ResponsiveContainer>
           <LineChart data={data} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
@@ -81,10 +82,10 @@ export default function UhiCard({ city, cityRows, ruralRows }) {
         </ResponsiveContainer>
       </div>
       <p className="mt-4 text-base leading-relaxed">
-        Subtract the desert's warming from the city's, and roughly{" "}
+        Subtract the ${kind}'s warming from the city's, and roughly{" "}
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(stats.share * 100)}% of {city.shortName}'s night-time warming since {stats.first}</span>{" "}
         is the city itself — heat that would remain even if the global climate stood still. In the {g0.decade}s, {city.shortName}
-        {" "}nights averaged {g0.gap.toFixed(1)}°F hotter than the open desert; by the {gMax.decade}s the gap had reached{" "}
+        {" "}nights averaged {g0.gap.toFixed(1)}°F hotter than the ${kind}; by the {gMax.decade}s the gap had reached{" "}
         {gMax.gap.toFixed(1)}°F.
       </p>
       <ul className="text-xs mt-3 space-y-1 leading-relaxed" style={{ color: C.muted }}>

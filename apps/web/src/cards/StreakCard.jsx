@@ -15,11 +15,13 @@ export default function StreakCard({ city, streaks }) {
     if (early.length < 7 || late.length < 7) return null;
     const record = data.reduce((m, r) => (r.streak80 > m.streak80 ? r : m), data[0]);
     const record110 = data.reduce((m, r) => (r.streak110 > m.streak110 ? r : m), data[0]);
-    return {
-      data, record, record110,
-      earlyAvg: mean(early.map((r) => r.streak80)),
-      lateAvg: mean(late.map((r) => r.streak80)),
-    };
+    const earlyAvg = mean(early.map((r) => r.streak80));
+    const lateAvg = mean(late.map((r) => r.streak80));
+    // Applicability (card-fit): cities with essentially no 80F nights have no
+    // streak story to tell (a flat-zero chart). Cool/high-elevation and humid
+    // cities omit; hot-night cities keep it.
+    if (lateAvg < 2) return null;
+    return { data, record, record110, earlyAvg, lateAvg };
   }, [streaks, city]);
 
   if (!model) return null;

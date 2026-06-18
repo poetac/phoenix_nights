@@ -90,10 +90,18 @@ def main():
 
     early = [r for r in years if 1970 <= r["year"] <= 1979]
     late = [r for r in years if r["year"] > LAST_COMPLETE_YEAR - 10]
-    avg = lambda rows, k: sum(r[k] for r in rows) / len(rows)
-    print(f"wrote {OUT} ({len(years)} years)")
-    print(f"1970s: first day {avg(early,'first'):.0f}, span {avg(early,'length'):.0f} days, {avg(early,'count'):.0f} days>=100")
-    print(f"last 10y: first day {avg(late,'first'):.0f}, span {avg(late,'length'):.0f} days, {avg(late,'count'):.0f} days>=100")
+    avg = lambda rows, k: (sum(r[k] for r in rows) / len(rows)) if rows else float("nan")
+    print(f"wrote {OUT} ({len(years)} years with a 100F day)")
+    # Humid cities can have decades with no 100F days at all; report only when
+    # the decade actually had some (avoids a divide-by-zero on an empty decade).
+    if early:
+        print(f"1970s: first day {avg(early,'first'):.0f}, span {avg(early,'length'):.0f} days, {avg(early,'count'):.0f} days>=100")
+    else:
+        print("1970s: no 100F days on record")
+    if late:
+        print(f"last 10y: first day {avg(late,'first'):.0f}, span {avg(late,'length'):.0f} days, {avg(late,'count'):.0f} days>=100")
+    else:
+        print("last 10y: no 100F days on record")
 
 
 if __name__ == "__main__":

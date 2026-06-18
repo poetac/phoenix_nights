@@ -38,14 +38,15 @@ export default function CityExplore({ onPick }) {
           `radial-gradient(120% 60% at 50% -10%, rgba(255,107,61,.16), transparent 60%)` }} />
       <main className="relative max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
         <div className="text-xs tracking-widest uppercase mb-3" style={{ color: C.emberSoft }}>
-          Live NOAA station record · the desert Southwest
+          Live NOAA station record · arid West to humid South
         </div>
         <h1 className="text-3xl sm:text-5xl leading-tight" style={{ fontFamily: DISPLAY, fontWeight: 650 }}>
-          Where the desert is losing<br />its cool nights
+          Cities are losing<br />the cool of the night
         </h1>
         <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: C.muted }}>
-          Each city's overnight lows, straight from the official record, ranked by how fast its
-          summer nights are warming. Pick a city to see its full story.
+          From the desert Southwest to the humid South, US cities' overnight lows are abandoning their
+          history faster than their afternoon highs — the urban-heat-island fingerprint, straight from the
+          official record. Ranked by how fast each city's nights are warming; pick one for its full story.
         </p>
 
         <CityMap onPick={onPick} ranked={rows} />
@@ -85,8 +86,10 @@ export default function CityExplore({ onPick }) {
         <Suspense fallback={null}><CityCompare onPick={onPick} /></Suspense>
 
         <p className="mt-8 text-xs leading-relaxed" style={{ color: C.muted }}>
-          Overnight-low warming since 1970, vs the ~0.36 °F/decade global background rate. Phoenix is
-          the flagship narrative; every city is computed live from the NOAA (ACIS) station record. The map above and the list share one ranking.
+          Overnight-low warming since 1970, vs the ~0.36 °F/decade global background rate. Phoenix is the
+          curated flagship; every city is computed from the NOAA (ACIS) record and measured against a nearby
+          rural reference to isolate the city's own heat. Atlanta is the first humid-climate city — proof the
+          fingerprint isn't desert-only.
         </p>
       </main>
     </div>

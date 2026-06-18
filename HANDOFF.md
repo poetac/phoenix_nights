@@ -30,11 +30,13 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 ## Engine phases (see ROADMAP "City-climate engine")
 
 **1 ✅ fact engine · 2 ✅ per-city page + auto hero · 3a ✅ explore + ranking ·
-3b ✅ the literal US map · 4 ✅ scale cities (now 9) · 5 ✅ honest extrapolation.**
+3b ✅ the literal US map · 4 ✅ scale cities · 5 ✅ honest extrapolation.** Now **10 cities** incl.
+the first humid-climate one (Atlanta).
 
 Post-Phase-5: diurnal curves wired for all 9 cities; grid for the two clean-BA
 metros (ABQ=PNM, Boise=IPCO); the explore-map dots are sized by night-warming
-rate; per-city browser titles; and a **cross-city comparison overlay** on the
+rate (now on a national map, names on hover/focus); per-city browser titles; a **cross-city
+comparison overlay** on the
 landing (`compare-lows.json` via `analysis/build_compare.py`) that charts every
 city's overnight-low departure from its own 1970s baseline (lazy-loaded so recharts
 stays off the landing's critical path). The intra-metro **spatial-gradient** card stays
@@ -44,6 +46,16 @@ Also **rejected**: surfacing each city's raw `urban_excess` (warming above its r
 pair) in the comparison legend — Phoenix's Casa Grande reference is itself a booming
 corridor, so its raw excess (+0.09°/dec) is misleadingly small without the per-city
 caveat. UHI excess stays on the per-city `UhiCard`, where its caveats live.
+
+**Humid pivot (in progress):** the engine generalized beyond the arid West. The city-vs-rural control
+transfers to humid continental/Gulf cities (Atlanta is the shipped pilot, vs rural Gainesville) but
+**rejects** for maritime tropical (Miami: nights warm slower than days, no clean rural reference). Cards
+were de-aridified via a per-city `rural.kind` (default "open desert"; Atlanta "rural countryside") threaded
+through `UhiCard` / `GlobalContextCard` / `build_facts` (`rural_ref`). `StreakCard` gained a card-fit guard
+(omit where recent 80°F-night streaks ≈ 0) which also cleaned up the cool arid cities. `build_heat_season`
+now survives a decade with no 100°F days. The explore map is **national** (full-US `geoAlbersUsa`), dots
+sized by warming, names on hover/focus (always-on labels collide once cities span the country). Next humid
+candidates that probed clean: Houston, New Orleans (+ likely Memphis, Nashville, Dallas, Raleigh).
 
 ## What's deferred (the next obvious work)
 

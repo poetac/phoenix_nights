@@ -141,6 +141,19 @@ CITIES = {
         "diurnal": {"sids": ("99999924127", "72572024127"),
                     "station": "Salt Lake City Intl", "first_year": 1948},
     },
+    "atl": {
+        "key": "atl",
+        "prefix": "atl",
+        "sid": "ATLthr 9",
+        "label": "Atlanta (ThreadEx ATLthr 9)",
+        "record_start": "1879-01-01",
+        "rural_ref": "rural countryside",
+        # First humid-climate city (pilot). Eastern DST -> tz-aware bucketing.
+        "utc_offset": -5,
+        "tz": "America/New_York",
+        "diurnal": {"sids": ("99999913874", "72219013874"),
+                    "station": "Atlanta Hartsfield-Jackson Intl", "first_year": 1948},
+    },
     "boi": {
         "key": "boi",
         "prefix": "boi",
