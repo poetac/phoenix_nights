@@ -36,6 +36,8 @@ async function checkCity(cityId, label) {
     await page.waitForFunction((lbl) => document.body.textContent.includes("What stands out in " + lbl), label, { timeout: 20000 });
     console.log(`\u2713 ${cityId}: facts section present`);
   } catch { fail(`${cityId}: facts section ("What stands out in ${label}") missing`); }
+  const title = await page.title();
+  if (!title.includes(label)) fail(`${cityId}: document title "${title}" missing "${label}"`);
   await page.screenshot({ path: `${SHOTS}${cityId}.png`, fullPage: true });
 }
 
