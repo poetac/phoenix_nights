@@ -52,7 +52,7 @@ jobs:
         if: ${{ env.EIA_API_KEY != '' }}
         continue-on-error: true
         run: |
-          for city in phx tus lv ep; do
+          for city in phx tus lv ep abq boi; do
             python3 analysis/build_grid.py --city "$city"
           done
 

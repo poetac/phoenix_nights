@@ -467,9 +467,8 @@ const ALBUQUERQUE = {
   streaksAsset: "data/abq-streaks.json",
   normalsAsset: "data/abq-normals.json",
   cddSplitAsset: "data/abq-cdd-split.json",
-  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
-  // validated single-utility EIA balancing authority are a follow-up; both
-  // cards omit cleanly until their assets are committed.
+  gridAsset: "data/abq-grid.json",
+  // diurnal asset deferred (heavy NCEI hourly pull); the grid card uses PNM, the Albuquerque metro's single balancing authority.
 };
 
 const SALTLAKE = {
@@ -577,9 +576,8 @@ const BOISE = {
   streaksAsset: "data/boi-streaks.json",
   normalsAsset: "data/boi-normals.json",
   cddSplitAsset: "data/boi-cdd-split.json",
-  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
-  // validated single-utility EIA balancing authority are a follow-up; both
-  // cards omit cleanly until their assets are committed.
+  gridAsset: "data/boi-grid.json",
+  // diurnal asset deferred (heavy NCEI hourly pull); the grid card uses IPCO (Idaho Power), the Boise metro's balancing authority.
 };
 
 export const CITIES = [PHOENIX, TUCSON, LASVEGAS, ELPASO, YUMA, RENO, ALBUQUERQUE, SALTLAKE, BOISE];
