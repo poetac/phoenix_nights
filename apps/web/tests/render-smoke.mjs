@@ -22,10 +22,9 @@ page.on("pageerror", (e) => pageErrors.push(e.message));
 
 async function checkCity(cityId, label) {
   await page.goto(`${BASE}/?city=${cityId}`, { waitUntil: "domcontentloaded", timeout: 30000 });
-  await page.waitForSelector('nav[aria-label="Choose city"] button', { timeout: 15000 });
-  const active = await page.$$eval('nav[aria-label="Choose city"] button',
-    (bs) => bs.filter((b) => b.getAttribute("aria-current") === "true").map((b) => b.textContent.trim()));
-  if (!active.includes(label)) fail(`?city=${cityId}: expected active "${label}", got ${JSON.stringify(active)}`);
+  await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
+  const active = (await page.$eval('[data-testid="city-switcher"]', (b) => b.textContent.trim())).replace(/\s*\u25be\s*$/, "");
+  if (!active.includes(label)) fail(`?city=${cityId}: switcher shows "${active}", expected "${label}"`);
   // asset-backed cards render from committed JSON (no live data needed) — expect several headings
   try {
     await page.waitForFunction(() => document.querySelectorAll("h2, h3").length >= 3, { timeout: 40000 });
@@ -61,12 +60,30 @@ try {
   if (dots.length < 4) fail(`map: expected >=4 city dots, got ${dots.length} (${dots})`);
   else console.log(`\u2713 explore map: ${dots.length} city dots (${dots.join(",")})`);
   await page.click('[data-testid="us-map"] [data-city="ep"]');
-  await page.waitForSelector('nav[aria-label="Choose city"] button', { timeout: 15000 });
-  const active = await page.$$eval('nav[aria-label="Choose city"] button',
-    (bs) => bs.filter((b) => b.getAttribute("aria-current") === "true").map((b) => b.textContent.trim()));
-  if (!active.includes("El Paso")) fail(`map dot click: expected El Paso active, got ${JSON.stringify(active)}`);
+  await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
+  const sw = await page.$eval('[data-testid="city-switcher"]', (b) => b.textContent);
+  if (!sw.includes("El Paso")) fail(`map dot click: expected switcher "El Paso", got ${JSON.stringify(sw)}`);
   else console.log("\u2713 explore map: dot click deep-links to El Paso");
 } catch (e) { fail("explore map did not render/behave: " + e.message.split("\n")[0]); }
+
+// Bugfix: the city switcher opens a menu and collapses on selection (it used to
+// spill all cities into a multi-row block over the page at 9 cities).
+await page.goto(`${BASE}/?city=phx`, { waitUntil: "domcontentloaded", timeout: 30000 });
+await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
+await page.click('[data-testid="city-switcher"]');
+try {
+  await page.waitForSelector('[role="listbox"] [role="option"]', { timeout: 8000 });
+  const opts = await page.$$eval('[role="listbox"] [role="option"]', (b) => b.length);
+  if (opts < 9) fail(`city menu: expected >=9 options, got ${opts}`);
+  await page.$$eval('[role="listbox"] [role="option"]', (bs) => {
+    const r = bs.find((b) => b.textContent.trim().startsWith("Reno"));
+    if (r) r.click();
+  });
+  await page.waitForFunction(() => !document.querySelector('[role="listbox"]'), { timeout: 8000 });
+  const sw = await page.$eval('[data-testid="city-switcher"]', (b) => b.textContent);
+  if (!sw.includes("Reno")) fail(`city menu select: switcher shows "${sw}", expected Reno`);
+  else console.log(`\u2713 city switcher: menu (${opts} options) selects + collapses`);
+} catch (e) { fail("city switcher menu did not open/close: " + e.message.split("\n")[0]); }
 
 await checkCity("tus", "Tucson");
 await checkCity("phx", "Phoenix");
