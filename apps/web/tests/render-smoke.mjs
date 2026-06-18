@@ -53,6 +53,14 @@ try {
   else console.log(`\u2713 explore landing: ${cities} cities ranked`);
 } catch (e) { fail("explore landing did not render: " + e.message.split("\n")[0]); }
 
+// Cross-city comparison overlay renders with all cities in its legend.
+try {
+  await page.waitForSelector('[data-testid="city-compare"]', { timeout: 20000 });
+  const legend = await page.$$eval('section[aria-label="All cities\' overnight-low warming compared"] ul button', (b) => b.length);
+  if (legend < 9) fail(`compare chart: expected >=9 legend cities, got ${legend}`);
+  else console.log(`\u2713 compare chart: ${legend} cities overlaid`);
+} catch (e) { fail("compare chart did not render: " + e.message.split("\n")[0]); }
+
 
 // Phase 3b: the explore landing renders a clickable US map of the cities
 try {

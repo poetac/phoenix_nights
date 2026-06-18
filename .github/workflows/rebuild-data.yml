@@ -60,6 +60,9 @@ jobs:
       - name: Rebuild per-city facts (salience engine)
         run: python3 analysis/build_facts.py
 
+      - name: Rebuild cross-city comparison series
+        run: python3 analysis/build_compare.py
+
       # Gate: don't commit anything if the headline numbers stopped checking out.
       - name: Verify statistics against the official record
         run: python3 analysis/verify_v0.py

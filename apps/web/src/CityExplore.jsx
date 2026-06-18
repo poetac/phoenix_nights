@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { CITIES } from "./lib/cities.js";
 import { fetchFacts } from "./lib/data.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
 import CityMap from "./CityMap.jsx";
+const CityCompare = lazy(() => import("./CityCompare.jsx"));
 
 // The cross-city explorer / landing: every computed city, ranked by how fast its
 // summer nights are warming, each a click into its own page. The shareable hook
@@ -80,6 +81,9 @@ export default function CityExplore({ onPick }) {
             </li>
           ))}
         </ol>
+
+        <Suspense fallback={null}><CityCompare onPick={onPick} /></Suspense>
+
         <p className="mt-8 text-xs leading-relaxed" style={{ color: C.muted }}>
           Overnight-low warming since 1970, vs the ~0.36 °F/decade global background rate. Phoenix is
           the flagship narrative; every city is computed live from the NOAA (ACIS) station record. The map above and the list share one ranking.

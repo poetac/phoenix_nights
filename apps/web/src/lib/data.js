@@ -184,6 +184,14 @@ export async function fetchFacts(city) {
   return j;
 }
 
+// Cross-city comparison series (each city's overnight-low departure from its own
+// 1970s baseline) for the explore-landing overlay chart.
+export async function fetchCompare() {
+  const j = await fetchAsset("data/compare-lows.json");
+  if (!j.cities || !j.cities.length) throw new Error("compare asset empty");
+  return j;
+}
+
 export async function fetchStreaks(city) {
   if (!city.streaksAsset) return null;
   const j = await fetchAsset(city.streaksAsset);

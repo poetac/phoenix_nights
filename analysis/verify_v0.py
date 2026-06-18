@@ -338,6 +338,7 @@ ASSET_SCHEMAS = {
     "abq-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "slc-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "boi-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "compare-lows.json": ("cities", list, ("id", "slope", "anomalies")),
     "phx-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "tus-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "lv-facts.json": ("facts", list, ("key", "rank", "score", "label")),
