@@ -120,6 +120,10 @@ CITIES = {
         # Albuquerque observes Mountain DST -> tz-aware hour bucketing.
         "utc_offset": -7,
         "tz": "America/Denver",
+        # PNM (Public Service Co. of New Mexico) is the Albuquerque metro's
+        # balancing authority (EIA-930) — a clean single utility for the metro.
+        "grid": {"respondents": ("PNM",),
+                 "label": "PNM (Public Service Co. of New Mexico, EIA-930)"},
         "diurnal": {"sids": ("99999923050", "72365023050"),
                     "station": "Albuquerque Intl Sunport", "first_year": 1948},
     },
@@ -144,6 +148,9 @@ CITIES = {
         # Boise observes Mountain DST -> tz-aware hour bucketing.
         "utc_offset": -7,
         "tz": "America/Boise",
+        # Idaho Power (IPCO) is the Boise metro's balancing authority (EIA-930).
+        "grid": {"respondents": ("IPCO",),
+                 "label": "IPCO (Idaho Power, EIA-930)"},
         "diurnal": {"sids": ("99999924131", "72681024131"),
                     "station": "Boise Air Terminal", "first_year": 1948},
     },
