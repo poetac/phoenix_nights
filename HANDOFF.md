@@ -34,9 +34,16 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 
 Post-Phase-5: diurnal curves wired for all 9 cities; grid for the two clean-BA
 metros (ABQ=PNM, Boise=IPCO); the explore-map dots are sized by night-warming
-rate; per-city browser titles. The intra-metro **spatial-gradient** card stays
+rate; per-city browser titles; and a **cross-city comparison overlay** on the
+landing (`compare-lows.json` via `analysis/build_compare.py`) that charts every
+city's overnight-low departure from its own 1970s baseline (lazy-loaded so recharts
+stays off the landing's critical path). The intra-metro **spatial-gradient** card stays
 *rejected* (reproduce-or-reject): uniform warming rates across the metro +
 elevation-confounded absolute lows — see `analysis/spatial_gradient_probe.py`.
+Also **rejected**: surfacing each city's raw `urban_excess` (warming above its rural
+pair) in the comparison legend — Phoenix's Casa Grande reference is itself a booming
+corridor, so its raw excess (+0.09°/dec) is misleadingly small without the per-city
+caveat. UHI excess stays on the per-city `UhiCard`, where its caveats live.
 
 ## What's deferred (the next obvious work)
 
