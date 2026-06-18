@@ -97,6 +97,15 @@ await checkCity("abq", "Albuquerque");
 await checkCity("slc", "Salt Lake City");
 await checkCity("boi", "Boise");
 
+// Phase 5: the honest-extrapolation card renders for a warming city, clearly labeled.
+await page.goto(`${BASE}/?city=phx`, { waitUntil: "domcontentloaded", timeout: 30000 });
+try {
+  await page.waitForFunction(() => document.body.textContent.includes("straight-line extrapolation"), { timeout: 45000 });
+  const labeled = await page.$$eval("h2", (hs) => hs.some((h) => h.textContent.includes("A line, not a forecast")));
+  if (!labeled) fail("extrapolation card heading ('A line, not a forecast') missing");
+  else console.log("\u2713 extrapolation card present + labeled (not a forecast)");
+} catch (e) { fail("extrapolation card did not render: " + e.message.split("\n")[0]); }
+
 // per-card share landing page must redirect to the right city + card anchor
 await page.goto(`${BASE}/share/phx-hot-nights.html`, { waitUntil: "domcontentloaded", timeout: 20000 });
 await page.waitForTimeout(2000);
