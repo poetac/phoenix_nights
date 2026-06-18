@@ -96,7 +96,9 @@ CITIES = {
         "record_start": "1893-01-01",
         # Yuma keeps Arizona standard time (no DST), like phx/tus -> fixed offset.
         "utc_offset": -7,
-        "diurnal": {"sids": ("99999923195", "69002003145"),
+        # Yuma's hourly record spans several ISD ids over time (the single modern
+        # id is wrong); chain the eras: 1948-72, 1942-97, 2000-04, 2005-present.
+        "diurnal": {"sids": ("99999923195", "72280023195", "72280099999", "74003503145"),
                     "station": "Yuma MCAS / Intl", "first_year": 1948},
     },
     "rno": {

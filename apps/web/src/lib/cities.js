@@ -357,9 +357,9 @@ const YUMA = {
   streaksAsset: "data/yum-streaks.json",
   normalsAsset: "data/yum-normals.json",
   cddSplitAsset: "data/yum-cdd-split.json",
-  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
-  // validated single-utility EIA balancing authority are a follow-up; both
-  // cards omit cleanly until their assets are committed.
+  diurnalAsset: "data/yum-diurnal.json",
+  // grid asset deferred: no clean single-utility metro balancing authority
+  // for this city, so the grid card omits rather than show wrong-region demand.
 };
 
 const RENO = {
@@ -412,9 +412,9 @@ const RENO = {
   streaksAsset: "data/rno-streaks.json",
   normalsAsset: "data/rno-normals.json",
   cddSplitAsset: "data/rno-cdd-split.json",
-  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
-  // validated single-utility EIA balancing authority are a follow-up; both
-  // cards omit cleanly until their assets are committed.
+  diurnalAsset: "data/rno-diurnal.json",
+  // grid asset deferred: no clean single-utility metro balancing authority
+  // for this city, so the grid card omits rather than show wrong-region demand.
 };
 
 const ALBUQUERQUE = {
@@ -468,7 +468,8 @@ const ALBUQUERQUE = {
   normalsAsset: "data/abq-normals.json",
   cddSplitAsset: "data/abq-cdd-split.json",
   gridAsset: "data/abq-grid.json",
-  // diurnal asset deferred (heavy NCEI hourly pull); the grid card uses PNM, the Albuquerque metro's single balancing authority.
+  diurnalAsset: "data/abq-diurnal.json",
+  // grid card uses PNM, the Albuquerque metro's single balancing authority.
 };
 
 const SALTLAKE = {
@@ -521,9 +522,9 @@ const SALTLAKE = {
   streaksAsset: "data/slc-streaks.json",
   normalsAsset: "data/slc-normals.json",
   cddSplitAsset: "data/slc-cdd-split.json",
-  // diurnal + grid assets deferred for this city: the NCEI hourly pull and a
-  // validated single-utility EIA balancing authority are a follow-up; both
-  // cards omit cleanly until their assets are committed.
+  diurnalAsset: "data/slc-diurnal.json",
+  // grid asset deferred: no clean single-utility metro balancing authority
+  // for this city, so the grid card omits rather than show wrong-region demand.
 };
 
 const BOISE = {
@@ -577,7 +578,8 @@ const BOISE = {
   normalsAsset: "data/boi-normals.json",
   cddSplitAsset: "data/boi-cdd-split.json",
   gridAsset: "data/boi-grid.json",
-  // diurnal asset deferred (heavy NCEI hourly pull); the grid card uses IPCO (Idaho Power), the Boise metro's balancing authority.
+  diurnalAsset: "data/boi-diurnal.json",
+  // grid card uses IPCO (Idaho Power), the Boise metro's balancing authority.
 };
 
 export const CITIES = [PHOENIX, TUCSON, LASVEGAS, ELPASO, YUMA, RENO, ALBUQUERQUE, SALTLAKE, BOISE];

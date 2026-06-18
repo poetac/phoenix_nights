@@ -34,6 +34,13 @@ export default function CoolWindowCard({ city, diurnal }) {
     // last decade that still had any hour below the 77°F recovery line
     const lastRecovery = [...data].reverse().find((d) => d.recovery > 0);
 
+    // Applicability (card-fit): this is a hot-city *scarcity* story — overnight
+    // relief below 85°F shrinking toward zero. Cool / high-elevation cities spend
+    // most of the night under 85°F (relief is abundant, not vanishing) and would
+    // overflow the axis, so the card omits there. Hot cities (incl. El Paso ~12h)
+    // keep it.
+    if (now.total > 13) return null;
+
     return { data, base, now, lastRecovery };
   }, [diurnal, city]);
 
@@ -53,7 +60,7 @@ export default function CoolWindowCard({ city, diurnal }) {
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
             <XAxis dataKey="decade" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} />
             <YAxis tick={axisTick} tickLine={false} axisLine={false}
-              domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]} allowDecimals={false} />
+              domain={[0, Math.max(10, ...data.map((d) => d.total))]} allowDecimals={false} />
             <Tooltip cursor={{ fill: "rgba(255,255,255,.04)" }} content={({ active, payload }) => {
               if (!active || !payload?.length) return null;
               const p = payload[0]?.payload;
