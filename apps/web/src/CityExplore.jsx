@@ -47,7 +47,7 @@ export default function CityExplore({ onPick }) {
           summer nights are warming. Pick a city to see its full story.
         </p>
 
-        <CityMap onPick={onPick} />
+        <CityMap onPick={onPick} ranked={rows} />
 
         <ol className="mt-4 space-y-3" aria-label="Cities ranked by overnight-low warming">
           {rows.map((r, i) => (
