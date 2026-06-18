@@ -293,7 +293,7 @@ Evolving the registry-driven engine into a generalized city-climate explorer whe
 - ✅ **Phase 3a — explore landing + ranking:** the root ranks every city by overnight-low warming → click into its page (`?city=<id>`).
 - ✅ **Phase 3b — the literal map (this PR):** the explore landing now leads with a clickable US map of the interior West. A committed build script (`apps/web/scripts/build-map.mjs`) projects us-atlas `states-10m` and each city's `latLon` with one shared d3 `geoAlbersUsa`, validates each city falls inside its state, and emits `src/lib/usMap.js` (committed; no runtime map deps). City dots → `?city=<id>`; the ranked list stays beneath as the ordered, accessible fallback. Render smoke test asserts the map + a dot-click deep-link.
 - ✅ **Phase 4 — scale cities (this PR):** the five vetted-PASS metros (Yuma, Reno, Albuquerque, Salt Lake City, Boise) are live — registry entries in `analysis/cities.py` + `cities.js`, committed ACIS assets, and verify + render + map coverage. The four high-elevation additions inherit the card-fit guards (night-cooling-share, and where applicable tropical-nights / 100°F-days, omit cleanly).
-- ⏳ Phase 5: honest forward extrapolation.
+- ✅ **Phase 5 — honest extrapolation (this PR):** each city page carries its measured overnight-low trend forward to 2050 as a clearly-labeled dashed line inside the existing moving-block-bootstrap slope fan — framed as “a line, not a forecast” (no emissions scenario, no physics). A real CMIP6/LOCA2 projection layer remains a separate go/no-go, deliberately not dressed up here.
 
 ## Breadth — vetted desert-UHI city pipeline
 

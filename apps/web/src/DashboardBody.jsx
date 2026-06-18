@@ -22,6 +22,7 @@ import StreakCard from "./cards/StreakCard.jsx";
 import WinterCard from "./cards/WinterCard.jsx";
 import GridCard from "./cards/GridCard.jsx";
 import NightCoolingCard from "./cards/NightCoolingCard.jsx";
+import ExtrapolationCard from "./cards/ExtrapolationCard.jsx";
 import MethodologyCard from "./cards/MethodologyCard.jsx";
 import SourcesCard from "./cards/SourcesCard.jsx";
 
@@ -193,6 +194,8 @@ export default function DashboardBody({
         </div>
       </Card>
 
+      <ExtrapolationCard city={city} rows={vis} fit={fitLow} windowStart={windowStart} />
+
       {decades.length >= 2 && ladder && (
         <Card>
           <CardHead kicker="Decade by decade" title="The floor is rising faster than the ceiling"
@@ -331,6 +334,7 @@ export default function DashboardBody({
         <ul className="text-sm space-y-2 leading-relaxed" style={{ color: C.muted }}>
           <li>Data: {sourceLabel}, fetched live each time this page loads. Years missing more than 36 days of observations are excluded, as is the still-incomplete current year; {rows[rows.length - 1].year} is the last complete year shown.</li>
           <li>Trends are ordinary least-squares fits to yearly means over the selected window, expressed per decade. The ± is a 95% interval from a moving-block bootstrap (residuals resampled in multi-year blocks), which widens it to allow for year-to-year autocorrelation — so it runs wider than a textbook OLS error and is best read as a floor on the uncertainty, not a full accounting of climate persistence.</li>
+          <li>The “if the trend continued” card is a straight-line extrapolation of that same fitted slope to 2050, drawn inside the bootstrap slope fan. It is a labeled hypothetical, <strong>not a forecast</strong>: it assumes the historical slope simply persists, with no emissions scenario or climate physics. A real projection (CMIP6 / LOCA2 downscaling) would be a separate layer.</li>
           <li>"Departure" compares every year with the same station's {city.baseline.start}–{city.baseline.end} average — a fixed baseline, unlike rolling "normals" that quietly absorb past warming.</li>
           <li>The {city.urbanShort} station sits inside the urban heat island it measures — that's the point. The control-experiment card pairs it with an open-desert station to separate the city's contribution from the global trend.</li>
           <li>The hour-by-hour card is precomputed from NOAA's hourly archive (NCEI ISD); everything else is computed in your browser from the raw yearly and monthly station records.</li>
