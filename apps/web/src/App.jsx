@@ -4,6 +4,10 @@ import { C, BODY } from "./ui.jsx";
 import CityDashboard from "./CityDashboard.jsx";
 import CityExplore from "./CityExplore.jsx";
 
+// The index.html title is the landing/brand title; per-city pages extend it so
+// browser tabs, bookmarks, and shared links identify the city (the engine has 9).
+const BASE_TITLE = typeof document !== "undefined" ? document.title : "Phoenix Nights";
+
 // No ?city -> the cross-city explore landing. ?city=<id> -> that city's page
 // (set by the explore list, the picker, share links, and deep links).
 function initialCityId() {
@@ -40,6 +44,14 @@ export default function App() {
     document.addEventListener("keydown", onKey);
     return () => { document.removeEventListener("mousedown", onDown); document.removeEventListener("keydown", onKey); };
   }, [menuOpen]);
+
+  // Keep the document title in sync with the selected city.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.title = city
+      ? `${city.name} — overnight lows vs the 1970s · Phoenix Nights`
+      : BASE_TITLE;
+  }, [city]);
 
   // On a fresh deep-link load to #card (with ?city set), retry the scroll until
   // the lazy chart body has mounted. Only relevant when a city is shown.
