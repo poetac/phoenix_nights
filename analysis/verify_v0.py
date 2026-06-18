@@ -331,6 +331,11 @@ ASSET_SCHEMAS = {
     "boi-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
     "boi-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
     "boi-normals.json": ("byDate", dict, None),
+    "atl-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "atl-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "atl-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "atl-normals.json": ("byDate", dict, None),
+    "atl-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "boi-diurnal.json": ("decades", dict, None),
     "boi-grid.json": ("years", dict, None),
     "yum-facts.json": ("facts", list, ("key", "rank", "score", "label")),
@@ -555,6 +560,18 @@ def main():
                    boise_trend, boise_trend > GLOBAL_BENCH))
     checks.append((f"Boise night-low trend > its rural pair Emmett ({boise_trend:.2f} vs {emmett_trend:.2f}/dec)",
                    boise_trend - emmett_trend, boise_trend > emmett_trend))
+
+
+    # Tenth city (Atlanta): the first HUMID-climate city — the UHI nights-first
+    # signal must reproduce outside the desert. Atlanta's overnight-low trend
+    # since 1970 outruns both the global rate and its rural pair (Gainesville,
+    # GA). Live from ACIS; sids match cities.js.
+    atl_trend = acis_yearly_low_trend("ATLthr 9", 1970)
+    gville_trend = acis_yearly_low_trend("USC00093621", 1970)
+    checks.append((f"Atlanta night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   atl_trend, atl_trend > GLOBAL_BENCH))
+    checks.append((f"Atlanta night-low trend > its rural pair Gainesville ({atl_trend:.2f} vs {gville_trend:.2f}/dec)",
+                   atl_trend - gville_trend, atl_trend > gville_trend))
 
     # Season cards' outlier-robust definitions: the *sustained* warm-night
     # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of

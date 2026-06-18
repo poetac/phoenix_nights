@@ -102,13 +102,13 @@ def compute_raw(city):
     # cities.py registries don't carry the JS rural; derive from known pairs below
     REF = {"phx": "USC00021314", "tus": "USC00027619", "lv": "USC00262243",
            "ep": "USC00299686", "yum": "USW00003125", "rno": "USC00048758",
-           "abq": "USC00295150", "slc": "USC00429133", "boi": "USC00102942"}
+           "abq": "USC00295150", "slc": "USC00429133", "boi": "USC00102942", "atl": "USC00093621"}
     rsid = REF.get(city["key"])
     if rsid and night is not None:
         rtrend, _ = linreg(_yearly(rsid, "mint", "mean"))
         if rtrend is not None:
             facts["urban_excess"] = dict(
-                label=f"City nights are warming {night-rtrend:+.2f}°F/decade faster than the nearby open desert",
+                label=f"City nights are warming {night-rtrend:+.2f}°F/decade faster than the nearby {city.get('rural_ref', 'open desert')}",
                 value=round(night - rtrend, 2), unit="°F/decade", magnitude=night - rtrend,
                 significant=night_sig and night > rtrend, vs_reference=round(rtrend, 2))
 

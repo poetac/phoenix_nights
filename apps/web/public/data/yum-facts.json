@@ -5,8 +5,8 @@
  "facts": [
   {
    "key": "coldest_night",
-   "score": 0.603,
-   "crossCityPercentile": 0.22,
+   "score": 0.597,
+   "crossCityPercentile": 0.2,
    "label": "Even the coldest night of the year is warming +1.05\u00b0F per decade",
    "value": 1.05,
    "unit": "\u00b0F/decade",
@@ -15,8 +15,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.493,
-   "crossCityPercentile": 0.33,
+   "score": 0.513,
+   "crossCityPercentile": 0.4,
    "label": "Overnight lows are rising 2.1\u00d7 as fast as afternoon highs",
    "value": 2.1,
    "unit": "\u00d7 ratio",
@@ -25,24 +25,13 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.493,
-   "crossCityPercentile": 0.33,
+   "score": 0.513,
+   "crossCityPercentile": 0.4,
    "label": "The day\u2013night temperature gap is shrinking 0.44\u00b0F per decade",
    "value": 0.44,
    "unit": "\u00b0F/decade",
    "significant": true,
    "rank": 3
-  },
-  {
-   "key": "night_warming",
-   "score": 0.49,
-   "crossCityPercentile": 0.11,
-   "label": "Summer nights are warming +0.84\u00b0F per decade",
-   "value": 0.84,
-   "unit": "\u00b0F/decade",
-   "significant": true,
-   "bench": 0.36,
-   "rank": 4
   },
   {
    "key": "tropical_nights",
@@ -53,7 +42,7 @@
    "unit": "nights",
    "baseline": 47,
    "significant": true,
-   "rank": 5
+   "rank": 4
   },
   {
    "key": "night_cooling_share",
@@ -64,6 +53,17 @@
    "unit": "%",
    "baseline": 10,
    "significant": true,
+   "rank": 5
+  },
+  {
+   "key": "night_warming",
+   "score": 0.487,
+   "crossCityPercentile": 0.1,
+   "label": "Summer nights are warming +0.84\u00b0F per decade",
+   "value": 0.84,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "bench": 0.36,
    "rank": 6
   },
   {
@@ -79,8 +79,8 @@
   },
   {
    "key": "urban_excess",
-   "score": 0.368,
-   "crossCityPercentile": 0.22,
+   "score": 0.361,
+   "crossCityPercentile": 0.2,
    "label": "City nights are warming +0.28\u00b0F/decade faster than the nearby open desert",
    "value": 0.28,
    "unit": "\u00b0F/decade",

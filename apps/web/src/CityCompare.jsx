@@ -61,7 +61,7 @@ export default function CityCompare({ onPick }) {
       </h2>
       <p className="mt-1 text-sm leading-relaxed" style={{ color: C.muted }}>
         Each city's average overnight low as a departure from its <em>own</em> 1970s normal — so the
-        desert and the high country are comparable. Every line climbs; the steepest is {ordered[0].name}.
+        desert, the high country, and the humid South are comparable. Every line climbs; the steepest is {ordered[0].name}.
       </p>
       <div data-testid="city-compare" role="img" className="mt-4"
         style={{ width: "100%", height: 320 }}

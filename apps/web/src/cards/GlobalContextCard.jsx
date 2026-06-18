@@ -32,7 +32,7 @@ export default function GlobalContextCard({ city, cityRows, ruralRows }) {
     const bars = [
       { label: "Whole planet", rate: +GLOBAL.toFixed(2), kind: "bench" },
       { label: "United States", rate: +CONUS.toFixed(2), kind: "bench" },
-      { label: `${city.rural.short} · desert nights`, rate: +desertTrend.toFixed(2), kind: "desert" },
+      { label: `${city.rural.short} nights`, rate: +desertTrend.toFixed(2), kind: "desert" },
       { label: `${city.shortName} · city nights`, rate: +cityTrend.toFixed(2), kind: "city" },
     ].sort((a, b) => a.rate - b.rate);
 
@@ -45,14 +45,15 @@ export default function GlobalContextCard({ city, cityRows, ruralRows }) {
 
   if (!model) return null;
   const { bars, cityTrend, desertTrend, cityX, desertX, first } = model;
+  const kind = city.rural.kind || "open desert";
   const fill = (kind) => (kind === "city" ? C.ember : kind === "desert" ? C.sage : C.line);
 
   return (
     <Card>
-      <CardHead kicker="Against the whole planet" title="The desert is outrunning the Earth — the city, the desert"
-        sub={`Warming isn't spread evenly. Lined up the same way — degrees per decade since ${first} — here is how ${city.shortName}'s nights and the open desert's nights compare with the background rates for the United States and the planet as a whole.`} />
+      <CardHead kicker="Against the whole planet" title={`Outrunning the Earth — the city, and the ${kind}`}
+        sub={`Warming isn't spread evenly. Lined up the same way — degrees per decade since ${first} — here is how ${city.shortName}'s nights and the ${kind}'s nights compare with the background rates for the United States and the planet as a whole.`} />
       <div role="img" style={{ width: "100%", height: 200 }}
-        aria-label="Horizontal bar chart comparing warming rates in degrees Fahrenheit per decade: the global average and the United States average against Phoenix and open-desert overnight lows, which are several times the global rate.">
+        aria-label="Horizontal bar chart comparing warming rates in degrees Fahrenheit per decade: the global average and the United States average against the city and its rural reference's overnight lows, which run well above the global rate.">
 
         <ResponsiveContainer>
           <BarChart data={bars} layout="vertical" margin={{ top: 4, right: 44, left: 8, bottom: 0 }}>
@@ -83,13 +84,13 @@ export default function GlobalContextCard({ city, cityRows, ruralRows }) {
         Since {first}, {city.shortName}'s overnight lows have climbed at{" "}
         <span style={{ color: C.ember, fontFamily: DISPLAY }}>+{cityTrend.toFixed(1)}°F per decade</span> — about{" "}
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{cityX.toFixed(1)}×</span> the whole planet's average rate.
-        Even {city.rural.short}'s open-desert nights, at +{desertTrend.toFixed(1)}°F per decade ({desertX.toFixed(1)}× global),
+        Even {city.rural.short}'s nights, at +{desertTrend.toFixed(1)}°F per decade ({desertX.toFixed(1)}× global),
         outpace it. The climate is warming everywhere; out here it warms faster, and inside the city faster still.
       </p>
       <ul className="text-xs mt-3 space-y-1 leading-relaxed" style={{ color: C.muted }}>
         <li>Read the benchmark bars as a <em>conservative floor</em>: the global and U.S. figures are annual averages across
           all 24 hours, while the two local figures are overnight lows — which carry steeper trends than daytime averages
-          almost everywhere. Part of the gap is lows-vs-means, not only place; the city-vs-desert gap (the control card above)
+          almost everywhere. Part of the gap is lows-vs-means, not only place; the city-vs-rural gap (the control card above)
           holds the metric fixed.</li>
         <li>Benchmarks are published rates, not derived from this station: global ≈ 0.20°C (0.36°F)/decade
           (NASA GISTEMP / NOAA, recent decades); contiguous U.S. ≈ 2.5°F since 1970 (NOAA / Climate Central). The

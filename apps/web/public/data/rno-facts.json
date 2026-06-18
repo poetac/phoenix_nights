@@ -47,8 +47,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.9,
-   "crossCityPercentile": 0.67,
+   "score": 0.91,
+   "crossCityPercentile": 0.7,
    "label": "Even the coldest night of the year is warming +2.48\u00b0F per decade",
    "value": 2.48,
    "unit": "\u00b0F/decade",
