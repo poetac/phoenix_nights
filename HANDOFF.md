@@ -32,15 +32,21 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 **1 ✅ fact engine · 2 ✅ per-city page + auto hero · 3a ✅ explore + ranking ·
 3b ✅ the literal US map · 4 ✅ scale cities (now 9) · 5 ✅ honest extrapolation.**
 
+Post-Phase-5: diurnal curves wired for all 9 cities; grid for the two clean-BA
+metros (ABQ=PNM, Boise=IPCO); the explore-map dots are sized by night-warming
+rate; per-city browser titles. The intra-metro **spatial-gradient** card stays
+*rejected* (reproduce-or-reject): uniform warming rates across the metro +
+elevation-confounded absolute lows — see `analysis/spatial_gradient_probe.py`.
+
 ## What's deferred (the next obvious work)
 
-1. **Grid + diurnal assets for the five Phase-4 cities.** Their grid (EIA-930) and
-   diurnal (NCEI hourly ISD) cards omit cleanly today. Grid was deferred because a
-   *single-utility* balancing authority must be validated per city (Reno's `NEVP`
-   is actually Las Vegas's utility; several BAs aren't clean) — don't ship
-   wrong-region demand. Diurnal is the heavy NCEI-hourly pull. When wiring them:
-   set `gridAsset`/`diurnalAsset` in `cities.js`, add the cities to the diurnal/grid
-   loops in `rebuild-data.yml`, and add a `grid` block to their `cities.py` entries.
+1. **Grid for Yuma / Reno / Salt Lake City.** Diurnal is now wired for all 9
+   cities, and grid for the two with a clean single-utility metro balancing
+   authority — **Albuquerque (PNM)** and **Boise (IPCO)**. Yuma/Reno/SLC grid stays
+   deferred: no clean single-utility metro BA (Reno's `NEVP` is Las Vegas's utility;
+   `WALC`/`PACE` aren't metro-specific) — don't ship wrong-region demand. To wire one
+   later: add a `grid` block to `cities.py`, `gridAsset` to `cities.js`, the city to
+   the grid loop in `rebuild-data.yml`, a verify shape-check, and run `build_grid.py`.
 2. **A real projection layer (CMIP6 / LOCA2 downscaling)** — the separate go/no-go
    behind Phase 5. The current extrapolation is deliberately a labeled trend line,
    not a forecast; a true projection is a different, physics-based layer.
@@ -104,5 +110,13 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
   wrapping pill bar (it overflowed at 9 cities).
 - Grid card needs a **single-utility** EIA balancing authority — California cities
   (CISO is statewide) can't get one, and check northern vs southern NV (`NEVP` ≠ Reno).
+- **Diurnal ISD ids must cover recent decades**, not just "any data": Yuma's single
+  modern id was wrong, so its hourly record is chained across era ids in `cities.py`
+  (`build_diurnal` fetches them all). The **cool-window** card self-omits where
+  overnight sub-85°F relief is still abundant (cool/high-elevation cities) — it's a
+  hot-city scarcity story.
+- The explore **map dots are sized by night-warming rate** (`CityMap` takes the
+  ranked rows from `CityExplore`); re-running `build-map.mjs` only changes geometry,
+  not the sizing.
 - Playwright `waitForFunction(fn, arg, options)` — **arg before options** (a real
   bug that once cost a render run).
