@@ -16,7 +16,12 @@
 // `?product=` query string overrides it at runtime for preview and CI render
 // tests. Default is `explorer`, so an un-flagged build is the current site.
 
-import { CITIES, climateOf } from "./lib/cities.js";
+import { CITIES } from "./lib/cities.js";
+
+// Desert Nights' city cut: the hot low deserts only — the purest "desert nights"
+// story (high summer heat + a clean open-desert control). The cooler high-desert
+// metros (Reno, SLC, Boise, Albuquerque) live in City Signals only. Edit to tune.
+const HOT_DESERTS = new Set(["phx", "tus", "lv", "ep", "yum"]);
 
 export const PRODUCTS = {
   explorer: {
@@ -41,9 +46,7 @@ export const PRODUCTS = {
     short: "Desert Nights",
     layout: "curated", // the full, fixed thesis-driven stack (DashboardBody)
     tagline: "The desert still cools off at night. The city doesn't.",
-    // the arid West only — the cities where the open-desert control is cleanest.
-    // Curation lives here: edit this predicate (or list ids) to tune the set.
-    includes: () => CITIES.filter((c) => climateOf(c.id).key === "arid"),
+    includes: () => CITIES.filter((c) => HOT_DESERTS.has(c.id)),
     flagshipId: "phx",
     showClimateChips: false, // single biome — the chips would all say "Arid West"
     kicker: "Live NOAA station record · the arid West",

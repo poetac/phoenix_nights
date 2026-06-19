@@ -60,8 +60,9 @@ Go-forward (the split, phased):
   renamed to "Desert Nights"; City Signals city pages now use the salience-driven
   `SignalsBody` (a different layout per city), Desert Nights keeps the curated
   `DashboardBody`.
-- **Now — button down each product:** *Desert Nights* — city cut **locked to the 9
-  arid-West cities**; its curated pages now **lead with the city-vs-open-desert control**
+- **Now — button down each product:** *Desert Nights* — city cut **tightened to the 5 hot
+  low deserts** (Phoenix, Tucson, Las Vegas, El Paso, Yuma — the cooler high-desert metros
+  stay in City Signals); its curated pages now **lead with the city-vs-open-desert control**
   (UHI + global-rate context sit right under the trend, before the extrapolation/ladder).
   Still deferred (deploy-adjacent): regenerate share cards under the new brand and point
   Desert-specific share slugs at `?product=desert` (they currently resolve against City
