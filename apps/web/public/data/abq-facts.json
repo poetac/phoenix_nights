@@ -1,12 +1,12 @@
 {
  "city": "abq",
  "name": "Albuquerque (ThreadEx ABQthr 9)",
- "generated": "2026-06-18",
+ "generated": "2026-06-19",
  "facts": [
   {
    "key": "urban_excess",
-   "score": 0.94,
-   "crossCityPercentile": 0.8,
+   "score": 0.925,
+   "crossCityPercentile": 0.75,
    "label": "City nights are warming +1.05\u00b0F/decade faster than the nearby open desert",
    "value": 1.05,
    "unit": "\u00b0F/decade",
@@ -16,8 +16,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.82,
-   "crossCityPercentile": 0.4,
+   "score": 0.85,
+   "crossCityPercentile": 0.5,
    "label": "Even the coldest night of the year is warming +1.82\u00b0F per decade",
    "value": 1.82,
    "unit": "\u00b0F/decade",
@@ -26,8 +26,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.813,
-   "crossCityPercentile": 0.7,
+   "score": 0.828,
+   "crossCityPercentile": 0.75,
    "label": "Overnight lows are rising 4.1\u00d7 as fast as afternoon highs",
    "value": 4.1,
    "unit": "\u00d7 ratio",
@@ -36,8 +36,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.813,
-   "crossCityPercentile": 0.7,
+   "score": 0.828,
+   "crossCityPercentile": 0.75,
    "label": "The day\u2013night temperature gap is shrinking 0.82\u00b0F per decade",
    "value": 0.82,
    "unit": "\u00b0F/decade",
@@ -46,8 +46,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.73,
-   "crossCityPercentile": 0.6,
+   "score": 0.725,
+   "crossCityPercentile": 0.58,
    "label": "Summer nights are warming +1.09\u00b0F per decade",
    "value": 1.09,
    "unit": "\u00b0F/decade",

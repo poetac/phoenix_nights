@@ -1,7 +1,7 @@
 {
  "city": "tus",
  "name": "Tucson (ThreadEx TUSthr 9)",
- "generated": "2026-06-18",
+ "generated": "2026-06-19",
  "facts": [
   {
    "key": "hot_day_season",
@@ -16,8 +16,8 @@
   },
   {
    "key": "urban_excess",
-   "score": 0.702,
-   "crossCityPercentile": 0.5,
+   "score": 0.677,
+   "crossCityPercentile": 0.42,
    "label": "City nights are warming +0.73\u00b0F/decade faster than the nearby open desert",
    "value": 0.73,
    "unit": "\u00b0F/decade",
@@ -27,8 +27,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.527,
-   "crossCityPercentile": 0.2,
+   "score": 0.517,
+   "crossCityPercentile": 0.17,
    "label": "Summer nights are warming +0.86\u00b0F per decade",
    "value": 0.86,
    "unit": "\u00b0F/decade",
@@ -37,31 +37,31 @@
    "rank": 3
   },
   {
-   "key": "night_cooling_share",
-   "score": 0.413,
-   "crossCityPercentile": 0.25,
-   "label": "6% of cooling demand now falls after dark (was 1% in the 1970s)",
-   "value": 6,
-   "unit": "%",
-   "baseline": 1,
-   "significant": true,
-   "rank": 4
-  },
-  {
    "key": "tropical_nights",
-   "score": 0.396,
-   "crossCityPercentile": 0.4,
+   "score": 0.448,
+   "crossCityPercentile": 0.57,
    "label": "22 nights a year now stay at or above 80\u00b0F (was 4 in the 1970s)",
    "value": 22,
    "unit": "nights",
    "baseline": 4,
    "significant": true,
+   "rank": 4
+  },
+  {
+   "key": "night_cooling_share",
+   "score": 0.388,
+   "crossCityPercentile": 0.17,
+   "label": "6% of cooling demand now falls after dark (was 1% in the 1970s)",
+   "value": 6,
+   "unit": "%",
+   "baseline": 1,
+   "significant": true,
    "rank": 5
   },
   {
    "key": "coldest_night",
-   "score": 0.207,
-   "crossCityPercentile": 0.1,
+   "score": 0.202,
+   "crossCityPercentile": 0.08,
    "label": "Even the coldest night of the year is warming +0.48\u00b0F per decade",
    "value": 0.48,
    "unit": "\u00b0F/decade",
@@ -70,8 +70,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.206,
-   "crossCityPercentile": 0.1,
+   "score": 0.201,
+   "crossCityPercentile": 0.08,
    "label": "Overnight lows are rising 0.9\u00d7 as fast as afternoon highs",
    "value": 0.9,
    "unit": "\u00d7 ratio",
@@ -80,8 +80,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.206,
-   "crossCityPercentile": 0.1,
+   "score": 0.201,
+   "crossCityPercentile": 0.08,
    "label": "The day\u2013night temperature gap is shrinking 0.05\u00b0F per decade",
    "value": -0.05,
    "unit": "\u00b0F/decade",

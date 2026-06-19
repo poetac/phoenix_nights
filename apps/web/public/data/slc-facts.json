@@ -1,12 +1,12 @@
 {
  "city": "slc",
  "name": "Salt Lake City (ThreadEx SLCthr 9)",
- "generated": "2026-06-18",
+ "generated": "2026-06-19",
  "facts": [
   {
    "key": "coldest_night",
-   "score": 0.97,
-   "crossCityPercentile": 0.9,
+   "score": 0.975,
+   "crossCityPercentile": 0.92,
    "label": "Even the coldest night of the year is warming +2.64\u00b0F per decade",
    "value": 2.64,
    "unit": "\u00b0F/decade",
@@ -15,8 +15,8 @@
   },
   {
    "key": "urban_excess",
-   "score": 0.823,
-   "crossCityPercentile": 0.6,
+   "score": 0.818,
+   "crossCityPercentile": 0.58,
    "label": "City nights are warming +0.90\u00b0F/decade faster than the nearby open desert",
    "value": 0.9,
    "unit": "\u00b0F/decade",
@@ -57,8 +57,8 @@
   },
   {
    "key": "hot_day_season",
-   "score": 0.344,
-   "crossCityPercentile": 0.38,
+   "score": 0.332,
+   "crossCityPercentile": 0.33,
    "label": "15 days a year now reach 100\u00b0F (was 6 in the 1970s)",
    "value": 15,
    "unit": "days",

@@ -30,8 +30,8 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 ## Engine phases (see ROADMAP "City-climate engine")
 
 **1 ✅ fact engine · 2 ✅ per-city page + auto hero · 3a ✅ explore + ranking ·
-3b ✅ the literal US map · 4 ✅ scale cities · 5 ✅ honest extrapolation.** Now **10 cities** incl.
-the first humid-climate one (Atlanta).
+3b ✅ the literal US map · 4 ✅ scale cities · 5 ✅ honest extrapolation.** Now **12 cities** incl. three
+humid (Atlanta, Houston, New Orleans).
 
 Post-Phase-5: diurnal curves wired for all 9 cities; grid for the two clean-BA
 metros (ABQ=PNM, Boise=IPCO); the explore-map dots are sized by night-warming
@@ -54,8 +54,9 @@ were de-aridified via a per-city `rural.kind` (default "open desert"; Atlanta "r
 through `UhiCard` / `GlobalContextCard` / `build_facts` (`rural_ref`). `StreakCard` gained a card-fit guard
 (omit where recent 80°F-night streaks ≈ 0) which also cleaned up the cool arid cities. `build_heat_season`
 now survives a decade with no 100°F days. The explore map is **national** (full-US `geoAlbersUsa`), dots
-sized by warming, names on hover/focus (always-on labels collide once cities span the country). Next humid
-candidates that probed clean: Houston, New Orleans (+ likely Memphis, Nashville, Dallas, Raleigh).
+sized by warming, names on hover/focus (always-on labels collide once cities span the country). Houston & New Orleans are now shipped (Gulf coast; full card sets \u2014 tropical nights +
+night-cooling, since the Gulf is hot AND humid). Next likely humid candidates: Memphis, Nashville,
+Dallas, Raleigh, Charlotte. Maritime tropical (Miami) stays rejected (no clean rural control).
 
 ## What's deferred (the next obvious work)
 

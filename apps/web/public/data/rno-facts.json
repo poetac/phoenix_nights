@@ -1,7 +1,7 @@
 {
  "city": "rno",
  "name": "Reno (ThreadEx RNOthr 9)",
- "generated": "2026-06-18",
+ "generated": "2026-06-19",
  "facts": [
   {
    "key": "night_warming",
@@ -47,8 +47,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.91,
-   "crossCityPercentile": 0.7,
+   "score": 0.925,
+   "crossCityPercentile": 0.75,
    "label": "Even the coldest night of the year is warming +2.48\u00b0F per decade",
    "value": 2.48,
    "unit": "\u00b0F/decade",
@@ -57,8 +57,8 @@
   },
   {
    "key": "hot_day_season",
-   "score": 0.251,
-   "crossCityPercentile": 0.12,
+   "score": 0.247,
+   "crossCityPercentile": 0.11,
    "label": "13 days a year now reach 100\u00b0F (was 6 in the 1970s)",
    "value": 13,
    "unit": "days",
