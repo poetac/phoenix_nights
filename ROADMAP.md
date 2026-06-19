@@ -66,8 +66,11 @@ Go-forward (the split, phased):
   (UHI + global-rate context sit right under the trend, before the extrapolation/ladder).
   Still deferred (deploy-adjacent): regenerate share cards under the new brand and point
   Desert-specific share slugs at `?product=desert` (they currently resolve against City
-  Signals). *City Signals* — enrich the fact→card mapping and the per-city signal hero so
-  sparse cities still feel complete.
+  Signals). *City Signals* — **done:** each top fact now renders its full card *family*
+  (e.g. the diurnal-compression fact pulls in the hour-by-hour "then and now" curve; the
+  tropical-nights fact pulls in the warm-night season + sleep-threshold + cool-window
+  cards), each self-omitting when its data/asset is absent — so a city's lead signal is
+  shown in depth, still salience-led and still a different layout per city.
 - **Phase 3 — worldwide (City Signals):** a new data backend (GHCN-Daily / Berkeley
   Earth), a world map, the rural-control method re-validated per region. Large and
   separate — the engine is US-specific today (ACIS, ThreadEx, Census, EIA, `geoAlbersUsa`).

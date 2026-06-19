@@ -134,12 +134,16 @@ try {
 } catch (e) { fail("extrapolation card did not render: " + e.message.split("\n")[0]); }
 
 // City Signals (the default product) renders the salience-driven body \u2014 a
-// different, fact-led layout per city \u2014 not the curated Desert Nights stack.
+// different, fact-led layout per city \u2014 not the curated Desert Nights stack. The
+// enriched fact families show the lead signal in depth (e.g. phx's diurnal
+// "then and now" curve as part of its warming-signal family).
 try {
-  const t = await page.evaluate(() => document.body.textContent || "");
-  if (!t.includes("The warming signal")) fail("City Signals: salience body backbone ('The warming signal') missing on phx");
-  else console.log("\u2713 City Signals: phx uses the salience-driven body");
-} catch (e) { fail("City Signals body check failed: " + e.message.split("\n")[0]); }
+  await page.waitForFunction(() => {
+    const t = document.body.textContent || "";
+    return t.includes("The warming signal") && t.includes("A summer day, then and now");
+  }, undefined, { timeout: 30000 });
+  console.log("\u2713 City Signals: phx uses the salience body + its enriched signal family");
+} catch (e) { fail("City Signals: salience body / enriched family missing on phx: " + e.message.split("\n")[0]); }
 
 // per-card share landing page must redirect to the right city + card anchor
 await page.goto(`${BASE}/share/phx-hot-nights.html`, { waitUntil: "domcontentloaded", timeout: 20000 });
