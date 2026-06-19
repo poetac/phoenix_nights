@@ -77,8 +77,10 @@ Go-forward (the split, phased):
 - **Deployment details** (subpaths vs custom domains vs separate repos) — revisit once
   both products are in a good state.
 
-Still open regardless: **card-depth parity** for the breadth cities (no diurnal/grid for
-the humid set, heat-deaths only for Phoenix).
+Still open regardless: **card-depth parity** for the breadth cities — diurnal is now
+**wired for all 14** (the humid set's `*-diurnal.json` builds on the next rebuild, then the
+hour-by-hour + cool-window cards light up); what remains is grid for the humid set (none has
+a clean single-utility metro BA) and heat-deaths (Phoenix-only by design).
 
 ---
 
@@ -131,9 +133,9 @@ The build is green and there is no half-finished work in the tree.
 
 Goal (met): make the flagship Phoenix story undeniable. All items below shipped; the
 work then generalized into the multi-city engine (see "City-climate engine" and
-"Direction" above). Phoenix remains the curated flagship and the deepest city — card
-parity for the breadth cities is the open follow-up, not more Phoenix cards. Backlog
-was ordered by impact ÷ risk.
+"Direction" above). Phoenix remains the curated flagship and the deepest city; diurnal is
+now wired for all 14, leaving grid (humid set) and heat-deaths (Phoenix-only) as the last
+card-parity gaps — not more Phoenix cards. Backlog was ordered by impact ÷ risk.
 
 ### 1. Extreme-minimum erosion — ✅ SHIPPED (PR #1)
 **Claim:** Even the *coldest* night of the year is warming, and the *hottest* night
