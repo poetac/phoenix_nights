@@ -53,6 +53,14 @@ try {
   else console.log(`\u2713 explore landing: ${cities} cities ranked`);
 } catch (e) { fail("explore landing did not render: " + e.message.split("\n")[0]); }
 
+// Climate tags: the ranked list shows both biomes the thesis spans.
+try {
+  const txt = await page.evaluate(() => document.body.textContent || "");
+  if (!txt.includes("Arid West") || !txt.includes("Humid South"))
+    fail("climate tags missing (expected both 'Arid West' and 'Humid South')");
+  else console.log("\u2713 climate tags: both Arid West + Humid South present");
+} catch (e) { fail("climate tag check failed: " + e.message.split("\n")[0]); }
+
 // Cross-city comparison overlay renders with all cities in its legend.
 try {
   await page.waitForSelector('[data-testid="city-compare"]', { timeout: 20000 });
