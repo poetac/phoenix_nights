@@ -29,8 +29,14 @@ jobs:
           cache-dependency-path: apps/web/package-lock.json
       - run: npm ci
         working-directory: apps/web
-      # served at https://<owner>.github.io/phoenix_nights/, so assets need the subpath base
+      # Two products, one Pages artifact. The explorer ships at the site root
+      # (https://<owner>.github.io/phoenix_nights/); Desert Nights ships at the
+      # /desert/ subpath, built into dist/desert so a single deploy serves both.
+      # Order matters: build the explorer first (it empties dist/), then the
+      # desert build writes into dist/desert without disturbing it.
       - run: npm run build -- --base=/phoenix_nights/
+        working-directory: apps/web
+      - run: VITE_PRODUCT=desert npm run build -- --base=/phoenix_nights/desert/ --outDir dist/desert
         working-directory: apps/web
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
