@@ -838,4 +838,11 @@ const DALLAS = {
   // grid (ERCOT is the whole Texas interconnect, not a metro utility) + diurnal deferred.
 };
 
+// Climate grouping for the explore landing: the same overnight-warming fingerprint
+// shows up across both biomes the engine spans. Humid cities are the South/Gulf
+// additions; everything else is the arid/interior West. Update HUMID when adding.
+const HUMID = new Set(["atl", "hou", "nola", "rdu", "dfw"]);
+export const climateOf = (id) =>
+  HUMID.has(id) ? { key: "humid", label: "Humid South" } : { key: "arid", label: "Arid West" };
+
 export const CITIES = [PHOENIX, TUCSON, LASVEGAS, ELPASO, YUMA, RENO, ALBUQUERQUE, SALTLAKE, BOISE, ATLANTA, HOUSTON, NEWORLEANS, RALEIGH, DALLAS];

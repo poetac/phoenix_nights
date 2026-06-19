@@ -137,6 +137,9 @@ Kansas City, Oklahoma City, San Antonio, Birmingham, Columbia SC, Tampa (probe m
   (`build_diurnal` fetches them all). The **cool-window** card self-omits where
   overnight sub-85°F relief is still abundant (cool/high-elevation cities) — it's a
   hot-city scarcity story.
+- The explore ranked list shows a per-city **climate chip** (Arid West / Humid South) via
+  `climateOf(id)` in `cities.js` — **add new humid cities to the `HUMID` set** there, or they
+  default to "Arid West".
 - The explore **map dots are sized by night-warming rate** (`CityMap` takes the
   ranked rows from `CityExplore`); re-running `build-map.mjs` only changes geometry,
   not the sizing.

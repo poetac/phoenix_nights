@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { CITIES } from "./lib/cities.js";
+import { CITIES, climateOf } from "./lib/cities.js";
 import { fetchFacts } from "./lib/data.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
 import CityMap from "./CityMap.jsx";
@@ -65,6 +65,15 @@ export default function CityExplore({ onPick }) {
                     {r.city.featured && (
                       <span className="ml-2 text-xs align-middle" style={{ color: C.gold }}>★ flagship</span>
                     )}
+                    <span className="ml-2 text-xs align-middle px-1.5 py-0.5 rounded-full"
+                      style={{
+                        fontFamily: BODY, fontWeight: 600,
+                        color: climateOf(r.city.id).key === "humid" ? C.sage : C.emberSoft,
+                        border: `1px solid ${climateOf(r.city.id).key === "humid" ? C.sage : C.emberSoft}`,
+                        opacity: 0.85,
+                      }}>
+                      {climateOf(r.city.id).label}
+                    </span>
                   </span>
                   <span className="block text-sm mt-0.5 truncate" style={{ color: C.muted }}>
                     {r.top ? r.top.label : "—"}
