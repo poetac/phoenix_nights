@@ -35,8 +35,9 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 3b ✅ the literal US map · 4 ✅ scale cities · 5 ✅ honest extrapolation.** Now **14 cities** incl. five
 humid/eastern (Atlanta, Houston, New Orleans, Raleigh, Dallas).
 
-Post-Phase-5: diurnal curves wired for all 9 cities; grid for the two clean-BA
-metros (ABQ=PNM, Boise=IPCO); the explore-map dots are sized by night-warming
+Post-Phase-5: diurnal curves wired for **all 14 cities** (the humid set's `*-diurnal.json`
+builds on the next rebuild); grid for the clean-BA metros only (ABQ=PNM, Boise=IPCO, +the
+arid airports); the explore-map dots are sized by night-warming
 rate (now on a national map, names on hover/focus); per-city browser titles; a **cross-city
 comparison overlay** on the
 landing (`compare-lows.json` via `analysis/build_compare.py`) that charts every
@@ -67,13 +68,13 @@ Kansas City, Oklahoma City, San Antonio, Birmingham, Columbia SC, Tampa (probe m
 **The chosen direction is card-depth parity, not more cities** (see ROADMAP "Direction").
 The breadth cities are shallower than Phoenix; close that before widening further.
 
-1. **Card-depth parity for the breadth cities (the priority).** Diurnal is wired for the
-   9 arid cities but **not the 5 humid ones** (atl/hou/nola/rdu/dfw) — their NCEI-hourly
-   ISD ids already exist in `cities.py`, so wiring them is: add the city to the diurnal
-   loop in `rebuild-data.yml`, run `build_diurnal.py --city <id>`, mark `diurnal` in the
-   `withAssets(...)` opt-in list in `cities.js`. Heat-deaths is still Phoenix-only — the
-   next clean transcription (LV/El Paso) to the `HEAT_DEATHS.md` bar adds the human-cost
-   card for another city.
+1. **Card-depth parity for the breadth cities.** ✅ Diurnal is now wired for **all 14**:
+   the 5 humid cities (atl/hou/nola/rdu/dfw) are opted into `diurnal` in `cities.js`, added
+   to the diurnal loop in `rebuild-data.yml`, and shape-checked in `verify_v0.py` — their
+   `*-diurnal.json` builds on the next rebuild (until then the cards self-omit via the 404→
+   null path). The hour-by-hour + cool-window cards then extend to the humid set. Remaining
+   gap: heat-deaths is still Phoenix-only — the next clean transcription (LV/El Paso) to the
+   `HEAT_DEATHS.md` bar adds the human-cost card for another city.
 2. **Grid where a clean single-utility metro BA exists.** Wired for PHX, TUS, LV, EP,
    ABQ, BOI. Yuma/Reno/SLC stay deferred: no clean single-utility metro BA (Reno's `NEVP`
    is Las Vegas's utility; `WALC`/`PACE` aren't metro-specific); humid Gulf/eastern cities
@@ -121,7 +122,8 @@ The breadth cities are shallower than Phoenix; close that before widening furthe
   map, and salience engine are shared. City Signals' fact→card map lives in
   `SignalsBody.jsx` (`FACT_CARD`); `night_warming`/`lows_outpace_highs` are the universal
   trend backbone, the other 6 fact keys each map to a full card *family* (gated on data,
-  so cards self-omit where the asset is absent — e.g. no diurnal for the humid set). The active product
+  so cards self-omit where the asset is absent — e.g. the humid set's diurnal until its next
+  rebuild). The active product
   is fixed per deployed site via `VITE_PRODUCT` (`npm run build` = City Signals,
   `npm run build:desert`), with `?product=<id>` for preview/CI. Components take the scoped
   `cities` + `product` as props (never import `CITIES` directly in the landing/map/compare).

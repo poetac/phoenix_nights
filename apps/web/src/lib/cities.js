@@ -572,9 +572,9 @@ const ATLANTA = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  // grid + diurnal deferred: Atlanta's BA (Southern Co.) isn't a single-utility
-  // metro authority, and the NCEI-hourly diurnal pull is a follow-up; both cards
-  // omit cleanly until then. The desert-specific cards (tropical nights, 100F-day
+  // diurnal wired (NCEI-hourly asset builds on the next rebuild). grid deferred:
+  // Atlanta's BA (Southern Co.) isn't a single-utility metro authority, so the
+  // grid card omits cleanly. The desert-specific cards (tropical nights, 100F-day
   // season, night-cooling) self-omit \u2014 Atlanta's nights rarely hit 80F and its
   // 1970s night-cooling baseline is non-positive.
 };
@@ -626,8 +626,8 @@ const HOUSTON = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  // grid (ERCOT is the whole Texas interconnect, not a metro utility) + diurnal
-  // (NCEI hourly pull) deferred; both cards omit cleanly until then.
+  // diurnal wired (NCEI-hourly asset builds on the next rebuild). grid deferred:
+  // ERCOT is the whole Texas interconnect, not a metro utility, so it omits.
 };
 
 const NEWORLEANS = {
@@ -677,7 +677,8 @@ const NEWORLEANS = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  // grid (Entergy / MISO, not a clean metro BA) + diurnal deferred; cards omit.
+  // diurnal wired (NCEI-hourly asset builds on the next rebuild). grid deferred:
+  // Entergy / MISO isn't a clean metro BA, so the grid card omits.
 };
 
 const RALEIGH = {
@@ -717,8 +718,9 @@ const RALEIGH = {
       note: "Raleigh\u2019s overnight lows are rising about +0.9\u00b0F/decade in the ACIS record \u2014 roughly +0.7\u00b0F/decade faster than nearby rural Clayton." },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  // grid + diurnal deferred; Raleigh's desert-specific cards self-omit (mild,
-  // humid \u2014 few 80F nights, few 100F days, non-positive 1970s night-cooling).
+  // diurnal wired (NCEI-hourly asset builds on the next rebuild). grid deferred.
+  // Raleigh's desert-specific cards self-omit (mild, humid \u2014 few 80F nights, few
+  // 100F days, non-positive 1970s night-cooling).
 };
 
 const DALLAS = {
@@ -758,7 +760,8 @@ const DALLAS = {
       note: "Dallas\u2019s overnight lows are rising about +0.8\u00b0F/decade in the ACIS record \u2014 roughly +1.1\u00b0F/decade faster than nearby rural Bowie." },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  // grid (ERCOT is the whole Texas interconnect, not a metro utility) + diurnal deferred.
+  // diurnal wired (NCEI-hourly asset builds on the next rebuild). grid deferred:
+  // ERCOT is the whole Texas interconnect, not a metro utility, so it omits.
 };
 
 // Climate grouping for the explore landing: the same overnight-warming fingerprint
@@ -773,7 +776,8 @@ export const climateOf = (id) =>
 // lines on every city, each city declares which assets it actually has and the
 // paths are derived from its id here. Omitting an asset is how a city opts out of
 // that card — the fetcher returns null and the card self-hides (e.g. humid cities
-// carry no diurnal/grid asset; only Phoenix carries heat-deaths).
+// carry no grid asset, since none has a clean single-utility metro BA; only
+// Phoenix carries heat-deaths).
 //   base four (every city, ACIS-derived): heat-season · streaks · normals · cdd-split
 //   opt-in: "diurnal" (NCEI hourly) · "grid" (EIA-930) · "heatDeaths" (hand-curated)
 const ASSET_FILE = {
@@ -797,9 +801,9 @@ export const CITIES = [
   withAssets(ALBUQUERQUE, ["diurnal", "grid"]),
   withAssets(SALTLAKE, ["diurnal"]),
   withAssets(BOISE, ["diurnal", "grid"]),
-  withAssets(ATLANTA),
-  withAssets(HOUSTON),
-  withAssets(NEWORLEANS),
-  withAssets(RALEIGH),
-  withAssets(DALLAS),
+  withAssets(ATLANTA, ["diurnal"]),
+  withAssets(HOUSTON, ["diurnal"]),
+  withAssets(NEWORLEANS, ["diurnal"]),
+  withAssets(RALEIGH, ["diurnal"]),
+  withAssets(DALLAS, ["diurnal"]),
 ];
