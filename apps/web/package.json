@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:desert": "VITE_PRODUCT=desert vite",
     "build": "vite build",
+    "build:desert": "VITE_PRODUCT=desert vite build --outDir dist-desert",
     "preview": "vite preview"
   },
   "dependencies": {

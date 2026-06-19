@@ -12,13 +12,21 @@ card has to clear (see Principles).
 
 ---
 
-## Direction (June 2026) — own the national explorer
+## Direction (June 2026) — two products on one shared engine
 
-The product started as a single-city Phoenix depth play and **became** a 14-city
-national city-climate explorer (arid West + humid South/Gulf), fronted by a US map and
-a salience engine. That drift was real but never formally chosen; this is the decision
-to **own it**. Phoenix Nights is now the universal-UHI explorer with Phoenix as the
-curated flagship — not a single-city page that happens to list other cities.
+The project started as a single-city Phoenix depth play, **became** a 14-city national
+explorer, and is now **splitting into two products built on one shared engine** (cards,
+fetchers, map, salience — all city-agnostic):
+
+- **Desert Nights** — the curated, opinionated heat-island story, anchored in the arid
+  West where the city-vs-open-desert control is cleanest. Phoenix is the flagship; the
+  landing leads with the thesis ("the desert still cools off at night; the city doesn't").
+- **The explorer** (working title *CityTrends* — name TBD) — the platform: every city,
+  map-first, neutral "what's changing here" framing. Grows to the whole US, then worldwide.
+
+A product is a thin composition over the engine (`apps/web/src/products.js`): which
+cities it includes, how the landing is framed, and its brand. The active product is
+fixed per deployed site (`VITE_PRODUCT`), with a `?product=` override for preview/CI.
 
 What that commits us to (and what this pass delivered):
 
@@ -33,12 +41,21 @@ What that commits us to (and what this pass delivered):
 - **No hardcoded cutoffs** — the salience engine and the vetting/reproduce scripts all
   derive the last-complete-year window, matching the guarantee the data-trust work made.
 
-Go-forward (next milestones): **card-depth parity** — the breadth cities are still
-shallower than Phoenix (no diurnal/grid for the humid set, heat-deaths only for
-Phoenix). Level them up (wire NCEI-hourly diurnal + any clean metro grid where a
-single-utility BA exists; transcribe more heat-death series to the `HEAT_DEATHS.md`
-bar) rather than adding more cities. The vetted set is broad enough; depth-per-city is
-the remaining gap.
+Go-forward (the split, phased):
+
+- **Phase 1 — product layer (done):** `products.js` + a product-aware engine; both
+  products build and render (`npm run build` = explorer, `npm run build:desert` = Desert
+  Nights). One default deploy unchanged; the second site is Phase 2.
+- **Phase 2 — differentiate + deploy:** two real sites (separate `base`, branding, OG
+  cards, per-product Pages deploys); Desert Nights leads with the UHI control, the
+  explorer leads with salience. Pick the explorer's public name.
+- **Phase 3 — worldwide (explorer):** a new data backend (GHCN-Daily / Berkeley Earth),
+  a world map, and the rural-control method re-validated per region. Large and separate —
+  the engine is US-specific today (ACIS, ThreadEx, Census, EIA, `geoAlbersUsa`).
+
+Still open regardless of the split: **card-depth parity** — the breadth cities are
+shallower than Phoenix (no diurnal/grid for the humid set, heat-deaths only for Phoenix);
+level them up rather than adding more cities.
 
 ---
 

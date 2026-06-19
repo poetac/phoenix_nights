@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer,
 } from "recharts";
-import { CITIES } from "./lib/cities.js";
 import { fetchCompare } from "./lib/data.js";
 import { C, DISPLAY, BODY, axisTick } from "./ui.jsx";
 
@@ -18,7 +17,7 @@ function lerpHex(a, b, t) {
 // its OWN 1970s normal, on one chart — so you can watch them all pull away from
 // zero and see which is steepest. Slow→fast cities run blue→ember; the Phoenix
 // flagship is gold. Clicking a city (line or legend chip) opens its page.
-export default function CityCompare({ onPick }) {
+export default function CityCompare({ onPick, cities }) {
   const [model, setModel] = useState(null);
   useEffect(() => {
     let alive = true;
@@ -28,16 +27,16 @@ export default function CityCompare({ onPick }) {
 
   const view = useMemo(() => {
     if (!model) return null;
-    const byId = new Map(CITIES.map((c) => [c.id, c]));
-    const cities = model.cities.filter((c) => byId.has(c.id));
-    const slopes = cities.map((c) => c.slope);
+    const byId = new Map(cities.map((c) => [c.id, c]));
+    const inProduct = model.cities.filter((c) => byId.has(c.id));
+    const slopes = inProduct.map((c) => c.slope);
     const lo = Math.min(...slopes), hi = Math.max(...slopes);
     const color = (c) => byId.get(c.id).featured
       ? C.gold
       : lerpHex(C.day, C.ember, hi > lo ? (c.slope - lo) / (hi - lo) : 0.5);
     // pivot to one row per year
     const years = new Set();
-    const series = cities.map((c) => {
+    const series = inProduct.map((c) => {
       const m = new Map(c.anomalies.map(([y, a]) => [y, a]));
       c.anomalies.forEach(([y]) => years.add(y));
       return { ...c, m, color: color(c), name: byId.get(c.id).shortName, featured: byId.get(c.id).featured };
@@ -49,7 +48,7 @@ export default function CityCompare({ onPick }) {
     });
     const ordered = [...series].sort((a, b) => b.slope - a.slope);
     return { data, ordered, through: model.throughYear };
-  }, [model]);
+  }, [model, cities]);
 
   if (!view) return null;
   const { data, ordered, through } = view;
@@ -57,7 +56,7 @@ export default function CityCompare({ onPick }) {
   return (
     <section className="mt-10" aria-label="All cities' overnight-low warming compared">
       <h2 className="text-xl sm:text-2xl" style={{ fontFamily: DISPLAY, fontWeight: 650 }}>
-        All nine, on one chart
+        Every city, on one chart
       </h2>
       <p className="mt-1 text-sm leading-relaxed" style={{ color: C.muted }}>
         Each city's average overnight low as a departure from its <em>own</em> 1970s normal — so the
@@ -65,7 +64,7 @@ export default function CityCompare({ onPick }) {
       </p>
       <div data-testid="city-compare" role="img" className="mt-4"
         style={{ width: "100%", height: 320 }}
-        aria-label={`Line chart through ${through}: nine interior-West cities' overnight-low departure from their 1970s baselines, all rising, ${ordered[0].name} steepest.`}>
+        aria-label={`Line chart through ${through}: ${ordered.length} cities' overnight-low departure from their 1970s baselines, all rising, ${ordered[0].name} steepest.`}>
         <ResponsiveContainer>
           <LineChart data={data} margin={{ top: 6, right: 10, left: -14, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />

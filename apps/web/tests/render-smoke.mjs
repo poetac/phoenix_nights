@@ -141,6 +141,37 @@ if (!url.includes("city=phx") || !url.includes("#nights-that-never-dropped-below
   fail(`share landing redirect went to ${url}`);
 else console.log("✓ share landing redirect ->", url);
 
+// --- Product split: Desert Nights (the curated arid-West product) ---
+// Same shared engine; ?product=desert scopes the city set to the arid West and
+// reframes the landing. (Build-time VITE_PRODUCT picks each deployed site's
+// product; the query override lets us exercise both from one build here.)
+await page.goto(`${BASE}/?product=desert`, { waitUntil: "domcontentloaded", timeout: 30000 });
+try {
+  await page.waitForFunction(
+    () => (document.body.textContent || "").includes("The desert still cools off at night"),
+    undefined, { timeout: 30000 });
+  await page.waitForSelector('[data-testid="us-map"]', { timeout: 15000 });
+  const dots = await page.$$eval('[data-testid="us-map"] [data-city]', (els) => els.map((e) => e.getAttribute("data-city")));
+  if (dots.includes("atl") || dots.includes("hou") || dots.includes("nola") || dots.includes("rdu") || dots.includes("dfw"))
+    fail(`desert: a humid city leaked onto the map (${dots.join(",")})`);
+  if (!dots.includes("phx")) fail("desert: Phoenix dot missing");
+  if (dots.length !== 9) fail(`desert: expected 9 arid-city dots, got ${dots.length} (${dots.join(",")})`);
+  const rows = await page.$$eval('ol[aria-label="Cities ranked by overnight-low warming"] button', (b) => b.length);
+  if (rows !== 9) fail(`desert: expected 9 ranked cities, got ${rows}`);
+  const txt = await page.evaluate(() => document.body.textContent || "");
+  if (txt.includes("Humid South")) fail("desert: 'Humid South' should not appear in the arid-only product");
+  console.log(`✓ desert product: ${dots.length} arid cities, thesis landing, no humid leak`);
+} catch (e) { fail("desert product landing did not render: " + e.message.split("\n")[0]); }
+
+// A desert deep-link keeps the product context and opens the right city.
+await page.goto(`${BASE}/?product=desert&city=phx`, { waitUntil: "domcontentloaded", timeout: 30000 });
+await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
+{
+  const sw = await page.$eval('[data-testid="city-switcher"]', (b) => b.textContent);
+  if (!sw.includes("Phoenix")) fail(`desert deep-link: switcher shows "${sw}", expected Phoenix`);
+  else console.log("✓ desert product: ?product=desert&city=phx deep-links into Phoenix");
+}
+
 if (pageErrors.length) fail("uncaught page errors: " + JSON.stringify([...new Set(pageErrors)].slice(0, 8)));
 
 await browser.close();

@@ -1,19 +1,21 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { CITIES, climateOf } from "./lib/cities.js";
+import { climateOf } from "./lib/cities.js";
 import { fetchFacts } from "./lib/data.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
 import CityMap from "./CityMap.jsx";
 const CityCompare = lazy(() => import("./CityCompare.jsx"));
 
-// The cross-city explorer / landing: every computed city, ranked by how fast its
-// summer nights are warming, each a click into its own page. The shareable hook
-// — and the "pick a city" entry point. (A literal US map is the next step.)
-export default function CityExplore({ onPick }) {
+// The cross-city explorer / landing: the product's cities, ranked by how fast
+// their summer nights are warming, each a click into its own page — plus the
+// literal map and the cross-city overlay. All copy (headline, intro, footnote)
+// and the city set come from the active product (see products.js), so Desert
+// Nights and the broad explorer share this one component with different framing.
+export default function CityExplore({ product, cities, onPick }) {
   const [ranked, setRanked] = useState(null);
   useEffect(() => {
     let alive = true;
     Promise.all(
-      CITIES.map(async (c) => {
+      cities.map(async (c) => {
         try {
           const f = await fetchFacts(c);
           const nw = f.facts.find((x) => x.key === "night_warming");
@@ -28,9 +30,9 @@ export default function CityExplore({ onPick }) {
       setRanked(rows);
     });
     return () => { alive = false; };
-  }, []);
+  }, [product.id, cities]);
 
-  const rows = ranked ?? CITIES.map((c) => ({ city: c, nightWarming: null, top: null }));
+  const rows = ranked ?? cities.map((c) => ({ city: c, nightWarming: null, top: null }));
   return (
     <div className="min-h-screen" style={{ background: C.bg, color: C.text, fontFamily: BODY }}>
       <div aria-hidden="true" className="pointer-events-none fixed inset-0"
@@ -38,18 +40,18 @@ export default function CityExplore({ onPick }) {
           `radial-gradient(120% 60% at 50% -10%, rgba(255,107,61,.16), transparent 60%)` }} />
       <main className="relative max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
         <div className="text-xs tracking-widest uppercase mb-3" style={{ color: C.emberSoft }}>
-          Live NOAA station record · arid West to humid South
+          {product.kicker}
         </div>
         <h1 className="text-3xl sm:text-5xl leading-tight" style={{ fontFamily: DISPLAY, fontWeight: 650 }}>
-          Cities are losing<br />the cool of the night
+          {product.h1Lines.map((line, i) => (
+            <span key={i}>{line}{i < product.h1Lines.length - 1 ? <br /> : null}</span>
+          ))}
         </h1>
         <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: C.muted }}>
-          From the desert Southwest to the humid South, US cities' overnight lows are abandoning their
-          history faster than their afternoon highs — the urban-heat-island fingerprint, straight from the
-          official record. Ranked by how fast each city's nights are warming; pick one for its full story.
+          {product.intro}
         </p>
 
-        <CityMap onPick={onPick} ranked={rows} />
+        <CityMap onPick={onPick} ranked={rows} cities={cities} />
 
         <ol className="mt-4 space-y-3" aria-label="Cities ranked by overnight-low warming">
           {rows.map((r, i) => (
@@ -65,15 +67,17 @@ export default function CityExplore({ onPick }) {
                     {r.city.featured && (
                       <span className="ml-2 text-xs align-middle" style={{ color: C.gold }}>★ flagship</span>
                     )}
-                    <span className="ml-2 text-xs align-middle px-1.5 py-0.5 rounded-full"
-                      style={{
-                        fontFamily: BODY, fontWeight: 600,
-                        color: climateOf(r.city.id).key === "humid" ? C.sage : C.emberSoft,
-                        border: `1px solid ${climateOf(r.city.id).key === "humid" ? C.sage : C.emberSoft}`,
-                        opacity: 0.85,
-                      }}>
-                      {climateOf(r.city.id).label}
-                    </span>
+                    {product.showClimateChips && (
+                      <span className="ml-2 text-xs align-middle px-1.5 py-0.5 rounded-full"
+                        style={{
+                          fontFamily: BODY, fontWeight: 600,
+                          color: climateOf(r.city.id).key === "humid" ? C.sage : C.emberSoft,
+                          border: `1px solid ${climateOf(r.city.id).key === "humid" ? C.sage : C.emberSoft}`,
+                          opacity: 0.85,
+                        }}>
+                        {climateOf(r.city.id).label}
+                      </span>
+                    )}
                   </span>
                   <span className="block text-sm mt-0.5 truncate" style={{ color: C.muted }}>
                     {r.top ? r.top.label : "—"}
@@ -92,13 +96,10 @@ export default function CityExplore({ onPick }) {
           ))}
         </ol>
 
-        <Suspense fallback={null}><CityCompare onPick={onPick} /></Suspense>
+        <Suspense fallback={null}><CityCompare onPick={onPick} cities={cities} /></Suspense>
 
         <p className="mt-8 text-xs leading-relaxed" style={{ color: C.muted }}>
-          Overnight-low warming since 1970, vs the ~0.36 °F/decade global background rate. Phoenix is the
-          curated flagship; every city is computed from the NOAA (ACIS) record and measured against a nearby
-          rural reference to isolate the city's own heat. Atlanta is the first humid-climate city — proof the
-          fingerprint isn't desert-only.
+          {product.caption}
         </p>
       </main>
     </div>

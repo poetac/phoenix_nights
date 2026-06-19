@@ -1,5 +1,4 @@
 import { US_MAP } from "./lib/usMap.js";
-import { CITIES } from "./lib/cities.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
 
 // Map a night-warming rate (°F/decade, ~0.8–2.2) to a 0..1 ramp position.
@@ -11,9 +10,9 @@ const clamp01 = (t) => Math.max(0, Math.min(1, t));
 // summer nights are warming, so the map carries the ranking spatially; the city
 // name reveals on hover/focus (the engine now spans the arid West and the humid
 // South, so the dots are spread across the country and always-on labels would
-// collide). Pairs with the ranked list + comparison below. No runtime map deps.
-export default function CityMap({ onPick, ranked }) {
-  const byId = new Map(CITIES.map((c) => [c.id, c]));
+// collide). Only the active product's cities get a dot. No runtime map deps.
+export default function CityMap({ onPick, ranked, cities }) {
+  const byId = new Map(cities.map((c) => [c.id, c]));
   const rate = new Map((ranked || []).map((r) => [r.city.id, r.nightWarming]));
   const dots = Object.entries(US_MAP.cities)
     .map(([id, xy]) => ({ city: byId.get(id), xy }))
