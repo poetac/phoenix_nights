@@ -13,8 +13,12 @@ import CityFacts from "./cards/CityFacts.jsx";
 // is a lazy chunk, so it loads after this shell paints and in parallel with the
 // ACIS fetch rather than blocking first paint.
 const DashboardBody = lazy(() => import("./DashboardBody.jsx"));
+// City Signals composes a different, salience-driven body (only this city's
+// top-fact cards). Desert Nights keeps the full curated DashboardBody.
+const SignalsBody = lazy(() => import("./SignalsBody.jsx"));
 
-export default function CityDashboard({ city }) {
+export default function CityDashboard({ city, product }) {
+  const signals = product?.layout === "signals";
   const [state, setState] = useState({ loading: true, error: null, rows: [], source: null });
   const [rural, setRural] = useState(null);
   const [seasonal, setSeasonal] = useState(null);
@@ -56,7 +60,7 @@ export default function CityDashboard({ city }) {
     fetchLastNight(city).then((d) => alive && setLastNight(d)).catch(() => {});
     // warm the lazy body chunk in parallel with the fetch so there's no gap
     // between the data resolving and the charts rendering.
-    import("./DashboardBody.jsx").catch(() => {});
+    import(signals ? "./SignalsBody.jsx" : "./DashboardBody.jsx").catch(() => {});
     (async () => {
       try {
         const res = await fetchCityYearly(city);
@@ -75,7 +79,7 @@ export default function CityDashboard({ city }) {
       }
     })();
     return () => { alive = false; };
-  }, [reloadKey, city]);
+  }, [reloadKey, city, signals]);
 
   const { rows, source } = state;
 
@@ -109,7 +113,7 @@ export default function CityDashboard({ city }) {
           <div className="text-xs tracking-widest uppercase mb-3" style={{ color: C.emberSoft }}>
             Live NOAA station record · {city.name}
           </div>
-          {city.featured ? (
+          {!signals && city.featured ? (
             <>
               <h1 className="text-3xl sm:text-5xl leading-tight" style={{ fontFamily: DISPLAY, fontWeight: 650 }}>
                 {city.featured.line1}
@@ -131,7 +135,7 @@ export default function CityDashboard({ city }) {
               </h1>
               <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: C.muted }}>
                 The official station record for {city.name}, ranked by what stands out from the
-                last half-century{city.rural ? ` — overnight lows measured against ${city.rural.short}, its nearby open-desert reference` : ""}.
+                last half-century{city.rural ? ` — overnight lows measured against ${city.rural.short}, its nearby rural reference` : ""}.
               </p>
             </>
           )}
@@ -171,9 +175,14 @@ export default function CityDashboard({ city }) {
 
         <Suspense fallback={null}>
           {!state.loading && !state.error && rows.length > 0 && (
-            <DashboardBody key={city.id} city={city} rows={rows} source={source}
-              rural={rural} seasonal={seasonal} diurnal={diurnal} heatSeason={heatSeason}
-              heatDeaths={heatDeaths} streaks={streaks} grid={grid} cddSplit={cddSplit} freshness={freshness} />
+            signals ? (
+              <SignalsBody key={city.id} city={city} rows={rows} source={source}
+                rural={rural} heatSeason={heatSeason} streaks={streaks} cddSplit={cddSplit} facts={facts?.facts} />
+            ) : (
+              <DashboardBody key={city.id} city={city} rows={rows} source={source}
+                rural={rural} seasonal={seasonal} diurnal={diurnal} heatSeason={heatSeason}
+                heatDeaths={heatDeaths} streaks={streaks} grid={grid} cddSplit={cddSplit} freshness={freshness} />
+            )
           )}
         </Suspense>
       </main>

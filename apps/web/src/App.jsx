@@ -154,7 +154,7 @@ export default function App() {
           )}
         </div>
       </nav>
-      <CityDashboard key={city.id} city={city} />
+      <CityDashboard key={city.id} city={city} product={product} />
     </>
   );
 }

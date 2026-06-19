@@ -19,14 +19,22 @@ explorer, and is now **splitting into two products built on one shared engine** 
 fetchers, map, salience — all city-agnostic):
 
 - **Desert Nights** — the curated, opinionated heat-island story, anchored in the arid
-  West where the city-vs-open-desert control is cleanest. Phoenix is the flagship; the
-  landing leads with the thesis ("the desert still cools off at night; the city doesn't").
-- **The explorer** (working title *CityTrends* — name TBD) — the platform: every city,
-  map-first, neutral "what's changing here" framing. Grows to the whole US, then worldwide.
+  West where the city-vs-open-desert control is cleanest. Phoenix is the flagship. Its
+  city pages use the **curated** layout: the full, fixed card stack (`DashboardBody`),
+  thesis-forward. ("Desert Nights" is the generic-desert rename of the old "Phoenix
+  Nights" brand — Phoenix is the flagship, not the brand.)
+- **City Signals** (the explorer) — the platform: every city (US now, worldwide later),
+  map-first. Its city pages use the **salience** layout (`SignalsBody`): each city shows
+  ONLY the cards matching *its own* top-ranked facts, in salience order, so **every
+  city's page is laid out differently** — the explorer surfaces what's distinctive about
+  each place rather than a fixed template.
 
-A product is a thin composition over the engine (`apps/web/src/products.js`): which
-cities it includes, how the landing is framed, and its brand. The active product is
-fixed per deployed site (`VITE_PRODUCT`), with a `?product=` override for preview/CI.
+A product is a composition over the shared engine (`apps/web/src/products.js`): which
+cities it includes, its landing framing, brand, and **`layout`** (`curated` vs
+`signals`). The active product is fixed per deployed site (`VITE_PRODUCT`), with a
+`?product=` override for preview/CI. The two products **fully diverge** at the page
+level (different hero + different body) while sharing the atomic cards, fetchers, map,
+and salience engine.
 
 What that commits us to (and what this pass delivered):
 
@@ -44,18 +52,27 @@ What that commits us to (and what this pass delivered):
 Go-forward (the split, phased):
 
 - **Phase 1 — product layer (done):** `products.js` + a product-aware engine; both
-  products build and render (`npm run build` = explorer, `npm run build:desert` = Desert
-  Nights). One default deploy unchanged; the second site is Phase 2.
-- **Phase 2 — differentiate + deploy:** two real sites (separate `base`, branding, OG
-  cards, per-product Pages deploys); Desert Nights leads with the UHI control, the
-  explorer leads with salience. Pick the explorer's public name.
-- **Phase 3 — worldwide (explorer):** a new data backend (GHCN-Daily / Berkeley Earth),
-  a world map, and the rural-control method re-validated per region. Large and separate —
-  the engine is US-specific today (ACIS, ThreadEx, Census, EIA, `geoAlbersUsa`).
+  products build (`npm run build` = City Signals, `npm run build:desert` = Desert Nights).
+- **Phase 2 — two-site deploy wiring (done):** one Pages artifact serves the explorer at
+  the root and Desert Nights at `/desert/`. (Branding/OG/custom-domain polish is deferred
+  until both products are buttoned down — owner's call.)
+- **Phase 3a — full page divergence (done):** City Signals named; "Phoenix Nights"
+  renamed to "Desert Nights"; City Signals city pages now use the salience-driven
+  `SignalsBody` (a different layout per city), Desert Nights keeps the curated
+  `DashboardBody`.
+- **Now — button down each product:** *City Signals* — enrich the fact→card mapping and
+  the per-city signal hero so sparse cities still feel complete; consider archetype
+  touches. *Desert Nights* — finalize the curated desert cut (which cities; lead with the
+  city-vs-desert control), regenerate share cards under the new brand, and resolve
+  Desert-specific share-link slugs (they currently resolve against City Signals).
+- **Phase 3 — worldwide (City Signals):** a new data backend (GHCN-Daily / Berkeley
+  Earth), a world map, the rural-control method re-validated per region. Large and
+  separate — the engine is US-specific today (ACIS, ThreadEx, Census, EIA, `geoAlbersUsa`).
+- **Deployment details** (subpaths vs custom domains vs separate repos) — revisit once
+  both products are in a good state.
 
-Still open regardless of the split: **card-depth parity** — the breadth cities are
-shallower than Phoenix (no diurnal/grid for the humid set, heat-deaths only for Phoenix);
-level them up rather than adding more cities.
+Still open regardless: **card-depth parity** for the breadth cities (no diurnal/grid for
+the humid set, heat-deaths only for Phoenix).
 
 ---
 

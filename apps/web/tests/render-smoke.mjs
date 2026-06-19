@@ -133,6 +133,14 @@ try {
   else console.log("\u2713 extrapolation card present + labeled (not a forecast)");
 } catch (e) { fail("extrapolation card did not render: " + e.message.split("\n")[0]); }
 
+// City Signals (the default product) renders the salience-driven body \u2014 a
+// different, fact-led layout per city \u2014 not the curated Desert Nights stack.
+try {
+  const t = await page.evaluate(() => document.body.textContent || "");
+  if (!t.includes("The warming signal")) fail("City Signals: salience body backbone ('The warming signal') missing on phx");
+  else console.log("\u2713 City Signals: phx uses the salience-driven body");
+} catch (e) { fail("City Signals body check failed: " + e.message.split("\n")[0]); }
+
 // per-card share landing page must redirect to the right city + card anchor
 await page.goto(`${BASE}/share/phx-hot-nights.html`, { waitUntil: "domcontentloaded", timeout: 20000 });
 await page.waitForTimeout(2000);
@@ -171,6 +179,12 @@ await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
   if (!sw.includes("Phoenix")) fail(`desert deep-link: switcher shows "${sw}", expected Phoenix`);
   else console.log("✓ desert product: ?product=desert&city=phx deep-links into Phoenix");
 }
+// Same city, different product → different layout: Desert Nights gets the curated
+// stack ("The verdict"), proving the two products diverge on the city page too.
+try {
+  await page.waitForFunction(() => (document.body.textContent || "").includes("The verdict"), undefined, { timeout: 45000 });
+  console.log("✓ Desert Nights: phx uses the curated body ('The verdict') — diverges from City Signals");
+} catch { fail("Desert Nights: curated body ('The verdict') missing on phx"); }
 
 if (pageErrors.length) fail("uncaught page errors: " + JSON.stringify([...new Set(pageErrors)].slice(0, 8)));
 

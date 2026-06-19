@@ -21,8 +21,9 @@ import { CITIES, climateOf } from "./lib/cities.js";
 export const PRODUCTS = {
   explorer: {
     id: "explorer",
-    name: "CityTrends",
-    short: "CityTrends",
+    name: "City Signals",
+    short: "City Signals",
+    layout: "signals", // salience-driven: each city shows ONLY its top-fact cards
     tagline: "How every city's climate is changing — in its own words.",
     // the whole registry (US today; worldwide is a future data-backend milestone)
     includes: () => CITIES,
@@ -38,6 +39,7 @@ export const PRODUCTS = {
     id: "desert",
     name: "Desert Nights",
     short: "Desert Nights",
+    layout: "curated", // the full, fixed thesis-driven stack (DashboardBody)
     tagline: "The desert still cools off at night. The city doesn't.",
     // the arid West only — the cities where the open-desert control is cleanest.
     // Curation lives here: edit this predicate (or list ids) to tune the set.
