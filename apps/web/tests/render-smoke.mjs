@@ -160,15 +160,16 @@ try {
     undefined, { timeout: 30000 });
   await page.waitForSelector('[data-testid="us-map"]', { timeout: 15000 });
   const dots = await page.$$eval('[data-testid="us-map"] [data-city]', (els) => els.map((e) => e.getAttribute("data-city")));
-  if (dots.includes("atl") || dots.includes("hou") || dots.includes("nola") || dots.includes("rdu") || dots.includes("dfw"))
-    fail(`desert: a humid city leaked onto the map (${dots.join(",")})`);
+  const allowed = new Set(["phx", "tus", "lv", "ep", "yum"]); // the 5 hot deserts
+  const leak = dots.filter((d) => !allowed.has(d));
+  if (leak.length) fail(`desert: a non-hot-desert city leaked onto the map (${leak.join(",")})`);
   if (!dots.includes("phx")) fail("desert: Phoenix dot missing");
-  if (dots.length !== 9) fail(`desert: expected 9 arid-city dots, got ${dots.length} (${dots.join(",")})`);
+  if (dots.length !== 5) fail(`desert: expected 5 hot-desert dots, got ${dots.length} (${dots.join(",")})`);
   const rows = await page.$$eval('ol[aria-label="Cities ranked by overnight-low warming"] button', (b) => b.length);
-  if (rows !== 9) fail(`desert: expected 9 ranked cities, got ${rows}`);
+  if (rows !== 5) fail(`desert: expected 5 ranked cities, got ${rows}`);
   const txt = await page.evaluate(() => document.body.textContent || "");
-  if (txt.includes("Humid South")) fail("desert: 'Humid South' should not appear in the arid-only product");
-  console.log(`✓ desert product: ${dots.length} arid cities, thesis landing, no humid leak`);
+  if (txt.includes("Humid South")) fail("desert: 'Humid South' should not appear in the desert product");
+  console.log(`✓ desert product: ${dots.length} hot-desert cities, thesis landing, no leak`);
 } catch (e) { fail("desert product landing did not render: " + e.message.split("\n")[0]); }
 
 // A desert deep-link keeps the product context and opens the right city.

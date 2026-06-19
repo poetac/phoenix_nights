@@ -112,7 +112,8 @@ The breadth cities are shallower than Phoenix; close that before widening furthe
 ## Conventions
 
 - **Two products, one engine** (`apps/web/src/products.js`): `desert` ("Desert Nights",
-  arid-West cut, Phoenix flagship) and `explorer` ("City Signals", all cities). They
+  the 5 hot-desert cities — phx/tus/lv/ep/yum — Phoenix flagship) and `explorer`
+  ("City Signals", all cities). They
   **fully diverge at the page level** via a `layout` field: `curated` (Desert Nights →
   `DashboardBody`, the full fixed stack) vs `signals` (City Signals → `SignalsBody`, only
   this city's top-fact cards in salience order, so every city's page differs).

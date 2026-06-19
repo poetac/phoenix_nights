@@ -194,6 +194,13 @@ export default function DashboardBody({
         </div>
       </Card>
 
+      {/* Desert Nights leads with the control experiment — the city vs its own
+          open-desert pair (and both vs the global rate) is the heart of the thesis,
+          so it sits right under the trend rather than mid-page. */}
+      {source === "acis" && rural && <UhiCard city={city} cityRows={rows} ruralRows={rural} />}
+
+      {source === "acis" && rural && <GlobalContextCard city={city} cityRows={rows} ruralRows={rural} />}
+
       <ExtrapolationCard city={city} rows={vis} fit={fitLow} windowStart={windowStart} />
 
       {decades.length >= 2 && ladder && (
@@ -228,10 +235,6 @@ export default function DashboardBody({
           )}
         </Card>
       )}
-
-      {source === "acis" && rural && <UhiCard city={city} cityRows={rows} ruralRows={rural} />}
-
-      {source === "acis" && rural && <GlobalContextCard city={city} cityRows={rows} ruralRows={rural} />}
 
       {source === "acis" && rural && <GrowthCard city={city} cityRows={rows} ruralRows={rural} />}
 

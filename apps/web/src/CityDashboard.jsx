@@ -135,7 +135,7 @@ export default function CityDashboard({ city, product }) {
               </h1>
               <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: C.muted }}>
                 The official station record for {city.name}, ranked by what stands out from the
-                last half-century{city.rural ? ` — overnight lows measured against ${city.rural.short}, its nearby rural reference` : ""}.
+                last half-century{city.rural ? ` — overnight lows measured against ${city.rural.short}, its nearby ${city.rural.kind ?? "open-desert"} reference` : ""}.
               </p>
             </>
           )}
