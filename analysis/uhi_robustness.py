@@ -10,11 +10,14 @@ so the comparison is apples-to-apples.
 Stdlib only.
 """
 
+import datetime
 import json
 import urllib.request
 
 ACIS_URL = "https://data.rcc-acis.org/StnData"
 MAX_MISSING_DAYS = 36
+# Derived, never hardcoded: the most recent fully-elapsed calendar year.
+LAST_COMPLETE_YEAR = datetime.date.today().year - 1
 
 CITY = ("PHXthr 9", "Phoenix (ThreadEx)")
 RURALS = [
@@ -26,7 +29,7 @@ RURALS = [
 
 def yearly_mint(sid):
     body = json.dumps({
-        "sid": sid, "sdate": "1896-01-01", "edate": "2025-12-31",
+        "sid": sid, "sdate": "1896-01-01", "edate": f"{LAST_COMPLETE_YEAR}-12-31",
         "elems": [{"name": "mint", "interval": "yly", "duration": "yly",
                    "reduce": {"reduce": "mean", "add": "mcnt"}}],
     }).encode()

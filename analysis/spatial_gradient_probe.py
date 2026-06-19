@@ -20,10 +20,14 @@ existing city-vs-desert UHI control card. Reproduce or reject -> reject for now.
 Stdlib only. Usage: python3 analysis/spatial_gradient_probe.py
 """
 
+import datetime
 import json
 import urllib.request
 
 ACIS = "https://data.rcc-acis.org/StnData"
+# Derived, never hardcoded: most recent complete year + trailing-decade start.
+LAST_COMPLETE_YEAR = datetime.date.today().year - 1
+RECENT0 = LAST_COMPLETE_YEAR - 9
 
 # (sid, label, elevation_ft, approx miles from Sky Harbor)
 TRANSECT = [
@@ -69,8 +73,8 @@ def main():
     print(f"{'station':24}{'elev':>5}{'mi':>4}{'n(70-25)':>9}{'F/dec':>7}{'JJAlow16-25':>12}{'n':>4}")
     rates, recents = [], []
     for sid, name, elev, mi in TRANSECT:
-        full = yearly_summer_low(sid, 1970, 2025)
-        recent = yearly_summer_low(sid, 2016, 2025)
+        full = yearly_summer_low(sid, 1970, LAST_COMPLETE_YEAR)
+        recent = yearly_summer_low(sid, RECENT0, LAST_COMPLETE_YEAR)
         sl = slope_per_decade(full)
         mr = sum(recent.values()) / len(recent) if recent else None
         if sl is not None:

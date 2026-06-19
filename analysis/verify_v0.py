@@ -54,6 +54,13 @@ GSOY_URL = (
 GLOBAL_BENCH = 0.36
 CASA_GRANDE_SID = "USC00021314"  # the open-desert control (cities.js rural.sid)
 
+# The city + rural-pair station ids are the single source of truth in cities.py
+# (rural_sid), so the per-city loop below doesn't re-type them here. verify still
+# reproduces every statistic independently from raw ACIS — the registry only
+# supplies the station ids, not the numbers.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from cities import CITIES as REGISTRY  # noqa: E402
+
 
 def fetch_gsoy():
     req = urllib.request.Request(GSOY_URL, headers={"User-Agent": "phoenix-nights-verify/0.1"})
@@ -160,6 +167,94 @@ def acis_yearly_low_trend(sid, start_year):
         if m <= MAX_MISSING_DAYS and y <= LAST_COMPLETE_YEAR:
             pts.append((y, v))
     return linreg(pts) * 10
+
+
+def facts_trend(sid, elem, start=1970, maxmissing=20):
+    """A station's annual-mean trend (F/decade) reproduced with build_facts.py's
+    EXACT method (maxmissing=20 in the reduce, OLS since `start`), so the headline
+    values in each committed <city>-facts.json can be value-checked, not just
+    shape-checked. Returns None if fewer than 25 usable years (build_facts' floor).
+    """
+    body = json.dumps({
+        "sid": sid, "sdate": f"{start}-01-01", "edate": f"{LAST_COMPLETE_YEAR}-12-31",
+        "elems": [{"name": elem, "interval": "yly", "duration": "yly",
+                   "reduce": "mean", "maxmissing": maxmissing}],
+    }).encode()
+    req = urllib.request.Request(ACIS_URL, data=body,
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=120) as r:
+        data = json.load(r)["data"]
+    pts = []
+    for y, v in data:
+        try:
+            pts.append((int(y[:4]), float(v)))
+        except (ValueError, TypeError):
+            pass
+    return linreg(pts) * 10 if len(pts) >= 25 else None
+
+
+def _load_facts(prefix):
+    """The committed <prefix>-facts.json as {key: fact}, or None if absent."""
+    p = DATA_DIR / f"{prefix}-facts.json"
+    if not p.exists():
+        return None
+    try:
+        return {f["key"]: f for f in json.loads(p.read_text()).get("facts", [])}
+    except (ValueError, OSError):
+        return None
+
+
+def check_cities(checks):
+    """Reproduce EVERY city's headline numbers live from ACIS and value-check them
+    against its committed facts JSON — the parity the deep Phoenix battery has but
+    the breadth cities used to lack (they were only shape-checked). For each city:
+
+      - directional: nights warm, outrun the global rate, and (except Phoenix,
+        whose post-1970 urban excess is documented-small) outrun the rural control;
+      - value: the facts JSON's night_warming / urban_excess / lows-vs-highs ratio
+        each MATCH the live recompute (catches a stale asset or a build_facts bug,
+        which a shape check can't).
+
+    Station ids come from the shared cities.py registry; the numbers are recomputed
+    here independently. Returns Phoenix's desert-pair trend for the summary line.
+    """
+    desert = float("nan")
+    for key, c in REGISTRY.items():
+        name = c["label"].split(" (")[0]
+        rsid = c.get("rural_sid")
+        night = facts_trend(c["sid"], "mint")
+        day = facts_trend(c["sid"], "maxt")
+        rural = facts_trend(rsid, "mint") if rsid else None
+        if key == "phx" and rural is not None:
+            desert = rural
+
+        checks.append((f"{name}: night-low trend since 1970 > global ~{GLOBAL_BENCH}/dec",
+                       night if night is not None else float("nan"),
+                       night is not None and night > GLOBAL_BENCH))
+        # Phoenix's since-1970 city-vs-desert excess is small by design (README),
+        # so the strict ">rural" inequality is asserted for the other cities only;
+        # Phoenix's small excess is still pinned by the urban_excess value-check.
+        if rural is not None and night is not None and key != "phx":
+            checks.append((f"{name}: night-low trend > rural pair ({night:.2f} vs {rural:.2f}/dec)",
+                           night - rural, night > rural))
+
+        facts = _load_facts(c["prefix"])
+        if not facts:
+            continue  # absent facts asset is handled by the shape-check section
+        nw = facts.get("night_warming")
+        if nw and night is not None:
+            checks.append((f"{name}: facts night_warming {nw['value']} ~= live {night:.2f}",
+                           night - nw["value"], abs(night - nw["value"]) < 0.3))
+        ue = facts.get("urban_excess")
+        if ue and night is not None and rural is not None:
+            checks.append((f"{name}: facts urban_excess {ue['value']} ~= live {night - rural:.2f}",
+                           (night - rural) - ue["value"], abs((night - rural) - ue["value"]) < 0.3))
+        lo = facts.get("lows_outpace_highs")
+        if lo and night is not None and day is not None and abs(day) > 0.15:
+            tol = max(0.5, 0.25 * abs(lo["value"]))
+            checks.append((f"{name}: facts lows/highs ratio {lo['value']} ~= live {night / day:.2f}",
+                           night / day - lo["value"], abs(night / day - lo["value"]) < tol))
+    return desert
 
 
 def cdd_night_share(rows, y0, y1):
@@ -501,129 +596,14 @@ def main():
     checks.append((f"night share of CDD rising {share_70s:.0f}%->{share_now:.0f}%",
                    share_now - share_70s, share_now > share_70s))
 
-    # Global context: both the city's and the open desert's overnight-low trends
-    # since 1970 outrun the published global background rate.
-    desert_trend = acis_yearly_low_trend(CASA_GRANDE_SID, 1970)
-    checks.append((f"Phoenix night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   tmin_slope, tmin_slope > GLOBAL_BENCH))
-    checks.append((f"desert (Casa Grande) night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   desert_trend, desert_trend > GLOBAL_BENCH))
-
-    # Second city (Tucson): the same desert-UHI signal must reproduce — Tucson's
-    # overnight-low trend since 1970 outruns both the global background rate and
-    # its own open-desert pair (Sasabe). Live from ACIS; sids match cities.js.
-    tucson_trend = acis_yearly_low_trend("TUSthr 9", 1970)
-    sasabe_trend = acis_yearly_low_trend("USC00027619", 1970)
-    checks.append((f"Tucson night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   tucson_trend, tucson_trend > GLOBAL_BENCH))
-    checks.append((f"Tucson night-low trend > its desert pair Sasabe ({tucson_trend:.2f} vs {sasabe_trend:.2f}/dec)",
-                   tucson_trend - sasabe_trend, tucson_trend > sasabe_trend))
-
-    # Third city (Las Vegas): same desert-UHI signal — McCarran/Harry Reid's
-    # overnight-low trend since 1970 outruns the global rate and its desert pair
-    # (Desert National Wildlife Refuge). Live from ACIS; sids match cities.js.
-    lv_trend = acis_yearly_low_trend("LASthr 9", 1970)
-    dnwr_trend = acis_yearly_low_trend("USC00262243", 1970)
-    checks.append((f"Las Vegas night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   lv_trend, lv_trend > GLOBAL_BENCH))
-    checks.append((f"Las Vegas night-low trend > its desert pair Desert NWR ({lv_trend:.2f} vs {dnwr_trend:.2f}/dec)",
-                   lv_trend - dnwr_trend, lv_trend > dnwr_trend))
-
-    # Fourth city (El Paso): same desert-UHI signal with the cleanest control —
-    # its open-desert pair (White Sands) is at nearly the same elevation.
-    elp_trend = acis_yearly_low_trend("ELPthr 9", 1970)
-    wsnm_trend = acis_yearly_low_trend("USC00299686", 1970)
-    checks.append((f"El Paso night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   elp_trend, elp_trend > GLOBAL_BENCH))
-    checks.append((f"El Paso night-low trend > its desert pair White Sands ({elp_trend:.2f} vs {wsnm_trend:.2f}/dec)",
-                   elp_trend - wsnm_trend, elp_trend > wsnm_trend))
-
-    # Fifth city (Yuma): low-desert AZ, no DST; pair Yuma Proving Ground sits at
-    # nearly the same elevation (the cleanest control after El Paso).
-    yuma_trend = acis_yearly_low_trend("YUMthr 9", 1970)
-    ypg_trend = acis_yearly_low_trend("USW00003125", 1970)
-    checks.append((f"Yuma night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   yuma_trend, yuma_trend > GLOBAL_BENCH))
-    checks.append((f"Yuma night-low trend > its desert pair Yuma Proving Ground ({yuma_trend:.2f} vs {ypg_trend:.2f}/dec)",
-                   yuma_trend - ypg_trend, yuma_trend > ypg_trend))
-
-    # Sixth city (Reno): fastest night-warming in the set; pair Tahoe City warms
-    # far slower (the absolute gap carries an elevation caveat, stated in-card).
-    reno_trend = acis_yearly_low_trend("RNOthr 9", 1970)
-    tahoe_trend = acis_yearly_low_trend("USC00048758", 1970)
-    checks.append((f"Reno night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   reno_trend, reno_trend > GLOBAL_BENCH))
-    checks.append((f"Reno night-low trend > its rural pair Tahoe City ({reno_trend:.2f} vs {tahoe_trend:.2f}/dec)",
-                   reno_trend - tahoe_trend, reno_trend > tahoe_trend))
-
-    # Seventh city (Albuquerque): pair Los Lunas sits ~500 ft below the city, so
-    # the elevation confound runs toward understating (not inflating) the signal.
-    abq_trend = acis_yearly_low_trend("ABQthr 9", 1970)
-    loslunas_trend = acis_yearly_low_trend("USC00295150", 1970)
-    checks.append((f"Albuquerque night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   abq_trend, abq_trend > GLOBAL_BENCH))
-    checks.append((f"Albuquerque night-low trend > its rural pair Los Lunas ({abq_trend:.2f} vs {loslunas_trend:.2f}/dec)",
-                   abq_trend - loslunas_trend, abq_trend > loslunas_trend))
-
-    # Eighth city (Salt Lake City): pair Vernon (high-desert ranchland).
-    slc_trend = acis_yearly_low_trend("SLCthr 9", 1970)
-    vernon_trend = acis_yearly_low_trend("USC00429133", 1970)
-    checks.append((f"Salt Lake City night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   slc_trend, slc_trend > GLOBAL_BENCH))
-    checks.append((f"Salt Lake City night-low trend > its rural pair Vernon ({slc_trend:.2f} vs {vernon_trend:.2f}/dec)",
-                   slc_trend - vernon_trend, slc_trend > vernon_trend))
-
-    # Ninth city (Boise): pair Emmett 2 E sits ~300 ft below the city (clean).
-    boise_trend = acis_yearly_low_trend("BOIthr 9", 1970)
-    emmett_trend = acis_yearly_low_trend("USC00102942", 1970)
-    checks.append((f"Boise night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   boise_trend, boise_trend > GLOBAL_BENCH))
-    checks.append((f"Boise night-low trend > its rural pair Emmett ({boise_trend:.2f} vs {emmett_trend:.2f}/dec)",
-                   boise_trend - emmett_trend, boise_trend > emmett_trend))
-
-
-    # Tenth city (Atlanta): the first HUMID-climate city — the UHI nights-first
-    # signal must reproduce outside the desert. Atlanta's overnight-low trend
-    # since 1970 outruns both the global rate and its rural pair (Gainesville,
-    # GA). Live from ACIS; sids match cities.js.
-    atl_trend = acis_yearly_low_trend("ATLthr 9", 1970)
-    gville_trend = acis_yearly_low_trend("USC00093621", 1970)
-    checks.append((f"Atlanta night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   atl_trend, atl_trend > GLOBAL_BENCH))
-    checks.append((f"Atlanta night-low trend > its rural pair Gainesville ({atl_trend:.2f} vs {gville_trend:.2f}/dec)",
-                   atl_trend - gville_trend, atl_trend > gville_trend))
-
-    # Eleventh & twelfth cities (Houston, New Orleans): humid Gulf-coast cities —
-    # the UHI nights-first signal reproduces against low-elevation coastal-plain
-    # rural pairs. Live from ACIS; sids match cities.js.
-    hou_trend = acis_yearly_low_trend("IAHthr 9", 1970)
-    danevang_trend = acis_yearly_low_trend("USC00412266", 1970)
-    checks.append((f"Houston night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   hou_trend, hou_trend > GLOBAL_BENCH))
-    checks.append((f"Houston night-low trend > its rural pair Danevang ({hou_trend:.2f} vs {danevang_trend:.2f}/dec)",
-                   hou_trend - danevang_trend, hou_trend > danevang_trend))
-    nola_trend = acis_yearly_low_trend("MSYthr 9", 1970)
-    donaldsonville_trend = acis_yearly_low_trend("USC00162534", 1970)
-    checks.append((f"New Orleans night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   nola_trend, nola_trend > GLOBAL_BENCH))
-    checks.append((f"New Orleans night-low trend > its rural pair Donaldsonville ({nola_trend:.2f} vs {donaldsonville_trend:.2f}/dec)",
-                   nola_trend - donaldsonville_trend, nola_trend > donaldsonville_trend))
-
-    # Thirteenth & fourteenth cities (Raleigh, Dallas): more humid/eastern cities.
-    # Raleigh is the cleanest eastern control (Clayton, ~28mi, matched elevation);
-    # Dallas's pair (Bowie) carries an elevation caveat, stated in-card.
-    rdu_trend = acis_yearly_low_trend("RDUthr 9", 1970)
-    clayton_trend = acis_yearly_low_trend("USC00311820", 1970)
-    checks.append((f"Raleigh night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   rdu_trend, rdu_trend > GLOBAL_BENCH))
-    checks.append((f"Raleigh night-low trend > its rural pair Clayton ({rdu_trend:.2f} vs {clayton_trend:.2f}/dec)",
-                   rdu_trend - clayton_trend, rdu_trend > clayton_trend))
-    dfw_trend = acis_yearly_low_trend("DFWthr 9", 1970)
-    bowie_trend = acis_yearly_low_trend("USC00410984", 1970)
-    checks.append((f"Dallas night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
-                   dfw_trend, dfw_trend > GLOBAL_BENCH))
-    checks.append((f"Dallas night-low trend > its rural pair Bowie ({dfw_trend:.2f} vs {bowie_trend:.2f}/dec)",
-                   dfw_trend - bowie_trend, dfw_trend > bowie_trend))
+    # Per-city parity (all 14, registry-driven): reproduce each city's headline
+    # numbers live from ACIS and value-check them against its committed facts JSON
+    # — nights warm, outrun the global rate, beat the rural control (except
+    # Phoenix's documented-small excess), and the displayed night_warming /
+    # urban_excess / lows-vs-highs values MATCH the recompute. This is the bar the
+    # deep Phoenix battery already met; check_cities brings the breadth cities to it
+    # (they were previously only shape-checked). See check_cities() above.
+    desert_trend = check_cities(checks)
 
     # Season cards' outlier-robust definitions: the *sustained* warm-night
     # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of

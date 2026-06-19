@@ -11,12 +11,14 @@ card from ACIS, independent of the front-end code:
 Stdlib only.
 """
 
+import datetime
 import json
 import urllib.request
 
 ACIS_URL = "https://data.rcc-acis.org/StnData"
 MAX_MISSING_DAYS = 36
-LAST_COMPLETE_YEAR = 2025
+# Derived, never hardcoded: the most recent fully-elapsed calendar year.
+LAST_COMPLETE_YEAR = datetime.date.today().year - 1
 
 PHOENIX = ("PHXthr 9", "Phoenix (ThreadEx)")
 RURAL = ("USC00021314", "Casa Grande National Monument")

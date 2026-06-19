@@ -25,9 +25,16 @@ Stdlib only. Usage: python3 analysis/city_audit.py [name ...]   (default: all)
 """
 
 import concurrent.futures as cf
+import datetime
 import json
 import sys
 import urllib.request
+
+# Derived, never hardcoded: the most recent fully-elapsed calendar year and the
+# trailing-decade window — mirrors build_facts.py so the audit's card-fit
+# prediction tracks the real pipeline as years roll over.
+LAST_COMPLETE_YEAR = datetime.date.today().year - 1
+RECENT0 = LAST_COMPLETE_YEAR - 9
 
 ACIS = "https://data.rcc-acis.org"
 GLOBAL_BENCH = 0.36  # F/decade, published global background rate (matches verify_v0)
@@ -59,7 +66,7 @@ def _post(path, body):
 
 
 def yearly_low(sid, start=1970, maxmissing=20):
-    body = {"sid": sid, "sdate": f"{start}-01-01", "edate": "2025-12-31",
+    body = {"sid": sid, "sdate": f"{start}-01-01", "edate": f"{LAST_COMPLETE_YEAR}-12-31",
             "elems": [{"name": "mint", "interval": "yly", "duration": "yly",
                        "reduce": "mean", "maxmissing": maxmissing}]}
     pts = []
@@ -155,7 +162,7 @@ def card_fit(city_sid):
     SAME thresholds as analysis/build_facts.py + the live card guards. One daily
     ACIS request; mirrors build_streaks (count80/count100) and build_cdd_split
     (the day/night CDD identity over cooling days, mean>65F)."""
-    body = {"sid": city_sid, "sdate": "1970-01-01", "edate": "2025-12-31",
+    body = {"sid": city_sid, "sdate": "1970-01-01", "edate": f"{LAST_COMPLETE_YEAR}-12-31",
             "elems": [{"name": "mint"}, {"name": "maxt"}]}
     years = {}
     for date, lo, hi in _post("/StnData", body).get("data", []):
@@ -184,9 +191,9 @@ def card_fit(city_sid):
         return 100 * sum(r["night"] for r in rows) / tot if tot else None
 
     return dict(
-        trop_now=dec_mean(2016, 2025, "c80"), trop_70s=dec_mean(1970, 1979, "c80"),
-        hot_now=dec_mean(2016, 2025, "c100"), hot_70s=dec_mean(1970, 1979, "c100"),
-        nshare_70s=night_share(1970, 1979), nshare_now=night_share(2016, 2025),
+        trop_now=dec_mean(RECENT0, LAST_COMPLETE_YEAR, "c80"), trop_70s=dec_mean(1970, 1979, "c80"),
+        hot_now=dec_mean(RECENT0, LAST_COMPLETE_YEAR, "c100"), hot_70s=dec_mean(1970, 1979, "c100"),
+        nshare_70s=night_share(1970, 1979), nshare_now=night_share(RECENT0, LAST_COMPLETE_YEAR),
     )
 
 
