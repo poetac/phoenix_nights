@@ -26,10 +26,16 @@ from cities import CITIES, DATA_DIR  # noqa: E402
 
 ACIS = "https://data.rcc-acis.org/StnData"
 GLOBAL_BENCH = 0.36  # F/decade
+# Derived, never hardcoded: the most recent fully-elapsed calendar year, and the
+# trailing-decade window the "...now, was X in the 1970s" facts compare against.
+# (Keeping these derived is the guarantee README/verify advertise; a literal year
+# here would silently freeze the salience engine after the next year rolls over.)
+LAST_COMPLETE_YEAR = datetime.date.today().year - 1
+RECENT0 = LAST_COMPLETE_YEAR - 9
 
 
 def _yearly(sid, elem, reduce_, start=1970, maxmissing=20):
-    body = {"sid": sid, "sdate": f"{start}-01-01", "edate": "2025-12-31",
+    body = {"sid": sid, "sdate": f"{start}-01-01", "edate": f"{LAST_COMPLETE_YEAR}-12-31",
             "elems": [{"name": elem, "interval": "yly", "duration": "yly",
                        "reduce": reduce_, "maxmissing": maxmissing}]}
     req = urllib.request.Request(ACIS, data=json.dumps(body).encode(),
@@ -97,15 +103,10 @@ def compute_raw(city):
             label=f"Even the coldest night of the year is warming {cold:+.2f}°F per decade",
             value=round(cold, 2), unit="°F/decade", magnitude=cold, significant=cold_sig)
 
-    # control: city night-low trend minus its open-desert reference
-    ref = city.get("rural") if isinstance(city.get("rural"), dict) else None
-    # cities.py registries don't carry the JS rural; derive from known pairs below
-    REF = {"phx": "USC00021314", "tus": "USC00027619", "lv": "USC00262243",
-           "ep": "USC00299686", "yum": "USW00003125", "rno": "USC00048758",
-           "abq": "USC00295150", "slc": "USC00429133", "boi": "USC00102942", "atl": "USC00093621",
-           "hou": "USC00412266", "nola": "USC00162534",
-           "rdu": "USC00311820", "dfw": "USC00410984"}
-    rsid = REF.get(city["key"])
+    # control: city night-low trend minus its open-desert reference. The rural
+    # pair's station id is the single source of truth in cities.py (rural_sid) —
+    # no private copy of the pairs lives here anymore.
+    rsid = city.get("rural_sid")
     if rsid and night is not None:
         rtrend, _ = linreg(_yearly(rsid, "mint", "mean"))
         if rtrend is not None:
@@ -121,7 +122,7 @@ def compute_raw(city):
     streaks = load("streaks")
     if streaks:
         b = _decade_mean(streaks["years"], "count80", 1970, 1979)
-        r = _decade_mean(streaks["years"], "count80", 2016, 2025)
+        r = _decade_mean(streaks["years"], "count80", RECENT0, LAST_COMPLETE_YEAR)
         if r is not None and r >= 5:  # applicability: a non-trivial count today
             facts["tropical_nights"] = dict(
                 label=f"{round(r)} nights a year now stay at or above 80°F (was {round(b or 0)} in the 1970s)",
@@ -130,7 +131,7 @@ def compute_raw(city):
     heat = load("heat-season")
     if heat:
         b = _decade_mean(heat["years"], "count", 1970, 1979)
-        r = _decade_mean(heat["years"], "count", 2016, 2025)
+        r = _decade_mean(heat["years"], "count", RECENT0, LAST_COMPLETE_YEAR)
         if r is not None and r >= 10:
             facts["hot_day_season"] = dict(
                 label=f"{round(r)} days a year now reach 100°F (was {round(b or 0)} in the 1970s)",
@@ -142,7 +143,7 @@ def compute_raw(city):
             rows = [x for x in cdd["years"] if y0 <= x["year"] <= y1]
             tot = sum(x["dayCdd"] + x["nightCdd"] for x in rows)
             return 100 * sum(x["nightCdd"] for x in rows) / tot if tot else None
-        b, r = share(1970, 1979), share(2016, 2025)
+        b, r = share(1970, 1979), share(RECENT0, LAST_COMPLETE_YEAR)
         if b is not None and r is not None and b > 0:  # premise: positive baseline
             facts["night_cooling_share"] = dict(
                 label=f"{round(r)}% of cooling demand now falls after dark (was {round(b)}% in the 1970s)",

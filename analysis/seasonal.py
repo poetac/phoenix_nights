@@ -1,7 +1,11 @@
-import json, urllib.request
+import datetime, json, urllib.request
+
+# Derived, never hardcoded: most recent complete year + trailing-decade start.
+LAST = datetime.date.today().year - 1
+RECENT0 = LAST - 9
 
 body = json.dumps({
-    "sid": "PHXthr 9", "sdate": "1896-01", "edate": "2025-12",
+    "sid": "PHXthr 9", "sdate": "1896-01", "edate": f"{LAST}-12",
     "elems": [{"name": "mint", "interval": "mly", "duration": "mly",
                "reduce": {"reduce": "mean", "add": "mcnt"}},
               {"name": "maxt", "interval": "mly", "duration": "mly",
@@ -28,7 +32,7 @@ for row in j["data"]:
 def series(season, key):
     out = []
     for (sy, s), months in sorted(vals.items()):
-        if s == season and len(months) == 3 and sy <= 2025:
+        if s == season and len(months) == 3 and sy <= LAST:
             out.append((sy, sum(v[key] for v in months.values()) / 3))
     return out
 
@@ -38,11 +42,11 @@ def slope10(pts):
     sxy = sum(x * y for x, y in pts); sxx = sum(x * x for x, _ in pts)
     return (n * sxy - sx * sy) / (n * sxx - sx * sx) * 10
 
-print("season | low trend F/dec since 1970 | high trend | 1970s avg low | 2016-25 avg low")
+print(f"season | low trend F/dec since 1970 | high trend | 1970s avg low | {RECENT0}-{LAST} avg low")
 for s in ("DJF", "MAM", "JJA", "SON"):
     lows = [(y, v) for y, v in series(s, 0) if y >= 1970]
     highs = [(y, v) for y, v in series(s, 1) if y >= 1970]
     l70 = [v for y, v in lows if y <= 1979]
-    lrec = [v for y, v in lows if y >= 2016]
+    lrec = [v for y, v in lows if y >= RECENT0]
     print(f"{s}: {slope10(lows):+.2f} | {slope10(highs):+.2f} | "
           f"{sum(l70)/len(l70):.1f} | {sum(lrec)/len(lrec):.1f}")

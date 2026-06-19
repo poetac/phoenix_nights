@@ -25,6 +25,7 @@ CITIES = {
         "key": "phx",
         "prefix": "phx",
         "sid": "PHXthr 9",
+        "rural_sid": "USC00021314",  # Casa Grande NM — open-desert control (cities.js rural.sid)
         "label": "Phoenix (ThreadEx PHXthr 9)",
         "record_start": "1896-01-01",
         # EIA-930 balancing authorities summed for the July grid-demand card.
@@ -42,6 +43,7 @@ CITIES = {
         "key": "tus",
         "prefix": "tus",
         "sid": "TUSthr 9",
+        "rural_sid": "USC00027619",  # Sasabe — open-desert control (cities.js rural.sid)
         "label": "Tucson (ThreadEx TUSthr 9)",
         # ACIS reports the Tucson Area thread valid from 1894-09-01; start at the
         # first full calendar year so partial-1894 doesn't skew a yearly reduce.
@@ -58,6 +60,7 @@ CITIES = {
         "key": "lv",
         "prefix": "lv",
         "sid": "LASthr 9",
+        "rural_sid": "USC00262243",  # Desert NWR — open-desert control (cities.js rural.sid)
         "label": "Las Vegas (ThreadEx LASthr 9)",
         # ACIS reports the Las Vegas Area thread from 1937.
         "record_start": "1937-01-01",
@@ -76,6 +79,7 @@ CITIES = {
         "key": "ep",
         "prefix": "ep",
         "sid": "ELPthr 9",
+        "rural_sid": "USC00299686",  # White Sands — open-desert control (cities.js rural.sid)
         "label": "El Paso (ThreadEx ELPthr 9)",
         "record_start": "1887-01-01",
         # El Paso Electric is the metro's balancing authority (EIA-930).
@@ -92,6 +96,7 @@ CITIES = {
         "key": "yum",
         "prefix": "yum",
         "sid": "YUMthr 9",
+        "rural_sid": "USW00003125",  # Yuma Proving Ground — open-desert control (cities.js rural.sid)
         "label": "Yuma (ThreadEx YUMthr 9)",
         "record_start": "1893-01-01",
         # Yuma keeps Arizona standard time (no DST), like phx/tus -> fixed offset.
@@ -105,6 +110,7 @@ CITIES = {
         "key": "rno",
         "prefix": "rno",
         "sid": "RNOthr 9",
+        "rural_sid": "USC00048758",  # Tahoe City — rural control (cities.js rural.sid)
         "label": "Reno (ThreadEx RNOthr 9)",
         "record_start": "1893-01-01",
         # Reno observes Pacific DST -> tz-aware hour bucketing.
@@ -117,6 +123,7 @@ CITIES = {
         "key": "abq",
         "prefix": "abq",
         "sid": "ABQthr 9",
+        "rural_sid": "USC00295150",  # Los Lunas — rural control (cities.js rural.sid)
         "label": "Albuquerque (ThreadEx ABQthr 9)",
         "record_start": "1893-01-01",
         # Albuquerque observes Mountain DST -> tz-aware hour bucketing.
@@ -133,6 +140,7 @@ CITIES = {
         "key": "slc",
         "prefix": "slc",
         "sid": "SLCthr 9",
+        "rural_sid": "USC00429133",  # Vernon — high-desert rural control (cities.js rural.sid)
         "label": "Salt Lake City (ThreadEx SLCthr 9)",
         "record_start": "1893-01-01",
         # Salt Lake City observes Mountain DST -> tz-aware hour bucketing.
@@ -145,6 +153,7 @@ CITIES = {
         "key": "atl",
         "prefix": "atl",
         "sid": "ATLthr 9",
+        "rural_sid": "USC00093621",  # Gainesville — rural countryside control (cities.js rural.sid)
         "label": "Atlanta (ThreadEx ATLthr 9)",
         "record_start": "1879-01-01",
         "rural_ref": "rural countryside",
@@ -158,6 +167,7 @@ CITIES = {
         "key": "hou",
         "prefix": "hou",
         "sid": "IAHthr 9",
+        "rural_sid": "USC00412266",  # Danevang — rural coastal-plain control (cities.js rural.sid)
         "label": "Houston (ThreadEx IAHthr 9)",
         "record_start": "1889-01-01",
         "rural_ref": "rural countryside",
@@ -170,6 +180,7 @@ CITIES = {
         "key": "nola",
         "prefix": "nola",
         "sid": "MSYthr 9",
+        "rural_sid": "USC00162534",  # Donaldsonville — rural delta control (cities.js rural.sid)
         "label": "New Orleans (ThreadEx MSYthr 9)",
         "record_start": "1946-01-01",
         "rural_ref": "rural countryside",
@@ -182,6 +193,7 @@ CITIES = {
         "key": "rdu",
         "prefix": "rdu",
         "sid": "RDUthr 9",
+        "rural_sid": "USC00311820",  # Clayton — rural Piedmont control (cities.js rural.sid)
         "label": "Raleigh (ThreadEx RDUthr 9)",
         "record_start": "1888-01-01",
         "rural_ref": "rural countryside",
@@ -194,6 +206,7 @@ CITIES = {
         "key": "dfw",
         "prefix": "dfw",
         "sid": "DFWthr 9",
+        "rural_sid": "USC00410984",  # Bowie — rural North-Texas-plains control (cities.js rural.sid)
         "label": "Dallas (ThreadEx DFWthr 9)",
         "record_start": "1899-01-01",
         "rural_ref": "rural countryside",
@@ -206,6 +219,7 @@ CITIES = {
         "key": "boi",
         "prefix": "boi",
         "sid": "BOIthr 9",
+        "rural_sid": "USC00102942",  # Emmett — rural agricultural control (cities.js rural.sid)
         "label": "Boise (ThreadEx BOIthr 9)",
         "record_start": "1893-01-01",
         # Boise observes Mountain DST -> tz-aware hour bucketing.

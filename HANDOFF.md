@@ -18,8 +18,10 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
   - **Explore landing (`/`)** leads with a clickable **US map** of the interior
     West (Phase 3b) over a ranked list; both share one ranking (night-low warming).
     Click a city → `?city=<id>`.
-  - **9 cities**, registry-driven: Phoenix (curated flagship), Tucson, Las Vegas,
-    El Paso, Yuma, Reno, Albuquerque, Salt Lake City, Boise.
+  - **14 cities**, registry-driven: Phoenix (curated flagship), Tucson, Las Vegas,
+    El Paso, Yuma, Reno, Albuquerque, Salt Lake City, Boise (arid West) + Atlanta,
+    Houston, New Orleans, Raleigh, Dallas (humid South/Gulf). **Direction (June 2026):
+    own the national explorer — see ROADMAP "Direction".**
   - **Each city page** leads with its own top-ranked verified facts ("What stands
     out in <city>", the salience engine), then its applicable cards. Phoenix keeps
     its curated hero via a registry `featured` overlay; others get an auto hero.
@@ -62,20 +64,30 @@ Kansas City, Oklahoma City, San Antonio, Birmingham, Columbia SC, Tampa (probe m
 
 ## What's deferred (the next obvious work)
 
-1. **Grid for Yuma / Reno / Salt Lake City.** Diurnal is now wired for all 9
-   cities, and grid for the two with a clean single-utility metro balancing
-   authority — **Albuquerque (PNM)** and **Boise (IPCO)**. Yuma/Reno/SLC grid stays
-   deferred: no clean single-utility metro BA (Reno's `NEVP` is Las Vegas's utility;
-   `WALC`/`PACE` aren't metro-specific) — don't ship wrong-region demand. To wire one
-   later: add a `grid` block to `cities.py`, `gridAsset` to `cities.js`, the city to
-   the grid loop in `rebuild-data.yml`, a verify shape-check, and run `build_grid.py`.
-2. **A real projection layer (CMIP6 / LOCA2 downscaling)** — the separate go/no-go
-   behind Phase 5. The current extrapolation is deliberately a labeled trend line,
-   not a forecast; a true projection is a different, physics-based layer.
-3. **More cities** are possible, but the original vetted set is now fully shipped.
-   `analysis/city_audit.py` (PASS/REVISE/REJECT + card-fit) is the gate; Bakersfield
-   was REJECTED (signal below the global rate). Scope stays the **arid interior
-   West**, where the city-vs-open-desert control experiment is valid.
+**The chosen direction is card-depth parity, not more cities** (see ROADMAP "Direction").
+The breadth cities are shallower than Phoenix; close that before widening further.
+
+1. **Card-depth parity for the breadth cities (the priority).** Diurnal is wired for the
+   9 arid cities but **not the 5 humid ones** (atl/hou/nola/rdu/dfw) — their NCEI-hourly
+   ISD ids already exist in `cities.py`, so wiring them is: add the city to the diurnal
+   loop in `rebuild-data.yml`, run `build_diurnal.py --city <id>`, mark `diurnal` in the
+   `withAssets(...)` opt-in list in `cities.js`. Heat-deaths is still Phoenix-only — the
+   next clean transcription (LV/El Paso) to the `HEAT_DEATHS.md` bar adds the human-cost
+   card for another city.
+2. **Grid where a clean single-utility metro BA exists.** Wired for PHX, TUS, LV, EP,
+   ABQ, BOI. Yuma/Reno/SLC stay deferred: no clean single-utility metro BA (Reno's `NEVP`
+   is Las Vegas's utility; `WALC`/`PACE` aren't metro-specific); humid Gulf/eastern cities
+   sit inside ERCOT/MISO/Southern, also not metro BAs. To wire one: add a `grid` block to
+   `cities.py`, mark `grid` in `withAssets(...)`, add the city to the grid loop in
+   `rebuild-data.yml`, and run `build_grid.py`.
+3. **A real projection layer (CMIP6 / LOCA2 downscaling)** — the separate go/no-go behind
+   Phase 5. The current extrapolation is deliberately a labeled trend line, not a forecast;
+   a true projection is a different, physics-based layer.
+4. **More cities** are lower priority now (depth-before-more-breadth). `analysis/city_audit.py`
+   (PASS/REVISE/REJECT + card-fit) is the gate; the scope is **any continental-US metro with
+   a clean, slower-warming rural control** (no longer arid-only — humid continental/Gulf
+   transfers; maritime tropical like Miami rejects). Bakersfield REJECTED (signal below the
+   global rate); next probes: Kansas City, OKC, San Antonio, Birmingham, Columbia SC, Tampa.
 
 ## Environment / unblockers
 
@@ -103,10 +115,20 @@ Kansas City, Oklahoma City, San Antonio, Birmingham, Columbia SC, Tampa (probe m
   ("keep going" = standing approval to merge green PRs.)
 - **Principles** (the bar — see ROADMAP): reproduce or reject · lows first · state
   the caveat in the card · no redundant cards.
-- Every new **city** = two registry entries (`analysis/cities.py` + `cities.js`) +
-  committed ACIS assets + a `build_facts` rural-pair sid + a `verify_v0.py` trend
-  gate + a render assertion + a README/ROADMAP line. Every new **card** adds a
-  `verify_v0.py` check (if it makes a data claim) + a render assertion.
+- Every new **city** = two registry entries (`analysis/cities.py` with its
+  **`rural_sid`** + `cities.js`) + committed ACIS assets + a render assertion + a
+  README/ROADMAP line. The rural-pair sid lives **once** in `cities.py` (`rural_sid`);
+  `build_facts.py` and `verify_v0.py` both read it from there — don't re-type it. Front-end
+  asset paths are **derived from the city `id`** by `withAssets(city, [...optIn])` at the
+  `CITIES` array in `cities.js` (list the opt-in assets: `diurnal`/`grid`/`heatDeaths`); the
+  base four are automatic. `verify_v0.py`'s registry-driven **`check_cities`** then value-checks
+  the new city's facts JSON live (night-warming / urban-excess / lows-vs-highs) — no per-city
+  block to add. Every new **card** still adds a `verify_v0.py` check (if it makes a data claim)
+  + a render assertion.
+- **No hardcoded year cutoffs.** Pipelines/scripts derive `LAST_COMPLETE_YEAR`
+  (`datetime.date.today().year - 1`) and the trailing decade (`RECENT0`); never paste a
+  literal year (it silently freezes the next rollover). `build_facts.py`, `city_audit.py`,
+  and the reproduce scripts all follow this.
 - **Precomputed assets** are committed JSON under `apps/web/public/data/`, stamped
   `generated`/`throughYear`; they go stale until the **Rebuild data assets** Action
   reruns the pipelines (monthly cron, or manual dispatch — which needs Actions:write).
@@ -116,7 +138,9 @@ Kansas City, Oklahoma City, San Antonio, Birmingham, Columbia SC, Tampa (probe m
 ## Gotchas
 
 - `cities.py` `CITIES` is a **dict** (iterate `.values()`); `cities.js` `CITIES` is
-  an **array**. Asset filename **prefix == city `id`** (phx/tus/lv/ep/yum/rno/abq/slc/boi).
+  an **array** built by `withAssets(...)` (the bare consts have no `*Asset` fields —
+  always consume `CITIES`). Asset filename **prefix == city `id`**
+  (phx/tus/lv/ep/yum/rno/abq/slc/boi/atl/hou/nola/rdu/dfw).
 - `build_facts.py` builds **all** cities in one run (cross-city ranking needs the
   whole set) and rewrites every `*-facts.json` — so adding a city shifts existing
   cities' fact scores (expected). Its rural-pair `REF` dict must gain each new sid.

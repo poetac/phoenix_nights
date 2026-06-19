@@ -70,20 +70,8 @@ export const PHOENIX = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  // built by analysis/build_diurnal.py from NCEI hourly observations
-  diurnalAsset: "data/phx-diurnal.json",
-  // built by analysis/build_heat_season.py from ACIS daily highs
-  heatSeasonAsset: "data/phx-heat-season.json",
-  // hand-verified from the county's annual report (see the JSON's source field)
-  heatDeathsAsset: "data/phx-heat-deaths.json",
-  // built by analysis/build_streaks.py from ACIS daily lows/highs
-  streaksAsset: "data/phx-streaks.json",
-  // built by analysis/build_grid.py from EIA-930 hourly demand (needs EIA_API_KEY)
-  gridAsset: "data/phx-grid.json",
-  // built by analysis/build_normals.py from ACIS 1970s daily lows/highs (hero baseline)
-  normalsAsset: "data/phx-normals.json",
-  // built by analysis/build_cdd_split.py — annual CDD split into day/night halves
-  cddSplitAsset: "data/phx-cdd-split.json",
+  // asset paths (diurnal + grid + heat-deaths + the base four) are derived from
+  // `id` by withAssets() at the CITIES array below.
   // decennial census, Maricopa County (US Census Bureau)
   metroPopulation: {
     1950: 331770, 1960: 663510, 1970: 971228, 1980: 1509175,
@@ -148,8 +136,6 @@ export const TUCSON = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  diurnalAsset: "data/tus-diurnal.json",
-  heatSeasonAsset: "data/tus-heat-season.json",
   // heatDeathsAsset intentionally omitted — see analysis/HEAT_DEATHS.md
   // "Second city (Tucson / Pima County)". The only primary year-by-year
   // heat-related (caused+contributed) series for Pima (AZDHS) is ~half
@@ -158,10 +144,6 @@ export const TUCSON = {
   // surveillance-method break, and Pima publishes no demographic breakdown
   // comparable to Maricopa's. The fetcher returns null when this is absent,
   // so the card simply omits for Tucson (reproduce-or-reject => reject).
-  streaksAsset: "data/tus-streaks.json",
-  gridAsset: "data/tus-grid.json",
-  normalsAsset: "data/tus-normals.json",
-  cddSplitAsset: "data/tus-cdd-split.json",
   // decennial census, Pima County (US Census Bureau)
   metroPopulation: {
     1950: 141216, 1960: 265660, 1970: 351667, 1980: 531443,
@@ -224,16 +206,10 @@ export const LASVEGAS = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  diurnalAsset: "data/lv-diurnal.json",
-  heatSeasonAsset: "data/lv-heat-season.json",
   // heatDeathsAsset deferred: Clark County / Southern Nevada Health District do
   // publish heat-death data, but it hasn't yet been transcribed and verified to
   // the primary-source bar in analysis/HEAT_DEATHS.md. Omitting it leaves the
   // card hidden for Las Vegas until that verification is done (a clean follow-up).
-  streaksAsset: "data/lv-streaks.json",
-  gridAsset: "data/lv-grid.json",
-  normalsAsset: "data/lv-normals.json",
-  cddSplitAsset: "data/lv-cdd-split.json",
   // decennial census, Clark County, NV (US Census Bureau)
   metroPopulation: {
     1950: 48289, 1960: 127016, 1970: 273288, 1980: 463087,
@@ -292,14 +268,8 @@ export const ELPASO = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  diurnalAsset: "data/ep-diurnal.json",
-  heatSeasonAsset: "data/ep-heat-season.json",
   // heatDeathsAsset deferred: not yet transcribed/verified to the HEAT_DEATHS.md
   // primary-source bar; the card cleanly omits until then.
-  streaksAsset: "data/ep-streaks.json",
-  gridAsset: "data/ep-grid.json",
-  normalsAsset: "data/ep-normals.json",
-  cddSplitAsset: "data/ep-cdd-split.json",
   // decennial census, El Paso County, TX (US Census Bureau)
   metroPopulation: {
     1950: 194968, 1960: 314070, 1970: 359291, 1980: 479899,
@@ -353,11 +323,6 @@ const YUMA = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/yum-heat-season.json",
-  streaksAsset: "data/yum-streaks.json",
-  normalsAsset: "data/yum-normals.json",
-  cddSplitAsset: "data/yum-cdd-split.json",
-  diurnalAsset: "data/yum-diurnal.json",
   // grid asset deferred: no clean single-utility metro balancing authority
   // for this city, so the grid card omits rather than show wrong-region demand.
 };
@@ -408,11 +373,6 @@ const RENO = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/rno-heat-season.json",
-  streaksAsset: "data/rno-streaks.json",
-  normalsAsset: "data/rno-normals.json",
-  cddSplitAsset: "data/rno-cdd-split.json",
-  diurnalAsset: "data/rno-diurnal.json",
   // grid asset deferred: no clean single-utility metro balancing authority
   // for this city, so the grid card omits rather than show wrong-region demand.
 };
@@ -463,12 +423,6 @@ const ALBUQUERQUE = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/abq-heat-season.json",
-  streaksAsset: "data/abq-streaks.json",
-  normalsAsset: "data/abq-normals.json",
-  cddSplitAsset: "data/abq-cdd-split.json",
-  gridAsset: "data/abq-grid.json",
-  diurnalAsset: "data/abq-diurnal.json",
   // grid card uses PNM, the Albuquerque metro's single balancing authority.
 };
 
@@ -518,11 +472,6 @@ const SALTLAKE = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/slc-heat-season.json",
-  streaksAsset: "data/slc-streaks.json",
-  normalsAsset: "data/slc-normals.json",
-  cddSplitAsset: "data/slc-cdd-split.json",
-  diurnalAsset: "data/slc-diurnal.json",
   // grid asset deferred: no clean single-utility metro balancing authority
   // for this city, so the grid card omits rather than show wrong-region demand.
 };
@@ -573,12 +522,6 @@ const BOISE = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/boi-heat-season.json",
-  streaksAsset: "data/boi-streaks.json",
-  normalsAsset: "data/boi-normals.json",
-  cddSplitAsset: "data/boi-cdd-split.json",
-  gridAsset: "data/boi-grid.json",
-  diurnalAsset: "data/boi-diurnal.json",
   // grid card uses IPCO (Idaho Power), the Boise metro's balancing authority.
 };
 
@@ -629,10 +572,6 @@ const ATLANTA = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/atl-heat-season.json",
-  streaksAsset: "data/atl-streaks.json",
-  normalsAsset: "data/atl-normals.json",
-  cddSplitAsset: "data/atl-cdd-split.json",
   // grid + diurnal deferred: Atlanta's BA (Southern Co.) isn't a single-utility
   // metro authority, and the NCEI-hourly diurnal pull is a follow-up; both cards
   // omit cleanly until then. The desert-specific cards (tropical nights, 100F-day
@@ -687,10 +626,6 @@ const HOUSTON = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/hou-heat-season.json",
-  streaksAsset: "data/hou-streaks.json",
-  normalsAsset: "data/hou-normals.json",
-  cddSplitAsset: "data/hou-cdd-split.json",
   // grid (ERCOT is the whole Texas interconnect, not a metro utility) + diurnal
   // (NCEI hourly pull) deferred; both cards omit cleanly until then.
 };
@@ -742,10 +677,6 @@ const NEWORLEANS = {
     },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/nola-heat-season.json",
-  streaksAsset: "data/nola-streaks.json",
-  normalsAsset: "data/nola-normals.json",
-  cddSplitAsset: "data/nola-cdd-split.json",
   // grid (Entergy / MISO, not a clean metro BA) + diurnal deferred; cards omit.
 };
 
@@ -786,10 +717,6 @@ const RALEIGH = {
       note: "Raleigh\u2019s overnight lows are rising about +0.9\u00b0F/decade in the ACIS record \u2014 roughly +0.7\u00b0F/decade faster than nearby rural Clayton." },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/rdu-heat-season.json",
-  streaksAsset: "data/rdu-streaks.json",
-  normalsAsset: "data/rdu-normals.json",
-  cddSplitAsset: "data/rdu-cdd-split.json",
   // grid + diurnal deferred; Raleigh's desert-specific cards self-omit (mild,
   // humid \u2014 few 80F nights, few 100F days, non-positive 1970s night-cooling).
 };
@@ -831,10 +758,6 @@ const DALLAS = {
       note: "Dallas\u2019s overnight lows are rising about +0.8\u00b0F/decade in the ACIS record \u2014 roughly +1.1\u00b0F/decade faster than nearby rural Bowie." },
   ],
   repoUrl: "https://github.com/poetac/phoenix_nights",
-  heatSeasonAsset: "data/dfw-heat-season.json",
-  streaksAsset: "data/dfw-streaks.json",
-  normalsAsset: "data/dfw-normals.json",
-  cddSplitAsset: "data/dfw-cdd-split.json",
   // grid (ERCOT is the whole Texas interconnect, not a metro utility) + diurnal deferred.
 };
 
@@ -845,4 +768,38 @@ const HUMID = new Set(["atl", "hou", "nola", "rdu", "dfw"]);
 export const climateOf = (id) =>
   HUMID.has(id) ? { key: "humid", label: "Humid South" } : { key: "arid", label: "Arid West" };
 
-export const CITIES = [PHOENIX, TUCSON, LASVEGAS, ELPASO, YUMA, RENO, ALBUQUERQUE, SALTLAKE, BOISE, ATLANTA, HOUSTON, NEWORLEANS, RALEIGH, DALLAS];
+// Precomputed-asset paths all follow one rule: data/<id>-<asset>.json, built by
+// the matching analysis/build_*.py pipeline. Rather than spell out ~7 identical
+// lines on every city, each city declares which assets it actually has and the
+// paths are derived from its id here. Omitting an asset is how a city opts out of
+// that card — the fetcher returns null and the card self-hides (e.g. humid cities
+// carry no diurnal/grid asset; only Phoenix carries heat-deaths).
+//   base four (every city, ACIS-derived): heat-season · streaks · normals · cdd-split
+//   opt-in: "diurnal" (NCEI hourly) · "grid" (EIA-930) · "heatDeaths" (hand-curated)
+const ASSET_FILE = {
+  diurnal: "diurnal", heatSeason: "heat-season", heatDeaths: "heat-deaths",
+  streaks: "streaks", grid: "grid", normals: "normals", cddSplit: "cdd-split",
+};
+const BASE_ASSETS = ["heatSeason", "streaks", "normals", "cddSplit"];
+function withAssets(city, optIn = []) {
+  const out = { ...city };
+  for (const a of [...BASE_ASSETS, ...optIn]) out[`${a}Asset`] = `data/${city.id}-${ASSET_FILE[a]}.json`;
+  return out;
+}
+
+export const CITIES = [
+  withAssets(PHOENIX, ["diurnal", "grid", "heatDeaths"]),
+  withAssets(TUCSON, ["diurnal", "grid"]),
+  withAssets(LASVEGAS, ["diurnal", "grid"]),
+  withAssets(ELPASO, ["diurnal", "grid"]),
+  withAssets(YUMA, ["diurnal"]),
+  withAssets(RENO, ["diurnal"]),
+  withAssets(ALBUQUERQUE, ["diurnal", "grid"]),
+  withAssets(SALTLAKE, ["diurnal"]),
+  withAssets(BOISE, ["diurnal", "grid"]),
+  withAssets(ATLANTA),
+  withAssets(HOUSTON),
+  withAssets(NEWORLEANS),
+  withAssets(RALEIGH),
+  withAssets(DALLAS),
+];
