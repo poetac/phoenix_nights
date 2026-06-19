@@ -30,8 +30,8 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 ## Engine phases (see ROADMAP "City-climate engine")
 
 **1 ✅ fact engine · 2 ✅ per-city page + auto hero · 3a ✅ explore + ranking ·
-3b ✅ the literal US map · 4 ✅ scale cities · 5 ✅ honest extrapolation.** Now **12 cities** incl. three
-humid (Atlanta, Houston, New Orleans).
+3b ✅ the literal US map · 4 ✅ scale cities · 5 ✅ honest extrapolation.** Now **14 cities** incl. five
+humid/eastern (Atlanta, Houston, New Orleans, Raleigh, Dallas).
 
 Post-Phase-5: diurnal curves wired for all 9 cities; grid for the two clean-BA
 metros (ABQ=PNM, Boise=IPCO); the explore-map dots are sized by night-warming
@@ -55,8 +55,10 @@ through `UhiCard` / `GlobalContextCard` / `build_facts` (`rural_ref`). `StreakCa
 (omit where recent 80°F-night streaks ≈ 0) which also cleaned up the cool arid cities. `build_heat_season`
 now survives a decade with no 100°F days. The explore map is **national** (full-US `geoAlbersUsa`), dots
 sized by warming, names on hover/focus (always-on labels collide once cities span the country). Houston & New Orleans are now shipped (Gulf coast; full card sets \u2014 tropical nights +
-night-cooling, since the Gulf is hot AND humid). Next likely humid candidates: Memphis, Nashville,
-Dallas, Raleigh, Charlotte. Maritime tropical (Miami) stays rejected (no clean rural control).
+night-cooling, since the Gulf is hot AND humid). Raleigh & Dallas now shipped too. **Probed but NOT added** (don\u2019t re-attempt): Charlotte (rejects,
+nights warm slower than days 0.6\u00d7), Memphis & Nashville (real UHI excess but flat ~1.0\u00d7 lows-vs-highs,
+too weak to feature), Miami (maritime, no clean rural control). Next clean candidates worth a probe:
+Kansas City, Oklahoma City, San Antonio, Birmingham, Columbia SC, Tampa (probe maritime carefully).
 
 ## What's deferred (the next obvious work)
 

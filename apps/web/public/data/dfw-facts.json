@@ -1,0 +1,92 @@
+{
+ "city": "dfw",
+ "name": "Dallas (ThreadEx DFWthr 9)",
+ "generated": "2026-06-19",
+ "facts": [
+  {
+   "key": "urban_excess",
+   "score": 0.957,
+   "crossCityPercentile": 0.86,
+   "label": "City nights are warming +1.10\u00b0F/decade faster than the nearby rural countryside",
+   "value": 1.1,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "vs_reference": -0.29,
+   "rank": 1
+  },
+  {
+   "key": "night_cooling_share",
+   "score": 0.535,
+   "crossCityPercentile": 0.43,
+   "label": "16% of cooling demand now falls after dark (was 9% in the 1970s)",
+   "value": 16,
+   "unit": "%",
+   "baseline": 9,
+   "significant": true,
+   "rank": 2
+  },
+  {
+   "key": "night_warming",
+   "score": 0.47,
+   "crossCityPercentile": 0.07,
+   "label": "Summer nights are warming +0.81\u00b0F per decade",
+   "value": 0.81,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "bench": 0.36,
+   "rank": 3
+  },
+  {
+   "key": "tropical_nights",
+   "score": 0.425,
+   "crossCityPercentile": 0.5,
+   "label": "20 nights a year now stay at or above 80\u00b0F (was 1 in the 1970s)",
+   "value": 20,
+   "unit": "nights",
+   "baseline": 1,
+   "significant": true,
+   "rank": 4
+  },
+  {
+   "key": "coldest_night",
+   "score": 0.361,
+   "crossCityPercentile": 0.14,
+   "label": "Even the coldest night of the year is warming +0.87\u00b0F per decade",
+   "value": 0.87,
+   "unit": "\u00b0F/decade",
+   "significant": false,
+   "rank": 5
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 0.35,
+   "crossCityPercentile": 0.21,
+   "label": "Overnight lows are rising 1.4\u00d7 as fast as afternoon highs",
+   "value": 1.4,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 6
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.35,
+   "crossCityPercentile": 0.21,
+   "label": "The day\u2013night temperature gap is shrinking 0.25\u00b0F per decade",
+   "value": 0.25,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 7
+  },
+  {
+   "key": "hot_day_season",
+   "score": 0.274,
+   "crossCityPercentile": 0.2,
+   "label": "21 days a year now reach 100\u00b0F (was 14 in the 1970s)",
+   "value": 21,
+   "unit": "days",
+   "baseline": 14,
+   "significant": true,
+   "rank": 8
+  }
+ ]
+}

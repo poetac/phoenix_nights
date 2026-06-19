@@ -47,8 +47,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.925,
-   "crossCityPercentile": 0.75,
+   "score": 0.936,
+   "crossCityPercentile": 0.79,
    "label": "Even the coldest night of the year is warming +2.48\u00b0F per decade",
    "value": 2.48,
    "unit": "\u00b0F/decade",
@@ -57,8 +57,8 @@
   },
   {
    "key": "hot_day_season",
-   "score": 0.247,
-   "crossCityPercentile": 0.11,
+   "score": 0.243,
+   "crossCityPercentile": 0.1,
    "label": "13 days a year now reach 100\u00b0F (was 6 in the 1970s)",
    "value": 13,
    "unit": "days",

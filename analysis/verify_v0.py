@@ -346,6 +346,16 @@ ASSET_SCHEMAS = {
     "nola-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
     "nola-normals.json": ("byDate", dict, None),
     "nola-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "rdu-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "rdu-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "rdu-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "rdu-normals.json": ("byDate", dict, None),
+    "rdu-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "dfw-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "dfw-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "dfw-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "dfw-normals.json": ("byDate", dict, None),
+    "dfw-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "boi-diurnal.json": ("decades", dict, None),
     "boi-grid.json": ("years", dict, None),
     "yum-facts.json": ("facts", list, ("key", "rank", "score", "label")),
@@ -598,6 +608,22 @@ def main():
                    nola_trend, nola_trend > GLOBAL_BENCH))
     checks.append((f"New Orleans night-low trend > its rural pair Donaldsonville ({nola_trend:.2f} vs {donaldsonville_trend:.2f}/dec)",
                    nola_trend - donaldsonville_trend, nola_trend > donaldsonville_trend))
+
+    # Thirteenth & fourteenth cities (Raleigh, Dallas): more humid/eastern cities.
+    # Raleigh is the cleanest eastern control (Clayton, ~28mi, matched elevation);
+    # Dallas's pair (Bowie) carries an elevation caveat, stated in-card.
+    rdu_trend = acis_yearly_low_trend("RDUthr 9", 1970)
+    clayton_trend = acis_yearly_low_trend("USC00311820", 1970)
+    checks.append((f"Raleigh night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   rdu_trend, rdu_trend > GLOBAL_BENCH))
+    checks.append((f"Raleigh night-low trend > its rural pair Clayton ({rdu_trend:.2f} vs {clayton_trend:.2f}/dec)",
+                   rdu_trend - clayton_trend, rdu_trend > clayton_trend))
+    dfw_trend = acis_yearly_low_trend("DFWthr 9", 1970)
+    bowie_trend = acis_yearly_low_trend("USC00410984", 1970)
+    checks.append((f"Dallas night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   dfw_trend, dfw_trend > GLOBAL_BENCH))
+    checks.append((f"Dallas night-low trend > its rural pair Bowie ({dfw_trend:.2f} vs {bowie_trend:.2f}/dec)",
+                   dfw_trend - bowie_trend, dfw_trend > bowie_trend))
 
     # Season cards' outlier-robust definitions: the *sustained* warm-night
     # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of

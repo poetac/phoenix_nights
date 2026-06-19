@@ -5,8 +5,8 @@
  "facts": [
   {
    "key": "coldest_night",
-   "score": 0.825,
-   "crossCityPercentile": 0.42,
+   "score": 0.829,
+   "crossCityPercentile": 0.43,
    "label": "Even the coldest night of the year is warming +1.55\u00b0F per decade",
    "value": 1.55,
    "unit": "\u00b0F/decade",
@@ -15,8 +15,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.769,
-   "crossCityPercentile": 0.67,
+   "score": 0.783,
+   "crossCityPercentile": 0.71,
    "label": "Summer nights are warming +1.14\u00b0F per decade",
    "value": 1.14,
    "unit": "\u00b0F/decade",
@@ -37,8 +37,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.718,
-   "crossCityPercentile": 0.67,
+   "score": 0.732,
+   "crossCityPercentile": 0.71,
    "label": "Overnight lows are rising 2.4\u00d7 as fast as afternoon highs",
    "value": 2.4,
    "unit": "\u00d7 ratio",
@@ -47,8 +47,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.718,
-   "crossCityPercentile": 0.67,
+   "score": 0.732,
+   "crossCityPercentile": 0.71,
    "label": "The day\u2013night temperature gap is shrinking 0.67\u00b0F per decade",
    "value": 0.67,
    "unit": "\u00b0F/decade",
@@ -57,8 +57,8 @@
   },
   {
    "key": "night_cooling_share",
-   "score": 0.706,
-   "crossCityPercentile": 0.67,
+   "score": 0.72,
+   "crossCityPercentile": 0.71,
    "label": "22% of cooling demand now falls after dark (was 12% in the 1970s)",
    "value": 22,
    "unit": "%",
@@ -68,8 +68,8 @@
   },
   {
    "key": "tropical_nights",
-   "score": 0.397,
-   "crossCityPercentile": 0.43,
+   "score": 0.381,
+   "crossCityPercentile": 0.38,
    "label": "18 nights a year now stay at or above 80\u00b0F (was 1 in the 1970s)",
    "value": 18,
    "unit": "nights",
