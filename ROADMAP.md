@@ -60,11 +60,13 @@ Go-forward (the split, phased):
   renamed to "Desert Nights"; City Signals city pages now use the salience-driven
   `SignalsBody` (a different layout per city), Desert Nights keeps the curated
   `DashboardBody`.
-- **Now — button down each product:** *City Signals* — enrich the fact→card mapping and
-  the per-city signal hero so sparse cities still feel complete; consider archetype
-  touches. *Desert Nights* — finalize the curated desert cut (which cities; lead with the
-  city-vs-desert control), regenerate share cards under the new brand, and resolve
-  Desert-specific share-link slugs (they currently resolve against City Signals).
+- **Now — button down each product:** *Desert Nights* — city cut **locked to the 9
+  arid-West cities**; its curated pages now **lead with the city-vs-open-desert control**
+  (UHI + global-rate context sit right under the trend, before the extrapolation/ladder).
+  Still deferred (deploy-adjacent): regenerate share cards under the new brand and point
+  Desert-specific share slugs at `?product=desert` (they currently resolve against City
+  Signals). *City Signals* — enrich the fact→card mapping and the per-city signal hero so
+  sparse cities still feel complete.
 - **Phase 3 — worldwide (City Signals):** a new data backend (GHCN-Daily / Berkeley
   Earth), a world map, the rural-control method re-validated per region. Large and
   separate — the engine is US-specific today (ACIS, ThreadEx, Census, EIA, `geoAlbersUsa`).
