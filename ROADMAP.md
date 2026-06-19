@@ -1,7 +1,10 @@
 # Phoenix Nights — Roadmap
 
-**Thesis:** The desert still cools off at night. The city doesn't. This app proves
-that from the official record, one reproducible card at a time.
+**Thesis:** Cities are abandoning their overnight lows faster than their highs — the
+urban-heat-island fingerprint, written in the official station record. The desert
+still cools off at night; the city doesn't — and the same fingerprint now shows up
+across 14 US metros in two biomes. Phoenix is the curated flagship; the engine proves
+the pattern is **universal**.
 
 This document is the working plan. It is meant to be edited — milestones get
 re-ordered, cards get promoted or rejected. What does *not* move is the bar every
@@ -9,12 +12,46 @@ card has to clear (see Principles).
 
 ---
 
+## Direction (June 2026) — own the national explorer
+
+The product started as a single-city Phoenix depth play and **became** a 14-city
+national city-climate explorer (arid West + humid South/Gulf), fronted by a US map and
+a salience engine. That drift was real but never formally chosen; this is the decision
+to **own it**. Phoenix Nights is now the universal-UHI explorer with Phoenix as the
+curated flagship — not a single-city page that happens to list other cities.
+
+What that commits us to (and what this pass delivered):
+
+- **Verification parity** — every city, not just Phoenix, now has its displayed
+  headline numbers (night-warming, urban excess, lows-vs-highs ratio) reproduced live
+  from ACIS and value-checked against its committed facts JSON in CI (`check_cities`
+  in `verify_v0.py`), so "reproduce or reject" holds across the whole set.
+- **One source of truth for the registry** — rural-pair station ids live once in
+  `analysis/cities.py` (`rural_sid`); `build_facts.py` and `verify_v0.py` read them
+  from there. Front-end asset paths are derived from a city's `id` (`withAssets` in
+  `lib/cities.js`), not spelled out per city.
+- **No hardcoded cutoffs** — the salience engine and the vetting/reproduce scripts all
+  derive the last-complete-year window, matching the guarantee the data-trust work made.
+
+Go-forward (next milestones): **card-depth parity** — the breadth cities are still
+shallower than Phoenix (no diurnal/grid for the humid set, heat-deaths only for
+Phoenix). Level them up (wire NCEI-hourly diurnal + any clean metro grid where a
+single-utility BA exists; transcribe more heat-death series to the `HEAT_DEATHS.md`
+bar) rather than adding more cities. The vetted set is broad enough; depth-per-city is
+the remaining gap.
+
+---
+
 ## Where we are (June 2026)
 
-A single-city Phoenix dashboard — React + Vite, deployed to GitHub Pages — built on
-a deliberately city-agnostic engine (`lib/cities.js` registry + `<CityDashboard
-city={…} />`). Python stdlib pipelines precompute static JSON; CI builds the app and
-verifies stats against NCEI GSOY.
+A **14-city national city-climate explorer** — React + Vite, deployed to GitHub Pages —
+on a city-agnostic engine (`lib/cities.js` registry + `<CityDashboard city={…} />`),
+fronted by a clickable US map and a per-city salience ("what stands out") section.
+Python stdlib pipelines precompute static JSON; CI builds the app, runs a real-browser
+render smoke test across all cities, and verifies every city's stats live against
+ACIS/NCEI. Cities: Phoenix (flagship), Tucson, Las Vegas, El Paso, Yuma, Reno,
+Albuquerque, Salt Lake City, Boise (arid West) + Atlanta, Houston, New Orleans,
+Raleigh, Dallas (humid South/Gulf).
 
 **Shipped cards:** night-warming trend & ratio · UHI city-vs-desert decomposition ·
 global/national warming-rate context · population-vs-night-gap growth ·
@@ -41,15 +78,22 @@ The build is green and there is no half-finished work in the tree.
    the way the UHI and human-cost cards already do.
 4. **No redundant cards.** A new card has to say something the diurnal, grid, streak,
    and seasonal cards don't already say.
-5. **One city's depth before many cities' breadth** — for now. The multi-city engine is
-   paid for and parked (M5), not abandoned.
+5. **Parity, not just presence** — *(supersedes the old "one city's depth before breadth")*.
+   Breadth is now the product, so every city must clear the same bar Phoenix does: its
+   displayed numbers reproduced and value-checked live in CI, its caveats stated in-card,
+   and its premise-failing cards omitted cleanly. A city that can only be *shown* but not
+   *verified* doesn't ship. (The earlier principle parked the multi-city engine; that
+   engine is now the product — see Direction above.)
 
 ---
 
-## M4 — Deeper Phoenix evidence (ACTIVE)
+## M4 — Deeper Phoenix evidence (✅ SHIPPED)
 
-Goal: make the single-city story undeniable. Backlog is ordered by impact ÷ risk;
-build top-down, but any item can be pulled forward.
+Goal (met): make the flagship Phoenix story undeniable. All items below shipped; the
+work then generalized into the multi-city engine (see "City-climate engine" and
+"Direction" above). Phoenix remains the curated flagship and the deepest city — card
+parity for the breadth cities is the open follow-up, not more Phoenix cards. Backlog
+was ordered by impact ÷ risk.
 
 ### 1. Extreme-minimum erosion — ✅ SHIPPED (PR #1)
 **Claim:** Even the *coldest* night of the year is warming, and the *hottest* night
