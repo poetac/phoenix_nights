@@ -313,8 +313,12 @@ Houston and New Orleans similar) — so the engine is generalizing beyond the de
 cities are the exception and **reject**: Miami's nights warm *slower* than its days and it has no clean
 rural reference (the ocean moderates the night, and SE-Florida "rural" stations are themselves
 urbanized). So the bar is now "any continental-US metro with a clean, slower-warming rural control,"
-not just the desert. **Three humid cities are now shipped** \u2014 Atlanta (pilot), then **Houston** and **New Orleans**
-(Gulf coast; New Orleans has the set\u2019s strongest lows-vs-highs ratio, ~2.4\u00d7). The landing is reframed
+not just the desert. **Five humid/eastern cities are now shipped** \u2014 Atlanta (pilot), **Houston**, **New Orleans**
+(Gulf coast; New Orleans has the set\u2019s strongest lows-vs-highs ratio, ~2.4\u00d7), **Raleigh** (humid
+Piedmont; cleanest eastern control, Clayton ~28mi), and **Dallas** (1.4\u00d7). Probe rejects/skips, recorded
+so they aren\u2019t re-attempted: **Charlotte** rejects (nights warm *slower* than days, 0.6\u00d7); **Memphis**
+and **Nashville** have a real UHI excess but a flat ~1.0\u00d7 lows-vs-highs ratio, too weak to feature the
+lows-first headline; **Miami** rejects (maritime, no clean rural control). The landing is reframed
 around the *universal* UHI fingerprint (every climate), with Phoenix still the curated flagship. First audit pass (June 2026):
 
 | Metro | City night-low /dec | Suggested rural pair (gap) | Grid BA | Verdict |

@@ -5,8 +5,8 @@
  "facts": [
   {
    "key": "urban_excess",
-   "score": 0.95,
-   "crossCityPercentile": 0.83,
+   "score": 0.936,
+   "crossCityPercentile": 0.79,
    "label": "City nights are warming +1.07\u00b0F/decade faster than the nearby rural countryside",
    "value": 1.07,
    "unit": "\u00b0F/decade",
@@ -16,8 +16,8 @@
   },
   {
    "key": "night_cooling_share",
-   "score": 0.802,
-   "crossCityPercentile": 0.83,
+   "score": 0.809,
+   "crossCityPercentile": 0.86,
    "label": "17% of cooling demand now falls after dark (was 6% in the 1970s)",
    "value": 17,
    "unit": "%",
@@ -27,8 +27,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.637,
-   "crossCityPercentile": 0.42,
+   "score": 0.662,
+   "crossCityPercentile": 0.5,
    "label": "Summer nights are warming +0.99\u00b0F per decade",
    "value": 0.99,
    "unit": "\u00b0F/decade",
@@ -38,8 +38,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.56,
-   "crossCityPercentile": 0.17,
+   "score": 0.574,
+   "crossCityPercentile": 0.21,
    "label": "Even the coldest night of the year is warming +0.98\u00b0F per decade",
    "value": 0.98,
    "unit": "\u00b0F/decade",
@@ -48,8 +48,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.453,
-   "crossCityPercentile": 0.33,
+   "score": 0.482,
+   "crossCityPercentile": 0.43,
    "label": "Overnight lows are rising 1.6\u00d7 as fast as afternoon highs",
    "value": 1.6,
    "unit": "\u00d7 ratio",
@@ -58,8 +58,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.453,
-   "crossCityPercentile": 0.33,
+   "score": 0.482,
+   "crossCityPercentile": 0.43,
    "label": "The day\u2013night temperature gap is shrinking 0.37\u00b0F per decade",
    "value": 0.37,
    "unit": "\u00b0F/decade",
@@ -68,8 +68,8 @@
   },
   {
    "key": "hot_day_season",
-   "score": 0.413,
-   "crossCityPercentile": 0.56,
+   "score": 0.427,
+   "crossCityPercentile": 0.6,
    "label": "13 days a year now reach 100\u00b0F (was 2 in the 1970s)",
    "value": 13,
    "unit": "days",
@@ -79,8 +79,8 @@
   },
   {
    "key": "tropical_nights",
-   "score": 0.348,
-   "crossCityPercentile": 0.29,
+   "score": 0.338,
+   "crossCityPercentile": 0.25,
    "label": "17 nights a year now stay at or above 80\u00b0F (was 0 in the 1970s)",
    "value": 17,
    "unit": "nights",

@@ -749,4 +749,93 @@ const NEWORLEANS = {
   // grid (Entergy / MISO, not a clean metro BA) + diurnal deferred; cards omit.
 };
 
-export const CITIES = [PHOENIX, TUCSON, LASVEGAS, ELPASO, YUMA, RENO, ALBUQUERQUE, SALTLAKE, BOISE, ATLANTA, HOUSTON, NEWORLEANS];
+const RALEIGH = {
+  id: "rdu",
+  name: "Raleigh, NC",
+  shortName: "Raleigh",
+  threadSid: "RDUthr 9",
+  recordStart: "1888-01-01",
+  stationLabel: "Raleigh Area ThreadEx record (Raleigh\u2013Durham Intl, KRDU)",
+  urbanShort: "Raleigh-Durham (RDU)",
+  baseline: { start: 1970, end: 1979, label: "1970s" },
+  windows: [
+    { y: 1970, label: "Since 1970" },
+    { y: 1948, label: "Since 1948" },
+  ],
+  latLon: [35.7796, -78.6382],
+  rural: {
+    sid: "USC00311820",
+    name: "Clayton WTP",
+    short: "Clayton",
+    kind: "rural countryside",
+    firstYear: 1955,
+    distance: "~28 miles SE",
+    elevationNote:
+      "Clayton sits within ~15 ft of Raleigh's station elevation and just ~28 miles away \u2014 one of the cleanest, closest rural controls in the set. The humid Southeast shows the same overnight urban-heat-island fingerprint as the desert.",
+    growthCaveat:
+      "Clayton is a small town on Raleigh's exurban edge; any growth there would only understate the city\u2019s excess.",
+    robustnessNote:
+      "Raleigh\u2019s nights climb +0.9\u00b0F/decade vs Clayton\u2019s +0.2 \u2014 a clean urban excess in the humid Piedmont. Reproduce with analysis/city_audit.py.",
+  },
+  citations: [
+    { label: "NOAA/NWS ACIS web services", url: "https://www.rcc-acis.org/docs_webservices.html",
+      note: "The official station record this page queries live in your browser." },
+    { label: "NWS Raleigh (Weather Forecast Office, RAH)", url: "https://www.weather.gov/rah/",
+      note: "Local climate normals and records for the Raleigh / Triangle area." },
+    { label: "Climate Central, \"Warm Summer Nights\" (2025)", url: "https://www.climatecentral.org/climate-matters/warm-summer-nights-2025",
+      note: "Raleigh\u2019s overnight lows are rising about +0.9\u00b0F/decade in the ACIS record \u2014 roughly +0.7\u00b0F/decade faster than nearby rural Clayton." },
+  ],
+  repoUrl: "https://github.com/poetac/phoenix_nights",
+  heatSeasonAsset: "data/rdu-heat-season.json",
+  streaksAsset: "data/rdu-streaks.json",
+  normalsAsset: "data/rdu-normals.json",
+  cddSplitAsset: "data/rdu-cdd-split.json",
+  // grid + diurnal deferred; Raleigh's desert-specific cards self-omit (mild,
+  // humid \u2014 few 80F nights, few 100F days, non-positive 1970s night-cooling).
+};
+
+const DALLAS = {
+  id: "dfw",
+  name: "Dallas, TX",
+  shortName: "Dallas",
+  threadSid: "DFWthr 9",
+  recordStart: "1899-01-01",
+  stationLabel: "Dallas Area ThreadEx record (Dallas\u2013Fort Worth Intl, KDFW)",
+  urbanShort: "Dallas-Fort Worth (DFW)",
+  baseline: { start: 1970, end: 1979, label: "1970s" },
+  windows: [
+    { y: 1970, label: "Since 1970" },
+    { y: 1948, label: "Since 1948" },
+  ],
+  latLon: [32.7767, -96.7970],
+  rural: {
+    sid: "USC00410984",
+    name: "Bowie",
+    short: "Bowie",
+    kind: "rural countryside",
+    firstYear: 1897,
+    distance: "~72 miles NW",
+    elevationNote:
+      "Bowie sits ~500 ft above Dallas on the North Texas plains, so part of the absolute night-low gap is elevation \u2014 the honest signal is the gap\u2019s growth, not its size. Dallas\u2019s nights warm 1.4\u00d7 as fast as its days.",
+    growthCaveat:
+      "Bowie is a small ranch-country town, a genuinely rural reference; modest growth there would understate the city\u2019s excess.",
+    robustnessNote:
+      "Dallas\u2019s nights climb +0.8\u00b0F/decade while Bowie\u2019s are flat-to-cooling (\u22120.3) \u2014 the urban-heat-island fingerprint in a hot, humid-subtropical city. Reproduce with analysis/city_audit.py.",
+  },
+  citations: [
+    { label: "NOAA/NWS ACIS web services", url: "https://www.rcc-acis.org/docs_webservices.html",
+      note: "The official station record this page queries live in your browser." },
+    { label: "NWS Fort Worth / Dallas (Weather Forecast Office, FWD)", url: "https://www.weather.gov/fwd/",
+      note: "Local climate normals and records for the Dallas-Fort Worth metroplex." },
+    { label: "Climate Central, \"Warm Summer Nights\" (2025)", url: "https://www.climatecentral.org/climate-matters/warm-summer-nights-2025",
+      note: "Dallas\u2019s overnight lows are rising about +0.8\u00b0F/decade in the ACIS record \u2014 roughly +1.1\u00b0F/decade faster than nearby rural Bowie." },
+  ],
+  repoUrl: "https://github.com/poetac/phoenix_nights",
+  heatSeasonAsset: "data/dfw-heat-season.json",
+  streaksAsset: "data/dfw-streaks.json",
+  normalsAsset: "data/dfw-normals.json",
+  cddSplitAsset: "data/dfw-cdd-split.json",
+  // grid (ERCOT is the whole Texas interconnect, not a metro utility) + diurnal deferred.
+};
+
+export const CITIES = [PHOENIX, TUCSON, LASVEGAS, ELPASO, YUMA, RENO, ALBUQUERQUE, SALTLAKE, BOISE, ATLANTA, HOUSTON, NEWORLEANS, RALEIGH, DALLAS];

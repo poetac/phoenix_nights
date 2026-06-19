@@ -113,6 +113,8 @@ await checkCity("boi", "Boise");
 await checkCity("atl", "Atlanta");  // first humid-climate city
 await checkCity("hou", "Houston");
 await checkCity("nola", "New Orleans");
+await checkCity("rdu", "Raleigh");
+await checkCity("dfw", "Dallas");
 
 // Phase 5: the honest-extrapolation card renders for a warming city, clearly labeled.
 await page.goto(`${BASE}/?city=phx`, { waitUntil: "domcontentloaded", timeout: 30000 });

@@ -5,8 +5,8 @@
  "facts": [
   {
    "key": "night_warming",
-   "score": 0.95,
-   "crossCityPercentile": 0.83,
+   "score": 0.957,
+   "crossCityPercentile": 0.86,
    "label": "Summer nights are warming +1.50\u00b0F per decade",
    "value": 1.5,
    "unit": "\u00b0F/decade",
@@ -15,40 +15,40 @@
    "rank": 1
   },
   {
+   "key": "lows_outpace_highs",
+   "score": 0.894,
+   "crossCityPercentile": 0.86,
+   "label": "Overnight lows are rising 2.4\u00d7 as fast as afternoon highs",
+   "value": 2.4,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 2
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.894,
+   "crossCityPercentile": 0.86,
+   "label": "The day\u2013night temperature gap is shrinking 0.89\u00b0F per decade",
+   "value": 0.89,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 3
+  },
+  {
    "key": "urban_excess",
-   "score": 0.9,
-   "crossCityPercentile": 0.67,
+   "score": 0.893,
+   "crossCityPercentile": 0.64,
    "label": "City nights are warming +1.02\u00b0F/decade faster than the nearby open desert",
    "value": 1.02,
    "unit": "\u00b0F/decade",
    "significant": true,
    "vs_reference": 0.48,
-   "rank": 2
-  },
-  {
-   "key": "lows_outpace_highs",
-   "score": 0.887,
-   "crossCityPercentile": 0.83,
-   "label": "Overnight lows are rising 2.4\u00d7 as fast as afternoon highs",
-   "value": 2.4,
-   "unit": "\u00d7 ratio",
-   "significant": true,
-   "rank": 3
-  },
-  {
-   "key": "diurnal_compression",
-   "score": 0.887,
-   "crossCityPercentile": 0.83,
-   "label": "The day\u2013night temperature gap is shrinking 0.89\u00b0F per decade",
-   "value": 0.89,
-   "unit": "\u00b0F/decade",
-   "significant": true,
    "rank": 4
   },
   {
    "key": "coldest_night",
-   "score": 0.875,
-   "crossCityPercentile": 0.58,
+   "score": 0.871,
+   "crossCityPercentile": 0.57,
    "label": "Even the coldest night of the year is warming +1.86\u00b0F per decade",
    "value": 1.86,
    "unit": "\u00b0F/decade",
@@ -57,8 +57,8 @@
   },
   {
    "key": "hot_day_season",
-   "score": 0.639,
-   "crossCityPercentile": 0.89,
+   "score": 0.642,
+   "crossCityPercentile": 0.9,
    "label": "43 days a year now reach 100\u00b0F (was 18 in the 1970s)",
    "value": 43,
    "unit": "days",
@@ -68,8 +68,8 @@
   },
   {
    "key": "tropical_nights",
-   "score": 0.249,
-   "crossCityPercentile": 0.14,
+   "score": 0.244,
+   "crossCityPercentile": 0.12,
    "label": "8 nights a year now stay at or above 80\u00b0F (was 0 in the 1970s)",
    "value": 8,
    "unit": "nights",

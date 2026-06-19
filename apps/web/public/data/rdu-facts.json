@@ -1,0 +1,59 @@
+{
+ "city": "rdu",
+ "name": "Raleigh (ThreadEx RDUthr 9)",
+ "generated": "2026-06-19",
+ "facts": [
+  {
+   "key": "coldest_night",
+   "score": 0.914,
+   "crossCityPercentile": 0.71,
+   "label": "Even the coldest night of the year is warming +2.12\u00b0F per decade",
+   "value": 2.12,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 1
+  },
+  {
+   "key": "urban_excess",
+   "score": 0.636,
+   "crossCityPercentile": 0.36,
+   "label": "City nights are warming +0.69\u00b0F/decade faster than the nearby rural countryside",
+   "value": 0.69,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "vs_reference": 0.18,
+   "rank": 2
+  },
+  {
+   "key": "night_warming",
+   "score": 0.555,
+   "crossCityPercentile": 0.29,
+   "label": "Summer nights are warming +0.87\u00b0F per decade",
+   "value": 0.87,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "bench": 0.36,
+   "rank": 3
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 0.31,
+   "crossCityPercentile": 0.14,
+   "label": "Overnight lows are rising 1.3\u00d7 as fast as afternoon highs",
+   "value": 1.3,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 4
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.31,
+   "crossCityPercentile": 0.14,
+   "label": "The day\u2013night temperature gap is shrinking 0.21\u00b0F per decade",
+   "value": 0.21,
+   "unit": "\u00b0F/decade",
+   "significant": true,
+   "rank": 5
+  }
+ ]
+}
