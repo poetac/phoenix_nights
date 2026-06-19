@@ -5,8 +5,12 @@ import ExtrapolationCard from "./cards/ExtrapolationCard.jsx";
 import GlobalContextCard from "./cards/GlobalContextCard.jsx";
 import UhiCard from "./cards/UhiCard.jsx";
 import GapCard from "./cards/GapCard.jsx";
+import DiurnalCard from "./cards/DiurnalCard.jsx";
 import ExtremesCard from "./cards/ExtremesCard.jsx";
+import WinterCard from "./cards/WinterCard.jsx";
 import HotNightSeasonCard from "./cards/HotNightSeasonCard.jsx";
+import SleepCard from "./cards/SleepCard.jsx";
+import CoolWindowCard from "./cards/CoolWindowCard.jsx";
 import SeasonLengthCard from "./cards/SeasonLengthCard.jsx";
 import NightCoolingCard from "./cards/NightCoolingCard.jsx";
 import MethodologyCard from "./cards/MethodologyCard.jsx";
@@ -19,18 +23,37 @@ import SourcesCard from "./cards/SourcesCard.jsx";
 // out differently — the whole point of the explorer.
 //
 // night_warming / lows_outpace_highs are the universal warming backbone (the
-// verdict + extrapolation), shown once up front rather than as per-fact cards;
-// the remaining fact keys each map to the standalone card that visualizes them.
+// verdict + extrapolation), shown once up front. Each remaining fact key maps to
+// its full CARD FAMILY — the cards that show that signal in depth — so a city's
+// top fact is emphasized completely, not as a single number. Every card in a
+// family self-omits when its data/asset is missing (e.g. no diurnal for the humid
+// set), so the page stays as deep as the city's record allows.
 const FACT_CARD = {
   urban_excess: (p) => (p.rural ? <UhiCard city={p.city} cityRows={p.rows} ruralRows={p.rural} /> : null),
-  diurnal_compression: (p) => <GapCard city={p.city} rows={p.rows} />,
-  coldest_night: (p) => <ExtremesCard city={p.city} rows={p.rows} windowStart={p.windowStart} />,
-  tropical_nights: (p) => (p.streaks ? <HotNightSeasonCard city={p.city} streaks={p.streaks} /> : null),
+  diurnal_compression: (p) => (
+    <>
+      <GapCard city={p.city} rows={p.rows} />
+      {p.diurnal && <DiurnalCard city={p.city} diurnal={p.diurnal} />}
+    </>
+  ),
+  coldest_night: (p) => (
+    <>
+      <ExtremesCard city={p.city} rows={p.rows} windowStart={p.windowStart} />
+      {p.streaks && <WinterCard city={p.city} streaks={p.streaks} />}
+    </>
+  ),
+  tropical_nights: (p) => (
+    <>
+      {p.streaks && <HotNightSeasonCard city={p.city} streaks={p.streaks} />}
+      <SleepCard city={p.city} rows={p.rows} windowStart={p.windowStart} />
+      {p.diurnal && <CoolWindowCard city={p.city} diurnal={p.diurnal} />}
+    </>
+  ),
   hot_day_season: (p) => (p.heatSeason ? <SeasonLengthCard city={p.city} heatSeason={p.heatSeason} /> : null),
   night_cooling_share: (p) => (p.cddSplit ? <NightCoolingCard city={p.city} cddSplit={p.cddSplit} /> : null),
 };
 
-export default function SignalsBody({ city, rows, source, rural, heatSeason, streaks, cddSplit, facts }) {
+export default function SignalsBody({ city, rows, source, rural, diurnal, heatSeason, streaks, cddSplit, facts }) {
   const windowStart = city.baseline.start;
   const vis = useMemo(() => rows.filter((r) => r.year >= windowStart), [rows, windowStart]);
   const fitLow = useMemo(() => blockBootstrapCI(vis.map((r) => ({ x: r.year, y: r.low }))), [vis]);
@@ -48,7 +71,7 @@ export default function SignalsBody({ city, rows, source, rural, heatSeason, str
       .filter((k) => FACT_CARD[k] && !seen.has(k) && seen.add(k));
   }, [facts]);
 
-  const ctx = { city, rows, rural, heatSeason, streaks, cddSplit, windowStart };
+  const ctx = { city, rows, rural, diurnal, heatSeason, streaks, cddSplit, windowStart };
 
   return (
     <div className="space-y-6">

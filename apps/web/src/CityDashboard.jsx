@@ -177,7 +177,7 @@ export default function CityDashboard({ city, product }) {
           {!state.loading && !state.error && rows.length > 0 && (
             signals ? (
               <SignalsBody key={city.id} city={city} rows={rows} source={source}
-                rural={rural} heatSeason={heatSeason} streaks={streaks} cddSplit={cddSplit} facts={facts?.facts} />
+                rural={rural} diurnal={diurnal} heatSeason={heatSeason} streaks={streaks} cddSplit={cddSplit} facts={facts?.facts} />
             ) : (
               <DashboardBody key={city.id} city={city} rows={rows} source={source}
                 rural={rural} seasonal={seasonal} diurnal={diurnal} heatSeason={heatSeason}

@@ -120,7 +120,8 @@ The breadth cities are shallower than Phoenix; close that before widening furthe
   `CityDashboard` branches on `product.layout` (hero + body); the atomic cards, fetchers,
   map, and salience engine are shared. City Signals' fact→card map lives in
   `SignalsBody.jsx` (`FACT_CARD`); `night_warming`/`lows_outpace_highs` are the universal
-  trend backbone, the other 6 fact keys each map to a standalone card. The active product
+  trend backbone, the other 6 fact keys each map to a full card *family* (gated on data,
+  so cards self-omit where the asset is absent — e.g. no diurnal for the humid set). The active product
   is fixed per deployed site via `VITE_PRODUCT` (`npm run build` = City Signals,
   `npm run build:desert`), with `?product=<id>` for preview/CI. Components take the scoped
   `cities` + `product` as props (never import `CITIES` directly in the landing/map/compare).
