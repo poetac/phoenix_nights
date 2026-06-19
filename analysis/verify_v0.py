@@ -336,6 +336,16 @@ ASSET_SCHEMAS = {
     "atl-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
     "atl-normals.json": ("byDate", dict, None),
     "atl-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "hou-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "hou-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "hou-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "hou-normals.json": ("byDate", dict, None),
+    "hou-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "nola-streaks.json": ("years", list, ("year", "streak80", "first80", "last80", "count80")),
+    "nola-heat-season.json": ("years", list, ("year", "first", "last", "length", "count")),
+    "nola-cdd-split.json": ("years", list, ("year", "dayCdd", "nightCdd")),
+    "nola-normals.json": ("byDate", dict, None),
+    "nola-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "boi-diurnal.json": ("decades", dict, None),
     "boi-grid.json": ("years", dict, None),
     "yum-facts.json": ("facts", list, ("key", "rank", "score", "label")),
@@ -572,6 +582,22 @@ def main():
                    atl_trend, atl_trend > GLOBAL_BENCH))
     checks.append((f"Atlanta night-low trend > its rural pair Gainesville ({atl_trend:.2f} vs {gville_trend:.2f}/dec)",
                    atl_trend - gville_trend, atl_trend > gville_trend))
+
+    # Eleventh & twelfth cities (Houston, New Orleans): humid Gulf-coast cities —
+    # the UHI nights-first signal reproduces against low-elevation coastal-plain
+    # rural pairs. Live from ACIS; sids match cities.js.
+    hou_trend = acis_yearly_low_trend("IAHthr 9", 1970)
+    danevang_trend = acis_yearly_low_trend("USC00412266", 1970)
+    checks.append((f"Houston night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   hou_trend, hou_trend > GLOBAL_BENCH))
+    checks.append((f"Houston night-low trend > its rural pair Danevang ({hou_trend:.2f} vs {danevang_trend:.2f}/dec)",
+                   hou_trend - danevang_trend, hou_trend > danevang_trend))
+    nola_trend = acis_yearly_low_trend("MSYthr 9", 1970)
+    donaldsonville_trend = acis_yearly_low_trend("USC00162534", 1970)
+    checks.append((f"New Orleans night-low trend since 1970 > global ~{GLOBAL_BENCH}F/dec",
+                   nola_trend, nola_trend > GLOBAL_BENCH))
+    checks.append((f"New Orleans night-low trend > its rural pair Donaldsonville ({nola_trend:.2f} vs {donaldsonville_trend:.2f}/dec)",
+                   nola_trend - donaldsonville_trend, nola_trend > donaldsonville_trend))
 
     # Season cards' outlier-robust definitions: the *sustained* warm-night
     # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of

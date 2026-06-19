@@ -1,0 +1,660 @@
+{
+ "station": "Houston (ThreadEx IAHthr 9)",
+ "source": "NOAA/NWS ACIS daily mint/maxt",
+ "base": 65.0,
+ "note": "annual cooling degree days split by the identity mean-65 = (Tmax-65)/2 + (Tmin-65)/2 over cooling days (mean>65F); years missing >36 days excluded.",
+ "generated": "2026-06-19",
+ "throughYear": 2025,
+ "years": [
+  {
+   "year": 1892,
+   "dayCdd": 2244,
+   "nightCdd": 298
+  },
+  {
+   "year": 1893,
+   "dayCdd": 2328,
+   "nightCdd": 376
+  },
+  {
+   "year": 1894,
+   "dayCdd": 2278,
+   "nightCdd": 204
+  },
+  {
+   "year": 1896,
+   "dayCdd": 2154,
+   "nightCdd": 458
+  },
+  {
+   "year": 1897,
+   "dayCdd": 2572,
+   "nightCdd": 318
+  },
+  {
+   "year": 1898,
+   "dayCdd": 2196,
+   "nightCdd": 466
+  },
+  {
+   "year": 1899,
+   "dayCdd": 2340,
+   "nightCdd": 484
+  },
+  {
+   "year": 1901,
+   "dayCdd": 2430,
+   "nightCdd": 286
+  },
+  {
+   "year": 1902,
+   "dayCdd": 2862,
+   "nightCdd": 320
+  },
+  {
+   "year": 1903,
+   "dayCdd": 2414,
+   "nightCdd": 168
+  },
+  {
+   "year": 1904,
+   "dayCdd": 2586,
+   "nightCdd": 292
+  },
+  {
+   "year": 1907,
+   "dayCdd": 2794,
+   "nightCdd": 246
+  },
+  {
+   "year": 1908,
+   "dayCdd": 2703,
+   "nightCdd": 311
+  },
+  {
+   "year": 1909,
+   "dayCdd": 2913,
+   "nightCdd": 259
+  },
+  {
+   "year": 1910,
+   "dayCdd": 2643,
+   "nightCdd": 270
+  },
+  {
+   "year": 1911,
+   "dayCdd": 2809,
+   "nightCdd": 458
+  },
+  {
+   "year": 1912,
+   "dayCdd": 2394,
+   "nightCdd": 457
+  },
+  {
+   "year": 1913,
+   "dayCdd": 2326,
+   "nightCdd": 370
+  },
+  {
+   "year": 1914,
+   "dayCdd": 2394,
+   "nightCdd": 476
+  },
+  {
+   "year": 1915,
+   "dayCdd": 2519,
+   "nightCdd": 487
+  },
+  {
+   "year": 1916,
+   "dayCdd": 2649,
+   "nightCdd": 306
+  },
+  {
+   "year": 1917,
+   "dayCdd": 2555,
+   "nightCdd": 373
+  },
+  {
+   "year": 1918,
+   "dayCdd": 2603,
+   "nightCdd": 462
+  },
+  {
+   "year": 1919,
+   "dayCdd": 2313,
+   "nightCdd": 462
+  },
+  {
+   "year": 1920,
+   "dayCdd": 2396,
+   "nightCdd": 482
+  },
+  {
+   "year": 1921,
+   "dayCdd": 2632,
+   "nightCdd": 398
+  },
+  {
+   "year": 1922,
+   "dayCdd": 2670,
+   "nightCdd": 474
+  },
+  {
+   "year": 1923,
+   "dayCdd": 2429,
+   "nightCdd": 482
+  },
+  {
+   "year": 1924,
+   "dayCdd": 2576,
+   "nightCdd": 434
+  },
+  {
+   "year": 1925,
+   "dayCdd": 2705,
+   "nightCdd": 512
+  },
+  {
+   "year": 1926,
+   "dayCdd": 2283,
+   "nightCdd": 531
+  },
+  {
+   "year": 1927,
+   "dayCdd": 2827,
+   "nightCdd": 606
+  },
+  {
+   "year": 1928,
+   "dayCdd": 2383,
+   "nightCdd": 461
+  },
+  {
+   "year": 1929,
+   "dayCdd": 2500,
+   "nightCdd": 468
+  },
+  {
+   "year": 1930,
+   "dayCdd": 2374,
+   "nightCdd": 489
+  },
+  {
+   "year": 1931,
+   "dayCdd": 2428,
+   "nightCdd": 497
+  },
+  {
+   "year": 1932,
+   "dayCdd": 2516,
+   "nightCdd": 440
+  },
+  {
+   "year": 1933,
+   "dayCdd": 2728,
+   "nightCdd": 572
+  },
+  {
+   "year": 1934,
+   "dayCdd": 2610,
+   "nightCdd": 501
+  },
+  {
+   "year": 1935,
+   "dayCdd": 2438,
+   "nightCdd": 536
+  },
+  {
+   "year": 1936,
+   "dayCdd": 2300,
+   "nightCdd": 510
+  },
+  {
+   "year": 1937,
+   "dayCdd": 2522,
+   "nightCdd": 491
+  },
+  {
+   "year": 1938,
+   "dayCdd": 2620,
+   "nightCdd": 494
+  },
+  {
+   "year": 1939,
+   "dayCdd": 2598,
+   "nightCdd": 482
+  },
+  {
+   "year": 1940,
+   "dayCdd": 2450,
+   "nightCdd": 352
+  },
+  {
+   "year": 1941,
+   "dayCdd": 2420,
+   "nightCdd": 665
+  },
+  {
+   "year": 1942,
+   "dayCdd": 2346,
+   "nightCdd": 471
+  },
+  {
+   "year": 1943,
+   "dayCdd": 2412,
+   "nightCdd": 477
+  },
+  {
+   "year": 1944,
+   "dayCdd": 2602,
+   "nightCdd": 546
+  },
+  {
+   "year": 1945,
+   "dayCdd": 2579,
+   "nightCdd": 506
+  },
+  {
+   "year": 1946,
+   "dayCdd": 2491,
+   "nightCdd": 503
+  },
+  {
+   "year": 1947,
+   "dayCdd": 2568,
+   "nightCdd": 536
+  },
+  {
+   "year": 1948,
+   "dayCdd": 2747,
+   "nightCdd": 542
+  },
+  {
+   "year": 1949,
+   "dayCdd": 2505,
+   "nightCdd": 632
+  },
+  {
+   "year": 1950,
+   "dayCdd": 2700,
+   "nightCdd": 508
+  },
+  {
+   "year": 1951,
+   "dayCdd": 2682,
+   "nightCdd": 616
+  },
+  {
+   "year": 1952,
+   "dayCdd": 2422,
+   "nightCdd": 440
+  },
+  {
+   "year": 1953,
+   "dayCdd": 2608,
+   "nightCdd": 582
+  },
+  {
+   "year": 1954,
+   "dayCdd": 2688,
+   "nightCdd": 602
+  },
+  {
+   "year": 1955,
+   "dayCdd": 2640,
+   "nightCdd": 638
+  },
+  {
+   "year": 1956,
+   "dayCdd": 2823,
+   "nightCdd": 542
+  },
+  {
+   "year": 1957,
+   "dayCdd": 2534,
+   "nightCdd": 590
+  },
+  {
+   "year": 1958,
+   "dayCdd": 2452,
+   "nightCdd": 724
+  },
+  {
+   "year": 1959,
+   "dayCdd": 2320,
+   "nightCdd": 616
+  },
+  {
+   "year": 1960,
+   "dayCdd": 2486,
+   "nightCdd": 563
+  },
+  {
+   "year": 1961,
+   "dayCdd": 2302,
+   "nightCdd": 496
+  },
+  {
+   "year": 1962,
+   "dayCdd": 2836,
+   "nightCdd": 759
+  },
+  {
+   "year": 1963,
+   "dayCdd": 2840,
+   "nightCdd": 804
+  },
+  {
+   "year": 1964,
+   "dayCdd": 2566,
+   "nightCdd": 733
+  },
+  {
+   "year": 1965,
+   "dayCdd": 2676,
+   "nightCdd": 686
+  },
+  {
+   "year": 1966,
+   "dayCdd": 2378,
+   "nightCdd": 527
+  },
+  {
+   "year": 1967,
+   "dayCdd": 2506,
+   "nightCdd": 569
+  },
+  {
+   "year": 1968,
+   "dayCdd": 2275,
+   "nightCdd": 593
+  },
+  {
+   "year": 1969,
+   "dayCdd": 2578,
+   "nightCdd": 231
+  },
+  {
+   "year": 1970,
+   "dayCdd": 2304,
+   "nightCdd": 258
+  },
+  {
+   "year": 1971,
+   "dayCdd": 2558,
+   "nightCdd": 200
+  },
+  {
+   "year": 1972,
+   "dayCdd": 2595,
+   "nightCdd": 100
+  },
+  {
+   "year": 1973,
+   "dayCdd": 2390,
+   "nightCdd": 208
+  },
+  {
+   "year": 1974,
+   "dayCdd": 2588,
+   "nightCdd": 176
+  },
+  {
+   "year": 1975,
+   "dayCdd": 2500,
+   "nightCdd": 108
+  },
+  {
+   "year": 1976,
+   "dayCdd": 2165,
+   "nightCdd": 8
+  },
+  {
+   "year": 1977,
+   "dayCdd": 2541,
+   "nightCdd": 148
+  },
+  {
+   "year": 1978,
+   "dayCdd": 2631,
+   "nightCdd": 175
+  },
+  {
+   "year": 1979,
+   "dayCdd": 2402,
+   "nightCdd": 116
+  },
+  {
+   "year": 1980,
+   "dayCdd": 2878,
+   "nightCdd": 408
+  },
+  {
+   "year": 1981,
+   "dayCdd": 2674,
+   "nightCdd": 470
+  },
+  {
+   "year": 1982,
+   "dayCdd": 2740,
+   "nightCdd": 418
+  },
+  {
+   "year": 1983,
+   "dayCdd": 2172,
+   "nightCdd": 318
+  },
+  {
+   "year": 1984,
+   "dayCdd": 2500,
+   "nightCdd": 322
+  },
+  {
+   "year": 1985,
+   "dayCdd": 2592,
+   "nightCdd": 432
+  },
+  {
+   "year": 1986,
+   "dayCdd": 2640,
+   "nightCdd": 476
+  },
+  {
+   "year": 1987,
+   "dayCdd": 2616,
+   "nightCdd": 259
+  },
+  {
+   "year": 1988,
+   "dayCdd": 2830,
+   "nightCdd": 186
+  },
+  {
+   "year": 1989,
+   "dayCdd": 2634,
+   "nightCdd": 302
+  },
+  {
+   "year": 1990,
+   "dayCdd": 2732,
+   "nightCdd": 444
+  },
+  {
+   "year": 1991,
+   "dayCdd": 2642,
+   "nightCdd": 413
+  },
+  {
+   "year": 1992,
+   "dayCdd": 2522,
+   "nightCdd": 206
+  },
+  {
+   "year": 1993,
+   "dayCdd": 2527,
+   "nightCdd": 407
+  },
+  {
+   "year": 1994,
+   "dayCdd": 2740,
+   "nightCdd": 409
+  },
+  {
+   "year": 1995,
+   "dayCdd": 2756,
+   "nightCdd": 394
+  },
+  {
+   "year": 1996,
+   "dayCdd": 2761,
+   "nightCdd": 360
+  },
+  {
+   "year": 1997,
+   "dayCdd": 2388,
+   "nightCdd": 216
+  },
+  {
+   "year": 1998,
+   "dayCdd": 2860,
+   "nightCdd": 502
+  },
+  {
+   "year": 1999,
+   "dayCdd": 2892,
+   "nightCdd": 246
+  },
+  {
+   "year": 2000,
+   "dayCdd": 2932,
+   "nightCdd": 278
+  },
+  {
+   "year": 2001,
+   "dayCdd": 2502,
+   "nightCdd": 310
+  },
+  {
+   "year": 2002,
+   "dayCdd": 2480,
+   "nightCdd": 638
+  },
+  {
+   "year": 2003,
+   "dayCdd": 2624,
+   "nightCdd": 512
+  },
+  {
+   "year": 2004,
+   "dayCdd": 2734,
+   "nightCdd": 502
+  },
+  {
+   "year": 2005,
+   "dayCdd": 2796,
+   "nightCdd": 432
+  },
+  {
+   "year": 2006,
+   "dayCdd": 2799,
+   "nightCdd": 424
+  },
+  {
+   "year": 2007,
+   "dayCdd": 2721,
+   "nightCdd": 496
+  },
+  {
+   "year": 2008,
+   "dayCdd": 2774,
+   "nightCdd": 368
+  },
+  {
+   "year": 2009,
+   "dayCdd": 2783,
+   "nightCdd": 572
+  },
+  {
+   "year": 2010,
+   "dayCdd": 2799,
+   "nightCdd": 564
+  },
+  {
+   "year": 2011,
+   "dayCdd": 3254,
+   "nightCdd": 632
+  },
+  {
+   "year": 2012,
+   "dayCdd": 3032,
+   "nightCdd": 472
+  },
+  {
+   "year": 2013,
+   "dayCdd": 2646,
+   "nightCdd": 507
+  },
+  {
+   "year": 2014,
+   "dayCdd": 2566,
+   "nightCdd": 422
+  },
+  {
+   "year": 2015,
+   "dayCdd": 2782,
+   "nightCdd": 502
+  },
+  {
+   "year": 2016,
+   "dayCdd": 2900,
+   "nightCdd": 480
+  },
+  {
+   "year": 2017,
+   "dayCdd": 3008,
+   "nightCdd": 457
+  },
+  {
+   "year": 2018,
+   "dayCdd": 2798,
+   "nightCdd": 646
+  },
+  {
+   "year": 2019,
+   "dayCdd": 2806,
+   "nightCdd": 660
+  },
+  {
+   "year": 2020,
+   "dayCdd": 3024,
+   "nightCdd": 542
+  },
+  {
+   "year": 2021,
+   "dayCdd": 2838,
+   "nightCdd": 548
+  },
+  {
+   "year": 2022,
+   "dayCdd": 2990,
+   "nightCdd": 622
+  },
+  {
+   "year": 2023,
+   "dayCdd": 3170,
+   "nightCdd": 646
+  },
+  {
+   "year": 2024,
+   "dayCdd": 3156,
+   "nightCdd": 692
+  },
+  {
+   "year": 2025,
+   "dayCdd": 3318,
+   "nightCdd": 716
+  }
+ ]
+}

@@ -1,12 +1,12 @@
 {
  "city": "ep",
  "name": "El Paso (ThreadEx ELPthr 9)",
- "generated": "2026-06-18",
+ "generated": "2026-06-19",
  "facts": [
   {
    "key": "night_warming",
-   "score": 0.94,
-   "crossCityPercentile": 0.8,
+   "score": 0.95,
+   "crossCityPercentile": 0.83,
    "label": "Summer nights are warming +1.50\u00b0F per decade",
    "value": 1.5,
    "unit": "\u00b0F/decade",
@@ -16,8 +16,8 @@
   },
   {
    "key": "urban_excess",
-   "score": 0.91,
-   "crossCityPercentile": 0.7,
+   "score": 0.9,
+   "crossCityPercentile": 0.67,
    "label": "City nights are warming +1.02\u00b0F/decade faster than the nearby open desert",
    "value": 1.02,
    "unit": "\u00b0F/decade",
@@ -27,8 +27,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.877,
-   "crossCityPercentile": 0.8,
+   "score": 0.887,
+   "crossCityPercentile": 0.83,
    "label": "Overnight lows are rising 2.4\u00d7 as fast as afternoon highs",
    "value": 2.4,
    "unit": "\u00d7 ratio",
@@ -37,8 +37,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.877,
-   "crossCityPercentile": 0.8,
+   "score": 0.887,
+   "crossCityPercentile": 0.83,
    "label": "The day\u2013night temperature gap is shrinking 0.89\u00b0F per decade",
    "value": 0.89,
    "unit": "\u00b0F/decade",
@@ -47,8 +47,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.85,
-   "crossCityPercentile": 0.5,
+   "score": 0.875,
+   "crossCityPercentile": 0.58,
    "label": "Even the coldest night of the year is warming +1.86\u00b0F per decade",
    "value": 1.86,
    "unit": "\u00b0F/decade",
@@ -57,8 +57,8 @@
   },
   {
    "key": "hot_day_season",
-   "score": 0.634,
-   "crossCityPercentile": 0.88,
+   "score": 0.639,
+   "crossCityPercentile": 0.89,
    "label": "43 days a year now reach 100\u00b0F (was 18 in the 1970s)",
    "value": 43,
    "unit": "days",
@@ -68,8 +68,8 @@
   },
   {
    "key": "tropical_nights",
-   "score": 0.266,
-   "crossCityPercentile": 0.2,
+   "score": 0.249,
+   "crossCityPercentile": 0.14,
    "label": "8 nights a year now stay at or above 80\u00b0F (was 0 in the 1970s)",
    "value": 8,
    "unit": "nights",

@@ -102,7 +102,8 @@ def compute_raw(city):
     # cities.py registries don't carry the JS rural; derive from known pairs below
     REF = {"phx": "USC00021314", "tus": "USC00027619", "lv": "USC00262243",
            "ep": "USC00299686", "yum": "USW00003125", "rno": "USC00048758",
-           "abq": "USC00295150", "slc": "USC00429133", "boi": "USC00102942", "atl": "USC00093621"}
+           "abq": "USC00295150", "slc": "USC00429133", "boi": "USC00102942", "atl": "USC00093621",
+           "hou": "USC00412266", "nola": "USC00162534"}
     rsid = REF.get(city["key"])
     if rsid and night is not None:
         rtrend, _ = linreg(_yearly(rsid, "mint", "mean"))
