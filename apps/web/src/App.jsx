@@ -1,26 +1,28 @@
-import { useState, useEffect, useRef } from "react";
-import { CITIES } from "./lib/cities.js";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { activeProduct, citiesOf } from "./products.js";
 import { C, BODY } from "./ui.jsx";
 import CityDashboard from "./CityDashboard.jsx";
 import CityExplore from "./CityExplore.jsx";
 
-// The index.html title is the landing/brand title; per-city pages extend it so
-// browser tabs, bookmarks, and shared links identify the city (the engine has 9).
-const BASE_TITLE = typeof document !== "undefined" ? document.title : "Phoenix Nights";
-
-// No ?city -> the cross-city explore landing. ?city=<id> -> that city's page
-// (set by the explore list, the picker, share links, and deep links).
-function initialCityId() {
-  if (typeof window === "undefined") return null;
-  const q = new URLSearchParams(window.location.search).get("city");
-  return CITIES.some((c) => c.id === q) ? q : null;
-}
-
+// One shared engine, two products (see products.js). The active product is fixed
+// per deployed site (VITE_PRODUCT) and scopes which cities exist, the landing
+// framing, and the brand; a ?product= override is honored for preview/CI.
+//
+// No ?city -> the product's explore landing. ?city=<id> -> that city's page (set
+// by the explore list, the picker, share links, and deep links), validated
+// against the product's own city set.
 export default function App() {
-  const [id, setId] = useState(initialCityId);
+  const product = useMemo(() => activeProduct(), []);
+  const cities = useMemo(() => citiesOf(product), [product]);
+
+  const [id, setId] = useState(() => {
+    if (typeof window === "undefined") return null;
+    const q = new URLSearchParams(window.location.search).get("city");
+    return cities.some((c) => c.id === q) ? q : null;
+  });
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef(null);
-  const city = id ? CITIES.find((c) => c.id === id) ?? null : null;
+  const city = id ? cities.find((c) => c.id === id) ?? null : null;
 
   function selectCity(next) {
     setId(next);
@@ -45,13 +47,13 @@ export default function App() {
     return () => { document.removeEventListener("mousedown", onDown); document.removeEventListener("keydown", onKey); };
   }, [menuOpen]);
 
-  // Keep the document title in sync with the selected city.
+  // Keep the document title in sync with the product + selected city.
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.title = city
-      ? `${city.name} — overnight lows vs the 1970s · Phoenix Nights`
-      : BASE_TITLE;
-  }, [city]);
+      ? `${city.name} — overnight lows vs the 1970s · ${product.name}`
+      : `${product.name} — ${product.tagline}`;
+  }, [city, product]);
 
   // On a fresh deep-link load to #card (with ?city set), retry the scroll until
   // the lazy chart body has mounted. Only relevant when a city is shown.
@@ -68,7 +70,7 @@ export default function App() {
     return () => clearInterval(timer);
   }, [id]);
 
-  if (!city) return <CityExplore onPick={selectCity} />;
+  if (!city) return <CityExplore product={product} cities={cities} onPick={selectCity} />;
 
   const pill = {
     border: "none", cursor: "pointer", borderRadius: 999,
@@ -126,7 +128,7 @@ export default function App() {
                 minWidth: 190, maxHeight: "min(62vh, 460px)", overflowY: "auto", zIndex: 60,
               }}
             >
-              {CITIES.map((c) => {
+              {cities.map((c) => {
                 const active = c.id === id;
                 return (
                   <li key={c.id}>

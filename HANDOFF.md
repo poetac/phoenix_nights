@@ -111,6 +111,15 @@ The breadth cities are shallower than Phoenix; close that before widening furthe
 
 ## Conventions
 
+- **Two products, one engine** (`apps/web/src/products.js`): `desert` ("Desert Nights",
+  arid-West cut, Phoenix flagship, thesis landing) and `explorer` (all cities, map +
+  salience; working name *CityTrends*). A product scopes the city list, landing copy, and
+  brand — the cards/fetchers/map/salience don't change. The active product is fixed per
+  deployed site via `VITE_PRODUCT` (`npm run build` = explorer, `npm run build:desert` =
+  Desert Nights → `dist-desert/`); a `?product=<id>` query overrides it for preview/CI.
+  Components take the scoped `cities` + `product` as props (never import `CITIES` directly
+  in the landing/map/compare). Phase 2 (separate `base`/branding/OG + per-product deploys)
+  and Phase 3 (worldwide data backend) are still open — see ROADMAP "Direction".
 - Branch `claude/<topic>`; one focused PR; draft/PR → CI green → squash-merge.
   ("keep going" = standing approval to merge green PRs.)
 - **Principles** (the bar — see ROADMAP): reproduce or reject · lows first · state
