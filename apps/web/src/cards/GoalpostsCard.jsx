@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { C, DISPLAY, Card, CardHead } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, useUnits } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
+import { convTemp, convTempDelta, tempUnit } from "../lib/units.js";
 
 // NOAA recomputes 30-year "climate normals" every decade; these are the
 // windows behind the "normal" your weather app showed in each era.
@@ -17,7 +18,11 @@ export default function GoalpostsCard({ city, rows }) {
     return { span, era, low: v.length >= 25 ? mean(v) : null };
   }).filter((v) => v.low != null), [rows]);
 
+  const units = useUnits();
   if (vintages.length < 3) return null;
+  // Vintage "normal" lows are absolute (convTemp); the redefined-upward rise is a
+  // difference (convTempDelta). Bar positions use affine-invariant ratios, so they
+  // need no conversion. Identity in °F → US output unchanged.
   const lo = Math.min(...vintages.map((v) => v.low)) - 0.4;
   const hi = Math.max(...vintages.map((v) => v.low)) + 0.4;
   const pos = (v) => ((v - lo) / (hi - lo)) * 100;
@@ -40,13 +45,13 @@ export default function GoalpostsCard({ city, rows }) {
               <div className="absolute top-[-3px] w-2 h-[14px] rounded-sm"
                 style={{ left: `calc(${pos(v.low)}% - 4px)`, background: C.gold }} />
             </div>
-            <div className="w-14 shrink-0 text-right" style={{ color: C.gold }}>{v.low.toFixed(1)}°</div>
+            <div className="w-14 shrink-0 text-right" style={{ color: C.gold }}>{convTemp(v.low, units).toFixed(1)}°</div>
           </div>
         ))}
       </div>
       <p className="mt-4 text-base leading-relaxed">
         In thirty years of re-averaging, what counts as a "normal" {city.shortName} night has been redefined upward by{" "}
-        <span style={{ color: C.gold, fontFamily: DISPLAY }}>{rise.toFixed(1)}°F</span>. A night your weather app calls
+        <span style={{ color: C.gold, fontFamily: DISPLAY }}>{convTempDelta(rise, units).toFixed(1)}{tempUnit(units)}</span>. A night your weather app calls
         "near normal" tonight would have read as a heat anomaly against the normal your parents knew. That's why this
         page grades every year against a fixed {city.baseline.label} baseline instead.
       </p>

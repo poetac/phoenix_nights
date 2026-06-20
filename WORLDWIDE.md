@@ -128,11 +128,12 @@ Concrete gotchas found in the current code, each a required change:
   (×5/9, **no** 32° offset) — the render smoke test checks cards mount, not temp
   strings, so this is the net under the conversions. `GlobalContextCard` is the
   migrated reference (chart + tooltip + prose trends), imperial-identical.
-  **Rollout (staged, ~17 cards left).** Migrated so far: `GlobalContextCard`,
+  **Rollout (staged, ~14 cards left).** Migrated so far: `GlobalContextCard`,
   `UhiCard`, `GapCard` (gap/comparison family), `ExtrapolationCard`, `DiurnalCard`
   (warming-trajectory family), `SeasonsCard`, `GrowthCard`, `ExtremesCard`
-  (seasonal/breadth family) — covering `convTemp`, `convTempDelta`, and
-  `convDistPhrase` for the rural-distance prose. Per card: read
+  (seasonal/breadth family), `LastNightHero`, `GoalpostsCard`, `GridCard` (live hero
+  + grid) — covering `convTemp`, `convTempDelta`, and `convDistPhrase` for the
+  rural-distance prose. Per card: read
   `useUnits()`, wrap absolute
   temps in `convTemp`+`tempUnit`, trends/gaps in `convTempDelta`+`tempRateUnit`,
   distances in `convDist`+`distUnit`; keep the card's own rounding so imperial stays
