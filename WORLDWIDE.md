@@ -163,10 +163,14 @@ zoom/region affordance once there are >~50 dots.
   from the hard assertion and tracked for Phase B rather than hidden by a looser
   tolerance. *No new cities, no UI change.* (Validated live in CI — the sandbox has no
   egress.)
-- **Phase B — first international slice (precomputed).** ~5 cities with dense networks
-  and clean rural controls (candidates: London, Tokyo, Madrid, Berlin, Melbourne).
-  Hemisphere-aware season + °C land here. Ship behind the existing engine; no map
-  change yet (list/ranking only).
+- **Phase B — first international slice (precomputed).** *Step 0 ✅: the GHCN-Daily
+  backend reaches international stations* — `verify_v0.py` smoke-tests a long-record
+  station per region/hemisphere (De Bilt, London, Tokyo, Sydney) and asserts each
+  yields a reachable, warming night trend. Next: ~5 cities with dense networks and
+  clean rural controls (candidates: London, Tokyo, Madrid, Berlin, Melbourne).
+  Hemisphere-aware season (done) + °C land here. Ship behind the existing engine; no
+  map change yet (list/ranking only). The blocker from a no-egress sandbox is asset
+  *generation* (the GHCN builders must run against NCEI) — a CI/rebuild step.
 - **Phase C — world map + units.** `geoNaturalEarth1`, °C default, the unit layer.
 - **Phase D — regional expansion.** Region by region, each gated on a rural-control
   validation pass; UHI card omits where no control qualifies.
