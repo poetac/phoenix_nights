@@ -115,6 +115,33 @@ def ghcn_night_trend(sid, start=1970):
     return linreg(pts) * 10 if len(pts) >= 25 else None
 
 
+# Worldwide Phase B step 0: confirm the proven GHCN-Daily backend (NCEI GSOY) reaches
+# INTERNATIONAL stations and yields sane night-warming trends — the data-availability
+# prerequisite before wiring any non-US city into the site. These are backend
+# reachability fixtures, not site cities; check_cities is the stronger, ACIS-cross-
+# checked bar. De Bilt (Europe, N) and Sydney (Oceania, S) cover both hemispheres and
+# two continents. A first pass also tried London Heathrow (UKM00003772) and Tokyo
+# (JA000047662): both returned no GSOY TMIN — NCEI's *annual* summaries don't carry
+# every GHCN-Daily station, an uneven-coverage reality Phase B's city selection must
+# map (WORLDWIDE.md §4/§8). Left out rather than chased with blind id guesses; a real
+# international city would resolve its source station the same way (verify, then ship).
+GHCN_INTL_SMOKE = [
+    ("De Bilt, NL", "NLM00006260"),
+    ("Sydney Observatory Hill, AU", "ASN00066062"),
+]
+
+
+def check_ghcn_intl(checks):
+    """Each international fixture's GHCN-Daily night trend is reachable and warming."""
+    for name, sid in GHCN_INTL_SMOKE:
+        g = ghcn_night_trend(sid)
+        checks.append((
+            f"[backend] {name}: GHCN-Daily night trend reachable & warming "
+            f"({'n/a' if g is None else f'{g:+.2f}'}/dec, {sid})",
+            g if g is not None else float("nan"),
+            g is not None and g > 0))
+
+
 def fetch_acis_mint(start_year):
     """Every daily low from start_year through the last complete year."""
     body = json.dumps({
@@ -678,6 +705,8 @@ def main():
     # deep Phoenix battery already met; check_cities brings the breadth cities to it
     # (they were previously only shape-checked). See check_cities() above.
     desert_trend = check_cities(checks)
+    # Worldwide Phase B step 0: the GHCN-Daily backend reaches international stations.
+    check_ghcn_intl(checks)
 
     # Season cards' outlier-robust definitions: the *sustained* warm-night
     # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of
