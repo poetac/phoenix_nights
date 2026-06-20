@@ -1,7 +1,8 @@
 import { useMemo } from "react";
-import { C, DISPLAY, Card, CardHead } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, useUnits } from "../ui.jsx";
 import { linreg, mean } from "../lib/stats.js";
 import { SEASONS } from "../lib/data.js";
+import { convTempDelta, tempUnit } from "../lib/units.js";
 
 const TREND_START = 1970;
 
@@ -27,7 +28,11 @@ export default function SeasonsCard({ city, seasonal }) {
     return out;
   }, [seasonal, city]);
 
+  const units = useUnits();
   if (!stats) return null;
+  // Season trends and the summer delta are differences (convTempDelta, identity in
+  // °F). The "+6°F since 1970" is Climate Central's published figure — kept as cited.
+  const d = (v) => convTempDelta(v, units);
   const summer = stats.find((s) => s.key === "JJA");
   const maxRatio = stats.reduce((m, s) =>
     (s.highTrend > 0.05 && s.lowTrend / s.highTrend > m.r ? { r: s.lowTrend / s.highTrend, s } : m),
@@ -43,11 +48,11 @@ export default function SeasonsCard({ city, seasonal }) {
             <div className="text-sm" style={{ color: C.text }}>{s.label}</div>
             <div className="text-xs mb-2" style={{ color: C.muted }}>{s.months}</div>
             <div className="text-2xl" style={{ fontFamily: DISPLAY, color: C.ember, fontVariantNumeric: "tabular-nums" }}>
-              +{s.lowTrend.toFixed(1)}°
+              +{d(s.lowTrend).toFixed(1)}°
             </div>
             <div className="text-xs" style={{ color: C.emberSoft }}>lows / decade</div>
             <div className="text-base mt-1" style={{ fontFamily: DISPLAY, color: C.day, fontVariantNumeric: "tabular-nums" }}>
-              {s.highTrend >= 0 ? "+" : ""}{s.highTrend.toFixed(1)}°
+              {s.highTrend >= 0 ? "+" : ""}{d(s.highTrend).toFixed(1)}°
             </div>
             <div className="text-xs" style={{ color: C.day }}>highs / decade</div>
           </div>
@@ -56,7 +61,7 @@ export default function SeasonsCard({ city, seasonal }) {
       {summer?.delta != null && (
         <p className="mt-4 text-base leading-relaxed">
           {city.shortName} summer nights now run{" "}
-          <span style={{ color: C.gold, fontFamily: DISPLAY }}>+{summer.delta.toFixed(1)}°F hotter than in the {city.baseline.label}</span>
+          <span style={{ color: C.gold, fontFamily: DISPLAY }}>+{d(summer.delta).toFixed(1)}{tempUnit(units)} hotter than in the {city.baseline.label}</span>
           {" "}— independently reproducing Climate Central's published estimate of about +6°F since 1970, from the raw
           station record.{maxRatio.s && maxRatio.s.key !== "JJA" && (
             <> The lopsided signature is strongest in {maxRatio.s.label.toLowerCase()}: lows warming{" "}

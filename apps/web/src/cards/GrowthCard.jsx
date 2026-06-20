@@ -2,8 +2,9 @@ import { useMemo } from "react";
 import {
   ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, axisTick } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, axisTick, useUnits } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
+import { convTempDelta, tempUnit } from "../lib/units.js";
 
 export default function GrowthCard({ city, cityRows, ruralRows }) {
   const model = useMemo(() => {
@@ -27,7 +28,10 @@ export default function GrowthCard({ city, cityRows, ruralRows }) {
     return { data, first: data[0], last: data[data.length - 1] };
   }, [city, cityRows, ruralRows]);
 
+  const units = useUnits();
   if (!model) return null;
+  // The city-minus-rural night gap is a difference (convTempDelta, identity in °F).
+  const displayData = model.data.map((p) => ({ ...p, gap: +convTempDelta(p.gap, units).toFixed(1) }));
 
   return (
     <Card>
@@ -51,11 +55,11 @@ export default function GrowthCard({ city, cityRows, ruralRows }) {
                 <div className="rounded-lg px-3 py-2 text-sm"
                   style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
                   <div style={{ color: C.muted }} className="text-xs mb-1">{p.decade}</div>
-                  <div>{p.pop}M people · nights +{p.gap}°F vs desert</div>
+                  <div>{p.pop}M people · nights +{p.gap}{tempUnit(units)} vs desert</div>
                 </div>
               );
             }} />
-            <Scatter data={model.data} fill={C.gold} line={{ stroke: C.line, strokeWidth: 1.5 }} isAnimationActive={false}>
+            <Scatter data={displayData} fill={C.gold} line={{ stroke: C.line, strokeWidth: 1.5 }} isAnimationActive={false}>
               <LabelList dataKey="decade" position="top" style={{ fill: C.muted, fontSize: 11 }} />
             </Scatter>
           </ScatterChart>
@@ -63,7 +67,7 @@ export default function GrowthCard({ city, cityRows, ruralRows }) {
       </div>
       <p className="mt-4 text-base leading-relaxed">
         From the {model.first.decade} to the 1990s, the night gap climbed almost in lockstep with population — roughly{" "}
-        <span style={{ color: C.gold, fontFamily: DISPLAY }}>2°F of hotter nights per million people</span>. After
+        <span style={{ color: C.gold, fontFamily: DISPLAY }}>{units === "metric" ? convTempDelta(2, units).toFixed(1) : "2"}{tempUnit(units)} of hotter nights per million people</span>. After
         2000 the curve bends: not because the heat island stopped, but because the "rural" yardstick itself started
         urbanizing, and a core that is already wall-to-wall pavement has less room to get worse.
       </p>

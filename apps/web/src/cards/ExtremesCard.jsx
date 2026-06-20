@@ -2,8 +2,9 @@ import { useMemo } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
 import { linreg, mean } from "../lib/stats.js";
+import { convTemp, convTempDelta, tempUnit } from "../lib/units.js";
 
 // The year's single warmest and single coldest overnight low — the ceiling and
 // floor of nighttime relief. Every other card on the page is a mean, a count,
@@ -37,8 +38,16 @@ export default function ExtremesCard({ city, rows, windowStart }) {
     };
   }, [rows, windowStart, city]);
 
+  const units = useUnits();
   if (!model) return null;
   const coldRising = model.coldTrend > 0;
+  // Warmest/coldest-night lows are absolute temps (convTemp); the trends are
+  // differences (convTempDelta). Both identity in °F → US output unchanged.
+  const t = (v) => convTemp(v, units);
+  const dd = (v) => convTempDelta(v, units);
+  const displayData = model.data.map((r) => ({
+    year: r.year, warmLow: +t(r.warmLow).toFixed(1), coldLow: +t(r.coldLow).toFixed(1),
+  }));
 
   return (
     <Card>
@@ -48,12 +57,12 @@ export default function ExtremesCard({ city, rows, windowStart }) {
         aria-label="Line chart of each year's single coldest and single hottest overnight low; both rise, the coldest-night floor lifting fastest.">
 
         <ResponsiveContainer>
-          <LineChart data={model.data} margin={{ top: 6, right: 8, left: -16, bottom: 0 }}>
+          <LineChart data={displayData} margin={{ top: 6, right: 8, left: -16, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
             <XAxis dataKey="year" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} minTickGap={32} />
             <YAxis tick={axisTick} tickLine={false} axisLine={false}
               domain={["auto", "auto"]} tickFormatter={(v) => `${v}°`} />
-            <Tooltip content={<DarkTooltip unit="°F" />} />
+            <Tooltip content={<DarkTooltip unit={tempUnit(units)} />} />
             <Line isAnimationActive={false} type="monotone" dataKey="warmLow" name="Warmest night's low"
               stroke={C.ember} strokeWidth={2.5} dot={false} />
             <Line isAnimationActive={false} type="monotone" dataKey="coldLow" name="Coldest night's low"
@@ -69,19 +78,19 @@ export default function ExtremesCard({ city, rows, windowStart }) {
         Pick the single coldest night of each year — the deepest the desert's cooling ever reaches.
         {model.baseCold != null && model.recentCold != null ? (
           <> In the {city.baseline.label} that night bottomed out around{" "}
-            <span style={{ fontFamily: DISPLAY, color: C.day }}>{model.baseCold.toFixed(0)}°F</span>; over the last
-            ten years it averaged <span style={{ fontFamily: DISPLAY, color: C.gold }}>{model.recentCold.toFixed(0)}°F</span>.</>
+            <span style={{ fontFamily: DISPLAY, color: C.day }}>{t(model.baseCold).toFixed(0)}{tempUnit(units)}</span>; over the last
+            ten years it averaged <span style={{ fontFamily: DISPLAY, color: C.gold }}>{t(model.recentCold).toFixed(0)}{tempUnit(units)}</span>.</>
         ) : null}{" "}
         {coldRising ? (
           <>Even the year's one moment of deepest relief is warming —{" "}
-            <span style={{ color: C.gold, fontFamily: DISPLAY }}>+{model.coldTrend.toFixed(1)}°F per decade</span>,
-            faster than the warmest night ({model.warmTrend >= 0 ? "+" : ""}{model.warmTrend.toFixed(1)}°/decade).
+            <span style={{ color: C.gold, fontFamily: DISPLAY }}>+{dd(model.coldTrend).toFixed(1)}{tempUnit(units)} per decade</span>,
+            faster than the warmest night ({model.warmTrend >= 0 ? "+" : ""}{dd(model.warmTrend).toFixed(1)}°/decade).
             The hottest of the lows can't climb much past the daytime heat, but the floor has room to rise — and it is.</>
         ) : (
-          <>The warmest night is climbing {model.warmTrend >= 0 ? "+" : ""}{model.warmTrend.toFixed(1)}°F per decade.</>
+          <>The warmest night is climbing {model.warmTrend >= 0 ? "+" : ""}{dd(model.warmTrend).toFixed(1)}{tempUnit(units)} per decade.</>
         )}{" "}
         {city.shortName}'s warmest low on record was{" "}
-        <span style={{ color: C.ember, fontFamily: DISPLAY }}>{model.recordWarm.warmLow.toFixed(0)}°F</span>, set in{" "}
+        <span style={{ color: C.ember, fontFamily: DISPLAY }}>{t(model.recordWarm.warmLow).toFixed(0)}{tempUnit(units)}</span>, set in{" "}
         {model.recordWarm.year} — a night that never cooled below body temperature.
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
