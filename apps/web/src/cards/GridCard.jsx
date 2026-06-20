@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
+import { convTemp, tempUnit } from "../lib/units.js";
 
 function hourLabel(h) {
   if (h === 0) return "12 AM";
@@ -27,6 +28,7 @@ export default function GridCard({ city, grid }) {
     };
   }, [grid]);
 
+  const units = useUnits();
   if (!model) return null;
 
   return (
@@ -57,7 +59,7 @@ export default function GridCard({ city, grid }) {
         Since {model.thenK}, the overnight minimum — the 3-to-4 AM trough — has grown{" "}
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{model.troughGrowth.toFixed(0)}%</span>, twice as fast as
         the evening peak ({model.peakGrowth.toFixed(0)}%). A July night now runs at {model.troughPctNow}% of peak
-        load, up from {model.troughPctThen}% — because when the air outside is still 90°F at 3 AM, five million air
+        load, up from {model.troughPctThen}% — because when the air outside is still {Math.round(convTemp(90, units))}{tempUnit(units)} at 3 AM, five million air
         conditioners never get to stop.
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
