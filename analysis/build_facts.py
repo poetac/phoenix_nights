@@ -22,9 +22,10 @@ import sys
 import urllib.request
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
-from cities import CITIES, DATA_DIR  # noqa: E402
+from cities import CITIES, DATA_DIR, source_of, primary_sid  # noqa: E402
 
 ACIS = "https://data.rcc-acis.org/StnData"
+GSOY = "https://www.ncei.noaa.gov/access/services/data/v1"  # NCEI Global-Summary-of-the-Year
 GLOBAL_BENCH = 0.36  # F/decade
 # Derived, never hardcoded: the most recent fully-elapsed calendar year, and the
 # trailing-decade window the "...now, was X in the 1970s" facts compare against.
@@ -47,6 +48,36 @@ def _yearly(sid, elem, reduce_, start=1970, maxmissing=20):
         except (ValueError, TypeError):
             pass
     return out
+
+
+def _yearly_gsoy(sid, elem, start=1970):
+    """Annual GSOY series [(year, value_F)] for an international (GHCN-Daily) station —
+    the GSOY parallel of _yearly(), in °F (units=standard) so trends/magnitudes stay
+    on the same scale as the ACIS cities. Elements: TMIN (annual mean daily low),
+    TMAX (annual mean daily high), EMNT (extreme/coldest daily low)."""
+    url = (f"{GSOY}?dataset=global-summary-of-the-year&stations={sid}"
+           f"&startDate={start}-01-01&endDate={LAST_COMPLETE_YEAR}-12-31"
+           f"&dataTypes={elem}&units=standard&format=json")
+    req = urllib.request.Request(url, headers={"User-Agent": "phoenix-nights-build/0.1"})
+    out = []
+    for row in json.load(urllib.request.urlopen(req, timeout=90)):
+        try:
+            out.append((int(row["DATE"]), float(row[elem])))
+        except (KeyError, ValueError, TypeError):
+            pass
+    return out
+
+
+# Metric formatting for international cities: trends are computed and ranked in °F
+# (the canonical scale, so cross-city magnitudes stay comparable), but a metric
+# city's *labels and values* are rendered in °C. A trend/gap is a temperature
+# DIFFERENCE, so it scales by 5/9 with no 32° offset.
+def _deg(metric):
+    return "°C" if metric else "°F"
+
+
+def _d(v, metric):
+    return v * 5 / 9 if metric else v
 
 
 def linreg(pts):
@@ -74,19 +105,26 @@ def _decade_mean(rows, key, y0, y1):
 
 def compute_raw(city):
     """All candidate facts for one city (value, magnitude, significance, ref)."""
-    sid = city["sid"]
+    metric = city.get("units") == "metric"
+    ghcn = source_of(city) == "ghcn"
+    sid = primary_sid(city)
     facts = {}
-    mint = _yearly(sid, "mint", "mean")
-    maxt = _yearly(sid, "maxt", "mean")
-    emnt = _yearly(sid, "mint", "min")
+    if ghcn:  # international: NCEI GSOY annual series (TMIN/TMAX/EMNT), in °F
+        mint = _yearly_gsoy(sid, "TMIN")
+        maxt = _yearly_gsoy(sid, "TMAX")
+        emnt = _yearly_gsoy(sid, "EMNT")
+    else:     # US: ACIS yearly reduces (unchanged)
+        mint = _yearly(sid, "mint", "mean")
+        maxt = _yearly(sid, "maxt", "mean")
+        emnt = _yearly(sid, "mint", "min")
     night, night_sig = linreg(mint)
     day, _ = linreg(maxt)
     cold, cold_sig = linreg(emnt)
 
     if night is not None:
         facts["night_warming"] = dict(
-            label=f"Summer nights are warming {night:+.2f}°F per decade",
-            value=round(night, 2), unit="°F/decade", magnitude=night,
+            label=f"Summer nights are warming {_d(night, metric):+.2f}{_deg(metric)} per decade",
+            value=round(_d(night, metric), 2), unit=f"{_deg(metric)}/decade", magnitude=night,
             significant=night_sig, bench=GLOBAL_BENCH)
     if night and day:
         facts["lows_outpace_highs"] = dict(
@@ -95,25 +133,24 @@ def compute_raw(city):
             value=round(night / day, 1) if day > 0 else None, unit="× ratio",
             magnitude=(night - day), significant=night_sig)
         facts["diurnal_compression"] = dict(
-            label=f"The day–night temperature gap is shrinking {abs(night-day):.2f}°F per decade",
-            value=round(night - day, 2), unit="°F/decade", magnitude=abs(night - day),
+            label=f"The day–night temperature gap is shrinking {abs(_d(night-day, metric)):.2f}{_deg(metric)} per decade",
+            value=round(_d(night - day, metric), 2), unit=f"{_deg(metric)}/decade", magnitude=abs(night - day),
             significant=night_sig)
     if cold is not None:
         facts["coldest_night"] = dict(
-            label=f"Even the coldest night of the year is warming {cold:+.2f}°F per decade",
-            value=round(cold, 2), unit="°F/decade", magnitude=cold, significant=cold_sig)
+            label=f"Even the coldest night of the year is warming {_d(cold, metric):+.2f}{_deg(metric)} per decade",
+            value=round(_d(cold, metric), 2), unit=f"{_deg(metric)}/decade", magnitude=cold, significant=cold_sig)
 
-    # control: city night-low trend minus its open-desert reference. The rural
-    # pair's station id is the single source of truth in cities.py (rural_sid) —
-    # no private copy of the pairs lives here anymore.
+    # control: city night-low trend minus its open-desert / rural reference. The
+    # rural pair's station id is the single source of truth in cities.py (rural_sid).
     rsid = city.get("rural_sid")
     if rsid and night is not None:
-        rtrend, _ = linreg(_yearly(rsid, "mint", "mean"))
+        rtrend, _ = linreg(_yearly_gsoy(rsid, "TMIN") if ghcn else _yearly(rsid, "mint", "mean"))
         if rtrend is not None:
             facts["urban_excess"] = dict(
-                label=f"City nights are warming {night-rtrend:+.2f}°F/decade faster than the nearby {city.get('rural_ref', 'open desert')}",
-                value=round(night - rtrend, 2), unit="°F/decade", magnitude=night - rtrend,
-                significant=night_sig and night > rtrend, vs_reference=round(rtrend, 2))
+                label=f"City nights are warming {_d(night-rtrend, metric):+.2f}{_deg(metric)}/decade faster than the nearby {city.get('rural_ref', 'open desert')}",
+                value=round(_d(night - rtrend, metric), 2), unit=f"{_deg(metric)}/decade", magnitude=night - rtrend,
+                significant=night_sig and night > rtrend, vs_reference=round(_d(rtrend, metric), 2))
 
     # asset-derived facts (1970s vs last decade), with applicability guards
     def load(asset):

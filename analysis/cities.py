@@ -228,8 +228,25 @@ CITIES = {
         # Idaho Power (IPCO) is the Boise metro's balancing authority (EIA-930).
         "grid": {"respondents": ("IPCO",),
                  "label": "IPCO (Idaho Power, EIA-930)"},
-        "diurnal": {"sids": ("99999924131", "72681024131"),
-                    "station": "Boise Air Terminal", "first_year": 1948},
+    },
+    # --- First international city (Worldwide Phase B). No ACIS (US-only), so it
+    # sources from NCEI GSOY via its GHCN-Daily id and renders in metric. Carries
+    # only a yearly series + facts (GSOY is annual), so the daily/hourly cards
+    # (streaks, heat-season, diurnal, grid) self-hide. Sydney Observatory Hill is
+    # the GSOY-proven station (verify_v0 GHCN_INTL_SMOKE, +0.34 F/dec); Bathurst
+    # Agricultural is a long-record rural-tablelands control (elevation offset noted
+    # on the card — the honest signal is the gap's growth, not its size).
+    "syd": {
+        "key": "syd",
+        "prefix": "syd",
+        "source": "ghcn",            # NCEI GSOY, not ACIS
+        "units": "metric",           # front-end renders °C
+        "ghcn_sid": "ASN00066062",   # Sydney Observatory Hill (GSOY-proven)
+        "rural_sid": "ASN00063005",  # Bathurst Agricultural — rural NSW tablelands control
+        "rural_ref": "rural tablelands",
+        "label": "Sydney (GHCN ASN00066062, Observatory Hill)",
+        "record_start": "1970-01-01",
+        "lat": -33.86,               # Southern Hemisphere
     },
 }
 
@@ -270,3 +287,15 @@ def get_city(description=""):
 def data_path(prefix, asset):
     """apps/web/public/data/<prefix>-<asset>.json"""
     return DATA_DIR / f"{prefix}-{asset}.json"
+
+
+def source_of(city):
+    """'acis' (US, the default) or 'ghcn' (international, via NCEI GSOY)."""
+    return city.get("source", "acis")
+
+
+def primary_sid(city):
+    """The station id a builder queries for this city: the ACIS ThreadEx sid, or
+    the GHCN-Daily id (GSOY) for international cities. Lets every CITIES consumer
+    stay source-agnostic while the ACIS path stays byte-for-byte unchanged."""
+    return city["ghcn_sid"] if source_of(city) == "ghcn" else city["sid"]
