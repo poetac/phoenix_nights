@@ -233,6 +233,24 @@ CITIES = {
     },
 }
 
+# GHCN-Daily station ids (queried via NCEI Global-Summary-of-the-Year) for the
+# worldwide Phase A parallel-source check (see WORLDWIDE.md). Format is
+# "USW00" + zero-padded WBAN, derived from each city's modern ISD id above
+# (e.g. Phoenix ISD 72278023183 -> WBAN 23183 -> USW00023183, the same station the
+# existing GSOY check already uses). verify_v0.py asserts the GHCN-Daily-derived
+# night-warming trend reproduces the ACIS one — the keystone that earns the right to
+# trust a global GHCN backend before any non-US city ships. US-only by construction
+# (GHCN "USW" network); international cities will carry their own GHCN ids.
+_GHCN_SIDS = {
+    "phx": "USW00023183", "tus": "USW00023160", "lv": "USW00023169",
+    "ep": "USW00023044", "yum": "USW00023195", "rno": "USW00023185",
+    "abq": "USW00023050", "slc": "USW00024127", "boi": "USW00024131",
+    "atl": "USW00013874", "hou": "USW00012960", "nola": "USW00012916",
+    "rdu": "USW00013722", "dfw": "USW00003927",
+}
+for _k, _g in _GHCN_SIDS.items():
+    CITIES[_k]["ghcn_sid"] = _g
+
 DATA_DIR = (pathlib.Path(__file__).resolve().parent.parent
             / "apps" / "web" / "public" / "data")
 

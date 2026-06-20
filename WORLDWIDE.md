@@ -101,6 +101,13 @@ ThreadEx (NOAA's US thread-splicing) has no global equivalent. Options, cheapest
 Make the homogeneity check explicit in `verify_v0.py` (flag step-changes that smell
 like an undocumented station move).
 
+**Phase A already surfaced one:** Yuma. Its ACIS thread (`YUMthr 9`, MCAS spliced to
+Intl) trends +0.84 °F/dec, but the single GHCN station USW00023195 trends +1.71 — the
+same metric off by ~0.9 because they're not the same record. This is precisely the
+splice-vs-single-station problem above, and it's the kind of case where Phase B has to
+*choose* the anchor record per city (and the chosen number may differ from today's
+ACIS-thread figure — a reproduce-or-reject decision, surfaced not buried).
+
 ## 6. The assumptions that *break* at the border
 
 Concrete gotchas found in the current code, each a required change:
@@ -143,10 +150,18 @@ zoom/region affordance once there are >~50 dots.
 
 ## 9. Phasing (each phase independently shippable + verifiable)
 
-- **Phase A — GHCN backend, US-validated.** Add a GHCN-Daily fetcher to the pipeline;
-  reproduce all 14 current cities from it and assert agreement with the live-ACIS
-  values in `verify_v0.py`. *No new cities, no UI change.* This de-risks the whole
-  track: if GHCN can't reproduce Phoenix, stop.
+- **Phase A — GHCN backend, US-validated. ✅ landed.** `verify_v0.py` re-derives each
+  US city's night-warming trend from the GHCN-Daily station record (NCEI
+  Global-Summary-of-the-Year, the same proven path the Phoenix GSOY check used) and
+  asserts it reproduces the ACIS trend within `GHCN_TOL` (0.5 °F/dec). Station ids live
+  in `analysis/cities.py` (`ghcn_sid`, `USW00`+WBAN). **Result: 13 of 14 cities
+  reproduce to ±0.01 °F/dec** — GHCN-Daily and ACIS are effectively the same record for
+  those stations, so the global backend is trustworthy. The one exception is **Yuma**
+  (see §5): its ACIS thread splices MCAS/Intl and trends +0.84, while the single GHCN
+  station USW00023195 gives +1.71 — a genuine station-continuity divergence, excluded
+  from the hard assertion and tracked for Phase B rather than hidden by a looser
+  tolerance. *No new cities, no UI change.* (Validated live in CI — the sandbox has no
+  egress.)
 - **Phase B — first international slice (precomputed).** ~5 cities with dense networks
   and clean rural controls (candidates: London, Tokyo, Madrid, Berlin, Melbourne).
   Hemisphere-aware season + °C land here. Ship behind the existing engine; no map
@@ -175,10 +190,11 @@ zoom/region affordance once there are >~50 dots.
 - Sub-daily/grid (EIA-930) cards globally — no clean worldwide equivalent; they stay
   US-only and self-omit, exactly as they already do for most cities.
 
-## 11. Recommended first move
+## 11. First move — done
 
-Build **Phase A only** as the next concrete PR: a GHCN-Daily fetcher + a
-`verify_v0.py` parallel-source check proving GHCN reproduces the 14 US cities. It needs
-network egress to NCEI/AWS (so it runs in CI, not this sandbox), changes no UI, and
-either earns trust in the backend or kills the track early — the cheapest possible test
-of the most expensive assumption.
+Phase A is **implemented** (`verify_v0.py` `ghcn_night_trend` + the per-city parity
+check in `check_cities`, station ids in `analysis/cities.py`). It runs in the
+`verify-data` CI job — the cheapest possible test of the most expensive assumption,
+and the gate for everything after it. **Next** is Phase B: the first international
+slice (precomputed assets, hemisphere-aware season, °C), each city gated on a
+rural-control validation pass.
