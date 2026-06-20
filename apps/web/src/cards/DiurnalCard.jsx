@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
+import { convTemp, convTempDelta, tempUnit } from "../lib/units.js";
 
 const MIN_OBS_PER_HOUR = 500; // drops thin decades (e.g. a 2-year 1940s stub)
 
@@ -36,7 +37,15 @@ export default function DiurnalCard({ city, diurnal }) {
     };
   }, [diurnal]);
 
+  const units = useUnits();
   if (!model) return null;
+  // Hourly curves and the cool/peak readings are absolute temps (convTemp); the
+  // night/day gains are differences (convTempDelta). Both identity in °F.
+  const displayData = model.data.map((d) => ({
+    hour: d.hour, label: d.label,
+    then: convTemp(d.then, units), now: convTemp(d.now, units),
+    band: [convTemp(d.band[0], units), convTemp(d.band[1], units)],
+  }));
 
   return (
     <Card>
@@ -46,12 +55,12 @@ export default function DiurnalCard({ city, diurnal }) {
         aria-label="Line chart comparing the average summer temperature at each hour of day in an earlier decade versus the most recent; the gap is widest overnight.">
 
         <ResponsiveContainer>
-          <ComposedChart data={model.data} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
+          <ComposedChart data={displayData} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
             <XAxis dataKey="hour" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }}
               ticks={[0, 4, 8, 12, 16, 20]} tickFormatter={hourLabel} />
             <YAxis tick={axisTick} tickLine={false} axisLine={false} domain={["auto", "auto"]} />
-            <Tooltip content={<DarkTooltip unit="°F" />} labelFormatter={hourLabel} />
+            <Tooltip content={<DarkTooltip unit={tempUnit(units)} />} labelFormatter={hourLabel} />
             <Area isAnimationActive={false} type="monotone" dataKey="band" name="added heat"
               stroke="none" fill={C.ember} fillOpacity={0.18} tooltipType="none" legendType="none" />
             <Line isAnimationActive={false} type="monotone" dataKey="then" name={`${model.thenK}s`}
@@ -67,9 +76,9 @@ export default function DiurnalCard({ city, diurnal }) {
       </div>
       <p className="mt-4 text-base leading-relaxed">
         At {hourLabel(model.coolHour)} — the coolest moment of a summer night — {city.shortName} is now{" "}
-        <span style={{ color: C.gold, fontFamily: DISPLAY }}>{model.nightGain.toFixed(1)}°F hotter</span> than it was in
-        the {model.thenK}s ({model.coolThen.toFixed(0)}° then, {model.coolNow.toFixed(0)}° now). The afternoon peak rose{" "}
-        {model.dayGain.toFixed(1)}°F. The city didn't make the days much hotter — it took away the night's recovery.
+        <span style={{ color: C.gold, fontFamily: DISPLAY }}>{convTempDelta(model.nightGain, units).toFixed(1)}{tempUnit(units)} hotter</span> than it was in
+        the {model.thenK}s ({convTemp(model.coolThen, units).toFixed(0)}° then, {convTemp(model.coolNow, units).toFixed(0)}° now). The afternoon peak rose{" "}
+        {convTempDelta(model.dayGain, units).toFixed(1)}{tempUnit(units)}. The city didn't make the days much hotter — it took away the night's recovery.
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
         Precomputed from NOAA's hourly archive (NCEI Integrated Surface Dataset) — every June–August observation at this
