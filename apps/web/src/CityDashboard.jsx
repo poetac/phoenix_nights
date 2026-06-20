@@ -133,6 +133,11 @@ export default function CityDashboard({ city, product }) {
               <h1 className="text-3xl sm:text-5xl leading-tight" style={{ fontFamily: DISPLAY, fontWeight: 650 }}>
                 {facts?.facts?.[0]?.label ?? `How ${city.shortName}'s climate is changing`}
               </h1>
+              {facts?.facts?.[0]?.crossCityPercentile >= 0.999 && (
+                <div className="mt-2 text-xs tracking-widest uppercase" style={{ color: C.gold }}>
+                  ▲ leads every city tracked
+                </div>
+              )}
               <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: C.muted }}>
                 The official station record for {city.name}, ranked by what stands out from the
                 last half-century{city.rural ? ` — overnight lows measured against ${city.rural.short}, its nearby ${city.rural.kind ?? "open-desert"} reference` : ""}.

@@ -105,6 +105,12 @@ try {
   const sw = await page.$eval('[data-testid="city-switcher"]', (b) => b.textContent);
   if (!sw.includes("Reno")) fail(`city menu select: switcher shows "${sw}", expected Reno`);
   else console.log(`\u2713 city switcher: menu (${opts} options) selects + collapses`);
+  // Reno's #1 fact (fastest night-warming of all 14) leads the dataset, so its
+  // signal hero carries the "leads every city tracked" badge.
+  try {
+    await page.waitForFunction(() => (document.body.textContent || "").includes("leads every city tracked"), { timeout: 20000 });
+    console.log("\u2713 signal hero: Reno shows the cross-city 'leads every city tracked' badge");
+  } catch { fail("signal hero: Reno's 'leads every city tracked' badge missing"); }
 } catch (e) { fail("city switcher menu did not open/close: " + e.message.split("\n")[0]); }
 
 await checkCity("tus", "Tucson");
