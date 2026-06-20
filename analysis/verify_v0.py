@@ -347,21 +347,20 @@ def seasonal_normal_low(rows, month, day, window=7):
     return sum(vals) / len(vals) if vals else float("nan")
 
 
-DIURNAL_ASSET = (pathlib.Path(__file__).resolve().parent.parent
-                 / "apps" / "web" / "public" / "data" / "phx-diurnal.json")
-
-
-def cool_window_hours():
-    """Hours/night below 85F in the committed JJA diurnal curve, 1970s vs the
-    latest solid decade — the 'narrowing cool window' card. Read from the asset
-    build_diurnal.py emits from NCEI hourly (re-deriving here would re-pull MB
-    across two station eras); the trend is the guard against a bad rebuild.
-    Returns (hrs_1970s, hrs_now, now_label) or None if the asset is absent.
+def cool_window_hours(prefix):
+    """Hours/night below 85F in a city's committed JJA diurnal curve, 1970s vs the
+    latest solid decade — the 'narrowing cool window' (CoolWindowCard). Read from
+    the asset build_diurnal.py emits from NCEI hourly (re-deriving here would
+    re-pull MB across station eras); the trend is the guard against a bad rebuild.
+    Returns (hrs_1970s, hrs_now, now_label) or None if the asset is absent/too thin.
     """
-    if not DIURNAL_ASSET.exists():
+    path = DATA_DIR / f"{prefix}-diurnal.json"
+    if not path.exists():
         return None
-    dec = json.loads(DIURNAL_ASSET.read_text())["decades"]
+    dec = json.loads(path.read_text()).get("decades", {})
     solid = sorted(k for k in dec if sum(dec[k]["nObs"]) / 24 >= 500)
+    if "1970" not in dec or len(solid) < 3:
+        return None
     below85 = lambda k: sum(1 for x in dec[k]["temp"] if x < 85)
     return below85("1970"), below85(solid[-1]), f"{solid[-1]}s"
 
@@ -586,11 +585,21 @@ def main():
     checks.append(("1970s mid-July normal low ~80F (hero baseline)", july_norm, 76.0 <= july_norm <= 84.0))
     checks.append(("1970s mid-Jan normal low ~40F (hero baseline)", jan_norm, 34.0 <= jan_norm <= 46.0))
 
-    # Narrowing cool window: hours/night below 85F shrink from the 1970s to now.
-    cw = cool_window_hours()
-    if cw is not None:
+    # Narrowing cool window (CoolWindowCard): for every city the card actually
+    # shows it for — a hot city whose latest decade still has <=13 h/night below
+    # 85F (the card's own applicability gate in CoolWindowCard.jsx) — the overnight
+    # window below 85F narrows vs the 1970s. Cities where the card omits (relief
+    # still abundant, e.g. the high-desert/humid set) or whose diurnal asset isn't
+    # rebuilt yet are skipped, so verify asserts exactly the claim the page shows.
+    for _c in REGISTRY.values():
+        cw = cool_window_hours(_c["prefix"])
+        if cw is None:
+            continue
         cw70, cw_now, cw_label = cw
-        checks.append((f"cool window <85F shrinks 1970s({cw70}h)->{cw_label}({cw_now}h)",
+        if cw_now > 13:
+            continue
+        _nm = _c["label"].split(" (")[0]
+        checks.append((f"{_nm}: cool window <85F shrinks 1970s({cw70}h)->{cw_label}({cw_now}h)",
                        cw70 - cw_now, cw_now < cw70))
 
     # Night share of cooling demand rising: the night half of CDD grows faster
