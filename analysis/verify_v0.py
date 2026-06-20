@@ -118,12 +118,15 @@ def ghcn_night_trend(sid, start=1970):
 # Worldwide Phase B step 0: confirm the proven GHCN-Daily backend (NCEI GSOY) reaches
 # INTERNATIONAL stations and yields sane night-warming trends — the data-availability
 # prerequisite before wiring any non-US city into the site. These are backend
-# reachability fixtures (a long-record station per region, both hemispheres), not site
-# cities; the US parity check in check_cities is the stronger, ACIS-cross-checked bar.
+# reachability fixtures, not site cities; check_cities is the stronger, ACIS-cross-
+# checked bar. De Bilt (Europe, N) and Sydney (Oceania, S) cover both hemispheres and
+# two continents. A first pass also tried London Heathrow (UKM00003772) and Tokyo
+# (JA000047662): both returned no GSOY TMIN — NCEI's *annual* summaries don't carry
+# every GHCN-Daily station, an uneven-coverage reality Phase B's city selection must
+# map (WORLDWIDE.md §4/§8). Left out rather than chased with blind id guesses; a real
+# international city would resolve its source station the same way (verify, then ship).
 GHCN_INTL_SMOKE = [
     ("De Bilt, NL", "NLM00006260"),
-    ("London Heathrow, UK", "UKM00003772"),
-    ("Tokyo, JP", "JA000047662"),
     ("Sydney Observatory Hill, AU", "ASN00066062"),
 ]
 

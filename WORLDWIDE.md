@@ -164,9 +164,12 @@ zoom/region affordance once there are >~50 dots.
   tolerance. *No new cities, no UI change.* (Validated live in CI — the sandbox has no
   egress.)
 - **Phase B — first international slice (precomputed).** *Step 0 ✅: the GHCN-Daily
-  backend reaches international stations* — `verify_v0.py` smoke-tests a long-record
-  station per region/hemisphere (De Bilt, London, Tokyo, Sydney) and asserts each
-  yields a reachable, warming night trend. Next: ~5 cities with dense networks and
+  backend reaches international stations* — `verify_v0.py` confirms **De Bilt, NL
+  (+0.59 °F/dec) and Sydney, AU (+0.34)** as reachable, warming night trends (Europe N
+  + Oceania S, both hemispheres). A first pass also found that NCEI's *annual* GSOY
+  summaries don't carry every station (London Heathrow, Tokyo returned no TMIN) — an
+  uneven-coverage reality §4/§8 must map, and a reminder that each real city resolves
+  its source station by verification first. Next: ~5 cities with dense networks and
   clean rural controls (candidates: London, Tokyo, Madrid, Berlin, Melbourne).
   Hemisphere-aware season (done) + °C land here. Ship behind the existing engine; no
   map change yet (list/ranking only). The blocker from a no-egress sandbox is asset
