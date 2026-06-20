@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Build the decade-by-decade summer diurnal curve for a city.
 
-Downloads NCEI global-hourly observations for June-August of every year since
-the city's hourly record begins (Phoenix 1948, Tucson 1949), buckets
+Downloads NCEI global-hourly observations for the city's summer (hemisphere-aware:
+June-August in the Northern Hemisphere, December-February in the Southern — see
+analysis/seasons.py) of every year since the city's hourly record begins (Phoenix
+1948, Tucson 1949), buckets
 temperatures by local hour of day, and writes per-decade mean curves to
 apps/web/public/data/<prefix>-diurnal.json for the app to plot.
 
@@ -30,10 +32,11 @@ import urllib.request
 from zoneinfo import ZoneInfo
 
 from cities import data_path, get_city
+from seasons import warm_season_windows, warm_season_label
 
 BASE = ("https://www.ncei.noaa.gov/access/services/data/v1"
         "?dataset=global-hourly&stations={sid}"
-        "&startDate={y}-06-01&endDate={y}-08-31&dataTypes=TMP,DEW&format=csv")
+        "&startDate={y}-{sd}&endDate={y}-{ed}&dataTypes=TMP,DEW&format=csv")
 LAST_YEAR = datetime.date.today().year - 1  # last complete year
 BAD_QUALITY = {"2", "3", "6", "7"}  # ISD suspect/erroneous codes
 MIN_OBS_PER_HOUR = 150  # per decade; drops the 3-hourly-era gaps
@@ -42,11 +45,12 @@ ROOT = pathlib.Path(__file__).resolve().parent
 CACHE = ROOT / "cache" / "hourly"
 
 
-def fetch_year(sid, year):
-    path = CACHE / f"{sid}_{year}.csv"
+def fetch_window(sid, year, sd, ed):
+    """Fetch one hourly date window (sd/ed = 'MM-DD') of a station-year."""
+    path = CACHE / f"{sid}_{year}_{sd}.csv"
     if path.exists():
         return path.read_text()
-    url = BASE.format(sid=sid, y=year)
+    url = BASE.format(sid=sid, y=year, sd=sd, ed=ed)
     for attempt in range(3):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "phoenix-nights/0.1"})
@@ -56,7 +60,7 @@ def fetch_year(sid, year):
             return text
         except Exception as e:
             if attempt == 2:
-                print(f"  WARN {sid} {year}: {e}", file=sys.stderr)
+                print(f"  WARN {sid} {year} {sd}: {e}", file=sys.stderr)
                 return ""
             time.sleep(3 * (attempt + 1))
 
@@ -85,6 +89,12 @@ def main():
     utc_offset = city.get("utc_offset")
     tz = city.get("tz")  # if set, DST-aware (zoneinfo); else fixed offset (no-DST AZ)
     zone = ZoneInfo(tz) if tz else None
+    # Hemisphere-aware summer: Northern cities (default) resolve to the single
+    # June 1-Aug 31 window — identical to the old hardcoded builder — while
+    # Southern cities pull Dec + Jan-Feb. lat defaults to Northern so the current
+    # US set is unchanged. See analysis/seasons.py / WORLDWIDE.md §6.
+    windows = warm_season_windows(city.get("lat", 40.0))
+    season_label = warm_season_label(city.get("lat", 40.0))
     source = ("NCEI global-hourly (ISD), station ids "
               + " / ".join(f"{s[:6]}-{s[6:]}" for s in sids))
     OUT = data_path(city["prefix"], "diurnal")
@@ -95,28 +105,29 @@ def main():
     for year in range(first_year, LAST_YEAR + 1):
         decade = year // 10 * 10
         for sid in sids:
-            text = fetch_year(sid, year)
-            if not text or "\n" not in text:
-                continue
-            for row in csv.DictReader(text.splitlines()):
-                date = row.get("DATE", "")
-                if len(date) < 13:
+            for sd, ed in windows:
+                text = fetch_window(sid, year, sd, ed)
+                if not text or "\n" not in text:
                     continue
-                if zone is None:
-                    hour = (int(date[11:13]) + utc_offset) % 24
-                else:
-                    hour = datetime.datetime(
-                        int(date[0:4]), int(date[5:7]), int(date[8:10]), int(date[11:13]),
-                        tzinfo=datetime.timezone.utc).astimezone(zone).hour
-                slot = acc.setdefault(decade, {}).setdefault(hour, [0.0, 0, 0.0, 0])
-                t = parse_scaled(row.get("TMP", ""))
-                if t is not None:
-                    slot[0] += t * 9 / 5 + 32
-                    slot[1] += 1
-                d = parse_scaled(row.get("DEW", ""))
-                if d is not None:
-                    slot[2] += d * 9 / 5 + 32
-                    slot[3] += 1
+                for row in csv.DictReader(text.splitlines()):
+                    date = row.get("DATE", "")
+                    if len(date) < 13:
+                        continue
+                    if zone is None:
+                        hour = (int(date[11:13]) + utc_offset) % 24
+                    else:
+                        hour = datetime.datetime(
+                            int(date[0:4]), int(date[5:7]), int(date[8:10]), int(date[11:13]),
+                            tzinfo=datetime.timezone.utc).astimezone(zone).hour
+                    slot = acc.setdefault(decade, {}).setdefault(hour, [0.0, 0, 0.0, 0])
+                    t = parse_scaled(row.get("TMP", ""))
+                    if t is not None:
+                        slot[0] += t * 9 / 5 + 32
+                        slot[1] += 1
+                    d = parse_scaled(row.get("DEW", ""))
+                    if d is not None:
+                        slot[2] += d * 9 / 5 + 32
+                        slot[3] += 1
         print(f"{year} done", flush=True)
 
     decades = {}
@@ -136,7 +147,7 @@ def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({
         "station": cfg["station"],
-        "months": "June-August",
+        "months": season_label,
         "hours": (f"local (UTC{utc_offset}, no DST)" if zone is None
                   else f"local time, DST-aware ({tz})"),
         "source": source,
