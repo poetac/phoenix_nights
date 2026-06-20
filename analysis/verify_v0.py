@@ -52,6 +52,11 @@ GSOY_URL = (
 # Published global background-warming rate (F/decade) the global-context card
 # compares the local night-low trends against — see GlobalContextCard.jsx.
 GLOBAL_BENCH = 0.36
+# Worldwide Phase A: how close the GHCN-Daily-derived night trend must land to the
+# ACIS-derived one to count as "reproduced" (F/decade). Generous enough to absorb
+# GHCN single-station vs ACIS ThreadEx-thread differences, tight enough to be a real
+# agreement (the post-1970 thread is the same airport station). See WORLDWIDE.md.
+GHCN_TOL = 0.5
 CASA_GRANDE_SID = "USC00021314"  # the open-desert control (cities.js rural.sid)
 
 # The city + rural-pair station ids are the single source of truth in cities.py
@@ -66,6 +71,39 @@ def fetch_gsoy():
     req = urllib.request.Request(GSOY_URL, headers={"User-Agent": "phoenix-nights-verify/0.1"})
     with urllib.request.urlopen(req, timeout=60) as r:
         return json.load(r)
+
+
+def fetch_gsoy_station(sid, start_year=1970):
+    """NCEI Global-Summary-of-the-Year rows for any GHCN-Daily station — the
+    parametrized form of the Phoenix GSOY call above, for the worldwide backend."""
+    url = ("https://www.ncei.noaa.gov/access/services/data/v1"
+           "?dataset=global-summary-of-the-year"
+           f"&stations={sid}&startDate={start_year}-01-01&endDate={LAST_COMPLETE_YEAR}-12-31"
+           "&units=standard&format=json")
+    req = urllib.request.Request(url, headers={"User-Agent": "phoenix-nights-verify/0.1"})
+    with urllib.request.urlopen(req, timeout=90) as r:
+        return json.load(r)
+
+
+def ghcn_night_trend(sid, start=1970):
+    """GHCN-Daily annual-mean TMIN trend (F/decade) since `start`, from NCEI GSOY —
+    the worldwide-backend reproduction of ACIS facts_trend(sid, 'mint'). Same metric
+    (annual mean overnight low, OLS slope x10), different source. Returns None on a
+    fetch error or fewer than 25 usable years (facts_trend's floor)."""
+    try:
+        rows = fetch_gsoy_station(sid, start)
+    except Exception:
+        return None
+    pts = []
+    for row in rows:
+        try:
+            y = int(row["DATE"])
+        except (KeyError, ValueError, TypeError):
+            continue
+        v = fnum(row, "TMIN")
+        if v is not None and start <= y <= LAST_COMPLETE_YEAR:
+            pts.append((y, v))
+    return linreg(pts) * 10 if len(pts) >= 25 else None
 
 
 def fetch_acis_mint(start_year):
@@ -237,6 +275,19 @@ def check_cities(checks):
         if rural is not None and night is not None and key != "phx":
             checks.append((f"{name}: night-low trend > rural pair ({night:.2f} vs {rural:.2f}/dec)",
                            night - rural, night > rural))
+
+        # Worldwide Phase A keystone: the same night-warming trend, re-derived from
+        # the GHCN-Daily station record (NCEI GSOY), must reproduce the ACIS one.
+        # Proving this across all 14 US cities is what earns the right to trust a
+        # global GHCN backend before any non-US city ships (see WORLDWIDE.md).
+        gsid = c.get("ghcn_sid")
+        if gsid and night is not None:
+            g = ghcn_night_trend(gsid)
+            checks.append((
+                f"{name}: GHCN-Daily night trend reproduces ACIS "
+                f"({'n/a' if g is None else f'{g:.2f}'} vs {night:.2f}/dec, ±{GHCN_TOL}, {gsid})",
+                (g - night) if g is not None else float("nan"),
+                g is not None and g > 0 and abs(g - night) <= GHCN_TOL))
 
         facts = _load_facts(c["prefix"])
         if not facts:
