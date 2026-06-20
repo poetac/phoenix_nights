@@ -2,7 +2,7 @@
  "station": "Boise (ThreadEx BOIthr 9)",
  "source": "NOAA/NWS ACIS daily mint/maxt",
  "note": "streaks within calendar years; years missing >36 days excluded. first80/last80 are day-of-year of the first/last single 80F+ night; firstSus/lastSus use a 5-of-7-night rule (outlier-robust season).",
- "generated": "2026-06-18",
+ "generated": "2026-06-20",
  "throughYear": 2025,
  "years": [
   {

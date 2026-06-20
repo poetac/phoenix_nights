@@ -8,7 +8,7 @@
  "window": "centered +/-7 days",
  "note": "byDate is keyed MM-DD; low/high are 1970-1979 means over the window",
  "source": "NOAA/NWS ACIS daily mint/maxt",
- "generated": "2026-06-18",
+ "generated": "2026-06-20",
  "byDate": {
   "01-01": {
    "low": 33.1,

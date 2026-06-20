@@ -4,7 +4,7 @@
  "hours": "local time, DST-aware (America/Los_Angeles)",
  "units": "average MW demand by hour of day",
  "source": "US EIA Hourly Electric Grid Monitor (api.eia.gov v2)",
- "generated": "2026-06-18",
+ "generated": "2026-06-20",
  "throughYear": 2025,
  "years": {
   "2019": {
