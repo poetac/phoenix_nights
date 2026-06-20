@@ -42,3 +42,12 @@ export const distUnit = (sys) => (sys === "metric" ? "km" : "miles");
 export const fmtTemp = (f, sys, digits = 0) => `${convTemp(f, sys).toFixed(digits)}${tempUnit(sys)}`;
 export const fmtTempDelta = (f, sys, digits = 2) => `${convTempDelta(f, sys).toFixed(digits)}${tempRateUnit(sys)}`;
 export const fmtDist = (mi, sys, digits = 0) => `${convDist(mi, sys).toFixed(digits)} ${distUnit(sys)}`;
+
+// Convert a rural-distance phrase like "~45 miles north" for display. Imperial
+// returns the phrase unchanged (identity), so the live US copy is byte-for-byte the
+// same; metric swaps the miles value for whole km, keeping the "~" and any trailing
+// direction. Lets UhiCard's prose go metric without a per-city schema change.
+export const convDistPhrase = (phrase, sys) =>
+  sys === "metric" && phrase
+    ? phrase.replace(/(\d+(?:\.\d+)?)\s*miles?/i, (_, n) => `${Math.round(convDist(+n, sys))} km`)
+    : phrase;
