@@ -6,7 +6,7 @@
 // Plain node, no deps: run `node tests/units.test.mjs` from apps/web.
 import {
   unitsOf, convTemp, convTempDelta, convDist,
-  tempUnit, tempRateUnit, distUnit, fmtTemp, fmtTempDelta, fmtDist,
+  tempUnit, tempRateUnit, distUnit, fmtTemp, fmtTempDelta, fmtDist, convDistPhrase,
 } from "../src/lib/units.js";
 
 let failed = false;
@@ -60,6 +60,14 @@ eq(fmtTempDelta(1.16, "imperial", 2), "1.16°F/decade", "fmtTempDelta imperial")
 eq(fmtTempDelta(1.8, "metric", 1), "1.0°C/decade", "fmtTempDelta metric");
 eq(fmtDist(45, "imperial", 0), "45 miles", "fmtDist imperial");
 eq(fmtDist(1, "metric", 2), "1.61 km", "fmtDist metric");
+
+// --- rural-distance phrases (UhiCard prose): imperial identity, metric -> km ---
+eq(convDistPhrase("~45 miles", "imperial"), "~45 miles", "convDistPhrase imperial identity");
+eq(convDistPhrase("~55 miles southwest", "imperial"), "~55 miles southwest", "convDistPhrase imperial keeps dir");
+eq(convDistPhrase(undefined, "metric"), undefined, "convDistPhrase undefined passthrough");
+eq(convDistPhrase("~45 miles", "metric"), "~72 km", "45 miles -> ~72 km");
+eq(convDistPhrase("~55 miles southwest", "metric"), "~89 km southwest", "55 miles SW -> ~89 km southwest");
+eq(convDistPhrase("~19 miles NE", "metric"), "~31 km NE", "19 miles NE -> ~31 km NE");
 
 console.log(failed ? "UNITS TEST FAILED" : "UNITS TEST PASSED");
 process.exit(failed ? 1 : 0);

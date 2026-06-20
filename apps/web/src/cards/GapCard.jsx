@@ -2,8 +2,9 @@ import { useMemo } from "react";
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
 import { linreg, mean } from "../lib/stats.js";
+import { convTempDelta, tempUnit, tempRateUnit } from "../lib/units.js";
 
 // Diurnal temperature range (DTR = high − low). A desert's signature is a big
 // daily swing; as nights warm faster than days, that swing collapses — the whole
@@ -49,8 +50,15 @@ export default function GapCard({ city, rows }) {
     };
   }, [rows]);
 
+  const units = useUnits();
   if (!model) return null;
   const narrowed = model.narrowing > 0;
+  // Diurnal range is a temperature DIFFERENCE, so every value scales with
+  // convTempDelta (the °F branch is the identity → US output is unchanged).
+  const d = (v) => convTempDelta(v, units);
+  const displayData = model.data.map((r) => ({
+    year: r.year, dtr: +d(r.dtr).toFixed(1), trend: +d(r.trend).toFixed(2),
+  }));
 
   return (
     <Card>
@@ -60,7 +68,7 @@ export default function GapCard({ city, rows }) {
         aria-label="Line chart of the daily high-minus-low temperature range each year at Sky Harbor, narrowing over time.">
 
         <ResponsiveContainer>
-          <ComposedChart data={model.data} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
+          <ComposedChart data={displayData} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
             <defs>
               <linearGradient id="dtrFill" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={C.day} stopOpacity={0.45} />
@@ -71,7 +79,7 @@ export default function GapCard({ city, rows }) {
             <XAxis dataKey="year" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} minTickGap={32} />
             <YAxis tick={axisTick} tickLine={false} axisLine={false}
               domain={["auto", "auto"]} tickFormatter={(v) => `${v}°`} />
-            <Tooltip content={<DarkTooltip unit="°F" />} />
+            <Tooltip content={<DarkTooltip unit={tempUnit(units)} />} />
             <Area isAnimationActive={false} type="monotone" dataKey="dtr" name="Day–night gap"
               stroke={C.day} strokeWidth={2} fill="url(#dtrFill)" />
             <Line isAnimationActive={false} type="monotone" dataKey="trend" name="Trend"
@@ -81,22 +89,22 @@ export default function GapCard({ city, rows }) {
       </div>
       <p className="mt-4 text-base leading-relaxed">
         In the {model.first.decade}s, an average {city.shortName} day swung{" "}
-        <span style={{ fontFamily: DISPLAY, color: C.day }}>{model.first.dtr.toFixed(1)}°F</span> between afternoon and
+        <span style={{ fontFamily: DISPLAY, color: C.day }}>{d(model.first.dtr).toFixed(1)}{tempUnit(units)}</span> between afternoon and
         dawn. In the {model.last.decade}s it swings{" "}
-        <span style={{ fontFamily: DISPLAY, color: C.ember }}>{model.last.dtr.toFixed(1)}°F</span> —{" "}
+        <span style={{ fontFamily: DISPLAY, color: C.ember }}>{d(model.last.dtr).toFixed(1)}{tempUnit(units)}</span> —{" "}
         {narrowed ? (
           <>the daily gap has narrowed by{" "}
-            <span style={{ color: C.gold, fontFamily: DISPLAY }}>{model.narrowing.toFixed(1)}°F</span>. The highs barely
+            <span style={{ color: C.gold, fontFamily: DISPLAY }}>{d(model.narrowing).toFixed(1)}{tempUnit(units)}</span>. The highs barely
             moved; the lows climbed up to meet them. A shrinking diurnal range is the classic fingerprint of a heat
             island and of greenhouse warming alike — the city is quietly erasing the difference between day and night.</>
         ) : (
-          <>a change of {Math.abs(model.narrowing).toFixed(1)}°F over the record.</>
+          <>a change of {Math.abs(d(model.narrowing)).toFixed(1)}{tempUnit(units)} over the record.</>
         )}
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
         Diurnal range = annual mean daily high minus annual mean daily low, from the same live station record as the
         rest of the page (dashed line is the ordinary-least-squares trend, {model.perDecade >= 0 ? "+" : ""}
-        {model.perDecade.toFixed(2)}°F/decade). Shown from {DTR_START}: earlier years in the threaded record carry an
+        {d(model.perDecade).toFixed(2)}{tempRateUnit(units)}). Shown from {DTR_START}: earlier years in the threaded record carry an
         agricultural "oasis effect" — heavy valley irrigation that lowered highs and raised lows — which confounds the
         urban signal, so they're left out here.
       </p>
