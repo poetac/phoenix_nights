@@ -71,9 +71,13 @@ Go-forward (the split, phased):
   tropical-nights fact pulls in the warm-night season + sleep-threshold + cool-window
   cards), each self-omitting when its data/asset is absent — so a city's lead signal is
   shown in depth, still salience-led and still a different layout per city.
-- **Phase 3 — worldwide (City Signals):** a new data backend (GHCN-Daily / Berkeley
-  Earth), a world map, the rural-control method re-validated per region. Large and
-  separate — the engine is US-specific today (ACIS, ThreadEx, Census, EIA, `geoAlbersUsa`).
+- **Phase 3 — worldwide (City Signals):** a new station-record data backend
+  (**GHCN-Daily** — *not* gridded reanalysis, which would smooth the UHI signal away),
+  a world map, °C + hemisphere-aware seasons, and the rural-control method re-validated
+  per region. Large and separate — the engine is US-specific today (ACIS, ThreadEx,
+  Census, EIA, `geoAlbersUsa`). **Full design + phasing in [`WORLDWIDE.md`](WORLDWIDE.md);
+  the recommended first move is Phase A** (prove GHCN-Daily reproduces the 14 US cities
+  before any new city ships).
 - **Deployment details** (subpaths vs custom domains vs separate repos) — revisit once
   both products are in a good state.
 
