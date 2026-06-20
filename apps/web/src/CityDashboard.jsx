@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, lazy, Suspense } from "react";
-import { C, DISPLAY, BODY, Card } from "./ui.jsx";
+import { C, DISPLAY, BODY, Card, UnitsContext } from "./ui.jsx";
+import { unitsOf } from "./lib/units.js";
 import {
   fetchCityYearly, fetchRural, fetchSeasonal, fetchDiurnal,
   fetchHeatSeason, fetchHeatDeaths, fetchStreaks, fetchGrid, fetchOpenMeteo,
@@ -89,6 +90,10 @@ export default function CityDashboard({ city, product }) {
   );
 
   return (
+    // Per-city unit system (imperial today; metric once an international city is
+    // added). Imperial is the converter identity, so this wrapper is a no-op for
+    // the live US product — see lib/units.js.
+    <UnitsContext.Provider value={unitsOf(city)}>
     <div className="min-h-screen" style={{ background: C.bg, color: C.text, fontFamily: BODY }}>
       <style>{`
         @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
@@ -192,5 +197,6 @@ export default function CityDashboard({ city, product }) {
         </Suspense>
       </main>
     </div>
+    </UnitsContext.Provider>
   );
 }

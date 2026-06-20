@@ -19,6 +19,8 @@ jobs:
           cache: npm
           cache-dependency-path: apps/web/package-lock.json
       - run: npm ci
+      # units layer conversion math (render smoke checks cards mount, not temp strings)
+      - run: node tests/units.test.mjs
       - run: npm run build
       # both products must build (explorer is default; desert is the second site)
       - run: npm run build:desert
