@@ -635,6 +635,15 @@ def main():
     checks.append((f"sustained 100F-day season (3-run) longer than 1970s ({sus100_70s:.0f}->{sus100_now:.0f}d)",
                    sus100_now - sus100_70s, sus100_now > sus100_70s))
 
+    # SleepCard claim ("nights too warm to sleep through"): nights at/above the
+    # 77F (25C) sleep-degradation threshold are rising vs the 1970s. Mirrors the
+    # card's ACIS reducer exactly (mint cnt_ge_77); reuses low_by_year (no fetch).
+    sleep_count = lambda v: sum(1 for x in v if x is not None and x >= 77)
+    sleep_70s = mean_season_len(low_by_year, sleep_count, 1970, 1979)
+    sleep_now = mean_season_len(low_by_year, sleep_count, recent0, LAST_COMPLETE_YEAR)
+    checks.append((f"sleep nights >=77F rising vs 1970s ({sleep_70s:.0f}->{sleep_now:.0f}/yr)",
+                   sleep_now - sleep_70s, sleep_now > sleep_70s))
+
     # Shape-check every committed asset (structure, not just values).
     for name, ok_a, count, detail in validate_assets():
         checks.append((f"asset {name}: {detail}", float(count), ok_a))
