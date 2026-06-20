@@ -128,22 +128,31 @@ Concrete gotchas found in the current code, each a required change:
   (×5/9, **no** 32° offset) — the render smoke test checks cards mount, not temp
   strings, so this is the net under the conversions. `GlobalContextCard` is the
   migrated reference (chart + tooltip + prose trends), imperial-identical.
-  **Rollout (staged, ~14 cards left).** Migrated so far: `GlobalContextCard`,
-  `UhiCard`, `GapCard` (gap/comparison family), `ExtrapolationCard`, `DiurnalCard`
-  (warming-trajectory family), `SeasonsCard`, `GrowthCard`, `ExtremesCard`
-  (seasonal/breadth family), `LastNightHero`, `GoalpostsCard`, `GridCard` (live hero
-  + grid) — covering `convTemp`, `convTempDelta`, and `convDistPhrase` for the
-  rural-distance prose. Per card: read
-  `useUnits()`, wrap absolute
-  temps in `convTemp`+`tempUnit`, trends/gaps in `convTempDelta`+`tempRateUnit`,
-  distances in `convDist`+`distUnit`; keep the card's own rounding so imperial stays
-  byte-identical. Physiological thresholds port in °C cleanly (the 25 °C / 77 °F sleep
-  line, 20 °C tropical-night); Imperial round numbers (100 °F-day season, 85 °F cool
-  window) need °C-native reframing or a metric twin, decided per card. Best done
-  alongside the first metric city so each card's metric output is visually verified
-  (the converters guarantee the US side, not the layout). Published-figure citations
-  (e.g. "U.S. ≈ 2.5 °F since 1970") keep their cited units. Locale number formatting
-  is a later refinement.
+  **Rollout — the mechanical pass is essentially done.** Migrated (all
+  imperial-identical): `GlobalContextCard`, `UhiCard`, `GapCard`,
+  `ExtrapolationCard`, `DiurnalCard`, `SeasonsCard`, `GrowthCard`, `ExtremesCard`,
+  `LastNightHero`, `GoalpostsCard`, `GridCard`, **and `DashboardBody`** (the curated
+  flagship body: verdict trends, the actual/anomaly chart, the decade ladder) —
+  covering `convTemp`, `convTempDelta`, and `convDistPhrase`. The pattern, for any
+  future card: read `useUnits()`, wrap absolute temps in `convTemp`+`tempUnit`,
+  trends/gaps in `convTempDelta`+`tempRateUnit`, distances in `convDist`+`distUnit`;
+  keep the card's own rounding so imperial stays byte-identical. Published-figure
+  citations (e.g. "U.S. ≈ 2.5 °F since 1970") keep their cited units.
+
+  **What's deliberately left — two buckets, both for the first-metric-city pass:**
+  1. *Threshold cards* (`SleepCard`, `HotNightSeasonCard`, `SeasonLengthCard`,
+     `StreakCard`, `CoolWindowCard`, `WinterCard`, `HumanCostCard`, and the
+     `80/90/110 °F` season block still inside `DashboardBody`). These hinge on
+     Imperial round numbers. A *canonical* °C metric (e.g. 20 °C "tropical nights",
+     30 °C days) is a **different threshold**, so doing it right means regenerating
+     the precomputed assets (`build_*.py` against ACIS/NCEI — egress-gated), not just
+     relabeling. `SleepCard`'s 25 °C/77 °F line and frost = 0 °C port cleanly; the
+     rest need a per-card °C-native decision with eyes on the layout.
+  2. *Cross-city views* (`CityExplore` ranked list, `CityMap`): these aren't inside a
+     per-city `UnitsProvider`, and once the set mixes US + international cities they
+     raise a **product-level unit policy** question (one default vs. per-row units) —
+     decide when the first non-US city is real. Locale number formatting is a later
+     refinement too.
 - **Timezone bucketing.** The hour-of-day builders already bucket by local time via an
   IANA `tz` (added for DST cities) — that generalizes worldwide for free. Good.
 - **The global background rate** (~0.36 °F/dec reference line) is already a *global*

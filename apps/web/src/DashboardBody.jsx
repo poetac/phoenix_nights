@@ -3,8 +3,9 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, BarChart, Bar, ReferenceLine, AreaChart, Area,
 } from "recharts";
-import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick } from "./ui.jsx";
+import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "./ui.jsx";
 import { mean, blockBootstrapCI } from "./lib/stats.js";
+import { convTemp, convTempDelta, tempUnit } from "./lib/units.js";
 import UhiCard from "./cards/UhiCard.jsx";
 import GlobalContextCard from "./cards/GlobalContextCard.jsx";
 import GoalpostsCard from "./cards/GoalpostsCard.jsx";
@@ -35,6 +36,7 @@ export default function DashboardBody({
 }) {
   const [windowStart, setWindowStart] = useState(city.baseline.start);
   const [view, setView] = useState("anom");
+  const units = useUnits();
 
   const minYear = rows.length ? rows[0].year : city.baseline.start;
   const vis = useMemo(() => rows.filter((r) => r.year >= windowStart), [rows, windowStart]);
@@ -61,6 +63,17 @@ export default function DashboardBody({
     days110: r.days110,
     cdd: r.cdd,
   })), [vis, base]);
+
+  // Active-unit copy for the temperature line chart: lows/highs are absolute
+  // (convTemp), the anomaly series are differences (convTempDelta). Counts pass
+  // through. Imperial is the identity → the live US chart is unchanged.
+  const displayChartData = useMemo(() => chartData.map((d) => ({
+    ...d,
+    low: +convTemp(d.low, units).toFixed(1),
+    high: +convTemp(d.high, units).toFixed(1),
+    lowAnom: d.lowAnom == null ? null : +convTempDelta(d.lowAnom, units).toFixed(1),
+    highAnom: d.highAnom == null ? null : +convTempDelta(d.highAnom, units).toFixed(1),
+  })), [chartData, units]);
 
   const decades = useMemo(() => {
     const g = {};
@@ -109,10 +122,10 @@ export default function DashboardBody({
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="text-4xl sm:text-5xl" style={{ fontFamily: DISPLAY, color: C.ember, fontVariantNumeric: "tabular-nums" }}>
-              {lowPerDecade != null ? `+${lowPerDecade.toFixed(1)}°` : "—"}
+              {lowPerDecade != null ? `+${convTempDelta(lowPerDecade, units).toFixed(1)}°` : "—"}
               {fitLow?.ci95 != null && (
                 <span className="text-base sm:text-lg ml-1" style={{ color: C.muted, fontFamily: BODY }}>
-                  ±{(fitLow.ci95 * 10).toFixed(1)}
+                  ±{convTempDelta(fitLow.ci95 * 10, units).toFixed(1)}
                 </span>
               )}
             </div>
@@ -120,10 +133,10 @@ export default function DashboardBody({
           </div>
           <div>
             <div className="text-4xl sm:text-5xl" style={{ fontFamily: DISPLAY, color: C.day, fontVariantNumeric: "tabular-nums" }}>
-              {highPerDecade != null ? `${highPerDecade >= 0 ? "+" : ""}${highPerDecade.toFixed(1)}°` : "—"}
+              {highPerDecade != null ? `${highPerDecade >= 0 ? "+" : ""}${convTempDelta(highPerDecade, units).toFixed(1)}°` : "—"}
               {fitHigh?.ci95 != null && (
                 <span className="text-base sm:text-lg ml-1" style={{ color: C.muted, fontFamily: BODY }}>
-                  ±{(fitHigh.ci95 * 10).toFixed(1)}
+                  ±{convTempDelta(fitHigh.ci95 * 10, units).toFixed(1)}
                 </span>
               )}
             </div>
@@ -152,7 +165,7 @@ export default function DashboardBody({
           </button>
         ))}
         <span className="mx-1 hidden sm:inline" style={{ color: C.line }}>|</span>
-        {[{ v: "anom", label: `Departure from ${city.baseline.label}` }, { v: "actual", label: "Actual °F" }].map((o) => (
+        {[{ v: "anom", label: `Departure from ${city.baseline.label}` }, { v: "actual", label: `Actual ${tempUnit(units)}` }].map((o) => (
           <button key={o.v} onClick={() => setView(o.v)} className="rounded-full px-3 py-1.5 text-sm"
             style={{
               background: view === o.v ? C.panel2 : "transparent",
@@ -168,15 +181,15 @@ export default function DashboardBody({
         <CardHead kicker="Yearly averages" title="Pulling away from the past"
           sub={view === "anom"
             ? `Each year's average low and high, shown as departure from this station's ${city.baseline.label} average. Watch the ember line climb away from zero while the blue line drifts.`
-            : "Each year's average low and high in °F. The gap between night and day is quietly narrowing."} />
+            : `Each year's average low and high in ${tempUnit(units)}. The gap between night and day is quietly narrowing.`} />
         <div role="img" style={{ width: "100%", height: 300 }}
           aria-label={`Line chart of ${city.shortName}'s average overnight low and daytime high each year from ${windowStart} to ${rows[rows.length - 1].year}; the overnight-low line rises faster than the daytime-high line.`}>
           <ResponsiveContainer>
-            <LineChart data={chartData} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
+            <LineChart data={displayChartData} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
               <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
               <XAxis dataKey="year" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} minTickGap={32} />
               <YAxis tick={axisTick} tickLine={false} axisLine={false} domain={["auto", "auto"]} />
-              <Tooltip content={<DarkTooltip unit="°F" />} />
+              <Tooltip content={<DarkTooltip unit={tempUnit(units)} />} />
               {view === "anom" && (
                 <ReferenceLine y={0} stroke={C.muted} strokeDasharray="4 4"
                   label={{ value: `${city.baseline.label} avg`, fill: C.muted, fontSize: 11, position: "insideBottomLeft" }} />
@@ -211,7 +224,7 @@ export default function DashboardBody({
             {decades.map((d) => (
               <div key={d.decade} className="flex items-center gap-2 text-sm" style={{ fontVariantNumeric: "tabular-nums" }}>
                 <div className="w-12 shrink-0" style={{ color: C.muted }}>{d.decade}s</div>
-                <div className="w-10 shrink-0 text-right" style={{ color: C.ember }}>{d.low.toFixed(0)}°</div>
+                <div className="w-10 shrink-0 text-right" style={{ color: C.ember }}>{convTemp(d.low, units).toFixed(0)}°</div>
                 <div className="relative flex-1 h-2 rounded-full" style={{ background: "#171229" }}>
                   {base.low != null && (
                     <div className="absolute top-[-4px] bottom-[-4px] w-px"
@@ -224,13 +237,13 @@ export default function DashboardBody({
                       background: `linear-gradient(90deg, ${C.ember}, ${C.emberSoft}, ${C.day})`,
                     }} />
                 </div>
-                <div className="w-10 shrink-0" style={{ color: C.day }}>{d.high.toFixed(0)}°</div>
+                <div className="w-10 shrink-0" style={{ color: C.day }}>{convTemp(d.high, units).toFixed(0)}°</div>
               </div>
             ))}
           </div>
           {base.low != null && (
             <p className="text-xs mt-3" style={{ color: C.muted }}>
-              Thin gray tick = the {city.baseline.label} average low ({base.low.toFixed(1)}°F), for reference.
+              Thin gray tick = the {city.baseline.label} average low ({convTemp(base.low, units).toFixed(1)}{tempUnit(units)}), for reference.
             </p>
           )}
         </Card>
