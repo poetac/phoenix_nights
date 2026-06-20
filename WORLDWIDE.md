@@ -112,11 +112,12 @@ ACIS-thread figure — a reproduce-or-reject decision, surfaced not buried).
 
 Concrete gotchas found in the current code, each a required change:
 
-- **Hemisphere.** "Summer" is hardcoded to **JJA** (`seasonal.py` season map;
-  `build_diurnal.py` "June–August"). For Sydney, Buenos Aires, Cape Town, summer is
-  **DJF**. Introduce a hemisphere-aware "warm season" (lat sign → JJA or DJF) threaded
-  through the seasonal/diurnal/heat-season builders. This is non-optional and touches
-  every "summer night" framing.
+- **Hemisphere. ✅ started.** "Summer" was hardcoded to **JJA**. `analysis/seasons.py`
+  now derives the warm-season month windows from latitude (Northern → June–Aug,
+  Southern → Dec–Feb), and `build_diurnal.py` uses it — a **no-op for the 14 northern
+  US cities** (the fetch URL is byte-identical; lat defaults to Northern) but the path
+  Southern-Hemisphere cities will take. Still to thread through when a Southern city
+  ships: the `seasonal.py` probe and any other "summer night" framing.
 - **Units.** °F is baked into ~25 card files. Add a unit layer (°C default outside the
   US, miles→km, locale number formatting). Thresholds that are physiological port in
   °C cleanly (the 25 °C / 77 °F sleep line, 20 °C tropical-night); the Imperial round
