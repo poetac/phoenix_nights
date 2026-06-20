@@ -73,7 +73,7 @@ CASA_GRANDE_SID = "USC00021314"  # the open-desert control (cities.js rural.sid)
 # reproduces every statistic independently from raw ACIS — the registry only
 # supplies the station ids, not the numbers.
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from cities import CITIES as REGISTRY  # noqa: E402
+from cities import CITIES as REGISTRY, source_of  # noqa: E402
 
 
 def fetch_gsoy():
@@ -294,6 +294,13 @@ def check_cities(checks):
     """
     desert = float("nan")
     for key, c in REGISTRY.items():
+        # This battery is the ACIS-cross-checked breadth bar for US cities. An
+        # international (source:"ghcn") city has no ACIS sid; its backend reach is
+        # covered by GHCN_INTL_SMOKE, and its facts get value-checked once the GSOY
+        # asset is built (see check_cities_ghcn). Skip it here so the ACIS path is
+        # untouched.
+        if source_of(c) != "acis":
+            continue
         name = c["label"].split(" (")[0]
         rsid = c.get("rural_sid")
         night = facts_trend(c["sid"], "mint")

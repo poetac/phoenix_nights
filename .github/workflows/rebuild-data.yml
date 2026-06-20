@@ -56,7 +56,15 @@ jobs:
             python3 analysis/build_grid.py --city "$city"
           done
 
-      # Rank each city's facts (reads the committed assets + live ACIS); one run, all cities.
+      # International (GHCN/GSOY) cities: ACIS is US-only, so precompute the yearly
+      # series the front end can't fetch live for them.
+      - name: Rebuild international series (NCEI GSOY)
+        run: |
+          for city in syd; do
+            python3 analysis/build_series.py --city "$city"
+          done
+
+      # Rank each city's facts (reads the committed assets + live ACIS/GSOY); one run, all cities.
       - name: Rebuild per-city facts (salience engine)
         run: python3 analysis/build_facts.py
 

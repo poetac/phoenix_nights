@@ -16,7 +16,7 @@ import sys
 import urllib.request
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
-from cities import CITIES, DATA_DIR  # noqa: E402
+from cities import CITIES, DATA_DIR, source_of  # noqa: E402
 
 ACIS = "https://data.rcc-acis.org/StnData"
 LAST_COMPLETE_YEAR = datetime.date.today().year - 1
@@ -48,6 +48,11 @@ def slope_per_decade(pts):
 def main():
     cities = []
     for c in CITIES.values():
+        # Cross-city compare is ACIS-sourced. International (source:"ghcn") cities
+        # join the explore ranking once the mixed-unit policy is settled (WORLDWIDE
+        # §6); for now skip them so the ACIS output stays byte-identical.
+        if source_of(c) != "acis":
+            continue
         pts = yearly_low(c["sid"])
         base = [y for (yr, y) in pts if BASE0 <= yr <= BASE1]
         if len(base) < 5 or len(pts) < 25:
