@@ -1,4 +1,12 @@
-import { useState } from "react";
+import { useState, createContext, useContext } from "react";
+
+// Active unit system for the subtree (imperial | metric), provided per-city by
+// CityDashboard via <UnitsContext.Provider value={unitsOf(city)}>. Defaults to
+// "imperial" so any card reading it outside a provider (or before the metric work
+// lands) renders the live US product unchanged. Cards format through ../lib/units.js.
+export const UnitsContext = createContext("imperial");
+export const useUnits = () => useContext(UnitsContext);
+
 export const C = {
   bg: "#141021", panel: "#1d1832", panel2: "#251e3e", line: "#2f2750",
   grid: "#2a2347", text: "#f2ecdf", muted: "#9b93ae",

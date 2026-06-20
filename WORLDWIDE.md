@@ -118,11 +118,26 @@ Concrete gotchas found in the current code, each a required change:
   US cities** (the fetch URL is byte-identical; lat defaults to Northern) but the path
   Southern-Hemisphere cities will take. Still to thread through when a Southern city
   ships: the `seasonal.py` probe and any other "summer night" framing.
-- **Units.** °F is baked into ~25 card files. Add a unit layer (°C default outside the
-  US, miles→km, locale number formatting). Thresholds that are physiological port in
-  °C cleanly (the 25 °C / 77 °F sleep line, 20 °C tropical-night); the Imperial round
-  numbers (100 °F-day season, 85 °F cool window) need °C-native reframing or a metric
-  twin, decided per card.
+- **Units.** *Foundation shipped (`src/lib/units.js` + `UnitsContext`/`useUnits` in
+  ui.jsx).* The record stays °F internally; cards format through pure converters
+  (`convTemp`, `convTempDelta`, `convDist`) whose **imperial branch is the exact
+  identity** — so routing a US number through them changes nothing byte-for-byte, and
+  a metric mistake can only ever affect metric output. A city opts in with
+  `units: "metric"` (read by `unitsOf`); `CityDashboard` provides it to the subtree.
+  `tests/units.test.mjs` (in CI's build job) pins the math, including the delta rule
+  (×5/9, **no** 32° offset) — the render smoke test checks cards mount, not temp
+  strings, so this is the net under the conversions. `GlobalContextCard` is the
+  migrated reference (chart + tooltip + prose trends), imperial-identical.
+  **Rollout (staged, ~24 cards left).** Per card: read `useUnits()`, wrap absolute
+  temps in `convTemp`+`tempUnit`, trends/gaps in `convTempDelta`+`tempRateUnit`,
+  distances in `convDist`+`distUnit`; keep the card's own rounding so imperial stays
+  byte-identical. Physiological thresholds port in °C cleanly (the 25 °C / 77 °F sleep
+  line, 20 °C tropical-night); Imperial round numbers (100 °F-day season, 85 °F cool
+  window) need °C-native reframing or a metric twin, decided per card. Best done
+  alongside the first metric city so each card's metric output is visually verified
+  (the converters guarantee the US side, not the layout). Published-figure citations
+  (e.g. "U.S. ≈ 2.5 °F since 1970") keep their cited units. Locale number formatting
+  is a later refinement.
 - **Timezone bucketing.** The hour-of-day builders already bucket by local time via an
   IANA `tz` (added for DST cities) — that generalizes worldwide for free. Good.
 - **The global background rate** (~0.36 °F/dec reference line) is already a *global*
@@ -171,10 +186,14 @@ zoom/region affordance once there are >~50 dots.
   uneven-coverage reality §4/§8 must map, and a reminder that each real city resolves
   its source station by verification first. Next: ~5 cities with dense networks and
   clean rural controls (candidates: London, Tokyo, Madrid, Berlin, Melbourne).
-  Hemisphere-aware season (done) + °C land here. Ship behind the existing engine; no
-  map change yet (list/ranking only). The blocker from a no-egress sandbox is asset
-  *generation* (the GHCN builders must run against NCEI) — a CI/rebuild step.
-- **Phase C — world map + units.** `geoNaturalEarth1`, °C default, the unit layer.
+  Hemisphere-aware season (done) + the °C **units foundation** (done — §6 Units; pure
+  converters + `UnitsContext`, imperial-identity, CI-tested) land here; the per-card
+  metric rollout finishes alongside the first metric city so its output is visually
+  verified. Ship behind the existing engine; no map change yet (list/ranking only).
+  The blocker from a no-egress sandbox is asset *generation* (the GHCN builders must
+  run against NCEI) — a CI/rebuild step.
+- **Phase C — world map + units rollout.** `geoNaturalEarth1`; finish migrating the
+  remaining cards onto the units layer (foundation already in §6).
 - **Phase D — regional expansion.** Region by region, each gated on a rural-control
   validation pass; UHI card omits where no control qualifies.
 
