@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Georgia, 'Times New Roman', serif">
+  <defs>
+    <radialGradient id="g1" cx="50%" cy="-10%" r="75%">
+      <stop offset="0%" stop-color="#ff6b3d" stop-opacity="0.20"/>
+      <stop offset="60%" stop-color="#ff6b3d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="85%" cy="0%" r="60%">
+      <stop offset="0%" stop-color="#ffb15c" stop-opacity="0.10"/>
+      <stop offset="55%" stop-color="#ffb15c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#141021"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+
+  <text x="80" y="118" fill="#ffb15c" font-family="ui-sans-serif, system-ui, sans-serif"
+        font-size="22" letter-spacing="6" font-weight="600">OFFICIAL STATION RECORDS · CITY BY CITY</text>
+  <text x="1120" y="118" fill="#ffd9a0" text-anchor="end"
+        font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" letter-spacing="2">poetac.github.io/phoenix_nights</text>
+
+  <text x="76" y="252" fill="#f2ecdf" font-size="84" font-weight="600">Every city has</text>
+  <text x="76" y="346" fill="#f2ecdf" font-size="84" font-weight="600">its own climate <tspan fill="#ff6b3d">signal.</tspan></text>
+
+  <text x="80" y="470" fill="#9b93ae" font-family="ui-sans-serif, system-ui, sans-serif" font-size="27">
+    Each city's distinctive trend, read straight from the official station
+  </text>
+  <text x="80" y="508" fill="#9b93ae" font-family="ui-sans-serif, system-ui, sans-serif" font-size="27">
+    record — NOAA across the US, NCEI GSOY worldwide. Phoenix to Sydney.
+  </text>
+</svg>
