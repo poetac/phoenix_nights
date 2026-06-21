@@ -60,7 +60,7 @@ jobs:
       # series the front end can't fetch live for them.
       - name: Rebuild international series (NCEI GSOY)
         run: |
-          for city in syd; do
+          for city in syd dbt; do
             python3 analysis/build_series.py --city "$city"
           done
 
