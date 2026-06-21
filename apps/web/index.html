@@ -5,35 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#141021" />
     <meta name="color-scheme" content="dark" />
-    <link rel="canonical" href="https://poetac.github.io/phoenix_nights/" />
+    <!-- Per-product meta: tokens below are filled at build time by the productMeta()
+         plugin in vite.config.js, keyed on VITE_PRODUCT (City Signals at the root,
+         Desert Nights at /desert/). -->
+    <link rel="canonical" href="__META_URL__" />
 
-    <title>Desert Nights — the desert still cools off at night. The city doesn't.</title>
-    <meta
-      name="description"
-      content="The official NOAA station record shows Phoenix's overnight lows abandoning their history faster than its highs. See the real trend, not the rolling 'normal'."
-    />
+    <title>__META_TITLE__</title>
+    <meta name="description" content="__META_DESC__" />
 
     <!-- Open Graph / social cards -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Desert Nights" />
-    <meta property="og:title" content="The desert still cools off at night. The city doesn't." />
-    <meta
-      property="og:description"
-      content="Phoenix's overnight lows are abandoning their history faster than its highs — measured against a fixed 1970s baseline, straight from the NOAA station record."
-    />
-    <meta property="og:url" content="https://poetac.github.io/phoenix_nights/" />
-    <meta property="og:image" content="https://poetac.github.io/phoenix_nights/og.png" />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:site_name" content="__META_SITENAME__" />
+    <meta property="og:title" content="__META_OGTITLE__" />
+    <meta property="og:description" content="__META_OGDESC__" />
+    <meta property="og:url" content="__META_URL__" />
+    <meta property="og:image" content="__META_OGIMAGE_URL__" />
+    <meta property="og:image:type" content="__META_OGIMAGE_TYPE__" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="The desert still cools off at night. The city doesn't." />
+    <meta property="og:image:alt" content="__META_OGALT__" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="The desert still cools off at night. The city doesn't." />
-    <meta
-      name="twitter:description"
-      content="Phoenix's overnight lows are abandoning their history faster than its highs — from the official NOAA record, against a fixed 1970s baseline."
-    />
-    <meta name="twitter:image" content="https://poetac.github.io/phoenix_nights/og.png" />
+    <meta name="twitter:title" content="__META_OGTITLE__" />
+    <meta name="twitter:description" content="__META_OGDESC__" />
+    <meta name="twitter:image" content="__META_OGIMAGE_URL__" />
 
     <!-- Display font, loaded without blocking first paint; system serif is the fallback -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
