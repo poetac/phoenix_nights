@@ -54,8 +54,10 @@ Go-forward (the split, phased):
 - **Phase 1 — product layer (done):** `products.js` + a product-aware engine; both
   products build (`npm run build` = City Signals, `npm run build:desert` = Desert Nights).
 - **Phase 2 — two-site deploy wiring (done):** one Pages artifact serves the explorer at
-  the root and Desert Nights at `/desert/`. (Branding/OG/custom-domain polish is deferred
-  until both products are buttoned down — owner's call.)
+  the root and Desert Nights at `/desert/`. **Per-product branding/OG done** — `index.html`
+  `__META_*__` tokens filled at build time by `productMeta()` (`vite.config.js`) per product
+  (City Signals → `og-citysignals.svg`; Desert Nights → `og.png`). (Custom-domain + a
+  rendered-PNG OG remain owner's-call polish.)
 - **Phase 3a — full page divergence (done):** City Signals named; "Phoenix Nights"
   renamed to "Desert Nights"; City Signals city pages now use the salience-driven
   `SignalsBody` (a different layout per city), Desert Nights keeps the curated
@@ -71,13 +73,14 @@ Go-forward (the split, phased):
   tropical-nights fact pulls in the warm-night season + sleep-threshold + cool-window
   cards), each self-omitting when its data/asset is absent — so a city's lead signal is
   shown in depth, still salience-led and still a different layout per city.
-- **Phase 3 — worldwide (City Signals):** a new station-record data backend
-  (**GHCN-Daily** — *not* gridded reanalysis, which would smooth the UHI signal away),
-  a world map, °C + hemisphere-aware seasons, and the rural-control method re-validated
-  per region. Large and separate — the engine is US-specific today (ACIS, ThreadEx,
-  Census, EIA, `geoAlbersUsa`). **Full design + phasing in [`WORLDWIDE.md`](WORLDWIDE.md);
-  the recommended first move is Phase A** (prove GHCN-Daily reproduces the 14 US cities
-  before any new city ships).
+- **Phase 3 — worldwide (City Signals) — shipping:** a station-record backend
+  (**GHCN-Daily via NCEI GSOY** — *not* gridded reanalysis, which would smooth the UHI
+  signal away), a world map, and °C rendering. **Phase A done** (GHCN-Daily reproduces the
+  14 US cities' night trends). **Phase B live: Sydney, AU is the first international city**
+  (`source:"ghcn"`, metric, value-checked by `check_cities_ghcn`); City Signals' copy +
+  map are now worldwide/neutral. Hemisphere-aware seasons + more cities (London/Tokyo
+  rejected at GSOY; De Bilt reachable) are the next slice. Full design in
+  [`WORLDWIDE.md`](WORLDWIDE.md).
 - **Deployment details** (subpaths vs custom domains vs separate repos) — revisit once
   both products are in a good state.
 
@@ -90,7 +93,8 @@ a clean single-utility metro BA) and heat-deaths (Phoenix-only by design).
 
 ## Where we are (June 2026)
 
-A **14-city national city-climate explorer** — React + Vite, deployed to GitHub Pages —
+A **worldwide city-climate explorer** (14 US cities + Sydney, the first international
+city) — React + Vite, deployed to GitHub Pages —
 on a city-agnostic engine (`lib/cities.js` registry + `<CityDashboard city={…} />`),
 fronted by a clickable US map and a per-city salience ("what stands out") section.
 Python stdlib pipelines precompute static JSON; CI builds the app, runs a real-browser
