@@ -1,0 +1,59 @@
+{
+ "city": "syd",
+ "name": "Sydney (GHCN ASN00066062, Observatory Hill)",
+ "generated": "2026-06-21",
+ "facts": [
+  {
+   "key": "coldest_night",
+   "score": 0.316,
+   "crossCityPercentile": 0.07,
+   "label": "Even the coldest night of the year is warming +0.22\u00b0C per decade",
+   "value": 0.22,
+   "unit": "\u00b0C/decade",
+   "significant": true,
+   "rank": 1
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 0.301,
+   "crossCityPercentile": 0.13,
+   "label": "Overnight lows are rising 0.6\u00d7 as fast as afternoon highs",
+   "value": 0.6,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 2
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.301,
+   "crossCityPercentile": 0.13,
+   "label": "The day\u2013night temperature gap is shrinking 0.11\u00b0C per decade",
+   "value": -0.11,
+   "unit": "\u00b0C/decade",
+   "significant": true,
+   "rank": 3
+  },
+  {
+   "key": "night_warming",
+   "score": 0.294,
+   "crossCityPercentile": 0.07,
+   "label": "Summer nights are warming +0.19\u00b0C per decade",
+   "value": 0.19,
+   "unit": "\u00b0C/decade",
+   "significant": true,
+   "bench": 0.36,
+   "rank": 4
+  },
+  {
+   "key": "urban_excess",
+   "score": 0.272,
+   "crossCityPercentile": 0.13,
+   "label": "City nights are warming +0.08\u00b0C/decade faster than the nearby rural tablelands",
+   "value": 0.08,
+   "unit": "\u00b0C/decade",
+   "significant": true,
+   "vs_reference": 0.11,
+   "rank": 5
+  }
+ ]
+}

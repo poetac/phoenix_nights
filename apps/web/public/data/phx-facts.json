@@ -1,12 +1,12 @@
 {
  "city": "phx",
  "name": "Phoenix (ThreadEx PHXthr 9)",
- "generated": "2026-06-20",
+ "generated": "2026-06-21",
  "facts": [
   {
    "key": "night_warming",
-   "score": 0.812,
-   "crossCityPercentile": 0.79,
+   "score": 0.817,
+   "crossCityPercentile": 0.8,
    "label": "Summer nights are warming +1.16\u00b0F per decade",
    "value": 1.16,
    "unit": "\u00b0F/decade",
@@ -16,8 +16,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.722,
-   "crossCityPercentile": 0.36,
+   "score": 0.735,
+   "crossCityPercentile": 0.4,
    "label": "Even the coldest night of the year is warming +1.27\u00b0F per decade",
    "value": 1.27,
    "unit": "\u00b0F/decade",
@@ -26,8 +26,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.68,
-   "crossCityPercentile": 0.64,
+   "score": 0.687,
+   "crossCityPercentile": 0.67,
    "label": "Overnight lows are rising 2.1\u00d7 as fast as afternoon highs",
    "value": 2.1,
    "unit": "\u00d7 ratio",
@@ -36,8 +36,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.68,
-   "crossCityPercentile": 0.64,
+   "score": 0.687,
+   "crossCityPercentile": 0.67,
    "label": "The day\u2013night temperature gap is shrinking 0.61\u00b0F per decade",
    "value": 0.61,
    "unit": "\u00b0F/decade",
@@ -79,7 +79,7 @@
   },
   {
    "key": "urban_excess",
-   "score": 0.222,
+   "score": 0.221,
    "crossCityPercentile": 0.07,
    "label": "City nights are warming +0.09\u00b0F/decade faster than the nearby open desert",
    "value": 0.09,

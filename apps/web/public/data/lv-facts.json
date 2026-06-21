@@ -1,11 +1,11 @@
 {
  "city": "lv",
  "name": "Las Vegas (ThreadEx LASthr 9)",
- "generated": "2026-06-20",
+ "generated": "2026-06-21",
  "facts": [
   {
    "key": "night_warming",
-   "score": 0.979,
+   "score": 0.98,
    "crossCityPercentile": 0.93,
    "label": "Summer nights are warming +1.68\u00b0F per decade",
    "value": 1.68,
@@ -16,7 +16,7 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.979,
+   "score": 0.98,
    "crossCityPercentile": 0.93,
    "label": "Overnight lows are rising 3.6\u00d7 as fast as afternoon highs",
    "value": 3.6,
@@ -26,7 +26,7 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.979,
+   "score": 0.98,
    "crossCityPercentile": 0.93,
    "label": "The day\u2013night temperature gap is shrinking 1.21\u00b0F per decade",
    "value": 1.21,
@@ -36,7 +36,7 @@
   },
   {
    "key": "urban_excess",
-   "score": 0.979,
+   "score": 0.98,
    "crossCityPercentile": 0.93,
    "label": "City nights are warming +1.15\u00b0F/decade faster than the nearby open desert",
    "value": 1.15,
@@ -47,8 +47,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.957,
-   "crossCityPercentile": 0.86,
+   "score": 0.96,
+   "crossCityPercentile": 0.87,
    "label": "Even the coldest night of the year is warming +2.58\u00b0F per decade",
    "value": 2.58,
    "unit": "\u00b0F/decade",

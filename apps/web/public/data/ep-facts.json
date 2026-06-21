@@ -1,12 +1,12 @@
 {
  "city": "ep",
  "name": "El Paso (ThreadEx ELPthr 9)",
- "generated": "2026-06-20",
+ "generated": "2026-06-21",
  "facts": [
   {
    "key": "night_warming",
-   "score": 0.957,
-   "crossCityPercentile": 0.86,
+   "score": 0.96,
+   "crossCityPercentile": 0.87,
    "label": "Summer nights are warming +1.50\u00b0F per decade",
    "value": 1.5,
    "unit": "\u00b0F/decade",
@@ -15,40 +15,40 @@
    "rank": 1
   },
   {
-   "key": "lows_outpace_highs",
-   "score": 0.894,
-   "crossCityPercentile": 0.86,
-   "label": "Overnight lows are rising 2.4\u00d7 as fast as afternoon highs",
-   "value": 2.4,
-   "unit": "\u00d7 ratio",
-   "significant": true,
-   "rank": 2
-  },
-  {
-   "key": "diurnal_compression",
-   "score": 0.894,
-   "crossCityPercentile": 0.86,
-   "label": "The day\u2013night temperature gap is shrinking 0.89\u00b0F per decade",
-   "value": 0.89,
-   "unit": "\u00b0F/decade",
-   "significant": true,
-   "rank": 3
-  },
-  {
    "key": "urban_excess",
-   "score": 0.893,
-   "crossCityPercentile": 0.64,
+   "score": 0.9,
+   "crossCityPercentile": 0.67,
    "label": "City nights are warming +1.02\u00b0F/decade faster than the nearby open desert",
    "value": 1.02,
    "unit": "\u00b0F/decade",
    "significant": true,
    "vs_reference": 0.48,
+   "rank": 2
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 0.897,
+   "crossCityPercentile": 0.87,
+   "label": "Overnight lows are rising 2.4\u00d7 as fast as afternoon highs",
+   "value": 2.4,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 3
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.897,
+   "crossCityPercentile": 0.87,
+   "label": "The day\u2013night temperature gap is shrinking 0.89\u00b0F per decade",
+   "value": 0.89,
+   "unit": "\u00b0F/decade",
+   "significant": true,
    "rank": 4
   },
   {
    "key": "coldest_night",
-   "score": 0.871,
-   "crossCityPercentile": 0.57,
+   "score": 0.88,
+   "crossCityPercentile": 0.6,
    "label": "Even the coldest night of the year is warming +1.86\u00b0F per decade",
    "value": 1.86,
    "unit": "\u00b0F/decade",
