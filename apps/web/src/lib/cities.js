@@ -779,7 +779,7 @@ export const SYDNEY = {
   source: "ghcn",
   units: "metric",
   recordStart: "1970-01-01",
-  stationLabel: "Sydney Observatory Hill (GHCN-Daily ASN00066062, via NCEI GSOY)",
+  stationLabel: "Sydney Observatory Hill (GHCN-Daily ASN00066062, via NCEI GSOY; annual record 1948–2019)",
   urbanShort: "Observatory Hill",
   // Principle 3 (state the caveat in the card): Sydney is the maritime exception.
   // At harbour-side Observatory Hill the sea moderates the overnight lows, so here

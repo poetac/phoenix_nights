@@ -351,6 +351,76 @@ def check_cities(checks):
     return desert
 
 
+def ghcn_elem_trend(sid, elem, start=1970):
+    """GSOY annual trend (°F/decade) of any element — TMIN (mean low), TMAX (mean
+    high), EMNT (coldest low) — for an international station. The parametrized
+    ghcn_night_trend, so a non-US city's full fact set can be value-checked. Returns
+    None on a fetch error or < 25 usable years."""
+    try:
+        rows = fetch_gsoy_station(sid, start)
+    except Exception:
+        return None
+    pts = []
+    for row in rows:
+        try:
+            y = int(row["DATE"])
+        except (KeyError, ValueError, TypeError):
+            continue
+        v = fnum(row, elem)
+        if v is not None and start <= y <= LAST_COMPLETE_YEAR:
+            pts.append((y, v))
+    return linreg(pts) * 10 if len(pts) >= 25 else None
+
+
+def check_cities_ghcn(checks):
+    """The check_cities bar, for international (source:'ghcn') cities: reproduce the
+    headline numbers live from NCEI GSOY and value-check the committed °C facts. The
+    directional asserts differ from the US set because Sydney is the honest
+    counterexample — at harbour-side Observatory Hill the nights still warm, but the
+    DAYS warm faster and the day–night gap WIDENS. We encode exactly that, so the
+    counterexample is a tested property, not a footnote. Trends are recomputed in °F
+    and compared to the °C facts via ×5/9 (build_facts's metric conversion)."""
+    F2C = 5.0 / 9.0
+    for key, c in REGISTRY.items():
+        if source_of(c) != "ghcn":
+            continue
+        name = c["label"].split(" (")[0]
+        sid = c["ghcn_sid"]
+        night = ghcn_elem_trend(sid, "TMIN")
+        day = ghcn_elem_trend(sid, "TMAX")
+        cold = ghcn_elem_trend(sid, "EMNT")
+        rsid = c.get("rural_sid")
+        rural = ghcn_elem_trend(rsid, "TMIN") if rsid else None
+
+        # directional: nights are warming, and faster than the rural control (UHI).
+        checks.append((f"{name}: GSOY night-low trend since 1970 is warming",
+                       night if night is not None else float("nan"),
+                       night is not None and night > 0))
+        if rural is not None and night is not None:
+            checks.append((f"{name}: city nights warm faster than rural pair "
+                           f"({night:.2f} vs {rural:.2f}/dec)", night - rural, night > rural))
+        # the maritime exception, as a test: days outpace nights -> gap widens.
+        if day is not None and night is not None:
+            checks.append((f"{name}: maritime counterexample — days outpace nights, "
+                           f"day–night gap WIDENS (day {day:.2f} > night {night:.2f}/dec)",
+                           day - night, day > night))
+
+        facts = _load_facts(c["prefix"])
+        if not facts or night is None:
+            continue
+        # value-check the committed °C facts against the live °F recompute (×5/9).
+        def _vc(fkey, live_f, label):
+            f = facts.get(fkey)
+            if f is not None and live_f is not None:
+                want = live_f * F2C
+                checks.append((f"{name}: facts {fkey} {f['value']}°C ~= live {want:.2f} ({label})",
+                               want - f["value"], abs(want - f["value"]) < 0.05))
+        _vc("night_warming", night, "TMIN trend")
+        _vc("coldest_night", cold, "EMNT trend")
+        _vc("diurnal_compression", (night - day) if day is not None else None, "TMIN−TMAX")
+        _vc("urban_excess", (night - rural) if rural is not None else None, "city−rural")
+
+
 def cdd_night_share(rows, y0, y1):
     """Night half's share of cooling degree-days over [y0, y1].
 
@@ -714,6 +784,10 @@ def main():
     desert_trend = check_cities(checks)
     # Worldwide Phase B step 0: the GHCN-Daily backend reaches international stations.
     check_ghcn_intl(checks)
+    # Worldwide Phase B: the shipped international city (Sydney) meets the same
+    # value-check bar as the US cities, adapted for its metric facts and its
+    # honest-counterexample direction (days outpace nights — the gap widens).
+    check_cities_ghcn(checks)
 
     # Season cards' outlier-robust definitions: the *sustained* warm-night
     # season (5-of-7 nights >=80F) and the *sustained* 100F-day season (runs of
