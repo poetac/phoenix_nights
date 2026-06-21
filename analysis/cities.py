@@ -248,6 +248,22 @@ CITIES = {
         "record_start": "1970-01-01",
         "lat": -33.86,               # Southern Hemisphere
     },
+    # Second international city (Worldwide Phase B). De Bilt is the Netherlands'
+    # national reference station (KNMI), GSOY-proven reachable (verify_v0
+    # GHCN_INTL_SMOKE, +0.59 F/dec night warming) — Europe + Northern Hemisphere, a
+    # maritime-temperate counterpoint to Sydney. No clean rural pair (De Bilt is
+    # itself the semi-rural national record), so it ships without urban_excess, like
+    # the no-pair US cities. Same GSOY path: metric, a precomputed series + facts.
+    "dbt": {
+        "key": "dbt",
+        "prefix": "dbt",
+        "source": "ghcn",            # NCEI GSOY, not ACIS
+        "units": "metric",           # front-end renders °C
+        "ghcn_sid": "NLM00006260",   # De Bilt (KNMI national station; GSOY-proven)
+        "label": "De Bilt (GHCN NLM00006260, KNMI Netherlands)",
+        "record_start": "1970-01-01",
+        "lat": 52.10,                # Northern Hemisphere
+    },
 }
 
 # GHCN-Daily station ids (queried via NCEI Global-Summary-of-the-Year) for the
