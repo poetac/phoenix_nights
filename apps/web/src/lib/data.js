@@ -49,7 +49,23 @@ async function acis(body) {
   return j;
 }
 
+// International (source:"ghcn") cities can't query ACIS (US-only); they load a
+// precomputed yearly series (NCEI GSOY, in °F — the canonical scale the units layer
+// renders as °C). Same row shape as the ACIS path's low/high (+ coldLow), minus the
+// daily-derived fields (hotNights, days110, warmLow, sleepNights, cdd), so the
+// daily-data cards self-hide.
+async function fetchGhcnSeries(city) {
+  const path = city.seriesAsset ?? `data/${city.id}-series.json`;
+  const j = await fetchAsset(path);
+  const rows = (j.years || [])
+    .map((d) => ({ year: d.year, high: num(d.high), low: num(d.low), coldLow: num(d.coldLow) }))
+    .filter((r2) => r2.year != null && (r2.high != null || r2.low != null));
+  if (rows.length < 20) throw new Error("GHCN series too short");
+  return { rows, source: "ghcn" };
+}
+
 export async function fetchCityYearly(city) {
+  if (city.source === "ghcn") return fetchGhcnSeries(city);
   const endYear = lastCompleteYear();
   const j = await acis({
     sid: city.threadSid,
@@ -87,6 +103,9 @@ export async function fetchCityYearly(city) {
 }
 
 export async function fetchRural(city) {
+  // International cities have no precomputed rural series yet, so the UHI control
+  // chart self-hides (the urban-excess fact still ships from the facts asset).
+  if (city.source === "ghcn") return [];
   const endYear = lastCompleteYear();
   const j = await acis({
     sid: city.rural.sid,

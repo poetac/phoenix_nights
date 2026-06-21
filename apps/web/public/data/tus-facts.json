@@ -82,7 +82,7 @@
    "key": "diurnal_compression",
    "score": 0.196,
    "crossCityPercentile": 0.07,
-   "label": "The day\u2013night temperature gap is shrinking 0.05\u00b0F per decade",
+   "label": "The day\u2013night temperature gap is widening 0.05\u00b0F per decade",
    "value": -0.05,
    "unit": "\u00b0F/decade",
    "significant": true,
