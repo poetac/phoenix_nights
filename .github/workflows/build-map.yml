@@ -1,0 +1,44 @@
+name: Build world map
+
+# Generates apps/web/src/lib/worldMap.js (the City Signals world map) from d3-geo +
+# world-atlas. Those libraries are needed only to PROJECT the outlines; the committed
+# output carries no runtime map deps, so they're installed here with --no-save and
+# never land in package.json. Run by hand after adding/moving a city (the city dots
+# are re-projected from cities.js). Until this runs, CityMap falls back to the US map.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-map:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install map-generation libraries (not committed to package.json)
+        run: npm i --no-save d3-geo topojson-client world-atlas
+
+      - name: Generate worldMap.js
+        run: node scripts/build-world-map.mjs
+
+      - name: Commit worldMap.js if changed
+        working-directory: .
+        run: |
+          git config user.name "phoenix-nights-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- apps/web/src/lib/worldMap.js; then
+            echo "No world-map change."
+          else
+            git add apps/web/src/lib/worldMap.js
+            git commit -m "Build worldMap.js (City Signals world map) from d3-geo/world-atlas"
+            git push
+          fi
