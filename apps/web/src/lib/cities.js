@@ -781,15 +781,17 @@ export const SYDNEY = {
   recordStart: "1970-01-01",
   stationLabel: "Sydney Observatory Hill (GHCN-Daily ASN00066062, via NCEI GSOY; annual record 1948–2019)",
   urbanShort: "Observatory Hill",
-  // Principle 3 (state the caveat in the card): Sydney is the maritime exception.
-  // At harbour-side Observatory Hill the sea moderates the overnight lows, so here
-  // the days warm faster than the nights and the day–night gap *widens* — the
-  // inverse of the inland and desert cities. Shown because the record says so.
+  // Oceanic/temperate — its own climate, not the US two-biome split.
+  climate: { key: "temperate", label: "Temperate coast" },
+  // City Signals surfaces each city's distinctive signal (Principle 3 — state it in
+  // the card). Sydney's runs opposite the inland cities: the harbour moderates its
+  // nights, so its days warm faster and the day–night gap widens. Not an exception to
+  // apologize for — it's exactly what a per-city-signal viewer is for.
   caveat:
-    "At harbour-side Observatory Hill the sea moderates the overnight lows, so here " +
-    "the days warm faster than the nights and the day–night gap widens — the inverse " +
-    "of the inland and desert cities, where the lows lead. Sydney is on this page " +
-    "because the engine reports what the record says, not in spite of it.",
+    "Sydney's signal runs the other way from the inland cities: at harbour-side " +
+    "Observatory Hill the sea moderates the overnight lows, so the days warm faster " +
+    "than the nights (+0.30 vs +0.19 °C/decade) and the day–night gap widens. That's " +
+    "the engine doing its job — surfacing whatever each city's record makes most distinctive.",
   baseline: { start: 1970, end: 1979, label: "1970s" },
   windows: [{ y: 1970, label: "Since 1970" }],
   latLon: [-33.8607, 151.205],
@@ -818,8 +820,14 @@ export const SYDNEY = {
 // shows up across both biomes the engine spans. Humid cities are the South/Gulf
 // additions; everything else is the arid/interior West. Update HUMID when adding.
 const HUMID = new Set(["atl", "hou", "nola", "rdu", "dfw"]);
-export const climateOf = (id) =>
-  HUMID.has(id) ? { key: "humid", label: "Humid South" } : { key: "arid", label: "Arid West" };
+// Climate chip for the ranked list. Data-driven so it generalizes worldwide: a city
+// may declare its own `climate` ({key,label}); US cities fall back to the two-biome
+// split the engine spans (humid South vs arid/interior West).
+export const climateOf = (id) => {
+  const c = CITIES.find((x) => x.id === id);
+  if (c?.climate) return c.climate;
+  return HUMID.has(id) ? { key: "humid", label: "Humid South" } : { key: "arid", label: "Arid West" };
+};
 
 // Precomputed-asset paths all follow one rule: data/<id>-<asset>.json, built by
 // the matching analysis/build_*.py pipeline. Rather than spell out ~7 identical

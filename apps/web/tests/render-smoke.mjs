@@ -46,7 +46,7 @@ await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
 try {
   await page.waitForFunction(() => {
     const t = document.body.textContent || "";
-    return t.includes("Cities are losing") && t.includes("Phoenix");
+    return t.includes("its own climate signal") && t.includes("Phoenix");
   }, undefined, { timeout: 30000 });
   const cities = await page.$$eval('ol[aria-label="Cities ranked by overnight-low warming"] button', (b) => b.length);
   if (cities < 4) fail(`explore: expected >=4 city rows, got ${cities}`);
@@ -133,16 +133,17 @@ await checkCity("dfw", "Dallas");
 // Phase B: the first international city. No ACIS — it renders from its committed
 // GSOY series + facts (in °C), so it mounts fully offline like an asset-backed card.
 await checkCity("syd", "Sydney");
-// Sydney is the honest counterexample: its caveat note must state that its days
-// outpace its nights (the engine reporting what the record says, not the thesis).
+// Sydney's per-city signal runs opposite the inland cities: its caveat note must
+// surface that its days outpace its nights (City Signals reporting what the record
+// makes distinctive, not a single thesis).
 await page.goto(`${BASE}/?city=syd`, { waitUntil: "domcontentloaded", timeout: 30000 });
 try {
-  await page.waitForFunction(() => (document.body.textContent || "").includes("The honest exception"),
+  await page.waitForFunction(() => (document.body.textContent || "").includes("What's distinctive"),
     undefined, { timeout: 20000 });
   const widening = await page.evaluate(() => (document.body.textContent || "").includes("gap is widening"));
   if (!widening) fail("syd: expected the diurnal fact to read 'gap is widening' (days outpace nights)");
-  else console.log("✓ syd: honest-exception caveat + 'gap is widening' fact present");
-} catch (e) { fail("syd: honest-exception caveat missing: " + e.message.split("\n")[0]); }
+  else console.log("✓ syd: distinctive-signal caveat + 'gap is widening' fact present");
+} catch (e) { fail("syd: distinctive-signal caveat missing: " + e.message.split("\n")[0]); }
 
 // Phase 5: the honest-extrapolation card renders for a warming city, clearly labeled.
 await page.goto(`${BASE}/?city=phx`, { waitUntil: "domcontentloaded", timeout: 30000 });
