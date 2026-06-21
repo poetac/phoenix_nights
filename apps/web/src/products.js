@@ -29,16 +29,16 @@ export const PRODUCTS = {
     name: "City Signals",
     short: "City Signals",
     layout: "signals", // salience-driven: each city shows ONLY its top-fact cards
-    tagline: "How every city's climate is changing — in its own words.",
-    // the whole registry (US today; worldwide is a future data-backend milestone)
+    tagline: "Every city's climate, in its own words.",
+    // the whole registry — US (ACIS) today, worldwide (GSOY) as cities are added
     includes: () => CITIES,
     showClimateChips: true,
-    kicker: "Live NOAA station record · arid West to humid South",
-    h1Lines: ["Cities are losing", "the cool of the night"],
+    kicker: "Official station records · city by city, US to worldwide",
+    h1Lines: ["Every city has", "its own climate signal"],
     intro:
-      "From the desert Southwest to the humid South, US cities' overnight lows are abandoning their history faster than their afternoon highs — the urban-heat-island fingerprint, straight from the official record. Ranked by how fast each city's nights are warming; pick one for its full story.",
+      "The official station record for each city, read for what stands out — overnight lows racing ahead across the US Southwest and South, the day–night gap flipping the other way on Sydney Harbour, and more. Ranked here by overnight-low warming; each city's own page surfaces whatever its record makes most distinctive.",
     caption:
-      "Overnight-low warming since 1970, vs the ~0.36 °F/decade global background rate. Every city is computed from the NOAA (ACIS) record and measured against a nearby rural reference to isolate the city's own heat — from the arid West to the humid South.",
+      "Each city's overnight-low warming since 1970, from the official station record — NOAA ACIS across the US, NCEI GSOY worldwide — against the ~0.36 °F/decade global background rate and a nearby rural reference where one exists.",
   },
   desert: {
     id: "desert",

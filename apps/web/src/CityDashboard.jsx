@@ -154,7 +154,7 @@ export default function CityDashboard({ city, product }) {
         {city.caveat && (
           <div className="rounded-xl px-4 py-3 mb-6 text-sm leading-relaxed" role="note"
             style={{ background: C.panel, border: `1px solid ${C.line}`, color: C.muted }}>
-            <span style={{ color: C.ember, fontWeight: 650 }}>The honest exception — </span>
+            <span style={{ color: C.ember, fontWeight: 650 }}>What's distinctive — </span>
             {city.caveat}
           </div>
         )}
