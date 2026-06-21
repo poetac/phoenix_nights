@@ -101,10 +101,9 @@ export default function HotNightSeasonCard({ city, streaks }) {
         The count of 80°F nights (in the tooltip) is the outlier-robust headline; the band marks the first and last
         <em> single</em> 80°F night, so its edges jump year to year, and the shifts above are {city.baseline.label}-vs-recent
         decade <em>averages</em>. {model.nYears} years on record ({model.minYear}–{model.lastYear}). Computed from every
-        daily low since 1896 (NOAA/NWS ACIS); years missing more than 36 daily lows are excluded. The {city.urbanShort}
+        daily low since {model.minYear} (NOAA/NWS ACIS); years missing more than 36 daily lows are excluded. The {city.urbanShort}
         gauge sits inside the urban heat island it measures, so part of this lengthening is the city itself, not the
-        climate alone; the threaded record splices downtown (pre-1933) onto Sky Harbor. Rebuild with
-        <code>analysis/build_streaks.py</code>.
+        climate alone. Rebuild with <code>analysis/build_streaks.py</code>.
       </p>
     </Card>
   );

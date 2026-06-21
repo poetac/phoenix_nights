@@ -19,11 +19,12 @@ export default function MethodologyCard({ city }) {
         The warming you see here is the <em>combined</em> effect of at least four things, and a single
         station can't fully separate them: (1) the regional/global climate trend, (2) the urban heat
         island as {city.urbanShort} was built up around the gauge, (3) local land-use and land-cover
-        change, and (4) changes in instruments and observing practice over 130 years. We never claim a
-        number is "climate change" alone. The control-experiment card is the honest tool here: differencing
-        {" "}{city.shortName} against an open-desert station that shares the regional climate isolates the
-        part that is the city itself (~half of the night warming since 1948), and the global-context card
-        sets both against published background rates.
+        change, and (4) changes in instruments and observing practice over the length of the record. We
+        never claim a number is "climate change" alone.{city.rural
+          ? <> The control-experiment card is the honest tool here: differencing {city.shortName} against a{" "}
+            {city.rural.kind || "rural"} station that shares the regional climate isolates the part that is the
+            city itself, and the global-context card sets both against published background rates.</>
+          : <> The global-context card sets the trend against published background rates.</>}
       </Section>
 
       <Section title="Trends and uncertainty">
@@ -45,13 +46,18 @@ export default function MethodologyCard({ city }) {
       </Section>
 
       <Section title="Station continuity">
-        The live record is NOAA's ThreadEx threaded series for Phoenix (<code>PHXthr 9</code>), which
-        splices the downtown gauge (1896–1933) onto Sky Harbor (1933–present); cards that lean on the
-        early record say so. The hourly diurnal curves stitch two ISD station identifiers
-        (<code>99999923183</code> pre-1973, <code>72278023183</code> after). Station moves, instrument
-        swaps, and observing-practice changes can introduce artificial steps; we don't independently
-        homogenize, which is another reason the urban–rural <em>difference</em> — where shared artifacts
-        tend to cancel — is the load-bearing comparison rather than any single absolute trend.
+        {city.source === "ghcn" ? (
+          <>The record is NCEI's Global Summary of the Year for {city.stationLabel}. We don't independently
+          homogenize the series; station moves, instrument swaps, and observing-practice changes can introduce
+          artificial steps, so read any single absolute trend with that caveat.</>
+        ) : (
+          <>The live record is NOAA's ThreadEx threaded series for {city.shortName}
+          {city.threadSid ? <> (<code>{city.threadSid}</code>)</> : null} — {city.stationLabel}; cards that lean
+          on the early record say so. Station moves, instrument swaps, and observing-practice changes can introduce
+          artificial steps; we don't independently homogenize
+          {city.rural ? <>, which is another reason the urban–rural <em>difference</em> — where shared artifacts
+          tend to cancel — is the load-bearing comparison rather than any single absolute trend</> : null}.</>
+        )}
       </Section>
 
       <Section title="Data hygiene and freshness">

@@ -91,7 +91,7 @@ export default function CoolWindowCard({ city, diurnal }) {
         By the {now.decade} that window has closed to{" "}
         <span style={{ color: C.ember, fontFamily: DISPLAY }}>{now.total} hour{now.total === 1 ? "" : "s"}</span>.
         {lastRecovery && <> The deep-recovery window below {RECOVERY}°F vanished after the {lastRecovery.decade}.</>}{" "}
-        The desert didn't just raise the low — it took away the hours of relief that used to come with the dark.
+        The heat didn't just raise the low — it took away the hours of relief that used to come with the dark.
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
         Counted from each decade's average June–August night — the mean temperature at every local hour in NOAA's hourly

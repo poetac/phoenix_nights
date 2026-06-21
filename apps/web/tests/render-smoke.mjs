@@ -38,6 +38,16 @@ async function checkCity(cityId, label) {
   } catch { fail(`${cityId}: facts section ("What stands out in ${label}") missing`); }
   const title = await page.title();
   if (!title.includes(label)) fail(`${cityId}: document title "${title}" missing "${label}"`);
+  // Regression: shared cards must not leak Phoenix-only copy onto another city's
+  // page (the flagged WinterCard "central Phoenix" footnote, MethodologyCard's
+  // "PHXthr 9", any "Sky Harbor" splice note). Phoenix itself may say all three.
+  if (cityId !== "phx") {
+    const leak = await page.evaluate(() => {
+      const t = document.body.textContent || "";
+      return ["central Phoenix", "PHXthr", "Sky Harbor"].find((s) => t.includes(s)) || "";
+    });
+    if (leak) fail(`${cityId}: leaked Phoenix-specific copy "${leak}" onto another city's page`);
+  }
   await page.screenshot({ path: `${SHOTS}${cityId}.png`, fullPage: true });
 }
 
@@ -129,6 +139,17 @@ await checkCity("hou", "Houston");
 await checkCity("nola", "New Orleans");
 await checkCity("rdu", "Raleigh");
 await checkCity("dfw", "Dallas");
+
+// Card-fit: "Winter left first" is a frost-DISAPPEARANCE story. Reno still freezes
+// ~110 nights a year, so the card must self-omit there — it used to render with
+// numbers (last 5-frost winter = this year, 0% frost-free) that contradicted its
+// own headline. It still renders for the desert cities where frost really is gone.
+await page.goto(`${BASE}/?city=rno`, { waitUntil: "domcontentloaded", timeout: 30000 });
+await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
+await page.waitForFunction(() => document.querySelectorAll("h2, h3").length >= 3, { timeout: 40000 });
+if (await page.evaluate(() => (document.body.textContent || "").includes("Winter left first")))
+  fail("rno: 'Winter left first' (WinterCard) should self-omit where frost is still abundant");
+else console.log("✓ rno: frost-disappearance WinterCard correctly omitted");
 
 // Phase B: the first international city. No ACIS — it renders from its committed
 // GSOY series + facts (in °C), so it mounts fully offline like an asset-backed card.
