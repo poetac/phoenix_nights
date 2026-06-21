@@ -1,4 +1,5 @@
 import { US_MAP } from "./lib/usMap.js";
+import { WORLD_MAP } from "./lib/worldMap.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
 
 // Map a night-warming rate (°F/decade, ~0.8–2.2) to a 0..1 ramp position.
@@ -11,16 +12,20 @@ const clamp01 = (t) => Math.max(0, Math.min(1, t));
 // name reveals on hover/focus (the engine now spans the arid West and the humid
 // South, so the dots are spread across the country and always-on labels would
 // collide). Only the active product's cities get a dot. No runtime map deps.
-export default function CityMap({ onPick, ranked, cities }) {
+export default function CityMap({ onPick, ranked, cities, product }) {
+  // City Signals (worldwide) uses the world map once it's been generated; Desert
+  // Nights — and the fallback before generation — uses the US Albers map.
+  const useWorld = product?.id === "explorer" && WORLD_MAP?.cities;
+  const MAP = useWorld ? WORLD_MAP : US_MAP;
   const byId = new Map(cities.map((c) => [c.id, c]));
   const rate = new Map((ranked || []).map((r) => [r.city.id, r.nightWarming]));
-  const dots = Object.entries(US_MAP.cities)
+  const dots = Object.entries(MAP.cities)
     .map(([id, xy]) => ({ city: byId.get(id), xy }))
     .filter((d) => d.city);
 
   // Scale dot/label sizes to the viewBox so they render at a consistent on-screen
-  // size whatever the map's geographic extent (regional SW vs national).
-  const vbW = parseFloat(US_MAP.viewBox.split(" ")[2]) || 290;
+  // size whatever the map's geographic extent (regional SW vs national vs world).
+  const vbW = parseFloat(MAP.viewBox.split(" ")[2]) || 290;
   const k = vbW / 290;
   const radius = (nw) => (nw == null ? 4.6 : 3.6 + clamp01((nw - LO) / (HI - LO)) * 3.8) * k;
 
@@ -29,16 +34,29 @@ export default function CityMap({ onPick, ranked, cities }) {
       style={{ background: C.panel, border: `1px solid ${C.line}` }}>
       <svg
         data-testid="us-map"
-        viewBox={US_MAP.viewBox}
+        viewBox={MAP.viewBox}
         role="group"
-        aria-label="Map of the United States; dot size shows each city's overnight-low warming rate. Select a city."
+        aria-label={`Map of ${useWorld ? "the world" : "the United States"}; dot size shows each city's overnight-low warming rate. Select a city.`}
         style={{ display: "block", width: "100%", height: "auto" }}
       >
-        <title>US cities — bigger dot = faster-warming summer nights. Select one to open its page.</title>
-        {US_MAP.states.map((s) => (
-          <path key={s.id} d={s.d} fill={C.panel2} stroke={C.line} strokeWidth={0.6 * k}
-            strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-        ))}
+        <title>{`${useWorld ? "Cities worldwide" : "US cities"} — bigger dot = faster-warming nights. Select one to open its page.`}</title>
+        {useWorld ? (
+          <>
+            {MAP.graticule && (
+              <path d={MAP.graticule} fill="none" stroke={C.line} strokeWidth={0.5 * k}
+                strokeOpacity={0.35} vectorEffect="non-scaling-stroke" />
+            )}
+            {MAP.countries.map((d, i) => (
+              <path key={i} d={d} fill={C.panel2} stroke={C.line} strokeWidth={0.6 * k}
+                strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+            ))}
+          </>
+        ) : (
+          US_MAP.states.map((s) => (
+            <path key={s.id} d={s.d} fill={C.panel2} stroke={C.line} strokeWidth={0.6 * k}
+              strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+          ))
+        )}
         {dots.map(({ city, xy: [x, y] }) => {
           const flagship = !!city.featured;
           const nw = rate.get(city.id) ?? null;
@@ -81,7 +99,7 @@ export default function CityMap({ onPick, ranked, cities }) {
         })}
       </svg>
       <figcaption className="px-4 py-2 text-xs" style={{ color: C.muted, fontFamily: BODY }}>
-        Each dot is a US city; <strong style={{ color: C.text }}>bigger dots warm faster at night</strong>
+        Each dot is a city; <strong style={{ color: C.text }}>bigger dots warm faster at night</strong>
         {" "}(overnight-low trend since 1970). <span style={{ color: C.gold }}>★ gold</span> is the Phoenix
         flagship. Hover or focus a dot for its name; select it — or a row below — for the full record.
       </figcaption>

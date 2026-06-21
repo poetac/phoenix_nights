@@ -51,7 +51,7 @@ export default function CityExplore({ product, cities, onPick }) {
           {product.intro}
         </p>
 
-        <CityMap onPick={onPick} ranked={rows} cities={cities} />
+        <CityMap onPick={onPick} ranked={rows} cities={cities} product={product} />
 
         <ol className="mt-4 space-y-3" aria-label="Cities ranked by overnight-low warming">
           {rows.map((r, i) => (
