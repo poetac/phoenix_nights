@@ -132,8 +132,13 @@ def compute_raw(city):
             if day > 0 else "Overnight lows rise while afternoon highs barely move",
             value=round(night / day, 1) if day > 0 else None, unit="× ratio",
             magnitude=(night - day), significant=night_sig)
+        # Day-night gap = DTR (high - low); its trend is (day - night). Nights
+        # leading (night > day, every US city) shrinks the gap; days leading
+        # (Sydney's harbour-moderated nights) widens it. Sign-aware so the label is
+        # never false — the project's reproduce-or-reject bar applies to prose too.
         facts["diurnal_compression"] = dict(
-            label=f"The day–night temperature gap is shrinking {abs(_d(night-day, metric)):.2f}{_deg(metric)} per decade",
+            label=f"The day–night temperature gap is {'widening' if day > night else 'shrinking'} "
+                  f"{abs(_d(night-day, metric)):.2f}{_deg(metric)} per decade",
             value=round(_d(night - day, metric), 2), unit=f"{_deg(metric)}/decade", magnitude=abs(night - day),
             significant=night_sig)
     if cold is not None:

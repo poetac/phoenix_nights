@@ -781,6 +781,15 @@ export const SYDNEY = {
   recordStart: "1970-01-01",
   stationLabel: "Sydney Observatory Hill (GHCN-Daily ASN00066062, via NCEI GSOY)",
   urbanShort: "Observatory Hill",
+  // Principle 3 (state the caveat in the card): Sydney is the maritime exception.
+  // At harbour-side Observatory Hill the sea moderates the overnight lows, so here
+  // the days warm faster than the nights and the day–night gap *widens* — the
+  // inverse of the inland and desert cities. Shown because the record says so.
+  caveat:
+    "At harbour-side Observatory Hill the sea moderates the overnight lows, so here " +
+    "the days warm faster than the nights and the day–night gap widens — the inverse " +
+    "of the inland and desert cities, where the lows lead. Sydney is on this page " +
+    "because the engine reports what the record says, not in spite of it.",
   baseline: { start: 1970, end: 1979, label: "1970s" },
   windows: [{ y: 1970, label: "Since 1970" }],
   latLon: [-33.8607, 151.205],
