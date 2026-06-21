@@ -1,0 +1,441 @@
+{
+ "city": "syd",
+ "name": "Sydney (GHCN ASN00066062, Observatory Hill)",
+ "units": "F",
+ "generated": "2026-06-21",
+ "throughYear": 2019,
+ "years": [
+  {
+   "year": 1948,
+   "low": 55.5,
+   "high": 70.3,
+   "coldLow": 38.0
+  },
+  {
+   "year": 1949,
+   "low": 56.2,
+   "high": 70.4,
+   "coldLow": 39.0
+  },
+  {
+   "year": 1950,
+   "low": 57.7,
+   "high": 70.5,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1951,
+   "low": 56.5,
+   "high": 71.2,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1952,
+   "low": 56.7,
+   "high": 70.7,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1953,
+   "low": 56.4,
+   "high": 71.1,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1954,
+   "low": 56.9,
+   "high": 71.0,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1955,
+   "low": 57.0,
+   "high": 71.2,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1956,
+   "low": 56.6,
+   "high": 70.8,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1957,
+   "low": 56.4,
+   "high": 71.8,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1958,
+   "low": 57.9,
+   "high": 72.0,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1959,
+   "low": 57.6,
+   "high": 71.3,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1960,
+   "low": 56.4,
+   "high": 70.9,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1961,
+   "low": 56.9,
+   "high": 71.2,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1962,
+   "low": 56.7,
+   "high": 71.4,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1963,
+   "low": 57.2,
+   "high": 71.0,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1964,
+   "low": 57.1,
+   "high": 72.2,
+   "coldLow": 39.0
+  },
+  {
+   "year": 1965,
+   "low": 57.0,
+   "high": 71.7,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1966,
+   "low": 56.4,
+   "high": 70.9,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1967,
+   "low": 57.3,
+   "high": 71.1,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1968,
+   "low": 57.4,
+   "high": 72.6,
+   "coldLow": 37.0
+  },
+  {
+   "year": 1969,
+   "low": 57.3,
+   "high": 71.8,
+   "coldLow": 42.0
+  },
+  {
+   "year": 1970,
+   "low": 56.4,
+   "high": 71.5,
+   "coldLow": 37.0
+  },
+  {
+   "year": 1971,
+   "low": 57.0,
+   "high": 71.4,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1972,
+   "low": 57.5,
+   "high": 71.3,
+   "coldLow": 42.0
+  },
+  {
+   "year": 1973,
+   "low": 58.9,
+   "high": 72.8,
+   "coldLow": 43.0
+  },
+  {
+   "year": 1974,
+   "low": 57.3,
+   "high": 71.0,
+   "coldLow": 38.0
+  },
+  {
+   "year": 1975,
+   "low": 58.0,
+   "high": 72.4,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1976,
+   "low": 57.4,
+   "high": 71.8,
+   "coldLow": 42.0
+  },
+  {
+   "year": 1977,
+   "low": 57.7,
+   "high": 72.8,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1978,
+   "low": 57.6,
+   "high": 71.2,
+   "coldLow": 38.0
+  },
+  {
+   "year": 1979,
+   "low": 58.2,
+   "high": 72.2,
+   "coldLow": 42.0
+  },
+  {
+   "year": 1980,
+   "low": 58.5,
+   "high": 73.5,
+   "coldLow": 42.0
+  },
+  {
+   "year": 1981,
+   "low": 58.5,
+   "high": 71.8,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1982,
+   "low": 57.5,
+   "high": 71.9,
+   "coldLow": 39.0
+  },
+  {
+   "year": 1983,
+   "low": 58.3,
+   "high": 71.9,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1984,
+   "low": 57.0,
+   "high": 71.5,
+   "coldLow": 42.0
+  },
+  {
+   "year": 1985,
+   "low": 57.7,
+   "high": 71.6,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1986,
+   "low": 57.4,
+   "high": 71.9,
+   "coldLow": 38.0
+  },
+  {
+   "year": 1987,
+   "low": 58.0,
+   "high": 72.0,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1988,
+   "low": 59.1,
+   "high": 73.1,
+   "coldLow": 45.0
+  },
+  {
+   "year": 1989,
+   "low": 58.4,
+   "high": 71.7,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1990,
+   "low": 58.2,
+   "high": 72.1,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1991,
+   "low": 58.5,
+   "high": 73.0,
+   "coldLow": 42.0
+  },
+  {
+   "year": 1992,
+   "low": 57.0,
+   "high": 70.7,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1993,
+   "low": 58.0,
+   "high": 72.0,
+   "coldLow": 43.0
+  },
+  {
+   "year": 1994,
+   "low": 57.3,
+   "high": 72.6,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1995,
+   "low": 57.2,
+   "high": 71.3,
+   "coldLow": 40.0
+  },
+  {
+   "year": 1996,
+   "low": 57.3,
+   "high": null,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1997,
+   "low": 57.9,
+   "high": 72.3,
+   "coldLow": 42.0
+  },
+  {
+   "year": 1998,
+   "low": 59.0,
+   "high": 72.8,
+   "coldLow": 41.0
+  },
+  {
+   "year": 1999,
+   "low": 58.2,
+   "high": 71.8,
+   "coldLow": 43.0
+  },
+  {
+   "year": 2000,
+   "low": 58.2,
+   "high": 72.9,
+   "coldLow": 42.0
+  },
+  {
+   "year": 2001,
+   "low": 58.5,
+   "high": 73.6,
+   "coldLow": 42.0
+  },
+  {
+   "year": 2002,
+   "low": 58.3,
+   "high": 73.5,
+   "coldLow": 40.0
+  },
+  {
+   "year": 2003,
+   "low": 58.2,
+   "high": 72.8,
+   "coldLow": 41.0
+  },
+  {
+   "year": 2004,
+   "low": 58.4,
+   "high": 74.1,
+   "coldLow": 43.0
+  },
+  {
+   "year": 2005,
+   "low": 58.6,
+   "high": 74.1,
+   "coldLow": 41.0
+  },
+  {
+   "year": 2006,
+   "low": 58.4,
+   "high": 73.5,
+   "coldLow": 42.0
+  },
+  {
+   "year": 2007,
+   "low": 59.4,
+   "high": 72.8,
+   "coldLow": 39.0
+  },
+  {
+   "year": 2008,
+   "low": 57.7,
+   "high": 71.8,
+   "coldLow": 42.0
+  },
+  {
+   "year": 2009,
+   "low": 59.3,
+   "high": 73.3,
+   "coldLow": 43.0
+  },
+  {
+   "year": 2010,
+   "low": 59.1,
+   "high": 72.7,
+   "coldLow": 40.0
+  },
+  {
+   "year": 2011,
+   "low": 58.6,
+   "high": 72.7,
+   "coldLow": 42.0
+  },
+  {
+   "year": 2012,
+   "low": 57.9,
+   "high": 72.8,
+   "coldLow": 42.0
+  },
+  {
+   "year": 2013,
+   "low": 59.1,
+   "high": 74.6,
+   "coldLow": 45.0
+  },
+  {
+   "year": 2014,
+   "low": 59.3,
+   "high": 74.2,
+   "coldLow": 42.0
+  },
+  {
+   "year": 2015,
+   "low": 58.9,
+   "high": 73.7,
+   "coldLow": 41.0
+  },
+  {
+   "year": 2016,
+   "low": 59.8,
+   "high": 74.9,
+   "coldLow": 42.0
+  },
+  {
+   "year": 2017,
+   "low": 59.4,
+   "high": 74.7,
+   "coldLow": 42.0
+  },
+  {
+   "year": 2018,
+   "low": 58.9,
+   "high": 74.1,
+   "coldLow": 40.0
+  },
+  {
+   "year": 2019,
+   "low": 59.1,
+   "high": 75.3,
+   "coldLow": 43.0
+  }
+ ]
+}

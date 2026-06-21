@@ -1,12 +1,12 @@
 {
  "city": "hou",
  "name": "Houston (ThreadEx IAHthr 9)",
- "generated": "2026-06-20",
+ "generated": "2026-06-21",
  "facts": [
   {
    "key": "urban_excess",
-   "score": 0.936,
-   "crossCityPercentile": 0.79,
+   "score": 0.94,
+   "crossCityPercentile": 0.8,
    "label": "City nights are warming +1.07\u00b0F/decade faster than the nearby rural countryside",
    "value": 1.07,
    "unit": "\u00b0F/decade",
@@ -27,8 +27,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.662,
-   "crossCityPercentile": 0.5,
+   "score": 0.672,
+   "crossCityPercentile": 0.53,
    "label": "Summer nights are warming +0.99\u00b0F per decade",
    "value": 0.99,
    "unit": "\u00b0F/decade",
@@ -38,8 +38,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.574,
-   "crossCityPercentile": 0.21,
+   "score": 0.59,
+   "crossCityPercentile": 0.27,
    "label": "Even the coldest night of the year is warming +0.98\u00b0F per decade",
    "value": 0.98,
    "unit": "\u00b0F/decade",
@@ -48,8 +48,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.482,
-   "crossCityPercentile": 0.43,
+   "score": 0.493,
+   "crossCityPercentile": 0.47,
    "label": "Overnight lows are rising 1.6\u00d7 as fast as afternoon highs",
    "value": 1.6,
    "unit": "\u00d7 ratio",
@@ -58,8 +58,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.482,
-   "crossCityPercentile": 0.43,
+   "score": 0.493,
+   "crossCityPercentile": 0.47,
    "label": "The day\u2013night temperature gap is shrinking 0.37\u00b0F per decade",
    "value": 0.37,
    "unit": "\u00b0F/decade",

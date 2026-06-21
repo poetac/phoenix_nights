@@ -1,12 +1,12 @@
 {
  "city": "dfw",
  "name": "Dallas (ThreadEx DFWthr 9)",
- "generated": "2026-06-20",
+ "generated": "2026-06-21",
  "facts": [
   {
    "key": "urban_excess",
-   "score": 0.957,
-   "crossCityPercentile": 0.86,
+   "score": 0.96,
+   "crossCityPercentile": 0.87,
    "label": "City nights are warming +1.10\u00b0F/decade faster than the nearby rural countryside",
    "value": 1.1,
    "unit": "\u00b0F/decade",
@@ -27,8 +27,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.47,
-   "crossCityPercentile": 0.07,
+   "score": 0.489,
+   "crossCityPercentile": 0.13,
    "label": "Summer nights are warming +0.81\u00b0F per decade",
    "value": 0.81,
    "unit": "\u00b0F/decade",
@@ -49,8 +49,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.361,
-   "crossCityPercentile": 0.14,
+   "score": 0.378,
+   "crossCityPercentile": 0.2,
    "label": "Even the coldest night of the year is warming +0.87\u00b0F per decade",
    "value": 0.87,
    "unit": "\u00b0F/decade",
@@ -59,8 +59,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.35,
-   "crossCityPercentile": 0.21,
+   "score": 0.366,
+   "crossCityPercentile": 0.27,
    "label": "Overnight lows are rising 1.4\u00d7 as fast as afternoon highs",
    "value": 1.4,
    "unit": "\u00d7 ratio",
@@ -69,8 +69,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.35,
-   "crossCityPercentile": 0.21,
+   "score": 0.366,
+   "crossCityPercentile": 0.27,
    "label": "The day\u2013night temperature gap is shrinking 0.25\u00b0F per decade",
    "value": 0.25,
    "unit": "\u00b0F/decade",
