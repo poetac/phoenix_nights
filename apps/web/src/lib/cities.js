@@ -764,6 +764,47 @@ const DALLAS = {
   // ERCOT is the whole Texas interconnect, not a metro utility, so it omits.
 };
 
+// First international city (Worldwide Phase B). ACIS is US-only, so Sydney is
+// `source: "ghcn"` — it loads a precomputed yearly series (NCEI GSOY, built by
+// analysis/build_series.py) instead of querying ACIS live, and renders in metric
+// (`units: "metric"`). GSOY is annual, so the yearly-trend cards light up (trend,
+// extrapolation, day-night gap, the facts list in °C) and the daily/hourly cards
+// (streaks, heat-season, diurnal, grid) carry no asset and self-hide. It appears in
+// the city switcher / deep-link; the US explore map + ranked list are keyed off
+// US-only data, so Sydney doesn't pollute them.
+export const SYDNEY = {
+  id: "syd",
+  name: "Sydney, AU",
+  shortName: "Sydney",
+  source: "ghcn",
+  units: "metric",
+  recordStart: "1970-01-01",
+  stationLabel: "Sydney Observatory Hill (GHCN-Daily ASN00066062, via NCEI GSOY)",
+  urbanShort: "Observatory Hill",
+  baseline: { start: 1970, end: 1979, label: "1970s" },
+  windows: [{ y: 1970, label: "Since 1970" }],
+  latLon: [-33.8607, 151.205],
+  rural: {
+    sid: "ASN00063005",
+    name: "Bathurst Agricultural Station",
+    short: "Bathurst",
+    firstYear: 1970,
+    distance: "~160 km west",
+    kind: "rural tablelands",
+    elevationNote:
+      "Bathurst sits ~670 m higher than Observatory Hill, so part of the absolute night-low gap is elevation — the honest signal is the gap's growth, not its size.",
+  },
+  citations: [
+    { label: "NCEI Global Summary of the Year (GSOY) — GHCN-Daily station ASN00066062",
+      url: "https://www.ncei.noaa.gov/access/search/data-search/global-summary-of-the-year",
+      note: "The annual overnight-low / daytime-high series this page reproduces (rendered in °C)." },
+    { label: "Bureau of Meteorology — Sydney (Observatory Hill) climate data",
+      url: "http://www.bom.gov.au/climate/data/",
+      note: "Australia's official record for the station." },
+  ],
+  repoUrl: "https://github.com/poetac/phoenix_nights",
+};
+
 // Climate grouping for the explore landing: the same overnight-warming fingerprint
 // shows up across both biomes the engine spans. Humid cities are the South/Gulf
 // additions; everything else is the arid/interior West. Update HUMID when adding.
@@ -783,11 +824,15 @@ export const climateOf = (id) =>
 const ASSET_FILE = {
   diurnal: "diurnal", heatSeason: "heat-season", heatDeaths: "heat-deaths",
   streaks: "streaks", grid: "grid", normals: "normals", cddSplit: "cdd-split",
+  series: "series",
 };
 const BASE_ASSETS = ["heatSeason", "streaks", "normals", "cddSplit"];
 function withAssets(city, optIn = []) {
   const out = { ...city };
-  for (const a of [...BASE_ASSETS, ...optIn]) out[`${a}Asset`] = `data/${city.id}-${ASSET_FILE[a]}.json`;
+  // The base four are ACIS-derived (daily reduces); an international (source:"ghcn")
+  // city has none of them — it carries only its precomputed GSOY `series` (+ facts).
+  const base = city.source === "ghcn" ? [] : BASE_ASSETS;
+  for (const a of [...base, ...optIn]) out[`${a}Asset`] = `data/${city.id}-${ASSET_FILE[a]}.json`;
   return out;
 }
 
@@ -806,4 +851,5 @@ export const CITIES = [
   withAssets(NEWORLEANS, ["diurnal"]),
   withAssets(RALEIGH, ["diurnal"]),
   withAssets(DALLAS, ["diurnal"]),
+  withAssets(SYDNEY, ["series"]),  // first international city (GHCN/GSOY, metric)
 ];
