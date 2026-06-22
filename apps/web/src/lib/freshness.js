@@ -16,6 +16,7 @@ export function assetThroughYear(asset) {
 const NAMES = {
   diurnal: "hourly curves", heatSeason: "100°F season", streaks: "night streaks",
   grid: "grid demand", cddSplit: "cooling split", heatDeaths: "heat deaths",
+  series: "yearly series",
 };
 
 // Freshness of the *committed* (precomputed) assets. The live ACIS cards are
