@@ -1,0 +1,31 @@
+# Keeps the two supply-chain surfaces current with review, and surfaces upstream
+# security advisories (the networked `npm audit` this repo can't run offline).
+#   - github-actions: opens PRs to bump (and, once pinned, re-pin) the actions used
+#     in the workflows — the path to moving floating @v4 tags onto commit SHAs.
+#   - npm: bumps the apps/web front-end dependencies; security updates are opened
+#     automatically even outside the weekly window.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    groups:
+      # batch routine dev/runtime bumps into one PR; security updates still open singly
+      front-end:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
