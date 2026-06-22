@@ -79,7 +79,7 @@ def main():
         "generated": datetime.date.today().isoformat(),
         "throughYear": rows[-1]["year"] if rows else None,
         "years": rows,
-    }, indent=1))
+    }, indent=1, allow_nan=False))
 
     print(f"wrote {OUT} ({len(rows)} years)")
 

@@ -72,7 +72,7 @@ def main():
         "metric": "annual mean overnight low, departure from the 1970s (°F)",
         "source": "NOAA/NWS ACIS yearly TMIN mean (maxmissing 36)",
         "cities": cities,
-    }, indent=1))
+    }, indent=1, allow_nan=False))
     print(f"wrote {DATA_DIR / 'compare-lows.json'} ({len(cities)} cities)")
 
 

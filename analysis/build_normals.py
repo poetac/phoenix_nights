@@ -91,7 +91,7 @@ def main():
         "source": "NOAA/NWS ACIS daily mint/maxt",
         "generated": datetime.date.today().isoformat(),
         "byDate": by_date,
-    }, indent=1))
+    }, indent=1, allow_nan=False))
 
     print(f"wrote {OUT} ({len(by_date)} calendar days)")
     for k in ("01-15", "04-15", "07-15", "10-15"):

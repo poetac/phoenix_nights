@@ -110,7 +110,7 @@ def main():
         "generated": datetime.date.today().isoformat(),
         "throughYear": max((int(k) for k in years), default=None),
         "years": years,
-    }, indent=1))
+    }, indent=1, allow_nan=False))
     print(f"wrote {OUT} ({len(years)} years)")
 
 

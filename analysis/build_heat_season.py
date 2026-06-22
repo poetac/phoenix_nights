@@ -86,7 +86,7 @@ def main():
         "generated": datetime.date.today().isoformat(),
         "throughYear": years[-1]["year"] if years else None,
         "years": years,
-    }, indent=1))
+    }, indent=1, allow_nan=False))
 
     early = [r for r in years if 1970 <= r["year"] <= 1979]
     late = [r for r in years if r["year"] > LAST_COMPLETE_YEAR - 10]
