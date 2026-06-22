@@ -98,19 +98,31 @@ def main():
     years = {}
     for date, lo, hi in fetch_daily(city):
         y = int(date[:4])
-        d = years.setdefault(y, {"lo": [], "hi": [], "miss": 0})
-        if lo in ("M", None) or hi in ("M", None):
-            d["miss"] += 1
-            d["lo"].append(None)
-            d["hi"].append(None)
+        d = years.setdefault(y, {"lo": [], "hi": [], "missLo": 0, "missHi": 0})
+        # Track missingness PER element: a missing daily HIGH must not discard an
+        # observed overnight LOW. The low-based metrics — streak80/90, the warm-night
+        # season, frost/cool counts — depend on every valid mint, and verify_v0 checks
+        # them mint-only, so coupling the two (the old behaviour) could drop an observed
+        # low and even push a complete-low year past the missing-day cutoff. One entry
+        # per calendar day is still appended to each list (None when that element is
+        # missing), so the 1-based index stays the day-of-year.
+        if lo in ("M", "T", None):
+            d["lo"].append(None); d["missLo"] += 1
         else:
             d["lo"].append(float(lo))
+        if hi in ("M", "T", None):
+            d["hi"].append(None); d["missHi"] += 1
+        else:
             d["hi"].append(float(hi))
 
     rows = []
     for y in sorted(years):
         d = years[y]
-        if d["miss"] > MAX_MISSING_DAYS:
+        # Qualify a year on its LOW record (what the warm-night metrics need, and what
+        # verify_v0 mirrors). streak110 is the only high-based output; a year with gappy
+        # highs just yields a conservative run, and its only consumer is the all-time
+        # record, set in recent complete years.
+        if d["missLo"] > MAX_MISSING_DAYS:
             continue
         first80, last80, count80 = season_span(d["lo"], lambda v: v >= 80)
         firstSus, lastSus = sustained_span(d["lo"], lambda v: v >= 80)
@@ -132,9 +144,10 @@ def main():
     OUT.write_text(json.dumps({
         "station": city["label"],
         "source": "NOAA/NWS ACIS daily mint/maxt",
-        "note": ("streaks within calendar years; years missing >36 days excluded. "
-                 "first80/last80 are day-of-year of the first/last single 80F+ night; "
-                 "firstSus/lastSus use a 5-of-7-night rule (outlier-robust season)."),
+        "note": ("streaks within calendar years; years missing >36 daily lows excluded "
+                 "(low and high missingness tracked separately, so a missing high never "
+                 "discards an observed low). first80/last80 are day-of-year of the first/"
+                 "last single 80F+ night; firstSus/lastSus use a 5-of-7-night rule."),
         "generated": datetime.date.today().isoformat(),
         "throughYear": rows[-1]["year"] if rows else None,
         "years": rows,
