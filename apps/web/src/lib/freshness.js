@@ -7,7 +7,12 @@ export function assetThroughYear(asset) {
   if (!asset) return null;
   if (typeof asset.throughYear === "number") return asset.throughYear;
   if (Array.isArray(asset.years) && asset.years.length) return Math.max(...asset.years.map((r) => r.year));
-  if (asset.years && typeof asset.years === "object") return Math.max(...Object.keys(asset.years).map(Number));
+  if (asset.years && typeof asset.years === "object") {
+    // Guard the empty container: Math.max(...[]) is -Infinity, which downstream reads
+    // as "behind the target year" and would raise a false staleness banner.
+    const ys = Object.keys(asset.years).map(Number).filter(Number.isFinite);
+    if (ys.length) return Math.max(...ys);
+  }
   if (Array.isArray(asset.series) && asset.series.length) return Math.max(...asset.series.map((r) => r.year));
   if (Array.isArray(asset.yearsCovered)) return asset.yearsCovered[1];
   return null; // e.g. the 1970s normals baseline — not a moving time series
