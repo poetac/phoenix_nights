@@ -784,6 +784,20 @@ def main():
         ("diurnal range (TMAX-TMIN) shrinking since 1948", dtr_slope, dtr_slope < 0),
     ]
 
+    # GoalpostsCard claim: the rolling 30-year "normal" low has been redefined upward —
+    # each NOAA-style vintage window's mean low sits above the last. Recompute the card's
+    # four windows (GoalpostsCard.jsx VINTAGES) from the GSOY annual lows already fetched
+    # (no extra request) and assert the newest "normal" (1991-2020) tops the oldest
+    # (1961-1990). Directional, so it encodes the claim without a brittle value match.
+    def _vintage_low(y0, y1):
+        v = [d["tmin"] for y, d in years.items() if y0 <= y <= y1]
+        return sum(v) / len(v) if len(v) >= 25 else None
+    gp_old, gp_new = _vintage_low(1961, 1990), _vintage_low(1991, 2020)
+    if gp_old is not None and gp_new is not None:
+        checks.append((f"GoalpostsCard: rolling 30-yr normal low redefined upward "
+                       f"(1961-1990 {gp_old:.1f}F -> 1991-2020 {gp_new:.1f}F)",
+                       gp_new - gp_old, gp_new > gp_old))
+
     # Warm-night season: re-derived from ACIS daily lows (GSOY has no per-day).
     spans = warm_night_spans(1970)
     span_70s = sum(s for y, s in spans.items() if 1970 <= y <= 1979)

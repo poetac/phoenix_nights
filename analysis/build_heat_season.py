@@ -75,6 +75,15 @@ def main():
             "firstRun": d["firstRun"], "lastRun": d["lastRun"],
         })
 
+    if len(years) < 30:
+        # The 100°F-season card needs >=30 qualifying years (data.js fetchHeatSeason);
+        # below that the season is too sparse to plot, so don't ship an asset the front
+        # end only hides — e.g. New Orleans (~14 non-contiguous 100°F years). The next
+        # rebuild re-derives this from ACIS, so nothing is lost if a city later crosses
+        # the threshold.
+        print(f"{city['prefix']}: only {len(years)} years with a 100F day (<30) — skipping asset (card omits it)")
+        return
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({
         "station": city["label"],
