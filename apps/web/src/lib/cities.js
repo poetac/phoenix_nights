@@ -73,6 +73,7 @@ export const PHOENIX = {
   // asset paths (diurnal + grid + heat-deaths + the base four) are derived from
   // `id` by withAssets() at the CITIES array below.
   // decennial census, Maricopa County (US Census Bureau)
+  county: "Maricopa County",
   metroPopulation: {
     1950: 331770, 1960: 663510, 1970: 971228, 1980: 1509175,
     1990: 2122101, 2000: 3072149, 2010: 3817117, 2020: 4420568,
@@ -145,6 +146,7 @@ export const TUCSON = {
   // comparable to Maricopa's. The fetcher returns null when this is absent,
   // so the card simply omits for Tucson (reproduce-or-reject => reject).
   // decennial census, Pima County (US Census Bureau)
+  county: "Pima County",
   metroPopulation: {
     1950: 141216, 1960: 265660, 1970: 351667, 1980: 531443,
     1990: 666880, 2000: 843746, 2010: 980263, 2020: 1043433,
@@ -211,6 +213,7 @@ export const LASVEGAS = {
   // the primary-source bar in analysis/HEAT_DEATHS.md. Omitting it leaves the
   // card hidden for Las Vegas until that verification is done (a clean follow-up).
   // decennial census, Clark County, NV (US Census Bureau)
+  county: "Clark County",
   metroPopulation: {
     1950: 48289, 1960: 127016, 1970: 273288, 1980: 463087,
     1990: 741459, 2000: 1375765, 2010: 1951269, 2020: 2265461,
@@ -271,6 +274,7 @@ export const ELPASO = {
   // heatDeathsAsset deferred: not yet transcribed/verified to the HEAT_DEATHS.md
   // primary-source bar; the card cleanly omits until then.
   // decennial census, El Paso County, TX (US Census Bureau)
+  county: "El Paso County",
   metroPopulation: {
     1950: 194968, 1960: 314070, 1970: 359291, 1980: 479899,
     1990: 591610, 2000: 679622, 2010: 800647, 2020: 865657,

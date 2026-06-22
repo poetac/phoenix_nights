@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import {
   ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, axisTick, useUnits } from "../ui.jsx";
+import { C, Card, CardHead, axisTick, useUnits } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
 import { convTempDelta, tempUnit } from "../lib/units.js";
 
@@ -36,9 +36,9 @@ export default function GrowthCard({ city, cityRows, ruralRows }) {
   return (
     <Card>
       <CardHead kicker="Dose and response" title="The gap grew with the city"
-        sub={`Each point is a decade: the county's census population against how much hotter ${city.shortName} nights ran than the open desert that decade. More city, hotter nights.`} />
+        sub={`Each point is a decade: ${city.county}'s census population against how much hotter ${city.shortName} nights ran than its ${city.rural.kind || "open desert"} reference that decade. More city, hotter nights.`} />
       <div role="img" style={{ width: "100%", height: 280 }}
-        aria-label="Chart of the county's decade-by-decade population against how much hotter Phoenix nights ran than the open desert; both rise together.">
+        aria-label={`Chart of ${city.county}'s decade-by-decade population against how much hotter ${city.shortName} nights ran than its ${city.rural.kind || "open desert"} reference; both rise together.`}>
 
         <ResponsiveContainer>
           <ScatterChart margin={{ top: 18, right: 24, left: -8, bottom: 0 }}>
@@ -66,13 +66,13 @@ export default function GrowthCard({ city, cityRows, ruralRows }) {
         </ResponsiveContainer>
       </div>
       <p className="mt-4 text-base leading-relaxed">
-        From the {model.first.decade} to the 1990s, the night gap climbed almost in lockstep with population — roughly{" "}
-        <span style={{ color: C.gold, fontFamily: DISPLAY }}>{units === "metric" ? convTempDelta(2, units).toFixed(1) : "2"}{tempUnit(units)} of hotter nights per million people</span>. After
-        2000 the curve bends: not because the heat island stopped, but because the "rural" yardstick itself started
-        urbanizing, and a core that is already wall-to-wall pavement has less room to get worse.
+        Decade by decade, {city.shortName}'s night gap over the {city.rural.short} reference tracks{" "}
+        {city.county}'s population — more city, hotter nights. It reads as a dose-response, not a controlled
+        trial: the same growth that built the city has also crept into the "rural" yardstick over time, so take
+        the climb as indicative of the heat island's pull rather than an exact coefficient.
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
-        Population: US Census Bureau decennial counts for Maricopa County. Night gap: decade-average difference in
+        Population: US Census Bureau decennial counts for {city.county}. Night gap: decade-average difference in
         yearly mean lows, {city.urbanShort} minus {city.rural.short}, over common complete years.
       </p>
     </Card>
