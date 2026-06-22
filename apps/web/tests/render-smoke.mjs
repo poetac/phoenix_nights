@@ -166,6 +166,20 @@ try {
   else console.log("✓ syd: distinctive-signal caveat + 'gap is widening' fact present");
 } catch (e) { fail("syd: distinctive-signal caveat missing: " + e.message.split("\n")[0]); }
 
+// Phase B: the second international city (Europe / Northern Hemisphere). Like Sydney it
+// mounts offline from its committed GSOY series + facts (°C) and has no rural pair. Its
+// most distinctive signal is the floor lifting — the coldest night of the year warming
+// fastest — which for a GHCN city carries no card, so the caveat must surface it.
+await checkCity("dbt", "De Bilt");
+await page.goto(`${BASE}/?city=dbt`, { waitUntil: "domcontentloaded", timeout: 30000 });
+try {
+  await page.waitForFunction(() => (document.body.textContent || "").includes("What's distinctive"),
+    undefined, { timeout: 20000 });
+  const coldest = await page.evaluate(() => (document.body.textContent || "").includes("coldest night of the year"));
+  if (!coldest) fail("dbt: expected the distinctive caveat/fact to surface the coldest-night warming");
+  else console.log("✓ dbt: distinctive-signal caveat + coldest-night standout present");
+} catch (e) { fail("dbt: distinctive-signal caveat missing: " + e.message.split("\n")[0]); }
+
 // Phase 5: the honest-extrapolation card renders for a warming city, clearly labeled.
 await page.goto(`${BASE}/?city=phx`, { waitUntil: "domcontentloaded", timeout: 30000 });
 try {

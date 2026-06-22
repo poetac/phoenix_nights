@@ -201,7 +201,10 @@ zoom/region affordance once there are >~50 dots.
   uneven-coverage reality §4/§8 must map, and a reminder that each real city resolves
   its source station by verification first. **First city SHIPPED: Sydney, AU**
   (`source:"ghcn"`, GSOY station ASN00066062, rural control Bathurst Agricultural
-  ASN00063005, `units:"metric"`, live as of PRs #71/#72/#73). The backend is
+  ASN00063005, `units:"metric"`, live as of PRs #71/#72/#73). **Second city SHIPPED:
+  De Bilt, NL** (`source:"ghcn"`, GSOY station NLM00006260, no rural pair, `units:"metric"`)
+  — the Northern-Hemisphere maritime counterpart: days outpace nights like Sydney and the
+  day–night gap widens, with the coldest night of the year warming fastest (+0.79 °C/dec). The backend is
   source-aware — `cities.py` carries a `source`/`primary_sid` split, `build_facts` +
   `build_series.py` take a GSOY path (trends ranked in °F, labels rendered in °C),
   and `build_compare` skips non-ACIS cities so the US path is byte-identical. The
