@@ -41,8 +41,11 @@ def fetch_july(key, respondent, year):
             with urllib.request.urlopen(url, timeout=60) as r:
                 return json.load(r)["response"]["data"]
         except Exception:
+            # Re-raise WITHOUT the chained original exception (`from None`): an
+            # HTTPError retains the request URL in `.url`, which carries the api_key
+            # query param — keep it out of any CI traceback.
             if attempt == 2:
-                raise
+                raise RuntimeError(f"EIA request failed for {respondent} {year} after 3 attempts") from None
             time.sleep(3 * (attempt + 1))
 
 
