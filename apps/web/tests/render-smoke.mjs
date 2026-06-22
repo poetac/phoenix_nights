@@ -247,6 +247,24 @@ try {
   console.log("✓ Desert Nights: phx uses the curated body ('The verdict') — diverges from City Signals");
 } catch { fail("Desert Nights: curated body ('The verdict') missing on phx"); }
 
+// Desert Nights, a non-flagship city: its curated GridCard must name ITS utility,
+// not "metro Phoenix's APS + SRP", and no card may leak Phoenix's county/utility/
+// population copy (GrowthCard's "Maricopa County", "five million"). Tucson's grid
+// card renders from the committed tus-grid.json (no live data), so this is
+// deterministic; the leak guard also covers GrowthCard whether or not it mounts.
+await page.goto(`${BASE}/?product=desert&city=tus`, { waitUntil: "domcontentloaded", timeout: 30000 });
+await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
+try {
+  await page.waitForFunction(() => (document.body.textContent || "").includes("Tucson Electric Power"),
+    undefined, { timeout: 45000 });
+  const leak = await page.evaluate(() => {
+    const t = document.body.textContent || "";
+    return ["metro Phoenix", "Maricopa County", "AZPS", "five million"].find((s) => t.includes(s)) || "";
+  });
+  if (leak) fail(`desert tus: Phoenix-specific copy "${leak}" leaked onto Tucson's curated cards`);
+  else console.log("✓ Desert Nights: tus names its own utility (TEPC), no Phoenix grid/county copy");
+} catch (e) { fail("desert tus: GridCard didn't render Tucson's utility: " + e.message.split("\n")[0]); }
+
 if (pageErrors.length) fail("uncaught page errors: " + JSON.stringify([...new Set(pageErrors)].slice(0, 8)));
 
 await browser.close();
