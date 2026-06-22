@@ -46,6 +46,23 @@ export default function HotNightSeasonCard({ city, streaks }) {
   }, [streaks, city]);
 
   if (!model) return null;
+  // Card-fit + sign-safety, mirroring SeasonLengthCard: the thesis is the warm-night
+  // band lengthening at BOTH ends. Omit where it didn't actually lengthen, and phrase
+  // each end by the sign of its shift (today only LV/PHX/TUS/YUM render this, all
+  // strongly positive — this guards the city-agnostic engine as cities are added).
+  if (Math.round(model.lengthGain) < 1) return null;
+  const dayWord = (n) => `${n} day${n === 1 ? "" : "s"}`;
+  const fns = Math.round(model.firstShift), lns = Math.round(model.lastShift);
+  const firstClause = fns > 0
+    ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(fns)} earlier</span></>
+    : fns < 0
+      ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(-fns)} later</span></>
+      : <>has held about steady</>;
+  const lastClause = lns > 0
+    ? <>lingers <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(lns)} later</span></>
+    : lns < 0
+      ? <>pulls in <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(-lns)} earlier</span></>
+      : <>holds about steady</>;
 
   return (
     <Card>
@@ -83,15 +100,13 @@ export default function HotNightSeasonCard({ city, streaks }) {
         </ResponsiveContainer>
       </div>
       <p className="mt-4 text-base leading-relaxed">
-        Against the {city.baseline.label}, the first 80°F night now arrives{" "}
-        <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.firstShift)} days earlier</span>{" "}
-        and the last one lingers{" "}
-        <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.lastShift)} days later</span> —
+        Against the {city.baseline.label}, the first 80°F night {firstClause}{" "}
+        and the last one {lastClause} —
         a warm-night season{" "}
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.lengthGain)} days longer</span> on the
         calendar, holding {Math.round(model.countLate)} such nights a year now against {Math.round(model.countEarly)} then.
-        The relief window at both ends of summer is closing.
-        {model.susGain != null && <>
+        {fns > 0 && lns > 0 && <> The relief window at both ends of summer is closing.</>}
+        {model.susGain != null && model.susGain > 0 && <>
           {" "}On a stricter rule that ignores lone warm nights — at least five of any seven nights ≥ 80°F — the
           season still stretched about{" "}
           <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.susGain)} days</span>.
