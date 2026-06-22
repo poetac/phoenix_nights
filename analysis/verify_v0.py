@@ -30,6 +30,7 @@ card. The latest-complete-year cutoff is derived, never hardcoded.
 Stdlib only. Exit code 0 = all checks pass.
 """
 
+import ast
 import datetime
 import json
 import math
@@ -635,6 +636,28 @@ ASSET_SCHEMAS = {
 }
 
 
+def check_stdlib_imports():
+    """The analysis pipelines are stdlib-only by design — zero third-party supply-chain
+    surface (see README "Data freshness & integrity" and the security audit). Enforce it:
+    every import across analysis/*.py must resolve to the standard library
+    (sys.stdlib_module_names) or a local sibling module, else CI fails. Returns a list of
+    "file: offending,roots" strings (empty == clean)."""
+    here = pathlib.Path(__file__).resolve().parent
+    local = {p.stem for p in here.glob("*.py")}
+    offenders = []
+    for p in sorted(here.glob("*.py")):
+        roots = set()
+        for node in ast.walk(ast.parse(p.read_text())):
+            if isinstance(node, ast.Import):
+                roots |= {a.name.split(".")[0] for a in node.names}
+            elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
+                roots.add(node.module.split(".")[0])
+        bad = sorted(r for r in roots if r not in sys.stdlib_module_names and r not in local)
+        if bad:
+            offenders.append(f"{p.name}: {', '.join(bad)}")
+    return offenders
+
+
 def _first_nonfinite(node, path="$"):
     """JSON-path of the first non-finite number (NaN/Infinity), or None.
 
@@ -848,6 +871,13 @@ def main():
     # Shape-check every committed asset (structure, not just values).
     for name, ok_a, count, detail in validate_assets():
         checks.append((f"asset {name}: {detail}", float(count), ok_a))
+
+    # Supply-chain invariant: analysis/ is stdlib-only (zero third-party surface). Enforce
+    # it so a future non-stdlib import fails CI instead of silently widening the surface.
+    _imp_offenders = check_stdlib_imports()
+    checks.append(("analysis/ imports are stdlib-only"
+                   + ("" if not _imp_offenders else ": " + "; ".join(_imp_offenders)),
+                   float(len(_imp_offenders)), not _imp_offenders))
 
     ok = True
     for name, value, passed in checks:
