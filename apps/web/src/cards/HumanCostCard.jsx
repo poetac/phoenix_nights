@@ -75,7 +75,9 @@ export default function HumanCostCard({ city, heatDeaths, rows }) {
         {heatDeaths.demographics && (
           <li>The breakdown is from the {heatDeaths.demographics.source}; {heatDeaths.demographics.note}</li>
         )}
-        <li>Source: <a href={heatDeaths.url} style={{ color: C.day }} target="_blank" rel="noreferrer">{heatDeaths.source}</a>.</li>
+        <li>Source: {/^https?:\/\//i.test(heatDeaths.url || "")
+          ? <a href={heatDeaths.url} style={{ color: C.day }} target="_blank" rel="noreferrer">{heatDeaths.source}</a>
+          : heatDeaths.source}.</li>
       </ul>
     </Card>
   );
