@@ -94,8 +94,13 @@ export default function GlobalContextCard({ city, cityRows, ruralRows }) {
         Since {first}, {city.shortName}'s overnight lows have climbed at{" "}
         <span style={{ color: C.ember, fontFamily: DISPLAY }}>+{tCity.toFixed(1)}{tempUnit(units)} per decade</span> — about{" "}
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{cityX.toFixed(1)}×</span> the whole planet's average rate.
-        Even {city.rural.short}'s nights, at +{tDesert.toFixed(1)}{tempUnit(units)} per decade ({desertX.toFixed(1)}× global),
-        outpace it. The climate is warming everywhere; out here it warms faster, and inside the city faster still.
+        {desertX > 1 ? (
+          <>Even {city.rural.short}'s nights, at +{tDesert.toFixed(1)}{tempUnit(units)} per decade ({desertX.toFixed(1)}× global),
+            outpace it. The climate is warming everywhere; out here it warms faster, and inside the city faster still.</>
+        ) : (
+          <>{city.rural.short}'s nights climb more slowly — +{tDesert.toFixed(1)}{tempUnit(units)} per decade ({desertX.toFixed(1)}× global) —
+            so the city's overnight warming stands out against its own regional backdrop, not just the planet's.</>
+        )}
       </p>
       <ul className="text-xs mt-3 space-y-1 leading-relaxed" style={{ color: C.muted }}>
         <li>Read the benchmark bars as a <em>conservative floor</em>: the global and U.S. figures are annual averages across

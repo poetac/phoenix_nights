@@ -48,7 +48,7 @@ export default function SeasonsCard({ city, seasonal }) {
             <div className="text-sm" style={{ color: C.text }}>{s.label}</div>
             <div className="text-xs mb-2" style={{ color: C.muted }}>{s.months}</div>
             <div className="text-2xl" style={{ fontFamily: DISPLAY, color: C.ember, fontVariantNumeric: "tabular-nums" }}>
-              +{d(s.lowTrend).toFixed(1)}°
+              {s.lowTrend >= 0 ? "+" : ""}{d(s.lowTrend).toFixed(1)}°
             </div>
             <div className="text-xs" style={{ color: C.emberSoft }}>lows / decade</div>
             <div className="text-base mt-1" style={{ fontFamily: DISPLAY, color: C.day, fontVariantNumeric: "tabular-nums" }}>

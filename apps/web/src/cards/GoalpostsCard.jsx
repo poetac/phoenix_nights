@@ -27,6 +27,10 @@ export default function GoalpostsCard({ city, rows }) {
   const hi = Math.max(...vintages.map((v) => v.low)) + 0.4;
   const pos = (v) => ((v - lo) / (hi - lo)) * 100;
   const rise = vintages[vintages.length - 1].low - vintages[0].low;
+  // The card's whole thesis is the rolling "normal" drifting UPWARD. If a station's
+  // newest 30-yr normal isn't above its oldest surviving vintage (a cooling record),
+  // the "redefined upward by X" prose would be false — omit rather than invert it.
+  if (rise <= 0) return null;
 
   return (
     <Card>
