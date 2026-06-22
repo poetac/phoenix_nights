@@ -45,6 +45,9 @@ export default function ExtremesCard({ city, rows, windowStart }) {
   // differences (convTempDelta). Both identity in °F → US output unchanged.
   const t = (v) => convTemp(v, units);
   const dd = (v) => convTempDelta(v, units);
+  // "faster than the warmest night" must mean it: gate the comparative on the actual
+  // ranking, not just coldTrend>0 (a small-but-positive floor trend can lag the ceiling).
+  const coldFaster = model.coldTrend > model.warmTrend;
   const displayData = model.data.map((r) => ({
     year: r.year, warmLow: +t(r.warmLow).toFixed(1), coldLow: +t(r.coldLow).toFixed(1),
   }));
@@ -83,15 +86,19 @@ export default function ExtremesCard({ city, rows, windowStart }) {
         ) : null}{" "}
         {coldRising ? (
           <>Even the year's one moment of deepest relief is warming —{" "}
-            <span style={{ color: C.gold, fontFamily: DISPLAY }}>+{dd(model.coldTrend).toFixed(1)}{tempUnit(units)} per decade</span>,
-            faster than the warmest night ({model.warmTrend >= 0 ? "+" : ""}{dd(model.warmTrend).toFixed(1)}°/decade).
-            The hottest of the lows can't climb much past the daytime heat, but the floor has room to rise — and it is.</>
+            <span style={{ color: C.gold, fontFamily: DISPLAY }}>+{dd(model.coldTrend).toFixed(1)}{tempUnit(units)} per decade</span>
+            {coldFaster ? (
+              <>, faster than the warmest night ({model.warmTrend >= 0 ? "+" : ""}{dd(model.warmTrend).toFixed(1)}°/decade).
+                The hottest of the lows can't climb much past the daytime heat, but the floor has room to rise — and it is.</>
+            ) : (
+              <>, while the warmest night climbs {model.warmTrend >= 0 ? "+" : ""}{dd(model.warmTrend).toFixed(1)}°/decade.</>
+            )}</>
         ) : (
           <>The warmest night is climbing {model.warmTrend >= 0 ? "+" : ""}{dd(model.warmTrend).toFixed(1)}{tempUnit(units)} per decade.</>
         )}{" "}
         {city.shortName}'s warmest low on record was{" "}
         <span style={{ color: C.ember, fontFamily: DISPLAY }}>{t(model.recordWarm.warmLow).toFixed(0)}{tempUnit(units)}</span>, set in{" "}
-        {model.recordWarm.year} — a night that never cooled below body temperature.
+        {model.recordWarm.year}{model.recordWarm.warmLow >= 98 ? " — a night that never cooled below body temperature" : ""}.
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
         Each point is the maximum and minimum daily low (TMIN) for that calendar year, from the live station record.

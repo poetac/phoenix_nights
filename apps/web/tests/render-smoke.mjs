@@ -272,6 +272,27 @@ try {
   else console.log("✓ Desert Nights: tus names its own utility (TEPC), no Phoenix copy, no false 'twice as fast'");
 } catch (e) { fail("desert tus: GridCard didn't render Tucson's utility: " + e.message.split("\n")[0]); }
 
+// Correctness regression (card-prose red-team): a card must never print a false
+// direction/extreme claim for a city. Houston has zero 110°F days, so StreakCard's
+// Phoenix-specific "national news" aside (and a "0 straight days" absurdity) must not
+// appear; Dallas's 100°F first-to-last span didn't lengthen, so the "expanding season"
+// card omits — its "extra month of summer" line must be absent. These cards render from
+// committed *-streaks/*-heat-season.json (no live data), so the guard is deterministic.
+for (const [cid, banned] of [
+  ["hou", ["made national news", "straight days at 110°F+", "0 straight days"]],
+  ["dfw", ["extra month of summer"]],
+]) {
+  await page.goto(`${BASE}/?city=${cid}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+  await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
+  try {
+    await page.waitForFunction(() => document.querySelectorAll("h2, h3").length >= 3, { timeout: 40000 });
+    const txt = await page.evaluate(() => document.body.textContent || "");
+    const hit = banned.find((s) => txt.includes(s));
+    if (hit) fail(`${cid}: false card copy present — "${hit}"`);
+    else console.log(`✓ ${cid}: no false direction/extreme card copy`);
+  } catch (e) { fail(`${cid}: cards did not render: ` + e.message.split("\n")[0]); }
+}
+
 if (pageErrors.length) fail("uncaught page errors: " + JSON.stringify([...new Set(pageErrors)].slice(0, 8)));
 
 await browser.close();
