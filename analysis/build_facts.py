@@ -228,7 +228,7 @@ def main():
             "city": c["key"], "name": c["label"],
             "generated": datetime.date.today().isoformat(),
             "facts": out,
-        }, indent=1))
+        }, indent=1, allow_nan=False))
         top = out[0] if out else None
         print(f"{ck}: {len(out)} facts | TOP = {top['key'] if top else '-'} "
               f"(score {top['score'] if top else '-'}) :: {top['label'] if top else ''}")

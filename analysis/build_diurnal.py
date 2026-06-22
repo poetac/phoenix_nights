@@ -155,7 +155,7 @@ def main():
         "generated": datetime.date.today().isoformat(),
         "throughYear": LAST_YEAR,
         "decades": decades,
-    }, indent=1))
+    }, indent=1, allow_nan=False))
     print(f"\nwrote {OUT} with decades: {', '.join(decades)}")
 
 

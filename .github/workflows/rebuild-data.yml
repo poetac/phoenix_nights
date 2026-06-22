@@ -15,8 +15,8 @@ on:
     - cron: "0 9 5 * *"
 
 permissions:
-  contents: write   # push refreshed assets
-  actions: write    # dispatch the Pages deploy below
+  contents: write        # push the refresh branch
+  pull-requests: write   # open the PR (replaces the old push-to-main + deploy dispatch)
 
 jobs:
   rebuild:
@@ -75,24 +75,27 @@ jobs:
       - name: Verify statistics against the official record
         run: python3 analysis/verify_v0.py
 
-      - name: Commit refreshed assets if changed
-        id: commit
+      # Open a PR with the refreshed assets instead of pushing straight to the
+      # deployed branch. The verify step above is the automated gate (headline
+      # numbers + asset finiteness); a human squash-merge is the review gate, and
+      # merging to main triggers pages.yml (on push) to deploy — so an unattended
+      # cron run can no longer publish unreviewed, upstream-derived bytes to prod.
+      - name: Open a PR with refreshed assets if changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE: ${{ github.ref_name }}
         run: |
           git config user.name "phoenix-nights-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git diff --quiet -- apps/web/public/data; then
             echo "No asset changes."
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            git add apps/web/public/data
-            git commit -m "Refresh precomputed data assets from the official record"
-            git push origin HEAD:${{ github.ref_name }}
-            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
-
-      # A GITHUB_TOKEN push doesn't trigger pages.yml, so kick the deploy here.
-      - name: Deploy refreshed data to Pages
-        if: steps.commit.outputs.changed == 'true' && github.ref_name == 'main'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh workflow run pages.yml --ref main
+          BRANCH="auto/refresh-data-$(date +%Y%m%d-%H%M%S)"
+          git switch -c "$BRANCH"
+          git add apps/web/public/data
+          git commit -m "Refresh precomputed data assets from the official record"
+          git push origin "$BRANCH"
+          gh pr create --base "$BASE" --head "$BRANCH" \
+            --title "Refresh precomputed data assets from the official record" \
+            --body "Automated monthly/dispatch refresh from ACIS / NCEI / EIA, gated by verify_v0.py (headline numbers + asset finiteness). Review and squash-merge to deploy."

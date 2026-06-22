@@ -69,7 +69,7 @@ def main():
         "years": rows,
     }
     path = data_path(city["prefix"], "series")
-    path.write_text(json.dumps(out, indent=1))
+    path.write_text(json.dumps(out, indent=1, allow_nan=False))
     span = f"{rows[0]['year']}–{rows[-1]['year']}" if rows else "no data"
     print(f"{city['key']}: wrote {len(rows)} yearly rows -> {path.name} ({span})")
 

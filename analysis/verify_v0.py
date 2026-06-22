@@ -32,6 +32,7 @@ Stdlib only. Exit code 0 = all checks pass.
 
 import datetime
 import json
+import math
 import pathlib
 import sys
 import urllib.request
@@ -634,12 +635,38 @@ ASSET_SCHEMAS = {
 }
 
 
+def _first_nonfinite(node, path="$"):
+    """JSON-path of the first non-finite number (NaN/Infinity), or None.
+
+    Python's json.loads accepts NaN/Infinity, but the browser's JSON.parse rejects
+    them — a committed non-finite value would ship an asset that throws on load and
+    blanks the card. This makes the commit gate reject it, pairing with the builders'
+    allow_nan=False (which stops one being written in the first place).
+    """
+    if isinstance(node, bool):
+        return None
+    if isinstance(node, (int, float)):
+        return None if math.isfinite(node) else path
+    if isinstance(node, dict):
+        for k, v in node.items():
+            r = _first_nonfinite(v, f"{path}.{k}")
+            if r is not None:
+                return r
+    elif isinstance(node, list):
+        for i, v in enumerate(node):
+            r = _first_nonfinite(v, f"{path}[{i}]")
+            if r is not None:
+                return r
+    return None
+
+
 def validate_assets():
     """Shape-check every committed JSON asset a card consumes.
 
     Catches the failure verify's value checks can't: a malformed, truncated, or
-    empty asset that would silently break a card. Assets not yet rebuilt (no
-    file on disk) are skipped. Yields (name, ok, count, detail).
+    empty asset that would silently break a card, or a non-finite number that would
+    crash JSON.parse in the browser. Assets not yet rebuilt (no file on disk) are
+    skipped. Yields (name, ok, count, detail).
     """
     for fname, (key, typ, fields) in ASSET_SCHEMAS.items():
         path = DATA_DIR / fname
@@ -650,6 +677,10 @@ def validate_assets():
             j = json.loads(path.read_text())
         except (ValueError, OSError) as e:
             yield (fname, False, 0, f"unreadable: {e}")
+            continue
+        bad = _first_nonfinite(j)
+        if bad is not None:
+            yield (fname, False, 0, f"non-finite number at {bad} (NaN/Infinity breaks JSON.parse)")
             continue
         coll = j.get(key)
         if not isinstance(coll, typ) or len(coll) == 0:

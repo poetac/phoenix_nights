@@ -5,6 +5,12 @@ on:
     branches: [main]
   pull_request:
 
+# Least privilege: fork PRs run author-controlled npm ci / tests, so cap the
+# GITHUB_TOKEN to read regardless of the repo's default token setting. The
+# artifact upload uses the Actions API, not contents, so this is sufficient.
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
