@@ -76,10 +76,10 @@ Go-forward (the split, phased):
 - **Phase 3 — worldwide (City Signals) — shipping:** a station-record backend
   (**GHCN-Daily via NCEI GSOY** — *not* gridded reanalysis, which would smooth the UHI
   signal away), a world map, and °C rendering. **Phase A done** (GHCN-Daily reproduces the
-  14 US cities' night trends). **Phase B live: Sydney, AU is the first international city**
+  14 US cities' night trends). **Phase B live: Sydney, AU and De Bilt, NL are the first two international cities**
   (`source:"ghcn"`, metric, value-checked by `check_cities_ghcn`); City Signals' copy +
   map are now worldwide/neutral. Hemisphere-aware seasons + more cities (London/Tokyo
-  rejected at GSOY; De Bilt reachable) are the next slice. Full design in
+  rejected at GSOY for missing TMIN) are the next slice. Full design in
   [`WORLDWIDE.md`](WORLDWIDE.md).
 - **Deployment details** (subpaths vs custom domains vs separate repos) — revisit once
   both products are in a good state.
@@ -93,8 +93,8 @@ a clean single-utility metro BA) and heat-deaths (Phoenix-only by design).
 
 ## Where we are (June 2026)
 
-A **worldwide city-climate explorer** (14 US cities + Sydney, the first international
-city) — React + Vite, deployed to GitHub Pages —
+A **worldwide city-climate explorer** (14 US cities + Sydney and De Bilt, the first
+two international cities) — React + Vite, deployed to GitHub Pages —
 on a city-agnostic engine (`lib/cities.js` registry + `<CityDashboard city={…} />`),
 fronted by a clickable US map and a per-city salience ("what stands out") section.
 Python stdlib pipelines precompute static JSON; CI builds the app, runs a real-browser

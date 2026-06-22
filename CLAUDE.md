@@ -10,7 +10,7 @@ Two products on one shared, city-agnostic engine — React + Vite front end
 The app originally proved, from the official NOAA record, that a city's **overnight
 lows** abandon their history faster than its highs — the UHI fingerprint. That's now
 the Desert Nights thesis; City Signals generalizes the same engine worldwide (Sydney
-is the first international city).
+and De Bilt are the first two international cities).
 
 **→ Read `HANDOFF.md` first for current state, in-flight PRs, and what this
 environment needs (network egress to ACIS/NCEI/EIA + a browser for render
@@ -44,7 +44,7 @@ international backend), and `README.md` (data sources + methodology).
   + `analysis/cities.py` + `<CityDashboard city={…} />`; cards and fetchers don't
   change. US cities source live from ACIS; **international cities are `source:"ghcn"`**
   (NCEI GSOY, `units:"metric"`, a precomputed yearly series via `build_series.py`, and
-  no daily/hourly cards) — **Sydney is the first**. City Signals (the explorer, all
+  no daily/hourly cards) — **Sydney is the first, De Bilt the second**. City Signals (the explorer, all
   cities) is the worldwide product; Desert Nights is the curated arid-West flagship
   (5 hot deserts) — see ROADMAP "Direction" and `WORLDWIDE.md`.
 - Single source of truth: a city's **rural-pair sid lives once** in `analysis/cities.py`
