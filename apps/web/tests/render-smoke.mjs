@@ -257,12 +257,13 @@ await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
 try {
   await page.waitForFunction(() => (document.body.textContent || "").includes("Tucson Electric Power"),
     undefined, { timeout: 45000 });
-  const leak = await page.evaluate(() => {
-    const t = document.body.textContent || "";
-    return ["metro Phoenix", "Maricopa County", "AZPS", "five million"].find((s) => t.includes(s)) || "";
-  });
-  if (leak) fail(`desert tus: Phoenix-specific copy "${leak}" leaked onto Tucson's curated cards`);
-  else console.log("✓ Desert Nights: tus names its own utility (TEPC), no Phoenix grid/county copy");
+  const t = await page.evaluate(() => document.body.textContent || "");
+  // "twice as fast" was hardcoded GridCard prose; Tucson's evening peak FELL 2019→2025, so
+  // it must not appear here (the clause is now derived from the asset's actual growth ratio).
+  const leak = ["metro Phoenix", "Maricopa County", "AZPS", "five million", "twice as fast"]
+    .find((s) => t.includes(s)) || "";
+  if (leak) fail(`desert tus: Phoenix-specific/false copy "${leak}" leaked onto Tucson's curated cards`);
+  else console.log("✓ Desert Nights: tus names its own utility (TEPC), no Phoenix copy, no false 'twice as fast'");
 } catch (e) { fail("desert tus: GridCard didn't render Tucson's utility: " + e.message.split("\n")[0]); }
 
 if (pageErrors.length) fail("uncaught page errors: " + JSON.stringify([...new Set(pageErrors)].slice(0, 8)));
