@@ -75,7 +75,7 @@ export default function ExtremesCard({ city, rows, windowStart }) {
         <span><span className="inline-block w-3 h-1 rounded-full align-middle mr-1" style={{ background: C.day }} />Coldest night each year</span>
       </div>
       <p className="mt-4 text-base leading-relaxed">
-        Pick the single coldest night of each year — the deepest the desert's cooling ever reaches.
+        Pick the single coldest night of each year — the deepest the year's cooling ever reaches.
         {model.baseCold != null && model.recentCold != null ? (
           <> In the {city.baseline.label} that night bottomed out around{" "}
             <span style={{ fontFamily: DISPLAY, color: C.day }}>{t(model.baseCold).toFixed(0)}{tempUnit(units)}</span>; over the last

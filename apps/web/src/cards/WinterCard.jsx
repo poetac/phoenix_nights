@@ -14,10 +14,20 @@ export default function WinterCard({ city, streaks }) {
     const late = data.filter((r) => r.year > lastYear - 30);
     if (early.length < 30 || late.length < 20) return null;
     const lastFrosty = [...data].reverse().find((r) => r.frost >= 5);
+    const zeroFrostShare = late.filter((r) => r.frost === 0).length / late.length;
+    // "Winter left first" is a frost-DISAPPEARANCE story. Only render where frost
+    // has genuinely collapsed: the most recent winters no longer reach even five
+    // frosts (so "the last winter with five frosts" names a PAST year) and some
+    // recent winters are now frost-free. Cold interior cities (Reno, Salt Lake,
+    // Boise, Albuquerque) still freeze 90–160 nights a year, so the card self-omits
+    // rather than force a vanishing-frost narrative onto a city that still freezes
+    // hard — and onto numbers (last 5-frost winter = this year, 0% frost-free) that
+    // would read as the opposite of its own headline.
+    if (!lastFrosty || lastFrosty.year >= lastYear || zeroFrostShare <= 0) return null;
     return {
       data,
       earlyFrost: mean(early.map((r) => r.frost)),
-      zeroFrostShare: late.filter((r) => r.frost === 0).length / late.length,
+      zeroFrostShare,
       lastFrosty,
       earlyCool: mean(early.map((r) => r.cool60)),
       lateCool: mean(data.filter((r) => r.year > lastYear - 10).map((r) => r.cool60)),
@@ -29,7 +39,7 @@ export default function WinterCard({ city, streaks }) {
   return (
     <Card>
       <CardHead kicker="The other end of the year" title="Winter left first"
-        sub="Frost is the desert winter's signature — and the same warming that keeps summer nights hot has all but erased it. Blue bars: nights at or below freezing. Gold line: nights at or below a crisp 60°F."
+        sub="Frost once defined winter here — and the same warming that keeps summer nights hot has all but erased it. Blue bars: nights at or below freezing. Gold line: nights at or below a crisp 60°F."
       />
       <div role="img" style={{ width: "100%", height: 260 }}
         aria-label="Chart of nights per year at or below freezing and at or below 60°F, both dwindling over the record.">
@@ -55,8 +65,8 @@ export default function WinterCard({ city, streaks }) {
         {Math.round(model.lateCool)} — about {Math.round(model.earlyCool - model.lateCool)} lost cool nights annually.
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
-        Same source and hygiene as the streak card. A footnote for gardeners: this is why the USDA hardiness zone for
-        central Phoenix has migrated — the climate that grew here in 1950 no longer exists at this station.
+        Same source and hygiene as the streak card. A footnote for gardeners: it's why USDA hardiness zones keep
+        shifting — the winter that defined {city.shortName} in 1950 no longer exists at this station.
       </p>
     </Card>
   );
