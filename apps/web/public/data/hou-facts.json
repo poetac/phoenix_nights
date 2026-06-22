@@ -1,7 +1,7 @@
 {
  "city": "hou",
  "name": "Houston (ThreadEx IAHthr 9)",
- "generated": "2026-06-21",
+ "generated": "2026-06-22",
  "facts": [
   {
    "key": "urban_excess",
@@ -27,8 +27,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.672,
-   "crossCityPercentile": 0.53,
+   "score": 0.681,
+   "crossCityPercentile": 0.56,
    "label": "Summer nights are warming +0.99\u00b0F per decade",
    "value": 0.99,
    "unit": "\u00b0F/decade",
@@ -38,8 +38,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.59,
-   "crossCityPercentile": 0.27,
+   "score": 0.585,
+   "crossCityPercentile": 0.25,
    "label": "Even the coldest night of the year is warming +0.98\u00b0F per decade",
    "value": 0.98,
    "unit": "\u00b0F/decade",
@@ -48,8 +48,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.493,
-   "crossCityPercentile": 0.47,
+   "score": 0.503,
+   "crossCityPercentile": 0.5,
    "label": "Overnight lows are rising 1.6\u00d7 as fast as afternoon highs",
    "value": 1.6,
    "unit": "\u00d7 ratio",
@@ -58,8 +58,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.493,
-   "crossCityPercentile": 0.47,
+   "score": 0.503,
+   "crossCityPercentile": 0.5,
    "label": "The day\u2013night temperature gap is shrinking 0.37\u00b0F per decade",
    "value": 0.37,
    "unit": "\u00b0F/decade",

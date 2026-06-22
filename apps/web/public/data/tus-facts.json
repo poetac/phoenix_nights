@@ -1,7 +1,7 @@
 {
  "city": "tus",
  "name": "Tucson (ThreadEx TUSthr 9)",
- "generated": "2026-06-21",
+ "generated": "2026-06-22",
  "facts": [
   {
    "key": "hot_day_season",
@@ -27,8 +27,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.547,
-   "crossCityPercentile": 0.27,
+   "score": 0.561,
+   "crossCityPercentile": 0.31,
    "label": "Summer nights are warming +0.86\u00b0F per decade",
    "value": 0.86,
    "unit": "\u00b0F/decade",
@@ -60,8 +60,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.217,
-   "crossCityPercentile": 0.13,
+   "score": 0.215,
+   "crossCityPercentile": 0.12,
    "label": "Even the coldest night of the year is warming +0.48\u00b0F per decade",
    "value": 0.48,
    "unit": "\u00b0F/decade",
@@ -70,8 +70,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.196,
-   "crossCityPercentile": 0.07,
+   "score": 0.195,
+   "crossCityPercentile": 0.06,
    "label": "Overnight lows are rising 0.9\u00d7 as fast as afternoon highs",
    "value": 0.9,
    "unit": "\u00d7 ratio",
@@ -80,8 +80,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.196,
-   "crossCityPercentile": 0.07,
+   "score": 0.195,
+   "crossCityPercentile": 0.06,
    "label": "The day\u2013night temperature gap is widening 0.05\u00b0F per decade",
    "value": -0.05,
    "unit": "\u00b0F/decade",

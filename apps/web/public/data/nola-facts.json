@@ -1,12 +1,12 @@
 {
  "city": "nola",
  "name": "New Orleans (ThreadEx MSYthr 9)",
- "generated": "2026-06-21",
+ "generated": "2026-06-22",
  "facts": [
   {
    "key": "coldest_night",
-   "score": 0.84,
-   "crossCityPercentile": 0.47,
+   "score": 0.85,
+   "crossCityPercentile": 0.5,
    "label": "Even the coldest night of the year is warming +1.55\u00b0F per decade",
    "value": 1.55,
    "unit": "\u00b0F/decade",
@@ -15,8 +15,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.789,
-   "crossCityPercentile": 0.73,
+   "score": 0.794,
+   "crossCityPercentile": 0.75,
    "label": "Summer nights are warming +1.14\u00b0F per decade",
    "value": 1.14,
    "unit": "\u00b0F/decade",
@@ -37,8 +37,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.738,
-   "crossCityPercentile": 0.73,
+   "score": 0.743,
+   "crossCityPercentile": 0.75,
    "label": "Overnight lows are rising 2.4\u00d7 as fast as afternoon highs",
    "value": 2.4,
    "unit": "\u00d7 ratio",
@@ -47,8 +47,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.738,
-   "crossCityPercentile": 0.73,
+   "score": 0.743,
+   "crossCityPercentile": 0.75,
    "label": "The day\u2013night temperature gap is shrinking 0.67\u00b0F per decade",
    "value": 0.67,
    "unit": "\u00b0F/decade",

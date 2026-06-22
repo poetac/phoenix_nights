@@ -1,12 +1,12 @@
 {
  "city": "slc",
  "name": "Salt Lake City (ThreadEx SLCthr 9)",
- "generated": "2026-06-21",
+ "generated": "2026-06-22",
  "facts": [
   {
    "key": "coldest_night",
-   "score": 0.98,
-   "crossCityPercentile": 0.93,
+   "score": 0.981,
+   "crossCityPercentile": 0.94,
    "label": "Even the coldest night of the year is warming +2.64\u00b0F per decade",
    "value": 2.64,
    "unit": "\u00b0F/decade",
@@ -26,8 +26,8 @@
   },
   {
    "key": "night_warming",
-   "score": 0.714,
-   "crossCityPercentile": 0.6,
+   "score": 0.721,
+   "crossCityPercentile": 0.62,
    "label": "Summer nights are warming +1.05\u00b0F per decade",
    "value": 1.05,
    "unit": "\u00b0F/decade",
@@ -37,8 +37,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.61,
-   "crossCityPercentile": 0.6,
+   "score": 0.617,
+   "crossCityPercentile": 0.62,
    "label": "Overnight lows are rising 1.9\u00d7 as fast as afternoon highs",
    "value": 1.9,
    "unit": "\u00d7 ratio",
@@ -47,8 +47,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.61,
-   "crossCityPercentile": 0.6,
+   "score": 0.617,
+   "crossCityPercentile": 0.62,
    "label": "The day\u2013night temperature gap is shrinking 0.51\u00b0F per decade",
    "value": 0.51,
    "unit": "\u00b0F/decade",

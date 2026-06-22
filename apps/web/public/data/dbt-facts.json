@@ -1,0 +1,48 @@
+{
+ "city": "dbt",
+ "name": "De Bilt (GHCN NLM00006260, KNMI Netherlands)",
+ "generated": "2026-06-22",
+ "facts": [
+  {
+   "key": "coldest_night",
+   "score": 0.802,
+   "crossCityPercentile": 0.44,
+   "label": "Even the coldest night of the year is warming +0.79\u00b0C per decade",
+   "value": 0.79,
+   "unit": "\u00b0C/decade",
+   "significant": true,
+   "rank": 1
+  },
+  {
+   "key": "night_warming",
+   "score": 0.402,
+   "crossCityPercentile": 0.12,
+   "label": "Summer nights are warming +0.33\u00b0C per decade",
+   "value": 0.33,
+   "unit": "\u00b0C/decade",
+   "significant": true,
+   "bench": 0.36,
+   "rank": 2
+  },
+  {
+   "key": "lows_outpace_highs",
+   "score": 0.343,
+   "crossCityPercentile": 0.25,
+   "label": "Overnight lows are rising 0.7\u00d7 as fast as afternoon highs",
+   "value": 0.7,
+   "unit": "\u00d7 ratio",
+   "significant": true,
+   "rank": 3
+  },
+  {
+   "key": "diurnal_compression",
+   "score": 0.343,
+   "crossCityPercentile": 0.25,
+   "label": "The day\u2013night temperature gap is widening 0.12\u00b0C per decade",
+   "value": -0.12,
+   "unit": "\u00b0C/decade",
+   "significant": true,
+   "rank": 4
+  }
+ ]
+}

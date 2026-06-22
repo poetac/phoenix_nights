@@ -1,12 +1,12 @@
 {
  "city": "ep",
  "name": "El Paso (ThreadEx ELPthr 9)",
- "generated": "2026-06-21",
+ "generated": "2026-06-22",
  "facts": [
   {
    "key": "night_warming",
-   "score": 0.96,
-   "crossCityPercentile": 0.87,
+   "score": 0.962,
+   "crossCityPercentile": 0.88,
    "label": "Summer nights are warming +1.50\u00b0F per decade",
    "value": 1.5,
    "unit": "\u00b0F/decade",
@@ -27,8 +27,8 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.897,
-   "crossCityPercentile": 0.87,
+   "score": 0.899,
+   "crossCityPercentile": 0.88,
    "label": "Overnight lows are rising 2.4\u00d7 as fast as afternoon highs",
    "value": 2.4,
    "unit": "\u00d7 ratio",
@@ -37,8 +37,8 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.897,
-   "crossCityPercentile": 0.87,
+   "score": 0.899,
+   "crossCityPercentile": 0.88,
    "label": "The day\u2013night temperature gap is shrinking 0.89\u00b0F per decade",
    "value": 0.89,
    "unit": "\u00b0F/decade",
@@ -47,8 +47,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.88,
-   "crossCityPercentile": 0.6,
+   "score": 0.888,
+   "crossCityPercentile": 0.62,
    "label": "Even the coldest night of the year is warming +1.86\u00b0F per decade",
    "value": 1.86,
    "unit": "\u00b0F/decade",

@@ -1,0 +1,477 @@
+{
+ "city": "dbt",
+ "name": "De Bilt (GHCN NLM00006260, KNMI Netherlands)",
+ "units": "F",
+ "generated": "2026-06-22",
+ "throughYear": 2025,
+ "years": [
+  {
+   "year": 1948,
+   "low": 41.6,
+   "high": 57.1,
+   "coldLow": 14.0
+  },
+  {
+   "year": 1949,
+   "low": 41.6,
+   "high": 57.7,
+   "coldLow": 16.0
+  },
+  {
+   "year": 1950,
+   "low": 41.4,
+   "high": 55.4,
+   "coldLow": 8.0
+  },
+  {
+   "year": 1951,
+   "low": 42.2,
+   "high": 56.1,
+   "coldLow": 19.0
+  },
+  {
+   "year": 1952,
+   "low": 40.7,
+   "high": 54.9,
+   "coldLow": 19.0
+  },
+  {
+   "year": 1953,
+   "low": 42.4,
+   "high": 56.5,
+   "coldLow": 17.0
+  },
+  {
+   "year": 1954,
+   "low": 41.3,
+   "high": 54.7,
+   "coldLow": 9.0
+  },
+  {
+   "year": 1955,
+   "low": 40.5,
+   "high": 54.9,
+   "coldLow": 13.0
+  },
+  {
+   "year": 1956,
+   "low": 39.6,
+   "high": 53.4,
+   "coldLow": -7.0
+  },
+  {
+   "year": 1957,
+   "low": 43.1,
+   "high": 56.5,
+   "coldLow": 14.0
+  },
+  {
+   "year": 1958,
+   "low": 42.4,
+   "high": 55.3,
+   "coldLow": 12.0
+  },
+  {
+   "year": 1959,
+   "low": 41.9,
+   "high": 58.2,
+   "coldLow": 18.0
+  },
+  {
+   "year": 1960,
+   "low": 42.7,
+   "high": 56.1,
+   "coldLow": 15.0
+  },
+  {
+   "year": 1961,
+   "low": 42.7,
+   "high": 56.8,
+   "coldLow": 11.0
+  },
+  {
+   "year": 1962,
+   "low": 39.7,
+   "high": 53.3,
+   "coldLow": 11.0
+  },
+  {
+   "year": 1963,
+   "low": 38.8,
+   "high": 53.0,
+   "coldLow": -1.0
+  },
+  {
+   "year": 1964,
+   "low": 41.0,
+   "high": 55.6,
+   "coldLow": 9.0
+  },
+  {
+   "year": 1965,
+   "low": 40.4,
+   "high": 54.7,
+   "coldLow": 14.0
+  },
+  {
+   "year": 1966,
+   "low": 42.1,
+   "high": 55.6,
+   "coldLow": 12.0
+  },
+  {
+   "year": 1967,
+   "low": 42.6,
+   "high": 56.8,
+   "coldLow": 10.0
+  },
+  {
+   "year": 1968,
+   "low": 41.7,
+   "high": 55.2,
+   "coldLow": 2.0
+  },
+  {
+   "year": 1969,
+   "low": 41.3,
+   "high": 55.8,
+   "coldLow": 2.0
+  },
+  {
+   "year": 1970,
+   "low": 41.2,
+   "high": 55.4,
+   "coldLow": 10.0
+  },
+  {
+   "year": 1971,
+   "low": 41.1,
+   "high": 56.5,
+   "coldLow": 7.0
+  },
+  {
+   "year": 1972,
+   "low": 40.8,
+   "high": 55.0,
+   "coldLow": 11.0
+  },
+  {
+   "year": 1973,
+   "low": 41.2,
+   "high": 55.9,
+   "coldLow": 8.0
+  },
+  {
+   "year": 1974,
+   "low": 42.1,
+   "high": 56.5,
+   "coldLow": 22.0
+  },
+  {
+   "year": 1975,
+   "low": 42.3,
+   "high": 57.1,
+   "coldLow": 18.0
+  },
+  {
+   "year": 1976,
+   "low": 41.9,
+   "high": 57.6,
+   "coldLow": 13.0
+  },
+  {
+   "year": 1977,
+   "low": 42.8,
+   "high": 56.4,
+   "coldLow": 22.0
+  },
+  {
+   "year": 1978,
+   "low": 41.6,
+   "high": 54.6,
+   "coldLow": 8.0
+  },
+  {
+   "year": 1979,
+   "low": 40.3,
+   "high": 54.0,
+   "coldLow": 0.0
+  },
+  {
+   "year": 1980,
+   "low": 41.7,
+   "high": 55.4,
+   "coldLow": 12.0
+  },
+  {
+   "year": 1981,
+   "low": 41.7,
+   "high": 55.2,
+   "coldLow": 10.0
+  },
+  {
+   "year": 1982,
+   "low": 42.5,
+   "high": 57.5,
+   "coldLow": 8.0
+  },
+  {
+   "year": 1983,
+   "low": 42.8,
+   "high": 57.5,
+   "coldLow": 18.0
+  },
+  {
+   "year": 1984,
+   "low": 42.2,
+   "high": 56.0,
+   "coldLow": 16.0
+  },
+  {
+   "year": 1985,
+   "low": 40.2,
+   "high": 54.3,
+   "coldLow": -1.0
+  },
+  {
+   "year": 1986,
+   "low": 40.4,
+   "high": 55.6,
+   "coldLow": 6.0
+  },
+  {
+   "year": 1987,
+   "low": 41.0,
+   "high": 54.7,
+   "coldLow": 5.0
+  },
+  {
+   "year": 1988,
+   "low": 43.9,
+   "high": 57.2,
+   "coldLow": 21.0
+  },
+  {
+   "year": 1989,
+   "low": 43.3,
+   "high": 59.2,
+   "coldLow": 20.0
+  },
+  {
+   "year": 1990,
+   "low": 43.8,
+   "high": 58.9,
+   "coldLow": 25.0
+  },
+  {
+   "year": 1991,
+   "low": 41.5,
+   "high": 56.2,
+   "coldLow": 9.0
+  },
+  {
+   "year": 1992,
+   "low": 43.9,
+   "high": 57.9,
+   "coldLow": 15.0
+  },
+  {
+   "year": 1993,
+   "low": 42.2,
+   "high": 56.1,
+   "coldLow": 13.0
+  },
+  {
+   "year": 1994,
+   "low": 43.7,
+   "high": 58.0,
+   "coldLow": 14.0
+  },
+  {
+   "year": 1995,
+   "low": 43.1,
+   "high": 58.2,
+   "coldLow": 9.0
+  },
+  {
+   "year": 1996,
+   "low": 39.8,
+   "high": 54.6,
+   "coldLow": 7.0
+  },
+  {
+   "year": 1997,
+   "low": 42.9,
+   "high": 57.7,
+   "coldLow": 3.0
+  },
+  {
+   "year": 1998,
+   "low": 43.9,
+   "high": 57.3,
+   "coldLow": 14.0
+  },
+  {
+   "year": 1999,
+   "low": 44.0,
+   "high": 59.0,
+   "coldLow": 13.0
+  },
+  {
+   "year": 2000,
+   "low": 44.5,
+   "high": 58.4,
+   "coldLow": 18.0
+  },
+  {
+   "year": 2001,
+   "low": 43.3,
+   "high": 57.8,
+   "coldLow": 16.0
+  },
+  {
+   "year": 2002,
+   "low": 43.6,
+   "high": 58.7,
+   "coldLow": 16.0
+  },
+  {
+   "year": 2003,
+   "low": 41.2,
+   "high": 59.4,
+   "coldLow": 13.0
+  },
+  {
+   "year": 2004,
+   "low": 42.7,
+   "high": 58.0,
+   "coldLow": 18.0
+  },
+  {
+   "year": 2005,
+   "low": 43.6,
+   "high": 58.5,
+   "coldLow": 6.0
+  },
+  {
+   "year": 2006,
+   "low": 44.6,
+   "high": 59.4,
+   "coldLow": 19.0
+  },
+  {
+   "year": 2007,
+   "low": 44.5,
+   "high": 59.5,
+   "coldLow": 20.0
+  },
+  {
+   "year": 2008,
+   "low": 43.5,
+   "high": 58.2,
+   "coldLow": 16.0
+  },
+  {
+   "year": 2009,
+   "low": 43.2,
+   "high": 58.1,
+   "coldLow": 11.0
+  },
+  {
+   "year": 2010,
+   "low": 40.7,
+   "high": 55.3,
+   "coldLow": 12.0
+  },
+  {
+   "year": 2011,
+   "low": 44.0,
+   "high": 59.0,
+   "coldLow": 20.0
+  },
+  {
+   "year": 2012,
+   "low": 43.1,
+   "high": 57.6,
+   "coldLow": -2.0
+  },
+  {
+   "year": 2013,
+   "low": 42.1,
+   "high": 56.6,
+   "coldLow": 9.0
+  },
+  {
+   "year": 2014,
+   "low": 45.6,
+   "high": 60.2,
+   "coldLow": 26.0
+  },
+  {
+   "year": 2015,
+   "low": 43.6,
+   "high": 58.7,
+   "coldLow": 22.0
+  },
+  {
+   "year": 2016,
+   "low": 43.6,
+   "high": 58.4,
+   "coldLow": 18.0
+  },
+  {
+   "year": 2017,
+   "low": 44.0,
+   "high": 58.8,
+   "coldLow": 19.0
+  },
+  {
+   "year": 2018,
+   "low": 43.9,
+   "high": 60.2,
+   "coldLow": 17.0
+  },
+  {
+   "year": 2019,
+   "low": 44.0,
+   "high": 59.6,
+   "coldLow": 17.0
+  },
+  {
+   "year": 2020,
+   "low": 44.8,
+   "high": 60.4,
+   "coldLow": 24.0
+  },
+  {
+   "year": 2021,
+   "low": 43.1,
+   "high": 57.8,
+   "coldLow": 12.0
+  },
+  {
+   "year": 2022,
+   "low": 43.8,
+   "high": 60.7,
+   "coldLow": 18.0
+  },
+  {
+   "year": 2023,
+   "low": 45.7,
+   "high": 60.1,
+   "coldLow": 22.0
+  },
+  {
+   "year": 2024,
+   "low": 45.9,
+   "high": 60.1,
+   "coldLow": 18.0
+  },
+  {
+   "year": 2025,
+   "low": 44.0,
+   "high": 60.3,
+   "coldLow": 22.0
+  }
+ ]
+}

@@ -1,7 +1,7 @@
 {
  "city": "rno",
  "name": "Reno (ThreadEx RNOthr 9)",
- "generated": "2026-06-21",
+ "generated": "2026-06-22",
  "facts": [
   {
    "key": "night_warming",
@@ -47,8 +47,8 @@
   },
   {
    "key": "coldest_night",
-   "score": 0.94,
-   "crossCityPercentile": 0.8,
+   "score": 0.944,
+   "crossCityPercentile": 0.81,
    "label": "Even the coldest night of the year is warming +2.48\u00b0F per decade",
    "value": 2.48,
    "unit": "\u00b0F/decade",
