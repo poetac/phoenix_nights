@@ -50,11 +50,13 @@ export default function StreakCard({ city, streaks }) {
         that never fell below 80°F. Two and a half months without a single night of relief.
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
-        Same daily record, days instead of nights: {model.record110.year}'s famous run of{" "}
-        {model.record110.streak110} straight days at 110°F+ — the number that made national news — falls out of this
-        dataset exactly, which is a good check that the pipeline is honest. Streaks are computed within calendar years
-        (NOAA/NWS ACIS daily lows; years missing more than 36 days excluded). Rebuild with{" "}
-        <code>analysis/build_streaks.py</code>.
+        {model.record110.streak110 > 0 && (
+          <>Same daily record, days instead of nights: {model.record110.year}'s run of{" "}
+          {model.record110.streak110} straight days at 110°F+{city.id === "phx" ? " — the number that made national news —" : ""}{" "}
+          falls out of this dataset exactly, a good check that the pipeline is honest. </>
+        )}
+        Streaks are computed within calendar years (NOAA/NWS ACIS daily lows; years missing more than 36 days
+        excluded). Rebuild with <code>analysis/build_streaks.py</code>.
       </p>
     </Card>
   );

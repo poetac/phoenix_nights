@@ -41,6 +41,18 @@ export default function SeasonLengthCard({ city, heatSeason }) {
   }, [heatSeason, city]);
 
   if (!model) return null;
+  // Card-fit: the thesis is the 100°F season EXPANDING ("annexing spring and fall").
+  // For a city whose first-to-last span didn't actually lengthen (noisy band — Dallas
+  // shrank, Albuquerque is flat), that framing is false, so omit rather than print an
+  // inverted "−2 days longer".
+  if (Math.round(model.lengthGain) < 1) return null;
+  const fs = Math.round(model.firstShift);
+  const dayWord = (n) => `${n} day${n === 1 ? "" : "s"}`;
+  const firstClause = fs > 0
+    ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(fs)} earlier</span></>
+    : fs < 0
+      ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(-fs)} later</span></>
+      : <>has held about steady</>;
 
   return (
     <Card>
@@ -78,13 +90,12 @@ export default function SeasonLengthCard({ city, heatSeason }) {
         </ResponsiveContainer>
       </div>
       <p className="mt-4 text-base leading-relaxed">
-        Compared with the {city.baseline.label}, the first 100°F day now arrives{" "}
-        <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.firstShift)} days earlier</span>{" "}
+        Compared with the {city.baseline.label}, the first 100°F day {firstClause}{" "}
         and the season runs{" "}
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.lengthGain)} days longer</span> —{" "}
         {Math.round(model.countLate)} triple-digit days a year now, against {Math.round(model.countEarly)} then.
-        That's most of an extra month of summer on each end of the calendar.
-        {model.susGain != null && <>
+        {fs > 0 && <> That's most of an extra month of summer on each end of the calendar.</>}
+        {model.susGain != null && model.susGain > 0 && <>
           {" "}Counting only <em>sustained</em> heat — runs of three or more 100°F days, which a single freak
           spring scorcher can't trigger — the season still grew about{" "}
           <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.susGain)} days</span>.
