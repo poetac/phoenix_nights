@@ -105,7 +105,8 @@ export default function GapCard({ city, rows }) {
         )}
       </p>
       <p className="text-xs mt-3" style={{ color: C.muted }}>
-        Diurnal range = annual mean daily high minus annual mean daily low, from the same live station record as the
+        Diurnal range = annual mean daily high minus annual mean daily low, from the same{" "}
+        {city.source === "ghcn" ? "precomputed NCEI GSOY annual series" : "live station record"} as the
         rest of the page (dashed line is the ordinary-least-squares trend, {model.perDecade >= 0 ? "+" : ""}
         {d(model.perDecade).toFixed(2)}{tempRateUnit(units)}). {city.id === "phx"
           ? <>Shown from {DTR_START}: earlier years in Phoenix's threaded record carry an agricultural "oasis effect" —

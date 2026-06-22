@@ -85,8 +85,14 @@ export default function CityDashboard({ city, product }) {
   const { rows, source } = state;
 
   const freshness = useMemo(
-    () => assetFreshness({ diurnal, heatSeason, streaks, grid, cddSplit, heatDeaths }),
-    [diurnal, heatSeason, streaks, grid, cddSplit, heatDeaths],
+    () => assetFreshness({
+      diurnal, heatSeason, streaks, grid, cddSplit, heatDeaths,
+      // International (GHCN) cities have no live ACIS trend — their whole record is the
+      // committed GSOY series (rows). Feed it so a stale series (e.g. Sydney, whose GSOY
+      // record ends 2019) is caught instead of silently driving a "current" headline.
+      ...(source === "ghcn" && rows.length ? { series: { series: rows } } : {}),
+    }),
+    [diurnal, heatSeason, streaks, grid, cddSplit, heatDeaths, source, rows],
   );
 
   return (
@@ -166,9 +172,19 @@ export default function CityDashboard({ city, product }) {
         {freshness?.stale?.length > 0 && (
           <div className="rounded-xl px-4 py-3 mb-6 text-sm" role="status"
             style={{ background: "rgba(255,177,92,.08)", border: `1px solid ${C.gold}`, color: C.gold }}>
-            Some precomputed series only run through {Math.min(...freshness.stale.map((s) => s.year))} — the live trend,
-            anomaly, and hero cards are current through {freshness.target}. The static datasets refresh on the next
-            scheduled data rebuild.
+            {source === "ghcn" ? (
+              <>
+                {city.shortName}'s annual record (NCEI Global Summary of the Year) currently runs through{" "}
+                {freshness.through} — NCEI hasn't published a later annual summary for this station, so the trend
+                and facts above reflect data through {freshness.through}, not {freshness.target}.
+              </>
+            ) : (
+              <>
+                Some precomputed series only run through {Math.min(...freshness.stale.map((s) => s.year))} — the live trend,
+                anomaly, and hero cards are current through {freshness.target}. The static datasets refresh on the next
+                scheduled data rebuild.
+              </>
+            )}
           </div>
         )}
 

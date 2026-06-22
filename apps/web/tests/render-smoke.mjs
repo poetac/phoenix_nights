@@ -163,7 +163,13 @@ try {
     undefined, { timeout: 20000 });
   const widening = await page.evaluate(() => (document.body.textContent || "").includes("gap is widening"));
   if (!widening) fail("syd: expected the diurnal fact to read 'gap is widening' (days outpace nights)");
-  else console.log("✓ syd: distinctive-signal caveat + 'gap is widening' fact present");
+  else {
+    // Sydney's GSOY series ends 2019, so the GHCN freshness note must surface that the
+    // record (and thus the trend/facts) runs only through 2019 — not silently "current".
+    const through2019 = await page.evaluate(() => (document.body.textContent || "").includes("through 2019"));
+    if (!through2019) fail("syd: expected the GHCN freshness note 'runs through 2019' (its GSOY series ends 2019)");
+    else console.log("✓ syd: distinctive caveat + 'gap is widening' + GHCN freshness note (through 2019)");
+  }
 } catch (e) { fail("syd: distinctive-signal caveat missing: " + e.message.split("\n")[0]); }
 
 // Phase B: the second international city (Europe / Northern Hemisphere). Like Sydney it
