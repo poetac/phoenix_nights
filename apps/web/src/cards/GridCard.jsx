@@ -3,12 +3,7 @@ import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick } from "../ui.jsx";
-
-function hourLabel(h) {
-  if (h === 0) return "12 AM";
-  if (h === 12) return "12 PM";
-  return h < 12 ? `${h} AM` : `${h - 12} PM`;
-}
+import { hourLabel } from "../lib/labels.js";
 
 export default function GridCard({ city, grid }) {
   const model = useMemo(() => {
