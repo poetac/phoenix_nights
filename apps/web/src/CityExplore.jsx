@@ -2,7 +2,10 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { climateOf } from "./lib/cities.js";
 import { fetchFacts } from "./lib/data.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
-import CityMap from "./CityMap.jsx";
+// CityMap statically imports both pre-projected map geometries (US + world, ~95 KB
+// gzip combined). Lazy-load it so they don't sit in the eager entry chunk — the map
+// is a viewport down, and only one of the two maps is ever rendered per product.
+const CityMap = lazy(() => import("./CityMap.jsx"));
 const CityCompare = lazy(() => import("./CityCompare.jsx"));
 
 // The cross-city explorer / landing: the product's cities, ranked by how fast
@@ -51,7 +54,9 @@ export default function CityExplore({ product, cities, onPick }) {
           {product.intro}
         </p>
 
-        <CityMap onPick={onPick} ranked={rows} cities={cities} product={product} />
+        <Suspense fallback={null}>
+          <CityMap onPick={onPick} ranked={rows} cities={cities} product={product} />
+        </Suspense>
 
         <ol className="mt-4 space-y-3" aria-label="Cities ranked by overnight-low warming">
           {rows.map((r, i) => (
