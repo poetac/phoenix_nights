@@ -393,6 +393,13 @@ are the immutable bar and stay untouched.
   adopted in the season cards, unit-tested in CI. (#99)
 - ✅ **Pipeline integrity** — restored the orphaned `boi-diurnal` config (reproduce-or-reject), added
   the 4 international assets to the shape/finiteness gate, `cdd_split` `'T'` guard. (#98)
+- ✅ **Offline Python test net** (item 9) — `analysis/tests/test_builders.py` (stdlib `unittest`): the
+  builders' pure logic — `max_streak`/`season_span`/`sustained_span` incl. the `None`-gap missing-day
+  contract, and the CDD-split identity (extracted to `split_cooling_day`). Wired into the CI build job.
+  The layer where the missing-high-vs-observed-low bug lived now has a deterministic, ACIS-free net. (#101)
+- ✅ **Registry-parity check** (item 11) — `tests/registry.test.mjs` asserts `cities.js` ⟷ `cities.py`
+  agree on the city set, station ids, rural pair, source, and every per-card opt-in; the diurnal-opt-in
+  assertion is exactly the one that would have caught the boi orphan. In the CI build job. (#102)
 - ✅ Earlier this session: the non-finite commit gate (`allow_nan=False` + `_first_nonfinite`), the
   stdlib-only CI guard, Dependabot, the GHCN staleness banner, rebuild-opens-a-PR, the card/builder
   prose fixes (#82–#96).
@@ -424,17 +431,18 @@ are the immutable bar and stay untouched.
    `<ChartCard>` scaffold.
 
 **Pipelines** (`deferred`)
-9. **Offline Python test net** — extract the builders' pure logic (streak runs, the CDD-split identity,
-   the missing-day gate, day-of-year) into module functions + a stdlib `unittest` suite wired into CI.
-   There is zero offline Python test today; the recent "missing high discarded a valid low" bug was
-   untestable. Highest pipeline-durability item.
+9. ✅ **Offline Python test net** (shipped #101) — `analysis/tests/test_builders.py` covers
+   `max_streak`/`season_span`/`sustained_span` (incl. the `None`-gap missing-day contract) and the
+   CDD-split identity (extracted to `split_cooling_day`); wired into the CI build job. *Remaining:*
+   broaden to the other builders' reduces as they're extracted (pairs with item 6/10).
 10. **Shared `analysis/acis.py` + `assetio.py`** — the ACIS/GSOY fetch boilerplate is copy-pasted ~16×,
     `LAST_COMPLETE_YEAR`/`MAX_MISSING_DAYS` redefined in 14/6 files, the stamped-write block 8×.
     Consolidate (stdlib-only; a local module passes the import guard) **with the rebuild workflow as the
     byte-identical gate**; fold in retry/backoff for the daily fetches (only diurnal/grid have it).
-11. **Registry-parity CI check** — assert `cities.js` opt-ins ⟷ `cities.py` blocks ⟷ rebuild loops
-    agree (root cause of the boi orphan) and cross-check `cities.py rural_sid` vs `cities.js rural.sid`;
-    generate `ASSET_SCHEMAS` from the registry.
+11. ✅ **Registry-parity CI check** (shipped #102) — `tests/registry.test.mjs` asserts `cities.js` ⟷
+    `cities.py` agree on the city set, station ids, rural pair (`rural_sid` vs `rural.sid`), source, and
+    every per-card opt-in (the diurnal-opt-in assertion catches the boi-orphan class). *Remaining:*
+    cross-check the rebuild-workflow loops, and generate `ASSET_SCHEMAS` from the registry.
 12. **Unify day-of-year** — three methods today (index-as-DOY in streaks couples to ACIS gap-padding;
     date-derived in heat_season; `tm_yday` in verify). Add a `len(year) ∈ {365,366}` assert now; unify
     on date-derived DOY (semantics change → rebuild gate). Also: leap-year DOY renders a date *label* 1

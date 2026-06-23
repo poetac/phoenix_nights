@@ -32,6 +32,10 @@ jobs:
       - run: node tests/stats.test.mjs
       - run: node tests/freshness.test.mjs
       - run: node tests/format.test.mjs
+      # the two city registries (cities.js front-end / cities.py pipelines) are
+      # hand-kept copies of one truth and drift — that drift orphaned boi's diurnal
+      # config (#98). Assert they agree on the city set, ids, rural pair, and opt-ins.
+      - run: node tests/registry.test.mjs
       # the same net, other language: the builders' pure logic (streak/season
       # spans, the CDD split identity) — offline, no ACIS, the layer where the
       # missing-high-vs-observed-low bug class lives. unittest is stdlib and the
