@@ -419,7 +419,11 @@ are the immutable bar and stay untouched.
    comparison prose; unify `LastNightHero.signed` (real-minus glyph + integers → generalize the
    helper, not a drop-in).
 5. **Extract `lib/series.js`** — `splitEarlyLate`/`meanEarlyLate`/`decadeBuckets` are re-implemented in
-   9 cards + `DashboardBody`; extract + unit-test.
+   9 cards + `DashboardBody`; extract + unit-test. **Not a clean drop-in** (verified): the "early" window
+   has two live variants — bounded `[baseline.start, baseline.end]` (Streak/NightCooling/HotNightSeason/
+   SeasonLength) vs unbounded `≤ baseline.end` (Sleep/Extremes/Seasons) — plus bespoke windows (Winter:
+   `<1970` / `-30y`; CoolWindow: decade buckets). A shared helper must take the window as a parameter and
+   adopt per-card with output-equivalence checks; do it browser-attended, not unattended.
 6. **Extract card `useMemo` models to pure, tested functions** — every card's transform is trapped in
    JSX, so the prose red-teams only run in the 30-navigation browser smoke test. Pull
    `gridModel`/`streakModel`/… into `lib/`, unit-test the direction branches, add to the "every new
@@ -461,9 +465,10 @@ are the immutable bar and stay untouched.
     and `engines` + `.nvmrc` pin node 22. Used a glob runner rather than `node:test` because `node --test`
     doesn't cleanly run the exit-code-based hand-rolled suites on node 22. *Remaining (optional):* migrate
     the suites to `node:test` for per-assertion reporting if richer output is ever wanted.
-16. **Smoke-test robustness** — derive expected counts from the registry (the `=== 5 hot-desert dots`
-    breaks on the next desert city); reduce live-ACIS exposure / add a wall-clock budget; share `dist/`
-    between the build and render jobs (built twice per PR today).
+16. **Smoke-test robustness** — ✅ *(partial, #104)* the desert city set + count now derive from
+    `products.js` (`citiesOf(PRODUCTS.desert)`) instead of a hardcoded `=== 5`, so vetting in a sixth
+    desert city no longer silently breaks the test. *Remaining:* reduce live-ACIS exposure / add a
+    wall-clock budget; share `dist/` between the build and render jobs (built twice per PR today).
 
 **Governance**
 17. **Branch protection on `main`** (require build/verify-data/render) — a repo setting, not code. The
