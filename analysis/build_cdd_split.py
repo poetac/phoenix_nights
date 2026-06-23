@@ -42,6 +42,20 @@ def fetch_daily(city):
         return json.load(r)["data"]
 
 
+def split_cooling_day(lo, hi, base=BASE):
+    """Split one day's cooling-degree-day excess into (day_half, night_half).
+
+    On a non-cooling day (daily mean <= base) both halves are 0.0. On a cooling
+    day the two halves sum *exactly* to mean-base, by the algebraic identity
+    mean-base = (hi-base)/2 + (lo-base)/2 — so neither share is an arbitrary
+    attribution. Kept as a pure function so the identity is unit-testable
+    offline (analysis/tests) without touching ACIS.
+    """
+    if (lo + hi) / 2 > base:  # a cooling day
+        return (hi - base) / 2, (lo - base) / 2
+    return 0.0, 0.0
+
+
 def main():
     city = get_city(__doc__)
     OUT = data_path(city["prefix"], "cdd-split")
@@ -52,10 +66,9 @@ def main():
         if lo in ("M", "T", None) or hi in ("M", "T", None):
             d["miss"] += 1
             continue
-        lo, hi = float(lo), float(hi)
-        if (lo + hi) / 2 > BASE:  # a cooling day
-            d["day"] += (hi - BASE) / 2
-            d["night"] += (lo - BASE) / 2
+        day_half, night_half = split_cooling_day(float(lo), float(hi))
+        d["day"] += day_half
+        d["night"] += night_half
 
     rows = []
     for y in sorted(years):
