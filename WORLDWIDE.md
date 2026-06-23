@@ -1,6 +1,7 @@
 # Worldwide — design proposal for the global City Signals explorer
 
-**Status: proposal (no code).** This scopes taking City Signals from a 14-city US
+**Status: Phases A–B shipped** — Sydney and De Bilt are live (NCEI GSOY, metric, value-checked by
+`check_cities_ghcn`); Phases C–D remain proposed. This scopes taking City Signals from a 14-city US
 explorer to a worldwide one *without* abandoning the thing that makes the project
 credible: every number comes from the official **station record**, re-derived by a
 committed pipeline (Principle 1, reproduce-or-reject). It is design-first because

@@ -378,7 +378,90 @@ are gone).
 
 ---
 
-## City-climate engine (generalization — in progress)
+## M8 — Durability & performance
+
+A five-stream audit (performance · frontend architecture · Python pipelines · testing/CI ·
+data/docs) of the whole project, captured here so the cross-cutting hardening lives in one place.
+✅ = shipped this round; the rest are `deferred` with the concrete fix. The **Principles** (above)
+are the immutable bar and stay untouched.
+
+**Shipped this round**
+- ✅ **Lazy-load the map geometry** — `CityMap` statically imported both maps (~95 KB gz) into the
+  eager entry chunk; now lazy. Entry 336→62 KB (gzip 115→19). (#97)
+- ✅ **Tested prose formatters** — `lib/format.js` (`signed`/`pluralize`/`direction`) extracts the
+  sign/direction logic hand-written per card (the recurring "wrong direction word" bug class);
+  adopted in the season cards, unit-tested in CI. (#99)
+- ✅ **Pipeline integrity** — restored the orphaned `boi-diurnal` config (reproduce-or-reject), added
+  the 4 international assets to the shape/finiteness gate, `cdd_split` `'T'` guard. (#98)
+- ✅ Earlier this session: the non-finite commit gate (`allow_nan=False` + `_first_nonfinite`), the
+  stdlib-only CI guard, Dependabot, the GHCN staleness banner, rebuild-opens-a-PR, the card/builder
+  prose fixes (#82–#96).
+
+**Performance** (`deferred`)
+1. **Product-split the maps** — load only the active product's single map (~40–50 KB more off the
+   lazy chunk). Needs the dynamic-import restructure inside `CityMap`.
+2. **Lighten recharts** — the lazy `LineChart` chunk is 365 KB / 101 KB gz; recharts 2.x barely
+   tree-shakes and the charts are static. recharts v3 (ESM) or a lightweight SVG/d3-shape renderer
+   could cut 50–80 KB gz. Needs a dep swap + browser regression.
+3. **Cache-bust `public/data`** — assets keep stable filenames across rebuilds while JS/CSS are
+   hashed, so a browser/CDN can serve stale data. Append `?v=<throughYear>` (already stamped) in the
+   fetchers, or hash filenames. Pair with a `schemaVersion` field for forward-compat.
+
+**Frontend architecture** (`deferred`)
+4. **Finish `lib/format.js` adoption** — Extremes/Gap/Grid/GlobalContext still hand-write sign/
+   comparison prose; unify `LastNightHero.signed` (real-minus glyph + integers → generalize the
+   helper, not a drop-in).
+5. **Extract `lib/series.js`** — `splitEarlyLate`/`meanEarlyLate`/`decadeBuckets` are re-implemented in
+   9 cards + `DashboardBody`; extract + unit-test.
+6. **Extract card `useMemo` models to pure, tested functions** — every card's transform is trapped in
+   JSX, so the prose red-teams only run in the 30-navigation browser smoke test. Pull
+   `gridModel`/`streakModel`/… into `lib/`, unit-test the direction branches, add to the "every new
+   card" convention.
+7. **Smaller extractions** — shared tooltip shell (6 inlined copies), `doyLabel`/`MONTH_TICKS`/
+   `hourLabel`, era constants; data-driven `climateOf` (delete the hand-kept `HUMID` set); collapse
+   `CityDashboard`'s 11 asset `useState`+resets into a reducer; remove/wire the unused `units` exports.
+8. **Split `cities.js`** (922 lines) or push long-form prose into the facts JSON as it scales; a
+   `<ChartCard>` scaffold.
+
+**Pipelines** (`deferred`)
+9. **Offline Python test net** — extract the builders' pure logic (streak runs, the CDD-split identity,
+   the missing-day gate, day-of-year) into module functions + a stdlib `unittest` suite wired into CI.
+   There is zero offline Python test today; the recent "missing high discarded a valid low" bug was
+   untestable. Highest pipeline-durability item.
+10. **Shared `analysis/acis.py` + `assetio.py`** — the ACIS/GSOY fetch boilerplate is copy-pasted ~16×,
+    `LAST_COMPLETE_YEAR`/`MAX_MISSING_DAYS` redefined in 14/6 files, the stamped-write block 8×.
+    Consolidate (stdlib-only; a local module passes the import guard) **with the rebuild workflow as the
+    byte-identical gate**; fold in retry/backoff for the daily fetches (only diurnal/grid have it).
+11. **Registry-parity CI check** — assert `cities.js` opt-ins ⟷ `cities.py` blocks ⟷ rebuild loops
+    agree (root cause of the boi orphan) and cross-check `cities.py rural_sid` vs `cities.js rural.sid`;
+    generate `ASSET_SCHEMAS` from the registry.
+12. **Unify day-of-year** — three methods today (index-as-DOY in streaks couples to ACIS gap-padding;
+    date-derived in heat_season; `tm_yday` in verify). Add a `len(year) ∈ {365,366}` assert now; unify
+    on date-derived DOY (semantics change → rebuild gate). Also: leap-year DOY renders a date *label* 1
+    day late in leap years (cosmetic).
+
+**Testing / CI** (`deferred`)
+13. **Pin Playwright** — `ci.yml` installs `playwright` unpinned (the only unpinned CI dep); a release
+    can break render with no code change. Pin an exact (resolvable) version or add it to devDeps via the
+    lockfile; cache the browser download.
+14. **Split `verify_v0` offline/live** — the offline checks (shape/finiteness/stdlib) sit *after* an
+    unguarded `fetch_gsoy()`, so an ACIS/NCEI outage fails the gate on PRs that never touched data and
+    the most valuable PR checks never run. Run the offline checks as a network-free hard gate; make the
+    live value-checks soft/retried.
+15. **`node --test` migration** — convert the hand-rolled suites to `node:test` + `node --test tests/`
+    so new suites auto-run without a `ci.yml` edit; add `engines`/`.nvmrc`.
+16. **Smoke-test robustness** — derive expected counts from the registry (the `=== 5 hot-desert dots`
+    breaks on the next desert city); reduce live-ACIS exposure / add a wall-clock budget; share `dist/`
+    between the build and render jobs (built twice per PR today).
+
+**Governance**
+17. **Branch protection on `main`** (require build/verify-data/render) — a repo setting, not code. The
+    rebuild flow opens a PR not a push, but that's moot if `main` isn't protected. The single largest
+    durability hole.
+
+---
+
+## City-climate engine (generalization — shipped)
 
 Evolving the registry-driven engine into a generalized city-climate explorer where each city surfaces *its own* most interesting trends, fronted by a map. Phoenix Nights is preserved as the curated flagship. Decision: hybrid salience (auto-rank + optional curated overlay).
 
