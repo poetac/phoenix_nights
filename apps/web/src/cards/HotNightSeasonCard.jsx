@@ -4,6 +4,7 @@ import {
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, axisTick } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
+import { direction, pluralize } from "../lib/format.js";
 
 // The warm-night season lives roughly May–October; keep the axis tight to it.
 const MONTH_TICKS = [121, 152, 182, 213, 244, 274];
@@ -51,18 +52,14 @@ export default function HotNightSeasonCard({ city, streaks }) {
   // each end by the sign of its shift (today only LV/PHX/TUS/YUM render this, all
   // strongly positive — this guards the city-agnostic engine as cities are added).
   if (Math.round(model.lengthGain) < 1) return null;
-  const dayWord = (n) => `${n} day${n === 1 ? "" : "s"}`;
-  const fns = Math.round(model.firstShift), lns = Math.round(model.lastShift);
-  const firstClause = fns > 0
-    ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(fns)} earlier</span></>
-    : fns < 0
-      ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(-fns)} later</span></>
-      : <>has held about steady</>;
-  const lastClause = lns > 0
-    ? <>lingers <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(lns)} later</span></>
-    : lns < 0
-      ? <>pulls in <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(-lns)} earlier</span></>
-      : <>holds about steady</>;
+  const fns = direction(model.firstShift, { pos: "earlier", neg: "later", zero: null });
+  const lns = direction(model.lastShift, { pos: "later", neg: "earlier", zero: null });
+  const firstClause = fns.word
+    ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{pluralize(fns.mag, "day")} {fns.word}</span></>
+    : <>has held about steady</>;
+  const lastClause = lns.word
+    ? <>{lns.n > 0 ? "lingers" : "pulls in"} <span style={{ color: C.gold, fontFamily: DISPLAY }}>{pluralize(lns.mag, "day")} {lns.word}</span></>
+    : <>holds about steady</>;
 
   return (
     <Card>
@@ -105,7 +102,7 @@ export default function HotNightSeasonCard({ city, streaks }) {
         a warm-night season{" "}
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.lengthGain)} days longer</span> on the
         calendar, holding {Math.round(model.countLate)} such nights a year now against {Math.round(model.countEarly)} then.
-        {fns > 0 && lns > 0 && <> The relief window at both ends of summer is closing.</>}
+        {fns.n > 0 && lns.n > 0 && <> The relief window at both ends of summer is closing.</>}
         {model.susGain != null && model.susGain > 0 && <>
           {" "}On a stricter rule that ignores lone warm nights — at least five of any seven nights ≥ 80°F — the
           season still stretched about{" "}
