@@ -6,10 +6,18 @@
 import { chromium } from "playwright";
 import { mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { PRODUCTS, citiesOf } from "../src/products.js";
 
 const BASE = process.env.BASE_URL || "http://localhost:8099";
 const SHOTS = fileURLToPath(new URL("./__screens__/", import.meta.url));
 mkdirSync(SHOTS, { recursive: true });
+
+// Desert Nights' city cut is defined once, in products.js. Derive the expected set
+// and count from there rather than hardcoding "5 hot deserts" — adding or removing a
+// desert city in the registry then updates this test automatically (it used to read
+// `=== 5`, which silently breaks the day a sixth desert city is vetted in).
+const DESERT_IDS = citiesOf(PRODUCTS.desert).map((c) => c.id);
+const DESERT_ALLOWED = new Set(DESERT_IDS);
 
 let failed = false;
 const fail = (m) => { console.error("✗ FAIL:", m); failed = true; };
@@ -226,13 +234,12 @@ try {
     undefined, { timeout: 30000 });
   await page.waitForSelector('[data-testid="us-map"]', { timeout: 15000 });
   const dots = await page.$$eval('[data-testid="us-map"] [data-city]', (els) => els.map((e) => e.getAttribute("data-city")));
-  const allowed = new Set(["phx", "tus", "lv", "ep", "yum"]); // the 5 hot deserts
-  const leak = dots.filter((d) => !allowed.has(d));
+  const leak = dots.filter((d) => !DESERT_ALLOWED.has(d));
   if (leak.length) fail(`desert: a non-hot-desert city leaked onto the map (${leak.join(",")})`);
-  if (!dots.includes("phx")) fail("desert: Phoenix dot missing");
-  if (dots.length !== 5) fail(`desert: expected 5 hot-desert dots, got ${dots.length} (${dots.join(",")})`);
+  if (!dots.includes(PRODUCTS.desert.flagshipId)) fail(`desert: flagship ${PRODUCTS.desert.flagshipId} dot missing`);
+  if (dots.length !== DESERT_IDS.length) fail(`desert: expected ${DESERT_IDS.length} hot-desert dots, got ${dots.length} (${dots.join(",")})`);
   const rows = await page.$$eval('ol[aria-label="Cities ranked by overnight-low warming"] button', (b) => b.length);
-  if (rows !== 5) fail(`desert: expected 5 ranked cities, got ${rows}`);
+  if (rows !== DESERT_IDS.length) fail(`desert: expected ${DESERT_IDS.length} ranked cities, got ${rows}`);
   const txt = await page.evaluate(() => document.body.textContent || "");
   if (txt.includes("Humid South")) fail("desert: 'Humid South' should not appear in the desert product");
   console.log(`✓ desert product: ${dots.length} hot-desert cities, thesis landing, no leak`);
