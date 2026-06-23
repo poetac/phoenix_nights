@@ -5,15 +5,10 @@ import {
 import { C, DISPLAY, Card, CardHead, axisTick } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
 import { direction, pluralize } from "../lib/format.js";
+import { doyLabel } from "../lib/labels.js";
 
 const MONTH_TICKS = [91, 121, 152, 182, 213, 244, 274];
 const MONTH_NAMES = { 91: "Apr", 121: "May", 152: "Jun", 182: "Jul", 213: "Aug", 244: "Sep", 274: "Oct" };
-
-function doyLabel(doy) {
-  if (MONTH_NAMES[doy]) return MONTH_NAMES[doy];
-  const d = new Date(2001, 0, doy);
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
 
 export default function SeasonLengthCard({ city, heatSeason }) {
   const model = useMemo(() => {
@@ -65,7 +60,7 @@ export default function SeasonLengthCard({ city, heatSeason }) {
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
             <XAxis dataKey="year" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} minTickGap={32} />
             <YAxis tick={axisTick} tickLine={false} axisLine={false}
-              domain={[80, 320]} ticks={MONTH_TICKS} tickFormatter={doyLabel} />
+              domain={[80, 320]} ticks={MONTH_TICKS} tickFormatter={(v) => doyLabel(v, MONTH_NAMES)} />
             <Tooltip content={({ active, payload, label }) => {
               if (!active || !payload?.length) return null;
               const p = payload[0]?.payload;
@@ -73,7 +68,7 @@ export default function SeasonLengthCard({ city, heatSeason }) {
                 <div className="rounded-lg px-3 py-2 text-sm"
                   style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
                   <div style={{ color: C.muted }} className="text-xs mb-1">{label}</div>
-                  <div>{doyLabel(p.first)} – {doyLabel(p.last)}</div>
+                  <div>{doyLabel(p.first, MONTH_NAMES)} – {doyLabel(p.last, MONTH_NAMES)}</div>
                   <div style={{ color: C.muted }}>{p.count} days ≥ 100°F</div>
                 </div>
               );

@@ -4,14 +4,9 @@ import {
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
 import { convTemp, convTempDelta, tempUnit } from "../lib/units.js";
+import { hourLabel } from "../lib/labels.js";
 
 const MIN_OBS_PER_HOUR = 500; // drops thin decades (e.g. a 2-year 1940s stub)
-
-function hourLabel(h) {
-  if (h === 0) return "12 AM";
-  if (h === 12) return "12 PM";
-  return h < 12 ? `${h} AM` : `${h - 12} PM`;
-}
 
 export default function DiurnalCard({ city, diurnal }) {
   const model = useMemo(() => {

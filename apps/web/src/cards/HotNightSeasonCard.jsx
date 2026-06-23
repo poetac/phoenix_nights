@@ -5,16 +5,11 @@ import {
 import { C, DISPLAY, Card, CardHead, axisTick } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
 import { direction, pluralize } from "../lib/format.js";
+import { doyLabel } from "../lib/labels.js";
 
 // The warm-night season lives roughly May–October; keep the axis tight to it.
 const MONTH_TICKS = [121, 152, 182, 213, 244, 274];
 const MONTH_NAMES = { 121: "May", 152: "Jun", 182: "Jul", 213: "Aug", 244: "Sep", 274: "Oct" };
-
-function doyLabel(doy) {
-  if (MONTH_NAMES[doy]) return MONTH_NAMES[doy];
-  const d = new Date(2001, 0, doy);
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
 
 export default function HotNightSeasonCard({ city, streaks }) {
   const model = useMemo(() => {
@@ -74,7 +69,7 @@ export default function HotNightSeasonCard({ city, streaks }) {
             <CartesianGrid stroke={C.grid} strokeDasharray="2 6" vertical={false} />
             <XAxis dataKey="year" tick={axisTick} tickLine={false} axisLine={{ stroke: C.line }} minTickGap={32} />
             <YAxis tick={axisTick} tickLine={false} axisLine={false}
-              domain={[110, 300]} ticks={MONTH_TICKS} tickFormatter={doyLabel} />
+              domain={[110, 300]} ticks={MONTH_TICKS} tickFormatter={(v) => doyLabel(v, MONTH_NAMES)} />
             <Tooltip content={({ active, payload, label }) => {
               if (!active || !payload?.length) return null;
               const p = payload[0]?.payload;
@@ -82,7 +77,7 @@ export default function HotNightSeasonCard({ city, streaks }) {
                 <div className="rounded-lg px-3 py-2 text-sm"
                   style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
                   <div style={{ color: C.muted }} className="text-xs mb-1">{label}</div>
-                  <div>{doyLabel(p.first)} – {doyLabel(p.last)}</div>
+                  <div>{doyLabel(p.first, MONTH_NAMES)} – {doyLabel(p.last, MONTH_NAMES)}</div>
                   <div style={{ color: C.muted }}>{p.count} nights ≥ 80°F</div>
                 </div>
               );
