@@ -1,8 +1,8 @@
 {
  "station": "Albuquerque (ThreadEx ABQthr 9)",
  "source": "NOAA/NWS ACIS daily mint/maxt",
- "note": "streaks within calendar years; years missing >36 days excluded. first80/last80 are day-of-year of the first/last single 80F+ night; firstSus/lastSus use a 5-of-7-night rule (outlier-robust season).",
- "generated": "2026-06-22",
+ "note": "streaks within calendar years; years missing >36 daily lows excluded (low and high missingness tracked separately, so a missing high never discards an observed low). first80/last80 are day-of-year of the first/last single 80F+ night; firstSus/lastSus use a 5-of-7-night rule.",
+ "generated": "2026-06-23",
  "throughYear": 2025,
  "years": [
   {
@@ -608,8 +608,8 @@
    "streak80": 0,
    "streak90": 0,
    "streak110": 0,
-   "frost": 120,
-   "cool60": 306,
+   "frost": 121,
+   "cool60": 307,
    "first80": null,
    "last80": null,
    "count80": 0,

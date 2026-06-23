@@ -1,7 +1,7 @@
 {
  "city": "dbt",
  "name": "De Bilt (GHCN NLM00006260, KNMI Netherlands)",
- "generated": "2026-06-22",
+ "generated": "2026-06-23",
  "facts": [
   {
    "key": "coldest_night",
