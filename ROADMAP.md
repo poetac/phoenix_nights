@@ -456,8 +456,11 @@ are the immutable bar and stay untouched.
     unguarded `fetch_gsoy()`, so an ACIS/NCEI outage fails the gate on PRs that never touched data and
     the most valuable PR checks never run. Run the offline checks as a network-free hard gate; make the
     live value-checks soft/retried.
-15. **`node --test` migration** — convert the hand-rolled suites to `node:test` + `node --test tests/`
-    so new suites auto-run without a `ci.yml` edit; add `engines`/`.nvmrc`.
+15. ✅ **Test auto-discovery + reproducibility pins** (shipped #103) — `npm test` globs
+    `tests/*.test.mjs` (one source of truth; a new suite auto-runs with no `ci.yml` edit), CI calls it,
+    and `engines` + `.nvmrc` pin node 22. Used a glob runner rather than `node:test` because `node --test`
+    doesn't cleanly run the exit-code-based hand-rolled suites on node 22. *Remaining (optional):* migrate
+    the suites to `node:test` for per-assertion reporting if richer output is ever wanted.
 16. **Smoke-test robustness** — derive expected counts from the registry (the `=== 5 hot-desert dots`
     breaks on the next desert city); reduce live-ACIS exposure / add a wall-clock budget; share `dist/`
     between the build and render jobs (built twice per PR today).
