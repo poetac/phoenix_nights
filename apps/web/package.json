@@ -8,7 +8,11 @@
     "dev:desert": "VITE_PRODUCT=desert vite",
     "build": "vite build",
     "build:desert": "VITE_PRODUCT=desert vite build --outDir dist-desert",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "for f in tests/*.test.mjs; do echo \"› $f\"; node \"$f\" || exit 1; done"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "dependencies": {
     "react": "^18.3.1",

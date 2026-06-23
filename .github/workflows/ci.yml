@@ -26,16 +26,12 @@ jobs:
           cache-dependency-path: apps/web/package-lock.json
       - run: npm ci
       # pure-logic unit tests — the net under the numbers the smoke test can't check:
-      # units conversion, the OLS/bootstrap stats, the freshness/staleness logic, and
-      # the sign/direction prose formatters (the recurring "wrong direction word" class)
-      - run: node tests/units.test.mjs
-      - run: node tests/stats.test.mjs
-      - run: node tests/freshness.test.mjs
-      - run: node tests/format.test.mjs
-      # the two city registries (cities.js front-end / cities.py pipelines) are
-      # hand-kept copies of one truth and drift — that drift orphaned boi's diurnal
-      # config (#98). Assert they agree on the city set, ids, rural pair, and opt-ins.
-      - run: node tests/registry.test.mjs
+      # units conversion, the OLS/bootstrap stats, the freshness/staleness logic, the
+      # sign/direction prose formatters (the recurring "wrong direction word" class), and
+      # cities.js<->cities.py registry parity (the boi-orphan guard). `npm test` globs
+      # tests/*.test.mjs, so a new suite auto-runs with no edit here (render-smoke.mjs,
+      # which needs a served build, is not *.test.mjs and runs in the render job instead).
+      - run: npm test
       # the same net, other language: the builders' pure logic (streak/season
       # spans, the CDD split identity) — offline, no ACIS, the layer where the
       # missing-high-vs-observed-low bug class lives. unittest is stdlib and the
