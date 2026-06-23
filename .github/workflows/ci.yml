@@ -32,6 +32,13 @@ jobs:
       - run: node tests/stats.test.mjs
       - run: node tests/freshness.test.mjs
       - run: node tests/format.test.mjs
+      # the same net, other language: the builders' pure logic (streak/season
+      # spans, the CDD split identity) — offline, no ACIS, the layer where the
+      # missing-high-vs-observed-low bug class lives. unittest is stdlib and the
+      # runner ships python3, so no setup-python needed; run from the repo root.
+      - name: Python builder unit tests
+        working-directory: ${{ github.workspace }}
+        run: python3 -m unittest discover -s analysis/tests
       - run: npm run build
       # both products must build (explorer is default; desert is the second site)
       - run: npm run build:desert
