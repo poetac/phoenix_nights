@@ -11,7 +11,6 @@ Stdlib only. Usage: python3 analysis/build_heat_season.py
 
 import datetime
 import json
-import pathlib
 import urllib.request
 
 from cities import data_path, get_city

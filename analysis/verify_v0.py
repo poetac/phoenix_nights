@@ -633,6 +633,12 @@ ASSET_SCHEMAS = {
     "tus-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "lv-facts.json": ("facts", list, ("key", "rank", "score", "label")),
     "ep-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    # International (GHCN/GSOY) cities — previously absent here, so they escaped the
+    # shape + non-finite commit gate (README claims "every committed JSON" is checked).
+    "syd-series.json": ("years", list, ("year", "low", "high", "coldLow")),
+    "dbt-series.json": ("years", list, ("year", "low", "high", "coldLow")),
+    "syd-facts.json": ("facts", list, ("key", "rank", "score", "label")),
+    "dbt-facts.json": ("facts", list, ("key", "rank", "score", "label")),
 }
 
 

@@ -19,7 +19,6 @@ apps/web/public/data/phx-cdd-split.json. Stdlib only.
 
 import datetime
 import json
-import pathlib
 import urllib.request
 
 from cities import data_path, get_city
@@ -50,7 +49,7 @@ def main():
     for date, lo, hi in fetch_daily(city):
         y = int(date[:4])
         d = years.setdefault(y, {"day": 0.0, "night": 0.0, "miss": 0})
-        if lo in ("M", None) or hi in ("M", None):
+        if lo in ("M", "T", None) or hi in ("M", "T", None):
             d["miss"] += 1
             continue
         lo, hi = float(lo), float(hi)

@@ -21,7 +21,6 @@ Output: apps/web/public/data/phx-streaks.json. Stdlib only.
 
 import datetime
 import json
-import pathlib
 import urllib.request
 
 from cities import data_path, get_city
