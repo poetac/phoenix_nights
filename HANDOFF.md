@@ -40,8 +40,8 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 ## Engine phases (see ROADMAP "City-climate engine")
 
 **1 ✅ fact engine · 2 ✅ per-city page + auto hero · 3a ✅ explore + ranking ·
-3b ✅ the literal US map · 4 ✅ scale cities · 5 ✅ honest extrapolation.** Now **14 cities** incl. five
-humid/eastern (Atlanta, Houston, New Orleans, Raleigh, Dallas).
+3b ✅ the literal US map · 4 ✅ scale cities · 5 ✅ honest extrapolation.** Now **16 cities** — 14 US incl.
+five humid/eastern (Atlanta, Houston, New Orleans, Raleigh, Dallas) + Sydney and De Bilt (GHCN/GSOY).
 
 Post-Phase-5: diurnal curves wired for **all 14 cities** (the humid set's `*-diurnal.json`
 builds on the next rebuild); grid for the clean-BA metros only (ABQ=PNM, Boise=IPCO, +the
@@ -180,7 +180,8 @@ The breadth cities are shallower than Phoenix; close that before widening furthe
   (phx/tus/lv/ep/yum/rno/abq/slc/boi/atl/hou/nola/rdu/dfw).
 - `build_facts.py` builds **all** cities in one run (cross-city ranking needs the
   whole set) and rewrites every `*-facts.json` — so adding a city shifts existing
-  cities' fact scores (expected). Its rural-pair `REF` dict must gain each new sid.
+  cities' fact scores (expected). The rural-pair sid is read from `cities.py` (`rural_sid`,
+  the single source of truth) — there is no separate `REF` dict to update.
 - The **card-fit** lesson: high-elevation cities have cool 1970s nights, so
   night-cooling-share goes ≤0 and tropical-nights ≈0 — those cards omit (guarded in
   `NightCoolingCard`, the salience applicability checks, the share generator). New
