@@ -415,9 +415,13 @@ are the immutable bar and stay untouched.
    fetchers, or hash filenames. Pair with a `schemaVersion` field for forward-compat.
 
 **Frontend architecture** (`deferred`)
-4. **Finish `lib/format.js` adoption** — Extremes/Gap/Grid/GlobalContext still hand-write sign/
-   comparison prose; unify `LastNightHero.signed` (real-minus glyph + integers → generalize the
-   helper, not a drop-in).
+4. **Finish `lib/format.js` adoption** — ✅ *(partial, #105)* Extremes (3×) + Gap (1×) now use `signed()`
+   for the `{x >= 0 ? "+" : ""}{…toFixed()}` sign prefix (proven output-identical: the unit converters
+   preserve sign and `toFixed` keeps the minus, so `signed(conv(x), d)` reproduces the old string in every
+   case). *Remaining:* Grid/GlobalContext (and Extremes `coldTrend`) hardcode `"+"` on contextually-positive
+   values — adopting `signed()` there is a *semantic* change (would surface a `−` for a maritime/edge city),
+   so it needs per-card judgment, not a drop-in; and unify `LastNightHero.signed` (real-minus glyph U+2212 +
+   integers → generalize the helper). Do these browser-attended.
 5. **Extract `lib/series.js`** — `splitEarlyLate`/`meanEarlyLate`/`decadeBuckets` are re-implemented in
    9 cards + `DashboardBody`; extract + unit-test. **Not a clean drop-in** (verified): the "early" window
    has two live variants — bounded `[baseline.start, baseline.end]` (Streak/NightCooling/HotNightSeason/
