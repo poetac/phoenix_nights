@@ -5,6 +5,7 @@ import {
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
 import { linreg, mean } from "../lib/stats.js";
 import { convTemp, convTempDelta, tempUnit } from "../lib/units.js";
+import { signed } from "../lib/format.js";
 
 // The year's single warmest and single coldest overnight low — the ceiling and
 // floor of nighttime relief. Every other card on the page is a mean, a count,
@@ -88,13 +89,13 @@ export default function ExtremesCard({ city, rows, windowStart }) {
           <>Even the year's one moment of deepest relief is warming —{" "}
             <span style={{ color: C.gold, fontFamily: DISPLAY }}>+{dd(model.coldTrend).toFixed(1)}{tempUnit(units)} per decade</span>
             {coldFaster ? (
-              <>, faster than the warmest night ({model.warmTrend >= 0 ? "+" : ""}{dd(model.warmTrend).toFixed(1)}°/decade).
+              <>, faster than the warmest night ({signed(dd(model.warmTrend), 1)}°/decade).
                 The hottest of the lows can't climb much past the daytime heat, but the floor has room to rise — and it is.</>
             ) : (
-              <>, while the warmest night climbs {model.warmTrend >= 0 ? "+" : ""}{dd(model.warmTrend).toFixed(1)}°/decade.</>
+              <>, while the warmest night climbs {signed(dd(model.warmTrend), 1)}°/decade.</>
             )}</>
         ) : (
-          <>The warmest night is climbing {model.warmTrend >= 0 ? "+" : ""}{dd(model.warmTrend).toFixed(1)}{tempUnit(units)} per decade.</>
+          <>The warmest night is climbing {signed(dd(model.warmTrend), 1)}{tempUnit(units)} per decade.</>
         )}{" "}
         {city.shortName}'s warmest low on record was{" "}
         <span style={{ color: C.ember, fontFamily: DISPLAY }}>{t(model.recordWarm.warmLow).toFixed(0)}{tempUnit(units)}</span>, set in{" "}

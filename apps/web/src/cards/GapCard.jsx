@@ -5,6 +5,7 @@ import {
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
 import { linreg, mean } from "../lib/stats.js";
 import { convTempDelta, tempUnit, tempRateUnit } from "../lib/units.js";
+import { signed } from "../lib/format.js";
 
 // Diurnal temperature range (DTR = high − low). A desert's signature is a big
 // daily swing; as nights warm faster than days, that swing collapses — the whole
@@ -107,8 +108,8 @@ export default function GapCard({ city, rows }) {
       <p className="text-xs mt-3" style={{ color: C.muted }}>
         Diurnal range = annual mean daily high minus annual mean daily low, from the same{" "}
         {city.source === "ghcn" ? "precomputed NCEI GSOY annual series" : "live station record"} as the
-        rest of the page (dashed line is the ordinary-least-squares trend, {model.perDecade >= 0 ? "+" : ""}
-        {d(model.perDecade).toFixed(2)}{tempRateUnit(units)}). {city.id === "phx"
+        rest of the page (dashed line is the ordinary-least-squares trend,{" "}
+        {signed(d(model.perDecade), 2)}{tempRateUnit(units)}). {city.id === "phx"
           ? <>Shown from {DTR_START}: earlier years in Phoenix's threaded record carry an agricultural "oasis effect" —
             heavy valley irrigation that lowered highs and raised lows — which confounds the urban signal, so they're
             left out here.</>
