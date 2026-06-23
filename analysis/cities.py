@@ -228,6 +228,12 @@ CITIES = {
         # Idaho Power (IPCO) is the Boise metro's balancing authority (EIA-930).
         "grid": {"respondents": ("IPCO",),
                  "label": "IPCO (Idaho Power, EIA-930)"},
+        # Boise Air Terminal hourly (NCEI ISD), DST-aware via the tz above. Recovered
+        # from the committed boi-diurnal.json provenance — the asset was committed with
+        # no config, so `build_diurnal.py --city boi` KeyError'd and the rebuild silently
+        # skipped it (continue-on-error). Restores reproducibility (Principle 1).
+        "diurnal": {"sids": ("99999924131", "72681024131"),
+                    "station": "Boise Air Terminal", "first_year": 1948},
     },
     # --- First international city (Worldwide Phase B). No ACIS (US-only), so it
     # sources from NCEI GSOY via its GHCN-Daily id and renders in metric. Carries
