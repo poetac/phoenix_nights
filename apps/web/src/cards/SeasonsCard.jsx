@@ -3,6 +3,7 @@ import { C, DISPLAY, Card, CardHead, useUnits } from "../ui.jsx";
 import { linreg, mean } from "../lib/stats.js";
 import { SEASONS } from "../lib/data.js";
 import { convTempDelta, tempUnit } from "../lib/units.js";
+import { signed } from "../lib/format.js";
 
 const TREND_START = 1970;
 
@@ -48,11 +49,11 @@ export default function SeasonsCard({ city, seasonal }) {
             <div className="text-sm" style={{ color: C.text }}>{s.label}</div>
             <div className="text-xs mb-2" style={{ color: C.muted }}>{s.months}</div>
             <div className="text-2xl" style={{ fontFamily: DISPLAY, color: C.ember, fontVariantNumeric: "tabular-nums" }}>
-              {s.lowTrend >= 0 ? "+" : ""}{d(s.lowTrend).toFixed(1)}°
+              {signed(d(s.lowTrend))}°
             </div>
             <div className="text-xs" style={{ color: C.emberSoft }}>lows / decade</div>
             <div className="text-base mt-1" style={{ fontFamily: DISPLAY, color: C.day, fontVariantNumeric: "tabular-nums" }}>
-              {s.highTrend >= 0 ? "+" : ""}{d(s.highTrend).toFixed(1)}°
+              {signed(d(s.highTrend))}°
             </div>
             <div className="text-xs" style={{ color: C.day }}>highs / decade</div>
           </div>

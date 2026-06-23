@@ -4,6 +4,7 @@ import {
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, axisTick } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
+import { direction, pluralize } from "../lib/format.js";
 
 const MONTH_TICKS = [91, 121, 152, 182, 213, 244, 274];
 const MONTH_NAMES = { 91: "Apr", 121: "May", 152: "Jun", 182: "Jul", 213: "Aug", 244: "Sep", 274: "Oct" };
@@ -46,13 +47,10 @@ export default function SeasonLengthCard({ city, heatSeason }) {
   // shrank, Albuquerque is flat), that framing is false, so omit rather than print an
   // inverted "−2 days longer".
   if (Math.round(model.lengthGain) < 1) return null;
-  const fs = Math.round(model.firstShift);
-  const dayWord = (n) => `${n} day${n === 1 ? "" : "s"}`;
-  const firstClause = fs > 0
-    ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(fs)} earlier</span></>
-    : fs < 0
-      ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{dayWord(-fs)} later</span></>
-      : <>has held about steady</>;
+  const fs = direction(model.firstShift, { pos: "earlier", neg: "later", zero: null });
+  const firstClause = fs.word
+    ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{pluralize(fs.mag, "day")} {fs.word}</span></>
+    : <>has held about steady</>;
 
   return (
     <Card>
@@ -94,7 +92,7 @@ export default function SeasonLengthCard({ city, heatSeason }) {
         and the season runs{" "}
         <span style={{ color: C.gold, fontFamily: DISPLAY }}>{Math.round(model.lengthGain)} days longer</span> —{" "}
         {Math.round(model.countLate)} triple-digit days a year now, against {Math.round(model.countEarly)} then.
-        {fs > 0 && <> That's most of an extra month of summer on each end of the calendar.</>}
+        {fs.n > 0 && <> That's most of an extra month of summer on each end of the calendar.</>}
         {model.susGain != null && model.susGain > 0 && <>
           {" "}Counting only <em>sustained</em> heat — runs of three or more 100°F days, which a single freak
           spring scorcher can't trigger — the season still grew about{" "}
