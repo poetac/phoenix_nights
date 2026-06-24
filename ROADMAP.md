@@ -434,54 +434,28 @@ are the immutable bar and stay untouched.
    SeasonLength) vs unbounded `≤ baseline.end` (Sleep/Extremes/Seasons) — plus bespoke windows (Winter:
    `<1970` / `-30y`; CoolWindow: decade buckets). A shared helper must take the window as a parameter and
    adopt per-card with output-equivalence checks; do it browser-attended, not unattended.
-6. **Extract card `useMemo` models to pure, tested functions** — ✅ *(pattern established + standardized)*
-   `gridModel` now lives in `lib/gridModel.js`, returning the chart series **plus** the `compare`/`floor`
-   direction clauses; its
-   branches (peak fell / barely moved / slower / faster / N× as fast; floor up / down / holds) are
-   unit-tested in `tests/gridModel.test.mjs` against synthetic Tucson/Boise/Phoenix shapes — the exact
-   prose that used to be exercised only by the 30-navigation browser smoke test (#112). The card is now a
-   thin `useMemo(() => gridModel(grid))` + JSX. `streakModel` now lives in `lib/streakModel.js`, with its
-   guards unit-tested in `tests/streakModel.test.mjs` — the bounded early window `[baseline.start, end]`,
-   the 7-year minimums, and the applicability floor (`lateAvg < 2`) that makes the card omit itself on
-   cool/high-elevation/humid cities (#113). `extremesModel` now lives in `lib/extremesModel.js`, carrying
-   the two direction flags `coldRising` (floor warming?) and `coldFaster` (floor outpaces ceiling? — the
-   thesis) that pick the prose branch; `tests/extremesModel.test.mjs` covers all three branches (rising+
-   faster / rising+slower / cooling), the windowing, the 7-year averages, and the 20-year guard (#114).
-   `seasonsModel` now lives in `lib/seasonsModel.js`, carrying `summer` and `maxRatio` (the lopsided-
-   signature pick — the season whose lows warm fastest relative to its highs, gated on `highTrend > 0.05`);
-   `tests/seasonsModel.test.mjs` covers that selector + its divide-by-tiny guard, the per-season trends, the
-   summer delta, and the < 30-year / missing-asset guards (#115). `extrapolationModel` now lives in
-   `lib/extrapolationModel.js` — the centroid-pivot slope-CI projection; `tests/extrapolationModel.test.mjs`
-   checks the projected value/fan math (`perDecade`/`at2050`/`half`, the hist+proj join row, the widened
-   horizon band) and every guard (non-robust fit, missing CI bound, < 15 finite lows, sub-decade runway)
-   (#116). The "model in `lib/`, direction branches unit-tested" rule is now folded into the every-new-card
-   convention in `CLAUDE.md` (#117), so new cards ship that way by default. Carried so far:
-   grid/streak/extremes/seasons/extrapolation (#112–#116) and `gapModel` — whose `narrowed` flag flips
-   GapCard's entire headline between the inland heat-island ("collapsing") and the maritime signal
-   ("widening", e.g. Sydney), with the decade-bucketing + 3 guards tested (#118). (Gap was mislabeled a
-   "simpler reshape" in #117 — it carries real direction prose; corrected here.) Also `winterModel` —
-   whose frost-disappearance guard self-omits the card on cities that still freeze hard (Reno/Salt Lake/
-   Boise/Albuquerque), tested from every angle (#119); and `goalpostsModel` — whose cooling-record guard
-   (`rise <= 0`) keeps the "normal redefined upward" prose from inverting, with the 25-year vintage floor
-   and the `< 3 vintages` guard tested (#120); and `coolWindowModel` — whose hot-city scarcity guard
-   (latest decade still > 13 relief hours → omit) keeps the "relief vanished" story off cool/high-elevation
-   cities, with the observation-density gate tested (#121); and `nightCoolingModel` — whose baseline-share
-   premise guard (`baseShare <= 0` → omit) keeps the "night's share of the cooling bill" story off
-   high-elevation cities (El Paso) whose 1970s nights had net-negative cooling demand (#122); and
-   `seasonLengthModel` — whose expansion guard (`round(lengthGain) < 1` → omit) keeps the "season runs N
-   days longer" prose from inverting on a city whose 100°F band shrank (Dallas) or is flat, with the
-   first-day shift + sustained-run gain tested (#123); and `hotNightSeasonModel` — the lows-first sibling,
-   with the same expansion guard plus two-ended (first + last 80°F night) shift math tested (#124); and
-   `globalContextModel` — whose positive-trend guard (`cityTrend <= 0 || desertTrend <= 0` → omit) keeps the
-   "outrunning the Earth" framing honest, with the sorted bars, the ×-global multiples, and the common-year
-   intersection tested (#125); and `uhiModel` — whose UHI-excess guard (`excess <= 0` → omit, where the
-   city isn't outpacing its rural reference) is the control card's whole premise, collapsing its two
-   useMemos into one tested function with the per-decade gaps + intersection (#126); and `lastNightModel` —
-   whose `warmer` / `near` flags pick the hero's sentence (`near` = `|anomLow| < 1` flips it to "landed
-   right on the normal"), with the date-normal lookup + Feb-29 fallback tested (#127). **All fourteen
-   prose-bearing card transforms are now extracted + tested** — the audit is cleared; only
-   Sleep/HumanCost/Diurnal/Growth are genuinely trivial reshapes that need no model. *(This entry has grown
-   unwieldy across the extractions — a follow-up condenses it to a compact carried-cards table.)*
+6. **Extract card `useMemo` models to pure, tested functions** — ✅ *(complete)* Every prose-bearing card
+   transform now lives in a pure `lib/<name>Model.js` (no React/JSX/units), called from a thin `useMemo`,
+   with a `tests/<name>Model.test.mjs` exercising its direction branches and applicability guards — the
+   logic that used to run only in the 30-navigation browser smoke test, which can't catch a card that
+   should have *omitted* itself. The rule is folded into the every-new-card convention in `CLAUDE.md`
+   (#117). The fifteen carried transforms (model — guard/branch under test — PR):
+   - `gridModel` — `compare`/`floor` clauses: peak fell / slower / N× as fast; floor up/down/holds (#112)
+   - `streakModel` — bounded early window + applicability floor (`lateAvg < 2` omits cool/humid cities) (#113)
+   - `extremesModel` — `coldRising`/`coldFaster` flags pick 1 of 3 prose branches (#114)
+   - `seasonsModel` — `maxRatio` lopsided-season pick + its `highTrend > 0.05` divide-by-tiny guard (#115)
+   - `extrapolationModel` — centroid-pivot projection math + 4 guards (fit / CI / points / runway) (#116)
+   - `gapModel` — `narrowed` flips the headline: inland "collapsing" vs maritime "widening" (#118)
+   - `winterModel` — frost-disappearance guard (omits cities that still freeze hard) (#119)
+   - `goalpostsModel` — cooling-record guard (`rise <= 0`) + 25-year vintage floor (#120)
+   - `coolWindowModel` — hot-city scarcity guard (`now.total > 13` omits cool cities) + density gate (#121)
+   - `nightCoolingModel` — baseline-share premise guard (`baseShare <= 0` omits El Paso) (#122)
+   - `seasonLengthModel` — 100°F-season expansion guard (`round(lengthGain) < 1` omits Dallas) (#123)
+   - `hotNightSeasonModel` — 80°F-night expansion guard + two-ended (first/last) shift math (#124)
+   - `globalContextModel` — positive-trend guard (`cityTrend`/`desertTrend <= 0`) + `desertX` branch (#125)
+   - `uhiModel` — UHI-excess guard (`excess <= 0`; city must outpace rural); two useMemos → one (#126)
+   - `lastNightModel` — `warmer`/`near` flags pick the hero's sentence (`near` = `|anomLow| < 1`) (#127)
+   Only `Sleep`/`HumanCost`/`Diurnal`/`Growth` remain — genuinely trivial reshapes that need no model.
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
    deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`
