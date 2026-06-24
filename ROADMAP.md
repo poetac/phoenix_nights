@@ -415,17 +415,19 @@ are the immutable bar and stay untouched.
    fetchers, or hash filenames. Pair with a `schemaVersion` field for forward-compat.
 
 **Frontend architecture** (`deferred`)
-4. **Finish `lib/format.js` adoption** — ✅ *(partial)* Extremes (3×) + Gap (1×) use `signed()` (#105);
-   the `DashboardBody`/`SignalsBody` headline stat-strips — low hardcoded `"+"`, high manually `{x >= 0 ?
-   "+" : ""}`-guarded — now both go through `signed()` (#110). Output-identical for the high *always* (the
-   `>= 0` guard matches `signed`'s zero→`"+"`) and for every current (warming-low) city; it also kills the
-   `"+-0.3"` render a future cooling-low city would have hit. *Remaining drop-ins* (same story — identical
-   on today's data, sign-correct for a worldwide cooling city, so render-smoke nets them): Extremes
-   `coldTrend`; GlobalContext (tooltip + bar label + prose); CityExplore / CityCompare:111 / CityMap
-   night-warming; UhiCard city/desert trend; Growth gap. *Not candidates:* Grid hardcodes `"+"` only inside
-   its `pg > 0.5` branch (sign already handled there + documented); Seasons `summer.delta` is prose-coupled
-   (“hotter” needs `direction()`, not `signed()`); `LastNightHero.signed` is a deliberate U+2212/integer
-   variant; CityCompare's per-year `> 0` guard differs from `signed()` at exactly zero.
+4. **Finish `lib/format.js` adoption** — ✅ *(clean drop-ins done)* Extremes (3×) + Gap (1×) `signed()`
+   (#105); the `DashboardBody`/`SignalsBody` headline stat-strips (#110); and the neutral trend displays —
+   GlobalContext tooltip + bar label, UhiCard city/desert, CityExplore / CityCompare:111 / CityMap
+   night-warming (#111). All output-identical on today's (warming) data and render-smoke-covered, and they
+   bug-proof the `"+-0.3"` a worldwide cooling city would render. *Deliberately NOT `signed()`-targets,
+   with reasons (each verified):* **sign already guarded** by an enclosing test, so `"+"` is correct by
+   construction — Extremes `coldTrend` (`coldRising = coldTrend > 0`), Grid (`pg > 0.5` branch); **prose-
+   coupled**, where the surrounding words assume a direction so `signed()` alone wouldn't make it read true
+   — GlobalContext "climbed/outpace" (94/97/100), Seasons "hotter" (`summer.delta`, wants `direction()`);
+   **deliberate variants** — `LastNightHero.signed` (U+2212 + integers), CityCompare's per-year `> 0` guard
+   (differs from `signed` at exactly zero). One genuine drop-in **deferred, not blind**: Growth `+{p.gap}`
+   renders a raw `+(…).toFixed(1)` number, so an integer gap prints `"+5"` where `signed()` would force
+   `"+5.0"` — a visible change needing a decision (normalize to 1dp, or keep raw), not a swap.
 5. **Extract `lib/series.js`** — `splitEarlyLate`/`meanEarlyLate`/`decadeBuckets` are re-implemented in
    9 cards + `DashboardBody`; extract + unit-test. **Not a clean drop-in** (verified): the "early" window
    has two live variants — bounded `[baseline.start, baseline.end]` (Streak/NightCooling/HotNightSeason/

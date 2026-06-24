@@ -5,6 +5,7 @@ import {
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
 import { linreg, mean } from "../lib/stats.js";
 import { convTemp, convTempDelta, tempUnit, convDistPhrase } from "../lib/units.js";
+import { signed } from "../lib/format.js";
 
 export default function UhiCard({ city, cityRows, ruralRows }) {
   const data = useMemo(() => {
@@ -66,13 +67,13 @@ export default function UhiCard({ city, cityRows, ruralRows }) {
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <div className="text-3xl sm:text-4xl" style={{ fontFamily: DISPLAY, color: C.ember, fontVariantNumeric: "tabular-nums" }}>
-            +{gap(stats.cityTrend).toFixed(1)}°
+            {signed(gap(stats.cityTrend))}°
           </div>
           <div className="text-sm mt-1" style={{ color: C.emberSoft }}>{city.shortName} lows, per decade since {stats.first}</div>
         </div>
         <div>
           <div className="text-3xl sm:text-4xl" style={{ fontFamily: DISPLAY, color: C.sage, fontVariantNumeric: "tabular-nums" }}>
-            +{gap(stats.desertTrend).toFixed(1)}°
+            {signed(gap(stats.desertTrend))}°
           </div>
           <div className="text-sm mt-1" style={{ color: C.sage }}>{kind} lows ({city.rural.short})</div>
         </div>
