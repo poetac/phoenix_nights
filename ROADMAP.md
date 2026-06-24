@@ -455,10 +455,12 @@ are the immutable bar and stay untouched.
    checks the projected value/fan math (`perDecade`/`at2050`/`half`, the hist+proj join row, the widened
    horizon band) and every guard (non-robust fit, missing CI bound, < 15 finite lows, sub-decade runway)
    (#116). The "model in `lib/`, direction branches unit-tested" rule is now folded into the every-new-card
-   convention in `CLAUDE.md` (#117), so new cards ship that way by default. The five carried cards
-   (grid/streak/extremes/seasons/extrapolation) cover the prose-bearing transforms; the remaining
-   simpler reshapes (Gap/Diurnal/CoolWindow/…) are pure data-shaping with no direction prose and can follow
-   opportunistically.
+   convention in `CLAUDE.md` (#117), so new cards ship that way by default. Carried so far:
+   grid/streak/extremes/seasons/extrapolation (#112–#116) and `gapModel` — whose `narrowed` flag flips
+   GapCard's entire headline between the inland heat-island ("collapsing") and the maritime signal
+   ("widening", e.g. Sydney), with the decade-bucketing + 3 guards tested (#118). (Gap was mislabeled a
+   "simpler reshape" in #117 — it carries real direction prose; corrected here.) The remaining cards
+   (Diurnal/CoolWindow/NightCooling/…) are genuinely simpler reshapes and can follow opportunistically.
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
    deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`
