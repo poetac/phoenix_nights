@@ -533,6 +533,8 @@ const ATLANTA = {
   id: "atl",
   name: "Atlanta, GA",
   shortName: "Atlanta",
+  // Humid South biome (single source of truth — was the hand-kept HUMID set).
+  climate: { key: "humid", label: "Humid South" },
   threadSid: "ATLthr 9",
   recordStart: "1879-01-01",
   stationLabel:
@@ -587,6 +589,7 @@ const HOUSTON = {
   id: "hou",
   name: "Houston, TX",
   shortName: "Houston",
+  climate: { key: "humid", label: "Humid South" },
   threadSid: "IAHthr 9",
   recordStart: "1889-01-01",
   stationLabel:
@@ -638,6 +641,7 @@ const NEWORLEANS = {
   id: "nola",
   name: "New Orleans, LA",
   shortName: "New Orleans",
+  climate: { key: "humid", label: "Humid South" },
   threadSid: "MSYthr 9",
   recordStart: "1946-01-01",
   stationLabel:
@@ -689,6 +693,7 @@ const RALEIGH = {
   id: "rdu",
   name: "Raleigh, NC",
   shortName: "Raleigh",
+  climate: { key: "humid", label: "Humid South" },
   threadSid: "RDUthr 9",
   recordStart: "1888-01-01",
   stationLabel: "Raleigh Area ThreadEx record (Raleigh\u2013Durham Intl, KRDU)",
@@ -731,6 +736,7 @@ const DALLAS = {
   id: "dfw",
   name: "Dallas, TX",
   shortName: "Dallas",
+  climate: { key: "humid", label: "Humid South" },
   threadSid: "DFWthr 9",
   recordStart: "1899-01-01",
   stationLabel: "Dallas Area ThreadEx record (Dallas\u2013Fort Worth Intl, KDFW)",
@@ -865,17 +871,15 @@ export const DEBILT = {
   repoUrl: "https://github.com/poetac/phoenix_nights",
 };
 
-// Climate grouping for the explore landing: the same overnight-warming fingerprint
-// shows up across both biomes the engine spans. Humid cities are the South/Gulf
-// additions; everything else is the arid/interior West. Update HUMID when adding.
-const HUMID = new Set(["atl", "hou", "nola", "rdu", "dfw"]);
-// Climate chip for the ranked list. Data-driven so it generalizes worldwide: a city
-// may declare its own `climate` ({key,label}); US cities fall back to the two-biome
-// split the engine spans (humid South vs arid/interior West).
+// Climate chip for the ranked list. Fully data-driven: every city carries its own
+// `climate` ({key,label}) — the South/Gulf additions declare "Humid South", the
+// international cities their own (temperate), and the arid/interior-West cities omit
+// it and fall back here. One source of truth per city (no separate biome set to keep
+// in sync — that hand-kept HUMID set was a drift point, the kind the registry-parity
+// check guards against).
 export const climateOf = (id) => {
   const c = CITIES.find((x) => x.id === id);
-  if (c?.climate) return c.climate;
-  return HUMID.has(id) ? { key: "humid", label: "Humid South" } : { key: "arid", label: "Arid West" };
+  return c?.climate ?? { key: "arid", label: "Arid West" };
 };
 
 // Precomputed-asset paths all follow one rule: data/<id>-<asset>.json, built by
