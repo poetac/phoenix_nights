@@ -3,26 +3,10 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick } from "../ui.jsx";
-import { mean } from "../lib/stats.js";
+import { streakModel } from "../lib/streakModel.js";
 
 export default function StreakCard({ city, streaks }) {
-  const model = useMemo(() => {
-    if (!streaks?.years) return null;
-    const data = streaks.years.map((r) => ({ year: r.year, streak80: r.streak80, streak110: r.streak110 }));
-    const early = data.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
-    const lastYear = data[data.length - 1].year;
-    const late = data.filter((r) => r.year > lastYear - 10);
-    if (early.length < 7 || late.length < 7) return null;
-    const record = data.reduce((m, r) => (r.streak80 > m.streak80 ? r : m), data[0]);
-    const record110 = data.reduce((m, r) => (r.streak110 > m.streak110 ? r : m), data[0]);
-    const earlyAvg = mean(early.map((r) => r.streak80));
-    const lateAvg = mean(late.map((r) => r.streak80));
-    // Applicability (card-fit): cities with essentially no 80F nights have no
-    // streak story to tell (a flat-zero chart). Cool/high-elevation and humid
-    // cities omit; hot-night cities keep it.
-    if (lateAvg < 2) return null;
-    return { data, record, record110, earlyAvg, lateAvg };
-  }, [streaks, city]);
+  const model = useMemo(() => streakModel(streaks, city), [streaks, city]);
 
   if (!model) return null;
 
