@@ -1,43 +1,20 @@
 import { useMemo } from "react";
 import { C, DISPLAY, Card, CardHead, useUnits } from "../ui.jsx";
-import { linreg, mean } from "../lib/stats.js";
-import { SEASONS } from "../lib/data.js";
 import { convTempDelta, tempUnit } from "../lib/units.js";
 import { signed } from "../lib/format.js";
-
-const TREND_START = 1970;
+import { seasonsModel } from "../lib/seasonsModel.js";
 
 export default function SeasonsCard({ city, seasonal }) {
-  const stats = useMemo(() => {
-    if (!seasonal) return null;
-    const out = [];
-    for (const s of SEASONS) {
-      const series = (seasonal[s.key] || []).filter((r) => r.year >= TREND_START);
-      if (series.length < 30) return null;
-      const lowFit = linreg(series.map((r) => ({ x: r.year, y: r.low })));
-      const highFit = linreg(series.map((r) => ({ x: r.year, y: r.high })));
-      const base = series.filter((r) => r.year <= city.baseline.end).map((r) => r.low);
-      const lastYear = series[series.length - 1].year;
-      const recent = series.filter((r) => r.year > lastYear - 10).map((r) => r.low);
-      out.push({
-        ...s,
-        lowTrend: lowFit.slope * 10,
-        highTrend: highFit.slope * 10,
-        delta: base.length >= 7 && recent.length >= 7 ? mean(recent) - mean(base) : null,
-      });
-    }
-    return out;
-  }, [seasonal, city]);
+  const model = useMemo(() => seasonsModel(seasonal, city), [seasonal, city]);
 
   const units = useUnits();
-  if (!stats) return null;
+  if (!model) return null;
   // Season trends and the summer delta are differences (convTempDelta, identity in
   // °F). The "+6°F since 1970" is Climate Central's published figure — kept as cited.
   const d = (v) => convTempDelta(v, units);
-  const summer = stats.find((s) => s.key === "JJA");
-  const maxRatio = stats.reduce((m, s) =>
-    (s.highTrend > 0.05 && s.lowTrend / s.highTrend > m.r ? { r: s.lowTrend / s.highTrend, s } : m),
-    { r: 0, s: null });
+  // seasons (per-season trends/delta), summer (JJA), and maxRatio (the lopsided-signature
+  // pick) all come from seasonsModel — see lib/seasonsModel.js.
+  const { seasons: stats, summer, maxRatio } = model;
 
   return (
     <Card>
