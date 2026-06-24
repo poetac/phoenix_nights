@@ -3,9 +3,9 @@ import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
-import { linreg, mean } from "../lib/stats.js";
 import { convTempDelta, tempUnit, tempRateUnit } from "../lib/units.js";
 import { signed } from "../lib/format.js";
+import { gapModel } from "../lib/gapModel.js";
 
 // Diurnal temperature range (DTR = high − low). A desert's signature is a big
 // daily swing; as nights warm faster than days, that swing collapses — the whole
@@ -19,41 +19,13 @@ import { signed } from "../lib/format.js";
 const DTR_START = 1948;
 
 export default function GapCard({ city, rows }) {
-  const model = useMemo(() => {
-    const series = rows
-      .filter((r) => r.year >= DTR_START && r.high != null && r.low != null)
-      .map((r) => ({ year: r.year, dtr: r.high - r.low }));
-    if (series.length < 40) return null;
-    const fit = linreg(series.map((r) => ({ x: r.year, y: r.dtr })));
-    if (!fit) return null;
-
-    const byDec = {};
-    for (const r of series) {
-      const d = Math.floor(r.year / 10) * 10;
-      (byDec[d] ||= []).push(r.dtr);
-    }
-    const decades = Object.keys(byDec)
-      .map((d) => ({ decade: +d, dtr: mean(byDec[d]), n: byDec[d].length }))
-      .filter((d) => d.n >= 5)
-      .sort((a, b) => a.decade - b.decade);
-    if (decades.length < 3) return null;
-
-    const first = decades[0], last = decades[decades.length - 1];
-    return {
-      data: series.map((r) => ({
-        year: r.year,
-        dtr: +r.dtr.toFixed(1),
-        trend: +(fit.slope * r.year + fit.intercept).toFixed(2),
-      })),
-      first, last,
-      narrowing: first.dtr - last.dtr,
-      perDecade: fit.slope * 10,
-    };
-  }, [rows]);
+  const model = useMemo(() => gapModel(rows, DTR_START), [rows]);
 
   const units = useUnits();
   if (!model) return null;
-  const narrowed = model.narrowing > 0;
+  // narrowed (is the daily swing collapsing? — the inland fingerprint vs the maritime
+  // signal) is computed in gapModel; see lib/gapModel.js.
+  const { narrowed } = model;
   // Diurnal range is a temperature DIFFERENCE, so every value scales with
   // convTempDelta (the °F branch is the identity → US output is unchanged).
   const d = (v) => convTempDelta(v, units);
