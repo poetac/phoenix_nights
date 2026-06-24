@@ -5,6 +5,7 @@ import {
 import { C, DISPLAY, Card, CardHead, axisTick, useUnits, TooltipShell } from "../ui.jsx";
 import { linreg } from "../lib/stats.js";
 import { convTempDelta, tempUnit } from "../lib/units.js";
+import { signed } from "../lib/format.js";
 
 // Published background-warming rates, °F/decade — cited reference lines, not
 // derived from this station (see the card's caveat). Both are annual averages
@@ -77,13 +78,13 @@ export default function GlobalContextCard({ city, cityRows, ruralRows }) {
               return (
                 <TooltipShell>
                   <div>{p.label}</div>
-                  <div style={{ color: C.muted }}>+{p.rate.toFixed(2)}{tempUnit(units)} per decade{p.kind === "bench" ? " (annual avg)" : " (overnight low)"}</div>
+                  <div style={{ color: C.muted }}>{signed(p.rate, 2)}{tempUnit(units)} per decade{p.kind === "bench" ? " (annual avg)" : " (overnight low)"}</div>
                 </TooltipShell>
               );
             }} />
             <Bar isAnimationActive={false} dataKey="rate" radius={[0, 4, 4, 0]}>
               {displayBars.map((b, i) => <Cell key={i} fill={fill(b.kind)} fillOpacity={b.kind === "bench" ? 0.55 : 1} />)}
-              <LabelList dataKey="rate" position="right" formatter={(v) => `+${v.toFixed(2)}°`}
+              <LabelList dataKey="rate" position="right" formatter={(v) => `${signed(v, 2)}°`}
                 style={{ fill: C.muted, fontSize: 12, fontVariantNumeric: "tabular-nums" }} />
             </Bar>
           </BarChart>

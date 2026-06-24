@@ -3,6 +3,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer,
 } from "recharts";
 import { fetchCompare } from "./lib/data.js";
+import { signed } from "./lib/format.js";
 import { C, DISPLAY, BODY, axisTick } from "./ui.jsx";
 
 // Linear interpolate between two hex colors (t in 0..1).
@@ -108,7 +109,7 @@ export default function CityCompare({ onPick, cities }) {
               style={{ background: "none", border: "none", cursor: "pointer", color: C.text, fontFamily: BODY }}>
               <span className="inline-block w-3 h-3 rounded-sm" style={{ background: c.color }} />
               {c.name}{c.featured && <span style={{ color: C.gold }}> ★</span>}
-              <span style={{ color: C.muted }}>+{c.slope.toFixed(1)}°/dec</span>
+              <span style={{ color: C.muted }}>{signed(c.slope)}°/dec</span>
             </button>
           </li>
         ))}

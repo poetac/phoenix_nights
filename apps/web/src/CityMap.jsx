@@ -1,5 +1,6 @@
 import { US_MAP } from "./lib/usMap.js";
 import { WORLD_MAP } from "./lib/worldMap.js";
+import { signed } from "./lib/format.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
 
 // Map a night-warming rate (°F/decade, ~0.8–2.2) to a 0..1 ramp position.
@@ -62,7 +63,7 @@ export default function CityMap({ onPick, ranked, cities, product }) {
           const nw = rate.get(city.id) ?? null;
           const r = radius(nw) * (flagship ? 1.12 : 1);
           const activate = () => onPick(city.id);
-          const rateText = nw != null ? `, overnight lows +${nw.toFixed(1)}°F per decade` : "";
+          const rateText = nw != null ? `, overnight lows ${signed(nw)}°F per decade` : "";
           return (
             <g
               key={city.id}

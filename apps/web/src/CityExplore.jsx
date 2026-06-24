@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { climateOf } from "./lib/cities.js";
 import { fetchFacts } from "./lib/data.js";
+import { signed } from "./lib/format.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
 // CityMap statically imports both pre-projected map geometries (US + world, ~95 KB
 // gzip combined). Lazy-load it so they don't sit in the eager entry chunk — the map
@@ -91,7 +92,7 @@ export default function CityExplore({ product, cities, onPick }) {
                 {r.nightWarming != null && (
                   <span className="text-right" style={{ minWidth: 96 }}>
                     <span className="block" style={{ fontFamily: DISPLAY, color: C.ember, fontSize: 24, fontWeight: 650 }}>
-                      +{r.nightWarming.toFixed(1)}°
+                      {signed(r.nightWarming)}°
                     </span>
                     <span className="block text-xs" style={{ color: C.emberSoft }}>nights, °F/decade</span>
                   </span>
