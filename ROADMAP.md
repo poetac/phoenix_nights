@@ -474,10 +474,12 @@ are the immutable bar and stay untouched.
    with the same expansion guard plus two-ended (first + last 80°F night) shift math tested (#124); and
    `globalContextModel` — whose positive-trend guard (`cityTrend <= 0 || desertTrend <= 0` → omit) keeps the
    "outrunning the Earth" framing honest, with the sorted bars, the ×-global multiples, and the common-year
-   intersection tested (#125). An audit of the rest found more guard/branch logic than first assumed; still
-   queued: **UhiCard** (UHI-excess guard) and
-   **LastNightHero** (warmer/near flags) carry applicability guards or prose-selecting branches; only
-   Sleep/HumanCost/Diurnal/Growth are genuinely trivial reshapes that need no model.
+   intersection tested (#125); and `uhiModel` — whose UHI-excess guard (`excess <= 0` → omit, where the
+   city isn't outpacing its rural reference) is the control card's whole premise, collapsing its two
+   useMemos into one tested function with the per-decade gaps + intersection (#126). An audit of the rest
+   found more guard/branch logic than first assumed; still queued: **LastNightHero** (warmer/near flags) is
+   the last prose-bearing transform; only Sleep/HumanCost/Diurnal/Growth are genuinely trivial reshapes that
+   need no model.
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
    deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`

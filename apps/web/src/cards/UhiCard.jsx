@@ -3,51 +3,18 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
-import { linreg, mean } from "../lib/stats.js";
 import { convTemp, convTempDelta, tempUnit, convDistPhrase } from "../lib/units.js";
 import { signed } from "../lib/format.js";
+import { uhiModel } from "../lib/uhiModel.js";
 
 export default function UhiCard({ city, cityRows, ruralRows }) {
-  const data = useMemo(() => {
-    const cityBy = new Map(cityRows.map((r) => [r.year, r.low]));
-    return ruralRows
-      .filter((r) => cityBy.has(r.year))
-      .map((r) => ({
-        year: r.year,
-        city: +cityBy.get(r.year).toFixed(1),
-        desert: +r.low.toFixed(1),
-      }));
-  }, [cityRows, ruralRows]);
-
-  const stats = useMemo(() => {
-    if (data.length < 30) return null;
-    const cityFit = linreg(data.map((d) => ({ x: d.year, y: d.city })));
-    const desertFit = linreg(data.map((d) => ({ x: d.year, y: d.desert })));
-    if (!cityFit || !desertFit) return null;
-    const cityTrend = cityFit.slope * 10;
-    const desertTrend = desertFit.slope * 10;
-    const byDec = {};
-    for (const d of data) {
-      const dec = Math.floor(d.year / 10) * 10;
-      (byDec[dec] ??= []).push(d.city - d.desert);
-    }
-    const gaps = Object.entries(byDec)
-      .filter(([, v]) => v.length >= 4)
-      .map(([dec, v]) => ({ decade: +dec, gap: mean(v) }))
-      .sort((a, b) => a.decade - b.decade);
-    if (gaps.length < 2) return null;
-    return {
-      cityTrend, desertTrend,
-      excess: cityTrend - desertTrend,
-      share: (cityTrend - desertTrend) / cityTrend,
-      gaps,
-      first: data[0].year,
-      last: data[data.length - 1].year,
-    };
-  }, [data]);
+  // uhiModel self-omits unless the city's nights warm faster than the rural reference's
+  // (the UHI-excess guard) — the control card's whole premise. See lib/uhiModel.js.
+  const model = useMemo(() => uhiModel(cityRows, ruralRows), [cityRows, ruralRows]);
 
   const units = useUnits();
-  if (!stats || stats.excess <= 0) return null;
+  if (!model) return null;
+  const { data, stats } = model;
   const g0 = stats.gaps[0];
   const gMax = stats.gaps.reduce((m, g) => (g.gap > m.gap ? g : m), stats.gaps[0]);
   const gLast = stats.gaps[stats.gaps.length - 1];
