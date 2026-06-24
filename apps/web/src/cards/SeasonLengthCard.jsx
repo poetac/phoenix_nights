@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, axisTick } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, axisTick, TooltipShell } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
 import { direction, pluralize } from "../lib/format.js";
 import { doyLabel } from "../lib/labels.js";
@@ -65,12 +65,11 @@ export default function SeasonLengthCard({ city, heatSeason }) {
               if (!active || !payload?.length) return null;
               const p = payload[0]?.payload;
               return (
-                <div className="rounded-lg px-3 py-2 text-sm"
-                  style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
+                <TooltipShell>
                   <div style={{ color: C.muted }} className="text-xs mb-1">{label}</div>
                   <div>{doyLabel(p.first, MONTH_NAMES)} – {doyLabel(p.last, MONTH_NAMES)}</div>
                   <div style={{ color: C.muted }}>{p.count} days ≥ 100°F</div>
-                </div>
+                </TooltipShell>
               );
             }} />
             <Area isAnimationActive={false} type="monotone" dataKey="band" name="100°F season"

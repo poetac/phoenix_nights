@@ -64,11 +64,22 @@ export function CardHead({ kicker, title, sub, id, shareCity, shareSlug }) {
   );
 }
 
-export function DarkTooltip({ active, payload, label, unit }) {
-  if (!active || !payload || !payload.length) return null;
+// The dark chart-tooltip shell every card shares. Cards keep their own body (the rows
+// differ per chart), so this is just the styled wrapper — the look lives in one place.
+export function TooltipShell({ children }) {
   return (
     <div className="rounded-lg px-3 py-2 text-sm"
       style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
+      {children}
+    </div>
+  );
+}
+
+// The standard name:value variant (a colour dot + label per series).
+export function DarkTooltip({ active, payload, label, unit }) {
+  if (!active || !payload || !payload.length) return null;
+  return (
+    <TooltipShell>
       <div style={{ color: C.muted }} className="text-xs mb-1">{label}</div>
       {payload.map((p) => (
         <div key={p.dataKey} className="flex items-center gap-2">
@@ -76,6 +87,6 @@ export function DarkTooltip({ active, payload, label, unit }) {
           <span>{p.name}: {typeof p.value === "number" ? p.value.toFixed(1) : p.value}{unit}</span>
         </div>
       ))}
-    </div>
+    </TooltipShell>
   );
 }
