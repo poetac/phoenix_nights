@@ -36,6 +36,12 @@ international backend), and `README.md` (data sources + methodology).
 - Branch `claude/<topic>`; one focused PR; draft → CI green → squash-merge.
 - Every new card: add a sanity check to `verify_v0.py` + a line to the README
   "Sanity checks" list and ROADMAP.
+- A card with a non-trivial transform puts it in a pure `lib/<name>Model.js`
+  (no React/JSX/units), called from a thin `useMemo(() => <name>Model(asset))`;
+  its direction branches and guards get a `tests/<name>Model.test.mjs`
+  (auto-discovered by `npm test`). This keeps the prose-deciding logic out of JSX,
+  where only the browser smoke test would exercise it — see
+  `grid`/`streak`/`extremes`/`seasons`/`extrapolation` `Model.js`.
 - Precomputed JSON lives in `apps/web/public/data/` (committed, stamped with
   `generated`/`throughYear`); it goes stale until the rebuild workflow reruns.
 - `phx-heat-deaths.json` is the only hand-curated dataset — update via
