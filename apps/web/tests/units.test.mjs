@@ -6,7 +6,7 @@
 // Plain node, no deps: run `node tests/units.test.mjs` from apps/web.
 import {
   unitsOf, convTemp, convTempDelta, convDist,
-  tempUnit, tempRateUnit, distUnit, fmtTemp, fmtTempDelta, fmtDist, convDistPhrase,
+  tempUnit, tempRateUnit, convDistPhrase,
 } from "../src/lib/units.js";
 
 let failed = false;
@@ -50,16 +50,6 @@ eq(tempUnit("imperial"), "°F", "tempUnit imperial");
 eq(tempUnit("metric"), "°C", "tempUnit metric");
 eq(tempRateUnit("imperial"), "°F/decade", "tempRateUnit imperial");
 eq(tempRateUnit("metric"), "°C/decade", "tempRateUnit metric");
-eq(distUnit("imperial"), "miles", "distUnit imperial");
-eq(distUnit("metric"), "km", "distUnit metric");
-
-// --- convenience formatters ---
-eq(fmtTemp(100, "imperial", 0), "100°F", "fmtTemp imperial");
-eq(fmtTemp(32, "metric", 0), "0°C", "fmtTemp metric");
-eq(fmtTempDelta(1.16, "imperial", 2), "1.16°F/decade", "fmtTempDelta imperial");
-eq(fmtTempDelta(1.8, "metric", 1), "1.0°C/decade", "fmtTempDelta metric");
-eq(fmtDist(45, "imperial", 0), "45 miles", "fmtDist imperial");
-eq(fmtDist(1, "metric", 2), "1.61 km", "fmtDist metric");
 
 // --- rural-distance phrases (UhiCard prose): imperial identity, metric -> km ---
 eq(convDistPhrase("~45 miles", "imperial"), "~45 miles", "convDistPhrase imperial identity");

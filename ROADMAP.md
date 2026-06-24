@@ -433,10 +433,11 @@ are the immutable bar and stay untouched.
    `gridModel`/`streakModel`/… into `lib/`, unit-test the direction branches, add to the "every new
    card" convention.
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
-   `climateOf` is now data-driven — every city declares its own `climate` and the hand-kept `HUMID` set
-   is deleted, unit-tested (#107). *Remaining:* shared tooltip shell (6 inlined copies); `MONTH_TICKS`/era
-   constants; collapse `CityDashboard`'s 11 asset `useState`+resets into a reducer; remove/wire the unused
-   `units` exports.
+   `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
+   deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`
+   + orphaned `distUnit`) are removed, so every `units.js` export is now used by the app (#108). *Remaining:*
+   shared tooltip shell (6 inlined copies); collapse `CityDashboard`'s 11 asset `useState`+resets into a
+   reducer. (`MONTH_TICKS` is NOT shared — the two season cards legitimately use different month ranges.)
 8. **Split `cities.js`** (922 lines) or push long-form prose into the facts JSON as it scales; a
    `<ChartCard>` scaffold.
 

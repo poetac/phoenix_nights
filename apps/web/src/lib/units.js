@@ -34,14 +34,6 @@ export const convDist = (mi, sys) => (sys === "metric" ? mi * 1.609344 : mi);
 // --- unit labels for the active system ---
 export const tempUnit = (sys) => (sys === "metric" ? "°C" : "°F");
 export const tempRateUnit = (sys) => (sys === "metric" ? "°C/decade" : "°F/decade");
-export const distUnit = (sys) => (sys === "metric" ? "km" : "miles");
-
-// --- convenience formatters (convert -> round -> append unit) ---
-// For exact-match card migrations, prefer the converters above with the card's own
-// rounding so imperial output stays byte-identical; these are for new/simple copy.
-export const fmtTemp = (f, sys, digits = 0) => `${convTemp(f, sys).toFixed(digits)}${tempUnit(sys)}`;
-export const fmtTempDelta = (f, sys, digits = 2) => `${convTempDelta(f, sys).toFixed(digits)}${tempRateUnit(sys)}`;
-export const fmtDist = (mi, sys, digits = 0) => `${convDist(mi, sys).toFixed(digits)} ${distUnit(sys)}`;
 
 // Convert a rural-distance phrase like "~45 miles north" for display. Imperial
 // returns the phrase unchanged (identity), so the live US copy is byte-for-byte the
