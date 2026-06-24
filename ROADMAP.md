@@ -459,8 +459,14 @@ are the immutable bar and stay untouched.
    grid/streak/extremes/seasons/extrapolation (#112–#116) and `gapModel` — whose `narrowed` flag flips
    GapCard's entire headline between the inland heat-island ("collapsing") and the maritime signal
    ("widening", e.g. Sydney), with the decade-bucketing + 3 guards tested (#118). (Gap was mislabeled a
-   "simpler reshape" in #117 — it carries real direction prose; corrected here.) The remaining cards
-   (Diurnal/CoolWindow/NightCooling/…) are genuinely simpler reshapes and can follow opportunistically.
+   "simpler reshape" in #117 — it carries real direction prose; corrected here.) Also `winterModel` —
+   whose frost-disappearance guard self-omits the card on cities that still freeze hard (Reno/Salt Lake/
+   Boise/Albuquerque), tested from every angle (#119). An audit of the rest found more guard/branch logic
+   than first assumed: **Goalposts** (cooling-record guard), **CoolWindow** (hot-city scarcity), **NightCooling**
+   (baseline-share premise), **SeasonLength**/**HotNightSeason** (`lengthGain < 1` guard + `direction()` shifts),
+   **GlobalContext** (positive-trend guard + `desertX` branch), **UhiCard** (UHI-excess guard) and **LastNightHero**
+   (warmer/near flags) all carry applicability guards or prose-selecting branches and are queued next; only
+   Sleep/HumanCost/Diurnal/Growth are genuinely trivial reshapes that need no model.
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
    deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`
