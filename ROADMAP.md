@@ -449,9 +449,13 @@ are the immutable bar and stay untouched.
    `seasonsModel` now lives in `lib/seasonsModel.js`, carrying `summer` and `maxRatio` (the lopsided-
    signature pick — the season whose lows warm fastest relative to its highs, gated on `highTrend > 0.05`);
    `tests/seasonsModel.test.mjs` covers that selector + its divide-by-tiny guard, the per-season trends, the
-   summer delta, and the < 30-year / missing-asset guards (#115). *Remaining:* the other in-JSX transforms
-   (Extrapolation's projection math next), then fold "model in `lib/`, branches unit-tested" into the
-   every-new-card convention.
+   summer delta, and the < 30-year / missing-asset guards (#115). `extrapolationModel` now lives in
+   `lib/extrapolationModel.js` — the centroid-pivot slope-CI projection; `tests/extrapolationModel.test.mjs`
+   checks the projected value/fan math (`perDecade`/`at2050`/`half`, the hist+proj join row, the widened
+   horizon band) and every guard (non-robust fit, missing CI bound, < 15 finite lows, sub-decade runway)
+   (#116). *Remaining:* fold "model in `lib/`, branches unit-tested" into the every-new-card convention
+   (the five carried cards — grid/streak/extremes/seasons/extrapolation — cover the prose-bearing
+   transforms; the simpler reshapes can follow opportunistically).
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
    deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`

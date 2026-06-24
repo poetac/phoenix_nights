@@ -4,8 +4,8 @@ import {
   ReferenceLine, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
-import { mean } from "../lib/stats.js";
 import { convTemp, convTempDelta, tempUnit } from "../lib/units.js";
+import { extrapolationModel } from "../lib/extrapolationModel.js";
 
 const HORIZON = 2050;
 
@@ -15,34 +15,7 @@ const HORIZON = 2050;
 // hypothetical ("if the line held"), NOT a forecast: no emissions scenario, no
 // physics. A real projection (CMIP6 / LOCA2 downscaling) is a separate layer.
 export default function ExtrapolationCard({ city, rows, fit, windowStart }) {
-  const model = useMemo(() => {
-    if (!fit || !fit.robust || fit.lo == null || fit.hi == null) return null;
-    const pts = rows.map((r) => ({ x: r.year, y: r.low })).filter((p) => Number.isFinite(p.y));
-    if (pts.length < 15) return null;
-    const lastYear = pts[pts.length - 1].x;
-    if (HORIZON - lastYear < 10) return null;
-    // OLS passes through the centroid, so pivot the slope-CI fan there.
-    const xbar = mean(pts.map((p) => p.x));
-    const ybar = mean(pts.map((p) => p.y));
-    const center = (yr) => ybar + fit.slope * (yr - xbar);
-    const loLine = (yr) => ybar + fit.lo * (yr - xbar);
-    const hiLine = (yr) => ybar + fit.hi * (yr - xbar);
-
-    const data = pts.map((p) => ({ year: p.x, hist: +p.y.toFixed(1), proj: null, band: null }));
-    for (let yr = lastYear; yr <= HORIZON; yr++) {
-      const row = yr === lastYear ? data[data.length - 1] : { year: yr, hist: null };
-      row.proj = +center(yr).toFixed(1);
-      row.band = [+loLine(yr).toFixed(1), +hiLine(yr).toFixed(1)];
-      if (yr !== lastYear) data.push(row);
-    }
-    return {
-      data, lastYear,
-      perDecade: fit.slope * 10,
-      at2050: center(HORIZON),
-      half: (hiLine(HORIZON) - loLine(HORIZON)) / 2,
-      recent: mean(pts.slice(-10).map((p) => p.y)),
-    };
-  }, [rows, fit]);
+  const model = useMemo(() => extrapolationModel(rows, fit, HORIZON), [rows, fit]);
 
   const units = useUnits();
   if (!model) return null;
