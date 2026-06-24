@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { C, DISPLAY, Card } from "./ui.jsx";
 import { blockBootstrapCI } from "./lib/stats.js";
+import { signed } from "./lib/format.js";
 import ExtrapolationCard from "./cards/ExtrapolationCard.jsx";
 import GlobalContextCard from "./cards/GlobalContextCard.jsx";
 import UhiCard from "./cards/UhiCard.jsx";
@@ -83,13 +84,13 @@ export default function SignalsBody({ city, rows, source, rural, diurnal, heatSe
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="text-4xl sm:text-5xl" style={{ fontFamily: DISPLAY, color: C.ember, fontVariantNumeric: "tabular-nums" }}>
-              {lowDec != null ? `+${lowDec.toFixed(1)}°` : "—"}
+              {lowDec != null ? `${signed(lowDec)}°` : "—"}
             </div>
             <div className="text-sm mt-1" style={{ color: C.emberSoft }}>overnight lows, per decade</div>
           </div>
           <div>
             <div className="text-4xl sm:text-5xl" style={{ fontFamily: DISPLAY, color: C.day, fontVariantNumeric: "tabular-nums" }}>
-              {highDec != null ? `${highDec >= 0 ? "+" : ""}${highDec.toFixed(1)}°` : "—"}
+              {highDec != null ? `${signed(highDec)}°` : "—"}
             </div>
             <div className="text-sm mt-1" style={{ color: C.day }}>daytime highs, per decade</div>
           </div>

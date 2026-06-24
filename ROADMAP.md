@@ -415,13 +415,17 @@ are the immutable bar and stay untouched.
    fetchers, or hash filenames. Pair with a `schemaVersion` field for forward-compat.
 
 **Frontend architecture** (`deferred`)
-4. **Finish `lib/format.js` adoption** — ✅ *(partial, #105)* Extremes (3×) + Gap (1×) now use `signed()`
-   for the `{x >= 0 ? "+" : ""}{…toFixed()}` sign prefix (proven output-identical: the unit converters
-   preserve sign and `toFixed` keeps the minus, so `signed(conv(x), d)` reproduces the old string in every
-   case). *Remaining:* Grid/GlobalContext (and Extremes `coldTrend`) hardcode `"+"` on contextually-positive
-   values — adopting `signed()` there is a *semantic* change (would surface a `−` for a maritime/edge city),
-   so it needs per-card judgment, not a drop-in; and unify `LastNightHero.signed` (real-minus glyph U+2212 +
-   integers → generalize the helper). Do these browser-attended.
+4. **Finish `lib/format.js` adoption** — ✅ *(partial)* Extremes (3×) + Gap (1×) use `signed()` (#105);
+   the `DashboardBody`/`SignalsBody` headline stat-strips — low hardcoded `"+"`, high manually `{x >= 0 ?
+   "+" : ""}`-guarded — now both go through `signed()` (#110). Output-identical for the high *always* (the
+   `>= 0` guard matches `signed`'s zero→`"+"`) and for every current (warming-low) city; it also kills the
+   `"+-0.3"` render a future cooling-low city would have hit. *Remaining drop-ins* (same story — identical
+   on today's data, sign-correct for a worldwide cooling city, so render-smoke nets them): Extremes
+   `coldTrend`; GlobalContext (tooltip + bar label + prose); CityExplore / CityCompare:111 / CityMap
+   night-warming; UhiCard city/desert trend; Growth gap. *Not candidates:* Grid hardcodes `"+"` only inside
+   its `pg > 0.5` branch (sign already handled there + documented); Seasons `summer.delta` is prose-coupled
+   (“hotter” needs `direction()`, not `signed()`); `LastNightHero.signed` is a deliberate U+2212/integer
+   variant; CityCompare's per-year `> 0` guard differs from `signed()` at exactly zero.
 5. **Extract `lib/series.js`** — `splitEarlyLate`/`meanEarlyLate`/`decadeBuckets` are re-implemented in
    9 cards + `DashboardBody`; extract + unit-test. **Not a clean drop-in** (verified): the "early" window
    has two live variants — bounded `[baseline.start, baseline.end]` (Streak/NightCooling/HotNightSeason/

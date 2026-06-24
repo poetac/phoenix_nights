@@ -6,6 +6,7 @@ import {
 import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "./ui.jsx";
 import { mean, blockBootstrapCI } from "./lib/stats.js";
 import { convTemp, convTempDelta, tempUnit } from "./lib/units.js";
+import { signed } from "./lib/format.js";
 import UhiCard from "./cards/UhiCard.jsx";
 import GlobalContextCard from "./cards/GlobalContextCard.jsx";
 import GoalpostsCard from "./cards/GoalpostsCard.jsx";
@@ -122,7 +123,7 @@ export default function DashboardBody({
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="text-4xl sm:text-5xl" style={{ fontFamily: DISPLAY, color: C.ember, fontVariantNumeric: "tabular-nums" }}>
-              {lowPerDecade != null ? `+${convTempDelta(lowPerDecade, units).toFixed(1)}°` : "—"}
+              {lowPerDecade != null ? `${signed(convTempDelta(lowPerDecade, units))}°` : "—"}
               {fitLow?.ci95 != null && (
                 <span className="text-base sm:text-lg ml-1" style={{ color: C.muted, fontFamily: BODY }}>
                   ±{convTempDelta(fitLow.ci95 * 10, units).toFixed(1)}
@@ -133,7 +134,7 @@ export default function DashboardBody({
           </div>
           <div>
             <div className="text-4xl sm:text-5xl" style={{ fontFamily: DISPLAY, color: C.day, fontVariantNumeric: "tabular-nums" }}>
-              {highPerDecade != null ? `${highPerDecade >= 0 ? "+" : ""}${convTempDelta(highPerDecade, units).toFixed(1)}°` : "—"}
+              {highPerDecade != null ? `${signed(convTempDelta(highPerDecade, units))}°` : "—"}
               {fitHigh?.ci95 != null && (
                 <span className="text-base sm:text-lg ml-1" style={{ color: C.muted, fontFamily: BODY }}>
                   ±{convTempDelta(fitHigh.ci95 * 10, units).toFixed(1)}
