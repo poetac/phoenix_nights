@@ -1,36 +1,20 @@
 import { useMemo } from "react";
 import { C, DISPLAY, Card, CardHead, useUnits } from "../ui.jsx";
-import { mean } from "../lib/stats.js";
 import { convTemp, convTempDelta, tempUnit } from "../lib/units.js";
-
-// NOAA recomputes 30-year "climate normals" every decade; these are the
-// windows behind the "normal" your weather app showed in each era.
-const VINTAGES = [
-  { span: [1961, 1990], era: "the 1990s" },
-  { span: [1971, 2000], era: "the 2000s" },
-  { span: [1981, 2010], era: "the 2010s" },
-  { span: [1991, 2020], era: "today" },
-];
+import { goalpostsModel } from "../lib/goalpostsModel.js";
 
 export default function GoalpostsCard({ city, rows }) {
-  const vintages = useMemo(() => VINTAGES.map(({ span, era }) => {
-    const v = rows.filter((r) => r.year >= span[0] && r.year <= span[1]).map((r) => r.low);
-    return { span, era, low: v.length >= 25 ? mean(v) : null };
-  }).filter((v) => v.low != null), [rows]);
+  // goalpostsModel self-omits on a cooling record (rise <= 0) or too few vintages — see
+  // lib/goalpostsModel.js.
+  const model = useMemo(() => goalpostsModel(rows), [rows]);
 
   const units = useUnits();
-  if (vintages.length < 3) return null;
+  if (!model) return null;
   // Vintage "normal" lows are absolute (convTemp); the redefined-upward rise is a
-  // difference (convTempDelta). Bar positions use affine-invariant ratios, so they
-  // need no conversion. Identity in °F → US output unchanged.
-  const lo = Math.min(...vintages.map((v) => v.low)) - 0.4;
-  const hi = Math.max(...vintages.map((v) => v.low)) + 0.4;
+  // difference (convTempDelta). Bar positions use affine-invariant ratios (lo/hi), so
+  // they need no conversion. Identity in °F → US output unchanged.
+  const { vintages, lo, hi, rise } = model;
   const pos = (v) => ((v - lo) / (hi - lo)) * 100;
-  const rise = vintages[vintages.length - 1].low - vintages[0].low;
-  // The card's whole thesis is the rolling "normal" drifting UPWARD. If a station's
-  // newest 30-yr normal isn't above its oldest surviving vintage (a cooling record),
-  // the "redefined upward by X" prose would be false — omit rather than invert it.
-  if (rise <= 0) return null;
 
   return (
     <Card>
