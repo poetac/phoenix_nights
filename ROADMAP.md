@@ -432,11 +432,11 @@ are the immutable bar and stay untouched.
    JSX, so the prose red-teams only run in the 30-navigation browser smoke test. Pull
    `gridModel`/`streakModel`/… into `lib/`, unit-test the direction branches, add to the "every new
    card" convention.
-7. **Smaller extractions** — ✅ *(partial, #106)* `hourLabel` (Diurnal/Grid, byte-identical) and
-   `doyLabel` (SeasonLength/HotNightSeason, with `monthNames` passed in) now live in `lib/labels.js`,
-   unit-tested. *Remaining:* shared tooltip shell (6 inlined copies); `MONTH_TICKS`/era constants;
-   data-driven `climateOf` (delete the hand-kept `HUMID` set); collapse `CityDashboard`'s 11 asset
-   `useState`+resets into a reducer; remove/wire the unused `units` exports.
+7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
+   `climateOf` is now data-driven — every city declares its own `climate` and the hand-kept `HUMID` set
+   is deleted, unit-tested (#107). *Remaining:* shared tooltip shell (6 inlined copies); `MONTH_TICKS`/era
+   constants; collapse `CityDashboard`'s 11 asset `useState`+resets into a reducer; remove/wire the unused
+   `units` exports.
 8. **Split `cities.js`** (922 lines) or push long-form prose into the facts JSON as it scales; a
    `<ChartCard>` scaffold.
 
