@@ -3,36 +3,13 @@ import {
   ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick } from "../ui.jsx";
-import { mean } from "../lib/stats.js";
+import { winterModel } from "../lib/winterModel.js";
 
 export default function WinterCard({ city, streaks }) {
-  const model = useMemo(() => {
-    if (!streaks?.years) return null;
-    const data = streaks.years.map((r) => ({ year: r.year, frost: r.frost, cool60: r.cool60 }));
-    const lastYear = data[data.length - 1].year;
-    const early = data.filter((r) => r.year < 1970);
-    const late = data.filter((r) => r.year > lastYear - 30);
-    if (early.length < 30 || late.length < 20) return null;
-    const lastFrosty = [...data].reverse().find((r) => r.frost >= 5);
-    const zeroFrostShare = late.filter((r) => r.frost === 0).length / late.length;
-    // "Winter left first" is a frost-DISAPPEARANCE story. Only render where frost
-    // has genuinely collapsed: the most recent winters no longer reach even five
-    // frosts (so "the last winter with five frosts" names a PAST year) and some
-    // recent winters are now frost-free. Cold interior cities (Reno, Salt Lake,
-    // Boise, Albuquerque) still freeze 90–160 nights a year, so the card self-omits
-    // rather than force a vanishing-frost narrative onto a city that still freezes
-    // hard — and onto numbers (last 5-frost winter = this year, 0% frost-free) that
-    // would read as the opposite of its own headline.
-    if (!lastFrosty || lastFrosty.year >= lastYear || zeroFrostShare <= 0) return null;
-    return {
-      data,
-      earlyFrost: mean(early.map((r) => r.frost)),
-      zeroFrostShare,
-      lastFrosty,
-      earlyCool: mean(early.map((r) => r.cool60)),
-      lateCool: mean(data.filter((r) => r.year > lastYear - 10).map((r) => r.cool60)),
-    };
-  }, [streaks]);
+  // winterModel self-omits (returns null) unless frost has genuinely collapsed here —
+  // the applicability guard that keeps this card off cities that still freeze hard.
+  // See lib/winterModel.js.
+  const model = useMemo(() => winterModel(streaks), [streaks]);
 
   if (!model) return null;
 
