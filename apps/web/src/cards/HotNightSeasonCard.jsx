@@ -3,50 +3,20 @@ import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, axisTick, TooltipShell } from "../ui.jsx";
-import { mean } from "../lib/stats.js";
 import { direction, pluralize } from "../lib/format.js";
 import { doyLabel } from "../lib/labels.js";
+import { hotNightSeasonModel } from "../lib/hotNightSeasonModel.js";
 
 // The warm-night season lives roughly May–October; keep the axis tight to it.
 const MONTH_TICKS = [121, 152, 182, 213, 244, 274];
 const MONTH_NAMES = { 121: "May", 152: "Jun", 182: "Jul", 213: "Aug", 244: "Sep", 274: "Oct" };
 
 export default function HotNightSeasonCard({ city, streaks }) {
-  const model = useMemo(() => {
-    if (!streaks?.years) return null;
-    const data = streaks.years
-      .filter((r) => r.first80 != null && r.last80 != null)
-      .map((r) => ({
-        year: r.year, first: r.first80, last: r.last80, band: [r.first80, r.last80],
-        length: r.last80 - r.first80 + 1, count: r.count80,
-        susLen: r.firstSus != null && r.lastSus != null ? r.lastSus - r.firstSus + 1 : null,
-      }));
-    if (data.length < 30) return null;
-    const early = data.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
-    const lastYear = data[data.length - 1].year;
-    const late = data.filter((r) => r.year > lastYear - 10);
-    if (early.length < 7 || late.length < 7) return null;
-    const eSus = early.map((r) => r.susLen).filter((v) => v != null);
-    const lSus = late.map((r) => r.susLen).filter((v) => v != null);
-    return {
-      data,
-      nYears: data.length, minYear: data[0].year, lastYear,
-      firstShift: mean(early.map((r) => r.first)) - mean(late.map((r) => r.first)),
-      lastShift: mean(late.map((r) => r.last)) - mean(early.map((r) => r.last)),
-      lengthGain: mean(late.map((r) => r.length)) - mean(early.map((r) => r.length)),
-      countEarly: mean(early.map((r) => r.count)),
-      countLate: mean(late.map((r) => r.count)),
-      // sustained season (5-of-7 nights >=80F) — present only after a rebuild
-      susGain: eSus.length >= 5 && lSus.length >= 5 ? mean(lSus) - mean(eSus) : null,
-    };
-  }, [streaks, city]);
+  // hotNightSeasonModel self-omits unless the warm-night band actually lengthened (the
+  // expansion guard, mirroring SeasonLengthCard). See lib/hotNightSeasonModel.js.
+  const model = useMemo(() => hotNightSeasonModel(streaks, city), [streaks, city]);
 
   if (!model) return null;
-  // Card-fit + sign-safety, mirroring SeasonLengthCard: the thesis is the warm-night
-  // band lengthening at BOTH ends. Omit where it didn't actually lengthen, and phrase
-  // each end by the sign of its shift (today only LV/PHX/TUS/YUM render this, all
-  // strongly positive — this guards the city-agnostic engine as cities are added).
-  if (Math.round(model.lengthGain) < 1) return null;
   const fns = direction(model.firstShift, { pos: "earlier", neg: "later", zero: null });
   const lns = direction(model.lastShift, { pos: "later", neg: "earlier", zero: null });
   const firstClause = fns.word
