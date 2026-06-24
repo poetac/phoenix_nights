@@ -463,8 +463,10 @@ are the immutable bar and stay untouched.
    whose frost-disappearance guard self-omits the card on cities that still freeze hard (Reno/Salt Lake/
    Boise/Albuquerque), tested from every angle (#119); and `goalpostsModel` — whose cooling-record guard
    (`rise <= 0`) keeps the "normal redefined upward" prose from inverting, with the 25-year vintage floor
-   and the `< 3 vintages` guard tested (#120). An audit of the rest found more guard/branch logic than
-   first assumed; still queued: **CoolWindow** (hot-city scarcity), **NightCooling** (baseline-share
+   and the `< 3 vintages` guard tested (#120); and `coolWindowModel` — whose hot-city scarcity guard
+   (latest decade still > 13 relief hours → omit) keeps the "relief vanished" story off cool/high-elevation
+   cities, with the observation-density gate tested (#121). An audit of the rest found more guard/branch
+   logic than first assumed; still queued: **NightCooling** (baseline-share
    premise), **SeasonLength**/**HotNightSeason** (`lengthGain < 1` guard + `direction()` shifts),
    **GlobalContext** (positive-trend guard + `desertX` branch), **UhiCard** (UHI-excess guard) and
    **LastNightHero** (warmer/near flags) all carry applicability guards or prose-selecting branches; only

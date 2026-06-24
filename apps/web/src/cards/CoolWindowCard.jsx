@@ -3,46 +3,12 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, axisTick, TooltipShell } from "../ui.jsx";
-
-const MIN_OBS_PER_HOUR = 500; // same density gate the diurnal card uses
-const RELIEF = 85;   // hours below this are usable overnight relief
-const RECOVERY = 77; // the cited sleep-recovery line (see the sleep card)
+import { coolWindowModel, RELIEF, RECOVERY } from "../lib/coolWindowModel.js";
 
 export default function CoolWindowCard({ city, diurnal }) {
-  const model = useMemo(() => {
-    if (!diurnal?.decades) return null;
-    const solid = Object.keys(diurnal.decades)
-      .filter((k) => diurnal.decades[k].nObs.reduce((a, b) => a + b, 0) / 24 >= MIN_OBS_PER_HOUR)
-      .sort();
-    if (solid.length < 3) return null;
-
-    const data = solid.map((k) => {
-      const t = diurnal.decades[k].temp;
-      const below85 = t.filter((x) => x < RELIEF).length;
-      const below77 = t.filter((x) => x < RECOVERY).length;
-      return {
-        decade: `${k}s`, k,
-        recovery: below77,           // hours below 77°F
-        some: below85 - below77,     // hours between 77 and 85°F
-        total: below85,
-      };
-    });
-
-    const baseK = String(Math.floor(city.baseline.start / 10) * 10);
-    const base = data.find((d) => d.k === baseK) || data[0];
-    const now = data[data.length - 1];
-    // last decade that still had any hour below the 77°F recovery line
-    const lastRecovery = [...data].reverse().find((d) => d.recovery > 0);
-
-    // Applicability (card-fit): this is a hot-city *scarcity* story — overnight
-    // relief below 85°F shrinking toward zero. Cool / high-elevation cities spend
-    // most of the night under 85°F (relief is abundant, not vanishing) and would
-    // overflow the axis, so the card omits there. Hot cities (incl. El Paso ~12h)
-    // keep it.
-    if (now.total > 13) return null;
-
-    return { data, base, now, lastRecovery };
-  }, [diurnal, city]);
+  // coolWindowModel self-omits on cool/high-elevation cities (latest decade still has
+  // > 13 relief hours) — the hot-city scarcity guard. See lib/coolWindowModel.js.
+  const model = useMemo(() => coolWindowModel(diurnal, city), [diurnal, city]);
 
   if (!model) return null;
   const { data, base, now, lastRecovery } = model;
