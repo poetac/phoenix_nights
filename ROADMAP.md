@@ -439,9 +439,11 @@ are the immutable bar and stay untouched.
    branches (peak fell / barely moved / slower / faster / N× as fast; floor up / down / holds) are
    unit-tested in `tests/gridModel.test.mjs` against synthetic Tucson/Boise/Phoenix shapes — the exact
    prose that used to be exercised only by the 30-navigation browser smoke test (#112). The card is now a
-   thin `useMemo(() => gridModel(grid))` + JSX. *Remaining:* the same for `streakModel` and the other
-   in-JSX transforms (Extrapolation, Extremes, Seasons…), then fold "model in `lib/`, direction branches
-   unit-tested" into the every-new-card convention.
+   thin `useMemo(() => gridModel(grid))` + JSX. `streakModel` now lives in `lib/streakModel.js`, with its
+   guards unit-tested in `tests/streakModel.test.mjs` — the bounded early window `[baseline.start, end]`,
+   the 7-year minimums, and the applicability floor (`lateAvg < 2`) that makes the card omit itself on
+   cool/high-elevation/humid cities (#113). *Remaining:* the other in-JSX transforms (Extrapolation,
+   Extremes, Seasons…), then fold "model in `lib/`, branches unit-tested" into the every-new-card convention.
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
    deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`
