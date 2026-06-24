@@ -3,52 +3,26 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "../ui.jsx";
-import { linreg, mean } from "../lib/stats.js";
 import { convTemp, convTempDelta, tempUnit } from "../lib/units.js";
 import { signed } from "../lib/format.js";
+import { extremesModel } from "../lib/extremesModel.js";
 
 // The year's single warmest and single coldest overnight low — the ceiling and
 // floor of nighttime relief. Every other card on the page is a mean, a count,
 // or a streak; this one looks at the two extreme nights and shows the floor
 // rising even faster than the year as a whole.
 export default function ExtremesCard({ city, rows, windowStart }) {
-  const model = useMemo(() => {
-    const series = rows.filter(
-      (r) => r.year >= windowStart && r.warmLow != null && r.coldLow != null,
-    );
-    if (series.length < 20) return null;
-    const warmFit = linreg(series.map((r) => ({ x: r.year, y: r.warmLow })));
-    const coldFit = linreg(series.map((r) => ({ x: r.year, y: r.coldLow })));
-    if (!warmFit || !coldFit) return null;
-
-    const lastYear = series[series.length - 1].year;
-    const baseCold = series.filter((r) => r.year <= city.baseline.end).map((r) => r.coldLow);
-    const recentCold = series.filter((r) => r.year > lastYear - 10).map((r) => r.coldLow);
-    const recordWarm = series.reduce((m, r) => (r.warmLow > m.warmLow ? r : m), series[0]);
-
-    return {
-      data: series.map((r) => ({
-        year: r.year, warmLow: +r.warmLow.toFixed(1), coldLow: +r.coldLow.toFixed(1),
-      })),
-      startYear: series[0].year,
-      coldTrend: coldFit.slope * 10,
-      warmTrend: warmFit.slope * 10,
-      baseCold: baseCold.length >= 7 ? mean(baseCold) : null,
-      recentCold: recentCold.length >= 7 ? mean(recentCold) : null,
-      recordWarm,
-    };
-  }, [rows, windowStart, city]);
+  const model = useMemo(() => extremesModel(rows, windowStart, city), [rows, windowStart, city]);
 
   const units = useUnits();
   if (!model) return null;
-  const coldRising = model.coldTrend > 0;
   // Warmest/coldest-night lows are absolute temps (convTemp); the trends are
   // differences (convTempDelta). Both identity in °F → US output unchanged.
   const t = (v) => convTemp(v, units);
   const dd = (v) => convTempDelta(v, units);
-  // "faster than the warmest night" must mean it: gate the comparative on the actual
-  // ranking, not just coldTrend>0 (a small-but-positive floor trend can lag the ceiling).
-  const coldFaster = model.coldTrend > model.warmTrend;
+  // coldRising (is the floor warming?) and coldFaster (does it outpace the ceiling?)
+  // are computed in extremesModel — see lib/extremesModel.js for the reasoning.
+  const { coldRising, coldFaster } = model;
   const displayData = model.data.map((r) => ({
     year: r.year, warmLow: +t(r.warmLow).toFixed(1), coldLow: +t(r.coldLow).toFixed(1),
   }));

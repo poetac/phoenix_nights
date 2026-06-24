@@ -442,8 +442,12 @@ are the immutable bar and stay untouched.
    thin `useMemo(() => gridModel(grid))` + JSX. `streakModel` now lives in `lib/streakModel.js`, with its
    guards unit-tested in `tests/streakModel.test.mjs` — the bounded early window `[baseline.start, end]`,
    the 7-year minimums, and the applicability floor (`lateAvg < 2`) that makes the card omit itself on
-   cool/high-elevation/humid cities (#113). *Remaining:* the other in-JSX transforms (Extrapolation,
-   Extremes, Seasons…), then fold "model in `lib/`, branches unit-tested" into the every-new-card convention.
+   cool/high-elevation/humid cities (#113). `extremesModel` now lives in `lib/extremesModel.js`, carrying
+   the two direction flags `coldRising` (floor warming?) and `coldFaster` (floor outpaces ceiling? — the
+   thesis) that pick the prose branch; `tests/extremesModel.test.mjs` covers all three branches (rising+
+   faster / rising+slower / cooling), the windowing, the 7-year averages, and the 20-year guard (#114).
+   *Remaining:* the other in-JSX transforms (Extrapolation, Seasons…), then fold "model in `lib/`, branches
+   unit-tested" into the every-new-card convention.
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
    deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`
