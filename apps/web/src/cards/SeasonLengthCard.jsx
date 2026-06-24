@@ -3,45 +3,19 @@ import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, axisTick, TooltipShell } from "../ui.jsx";
-import { mean } from "../lib/stats.js";
 import { direction, pluralize } from "../lib/format.js";
 import { doyLabel } from "../lib/labels.js";
+import { seasonLengthModel } from "../lib/seasonLengthModel.js";
 
 const MONTH_TICKS = [91, 121, 152, 182, 213, 244, 274];
 const MONTH_NAMES = { 91: "Apr", 121: "May", 152: "Jun", 182: "Jul", 213: "Aug", 244: "Sep", 274: "Oct" };
 
 export default function SeasonLengthCard({ city, heatSeason }) {
-  const model = useMemo(() => {
-    if (!heatSeason?.years) return null;
-    const data = heatSeason.years.map((r) => ({
-      year: r.year, first: r.first, last: r.last, band: [r.first, r.last],
-      length: r.length, count: r.count,
-      susLen: r.firstRun != null && r.lastRun != null ? r.lastRun - r.firstRun + 1 : null,
-    }));
-    const early = data.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
-    const lastYear = data[data.length - 1].year;
-    const late = data.filter((r) => r.year > lastYear - 10);
-    if (early.length < 7 || late.length < 7) return null;
-    const eSus = early.map((r) => r.susLen).filter((v) => v != null);
-    const lSus = late.map((r) => r.susLen).filter((v) => v != null);
-    return {
-      data,
-      nYears: data.length, minYear: data[0].year, lastYear,
-      firstShift: mean(early.map((r) => r.first)) - mean(late.map((r) => r.first)),
-      lengthGain: mean(late.map((r) => r.length)) - mean(early.map((r) => r.length)),
-      countEarly: mean(early.map((r) => r.count)),
-      countLate: mean(late.map((r) => r.count)),
-      // sustained (3+ consecutive 100F days) gain — present only after a rebuild
-      susGain: eSus.length >= 5 && lSus.length >= 5 ? mean(lSus) - mean(eSus) : null,
-    };
-  }, [heatSeason, city]);
+  // seasonLengthModel self-omits unless the 100°F season actually lengthened (the
+  // expansion guard that keeps the card off cities like Dallas). See lib/seasonLengthModel.js.
+  const model = useMemo(() => seasonLengthModel(heatSeason, city), [heatSeason, city]);
 
   if (!model) return null;
-  // Card-fit: the thesis is the 100°F season EXPANDING ("annexing spring and fall").
-  // For a city whose first-to-last span didn't actually lengthen (noisy band — Dallas
-  // shrank, Albuquerque is flat), that framing is false, so omit rather than print an
-  // inverted "−2 days longer".
-  if (Math.round(model.lengthGain) < 1) return null;
   const fs = direction(model.firstShift, { pos: "earlier", neg: "later", zero: null });
   const firstClause = fs.word
     ? <>now arrives <span style={{ color: C.gold, fontFamily: DISPLAY }}>{pluralize(fs.mag, "day")} {fs.word}</span></>

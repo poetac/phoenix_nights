@@ -467,9 +467,11 @@ are the immutable bar and stay untouched.
    (latest decade still > 13 relief hours → omit) keeps the "relief vanished" story off cool/high-elevation
    cities, with the observation-density gate tested (#121); and `nightCoolingModel` — whose baseline-share
    premise guard (`baseShare <= 0` → omit) keeps the "night's share of the cooling bill" story off
-   high-elevation cities (El Paso) whose 1970s nights had net-negative cooling demand (#122). An audit of
-   the rest found more guard/branch logic than first assumed; still queued:
-   **SeasonLength**/**HotNightSeason** (`lengthGain < 1` guard + `direction()` shifts),
+   high-elevation cities (El Paso) whose 1970s nights had net-negative cooling demand (#122); and
+   `seasonLengthModel` — whose expansion guard (`round(lengthGain) < 1` → omit) keeps the "season runs N
+   days longer" prose from inverting on a city whose 100°F band shrank (Dallas) or is flat, with the
+   first-day shift + sustained-run gain tested (#123). An audit of the rest found more guard/branch logic
+   than first assumed; still queued: **HotNightSeason** (`lengthGain < 1` guard + two `direction()` shifts),
    **GlobalContext** (positive-trend guard + `desertX` branch), **UhiCard** (UHI-excess guard) and
    **LastNightHero** (warmer/near flags) all carry applicability guards or prose-selecting branches; only
    Sleep/HumanCost/Diurnal/Growth are genuinely trivial reshapes that need no model.
