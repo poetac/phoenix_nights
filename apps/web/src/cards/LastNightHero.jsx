@@ -1,38 +1,21 @@
 import { useMemo } from "react";
 import { C, DISPLAY, useUnits } from "../ui.jsx";
 import { convTemp, convTempDelta, tempUnit } from "../lib/units.js";
+import { lastNightModel } from "../lib/lastNightModel.js";
 
 // "+11" / "−4" with a real minus glyph
 const signed = (n) => (n >= 0 ? "+" : "−") + Math.abs(n);
 
 export default function LastNightHero({ city, lastNight, normals }) {
-  const model = useMemo(() => {
-    if (!lastNight || !normals?.byDate) return null;
-    const key = lastNight.date.slice(5); // MM-DD
-    const norm = normals.byDate[key] || normals.byDate["02-28"]; // Feb-29 fallback
-    if (!norm || norm.low == null) return null;
-
-    const low = Math.round(lastNight.low);
-    const normLow = Math.round(norm.low);
-    const anomLow = low - normLow;
-
-    const high = lastNight.high != null ? Math.round(lastNight.high) : null;
-    const normHigh = norm.high != null ? Math.round(norm.high) : null;
-    const anomHigh = high != null && normHigh != null ? high - normHigh : null;
-
-    const [y, m, d] = lastNight.date.split("-").map(Number);
-    const dateLabel = new Date(y, m - 1, d).toLocaleDateString("en-US", { month: "long", day: "numeric" });
-
-    return { low, normLow, anomLow, high, normHigh, anomHigh, dateLabel };
-  }, [lastNight, normals]);
+  // warmer (sets the accent + above/below) and near (|anomLow| < 1 → "landed right on the
+  // normal") are computed in lastNightModel from the raw °F anomaly. See lib/lastNightModel.js.
+  const model = useMemo(() => lastNightModel(lastNight, normals), [lastNight, normals]);
 
   const units = useUnits();
   if (!model) return null;
 
-  const { low, normLow, anomLow, anomHigh, dateLabel } = model;
-  const warmer = anomLow >= 0;
+  const { low, normLow, anomLow, anomHigh, dateLabel, warmer, near } = model;
   const accent = warmer ? C.ember : C.day;
-  const near = Math.abs(anomLow) < 1;
   // Lows are absolute temps (convTemp); anomalies are differences (convTempDelta).
   // Both are the identity in °F (and the "near" test stays on the °F anomaly), so
   // the live US hero is unchanged; metric displays °C.
