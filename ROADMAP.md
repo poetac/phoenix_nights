@@ -471,10 +471,12 @@ are the immutable bar and stay untouched.
    `seasonLengthModel` — whose expansion guard (`round(lengthGain) < 1` → omit) keeps the "season runs N
    days longer" prose from inverting on a city whose 100°F band shrank (Dallas) or is flat, with the
    first-day shift + sustained-run gain tested (#123); and `hotNightSeasonModel` — the lows-first sibling,
-   with the same expansion guard plus two-ended (first + last 80°F night) shift math tested (#124). An audit
-   of the rest found more guard/branch logic than first assumed; still queued:
-   **GlobalContext** (positive-trend guard + `desertX` branch), **UhiCard** (UHI-excess guard) and
-   **LastNightHero** (warmer/near flags) all carry applicability guards or prose-selecting branches; only
+   with the same expansion guard plus two-ended (first + last 80°F night) shift math tested (#124); and
+   `globalContextModel` — whose positive-trend guard (`cityTrend <= 0 || desertTrend <= 0` → omit) keeps the
+   "outrunning the Earth" framing honest, with the sorted bars, the ×-global multiples, and the common-year
+   intersection tested (#125). An audit of the rest found more guard/branch logic than first assumed; still
+   queued: **UhiCard** (UHI-excess guard) and
+   **LastNightHero** (warmer/near flags) carry applicability guards or prose-selecting branches; only
    Sleep/HumanCost/Diurnal/Growth are genuinely trivial reshapes that need no model.
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
