@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, axisTick } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, axisTick, TooltipShell } from "../ui.jsx";
 
 const MIN_OBS_PER_HOUR = 500; // same density gate the diurnal card uses
 const RELIEF = 85;   // hours below this are usable overnight relief
@@ -65,12 +65,11 @@ export default function CoolWindowCard({ city, diurnal }) {
               if (!active || !payload?.length) return null;
               const p = payload[0]?.payload;
               return (
-                <div className="rounded-lg px-3 py-2 text-sm"
-                  style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
+                <TooltipShell>
                   <div style={{ color: C.muted }} className="text-xs mb-1">{p.decade}</div>
                   <div>{p.total} h below {RELIEF}°F</div>
                   <div style={{ color: C.muted }}>{p.recovery} h below {RECOVERY}°F</div>
-                </div>
+                </TooltipShell>
               );
             }} />
             <Bar isAnimationActive={false} dataKey="recovery" stackId="r" name={`below ${RECOVERY}°F`} fill={C.day} />

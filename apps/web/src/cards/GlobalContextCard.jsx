@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import {
   BarChart, Bar, Cell, LabelList, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, axisTick, useUnits } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, axisTick, useUnits, TooltipShell } from "../ui.jsx";
 import { linreg } from "../lib/stats.js";
 import { convTempDelta, tempUnit } from "../lib/units.js";
 
@@ -75,11 +75,10 @@ export default function GlobalContextCard({ city, cityRows, ruralRows }) {
               if (!active || !payload?.length) return null;
               const p = payload[0]?.payload;
               return (
-                <div className="rounded-lg px-3 py-2 text-sm"
-                  style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
+                <TooltipShell>
                   <div>{p.label}</div>
                   <div style={{ color: C.muted }}>+{p.rate.toFixed(2)}{tempUnit(units)} per decade{p.kind === "bench" ? " (annual avg)" : " (overnight low)"}</div>
-                </div>
+                </TooltipShell>
               );
             }} />
             <Bar isAnimationActive={false} dataKey="rate" radius={[0, 4, 4, 0]}>

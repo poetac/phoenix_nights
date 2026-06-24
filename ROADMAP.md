@@ -435,9 +435,11 @@ are the immutable bar and stay untouched.
 7. **Smaller extractions** — ✅ *(partial)* `hourLabel`/`doyLabel` → `lib/labels.js`, unit-tested (#106);
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
    deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`
-   + orphaned `distUnit`) are removed, so every `units.js` export is now used by the app (#108). *Remaining:*
-   shared tooltip shell (6 inlined copies); collapse `CityDashboard`'s 11 asset `useState`+resets into a
-   reducer. (`MONTH_TICKS` is NOT shared — the two season cards legitimately use different month ranges.)
+   + orphaned `distUnit`) are removed, so every `units.js` export is now used by the app (#108); the 6
+   inlined dark-tooltip wrappers + `DarkTooltip` now share a `TooltipShell` in `ui.jsx` (#109). *Remaining:*
+   collapse `CityDashboard`'s 11 asset `useState`+resets into a reducer (behavioural — do it
+   browser-attended). (`MONTH_TICKS` is NOT shared — the two season cards legitimately use different month
+   ranges; `CityCompare`'s tooltip is a distinct `text-xs`/max-width variant, intentionally left alone.)
 8. **Split `cities.js`** (922 lines) or push long-form prose into the facts JSON as it scales; a
    `<ChartCard>` scaffold.
 

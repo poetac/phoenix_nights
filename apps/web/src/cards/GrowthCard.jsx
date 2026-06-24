@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import {
   ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList,
 } from "recharts";
-import { C, Card, CardHead, axisTick, useUnits } from "../ui.jsx";
+import { C, Card, CardHead, axisTick, useUnits, TooltipShell } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
 import { convTempDelta, tempUnit } from "../lib/units.js";
 
@@ -52,11 +52,10 @@ export default function GrowthCard({ city, cityRows, ruralRows }) {
               if (!active || !payload?.length) return null;
               const p = payload[0].payload;
               return (
-                <div className="rounded-lg px-3 py-2 text-sm"
-                  style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
+                <TooltipShell>
                   <div style={{ color: C.muted }} className="text-xs mb-1">{p.decade}</div>
                   <div>{p.pop}M people · nights +{p.gap}{tempUnit(units)} vs desert</div>
-                </div>
+                </TooltipShell>
               );
             }} />
             <Scatter data={displayData} fill={C.gold} line={{ stroke: C.line, strokeWidth: 1.5 }} isAnimationActive={false}>

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { C, DISPLAY, Card, CardHead, axisTick } from "../ui.jsx";
+import { C, DISPLAY, Card, CardHead, axisTick, TooltipShell } from "../ui.jsx";
 
 export default function NightCoolingCard({ city, cddSplit }) {
   const model = useMemo(() => {
@@ -61,12 +61,11 @@ export default function NightCoolingCard({ city, cddSplit }) {
               if (!active || !payload?.length) return null;
               const p = payload[0]?.payload;
               return (
-                <div className="rounded-lg px-3 py-2 text-sm"
-                  style={{ background: "#0e0a1a", border: `1px solid ${C.line}`, color: C.text }}>
+                <TooltipShell>
                   <div style={{ color: C.muted }} className="text-xs mb-1">{label}</div>
                   <div><span style={{ color: C.ember }}>night</span> {p.night} · <span style={{ color: C.emberSoft }}>day</span> {p.day} CDD</div>
                   <div style={{ color: C.muted }}>night = {p.share.toFixed(0)}% of {p.total}</div>
-                </div>
+                </TooltipShell>
               );
             }} />
             <Area isAnimationActive={false} type="monotone" dataKey="night" name="night half" stackId="cdd"
