@@ -3,47 +3,14 @@ import {
   BarChart, Bar, Cell, LabelList, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, axisTick, useUnits, TooltipShell } from "../ui.jsx";
-import { linreg } from "../lib/stats.js";
 import { convTempDelta, tempUnit } from "../lib/units.js";
 import { signed } from "../lib/format.js";
-
-// Published background-warming rates, °F/decade — cited reference lines, not
-// derived from this station (see the card's caveat). Both are annual averages
-// across all 24 hours, so they run cooler than the overnight-low trends the
-// rest of the page measures; that's stated, and it makes them a conservative
-// floor for the comparison.
-const GLOBAL = 0.36; // NASA GISTEMP / NOAA: global land+ocean ~0.20°C (0.36°F)/decade, recent decades
-const CONUS = 0.50;  // NOAA / Climate Central: contiguous U.S. ~2.5°F since 1970
-const WINDOW = 1970; // compute the local trends over the same era the benchmarks describe
+import { globalContextModel } from "../lib/globalContextModel.js";
 
 export default function GlobalContextCard({ city, cityRows, ruralRows }) {
-  const model = useMemo(() => {
-    if (!cityRows?.length || !ruralRows?.length) return null;
-    const ruralBy = new Map(ruralRows.map((r) => [r.year, r.low]));
-    const common = cityRows
-      .filter((r) => r.year >= WINDOW && ruralBy.has(r.year))
-      .map((r) => ({ year: r.year, city: r.low, desert: ruralBy.get(r.year) }));
-    if (common.length < 20) return null;
-    const cityFit = linreg(common.map((d) => ({ x: d.year, y: d.city })));
-    const desertFit = linreg(common.map((d) => ({ x: d.year, y: d.desert })));
-    if (!cityFit || !desertFit) return null;
-    const cityTrend = cityFit.slope * 10;
-    const desertTrend = desertFit.slope * 10;
-    if (cityTrend <= 0 || desertTrend <= 0) return null;
-
-    const bars = [
-      { label: "Whole planet", rate: +GLOBAL.toFixed(2), kind: "bench" },
-      { label: "United States", rate: +CONUS.toFixed(2), kind: "bench" },
-      { label: `${city.rural.short} nights`, rate: +desertTrend.toFixed(2), kind: "desert" },
-      { label: `${city.shortName} · city nights`, rate: +cityTrend.toFixed(2), kind: "city" },
-    ].sort((a, b) => a.rate - b.rate);
-
-    return {
-      bars, cityTrend, desertTrend,
-      cityX: cityTrend / GLOBAL, desertX: desertTrend / GLOBAL,
-      first: common[0].year, last: common[common.length - 1].year,
-    };
-  }, [cityRows, ruralRows, city]);
+  // globalContextModel self-omits unless BOTH the city and its rural reference are warming
+  // (the positive-trend guard behind the "outrunning the Earth" framing). See lib/globalContextModel.js.
+  const model = useMemo(() => globalContextModel(cityRows, ruralRows, city), [cityRows, ruralRows, city]);
 
   const units = useUnits();
   if (!model) return null;
