@@ -3,7 +3,7 @@
  "source": "NOAA/NWS ACIS daily mint/maxt",
  "base": 65.0,
  "note": "annual cooling degree days split by the identity mean-65 = (Tmax-65)/2 + (Tmin-65)/2 over cooling days (mean>65F); years missing >36 days excluded.",
- "generated": "2026-06-22",
+ "generated": "2026-06-26",
  "throughYear": 2025,
  "years": [
   {

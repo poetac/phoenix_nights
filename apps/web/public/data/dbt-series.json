@@ -2,7 +2,7 @@
  "city": "dbt",
  "name": "De Bilt (GHCN NLM00006260, KNMI Netherlands)",
  "units": "F",
- "generated": "2026-06-22",
+ "generated": "2026-06-26",
  "throughYear": 2025,
  "years": [
   {
