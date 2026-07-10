@@ -1,4 +1,5 @@
 import { mean } from "./stats.js";
+import { baselineWindow, lastYears } from "./series.js";
 
 // Pure transform behind StreakCard — the per-year longest-run-of-80F-nights asset →
 // chart series + the early/late averages and the two record years. Pulled out of the
@@ -16,9 +17,8 @@ import { mean } from "./stats.js";
 export function streakModel(streaks, city) {
   if (!streaks?.years) return null;
   const data = streaks.years.map((r) => ({ year: r.year, streak80: r.streak80, streak110: r.streak110 }));
-  const early = data.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
-  const lastYear = data[data.length - 1].year;
-  const late = data.filter((r) => r.year > lastYear - 10);
+  const early = baselineWindow(data, city.baseline);
+  const late = lastYears(data, 10);
   if (early.length < 7 || late.length < 7) return null;
   const record = data.reduce((m, r) => (r.streak80 > m.streak80 ? r : m), data[0]);
   const record110 = data.reduce((m, r) => (r.streak110 > m.streak110 ? r : m), data[0]);

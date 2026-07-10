@@ -5,6 +5,7 @@ import {
 } from "recharts";
 import { C, DISPLAY, BODY, Card, CardHead, DarkTooltip, axisTick, useUnits } from "./ui.jsx";
 import { mean, blockBootstrapCI } from "./lib/stats.js";
+import { baselineWindow, decadeGroups } from "./lib/series.js";
 import { convTemp, convTempDelta, tempUnit } from "./lib/units.js";
 import { signed } from "./lib/format.js";
 import UhiCard from "./cards/UhiCard.jsx";
@@ -43,7 +44,7 @@ export default function DashboardBody({
   const vis = useMemo(() => rows.filter((r) => r.year >= windowStart), [rows, windowStart]);
 
   const base = useMemo(() => {
-    const b = rows.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
+    const b = baselineWindow(rows, city.baseline);
     return { low: mean(b.map((r) => r.low)), high: mean(b.map((r) => r.high)) };
   }, [rows, city]);
 
@@ -76,20 +77,12 @@ export default function DashboardBody({
     highAnom: d.highAnom == null ? null : +convTempDelta(d.highAnom, units).toFixed(1),
   })), [chartData, units]);
 
-  const decades = useMemo(() => {
-    const g = {};
-    for (const r of vis) {
-      const d = Math.floor(r.year / 10) * 10;
-      if (!g[d]) g[d] = [];
-      g[d].push(r);
-    }
-    return Object.keys(g).map((d) => ({
-      decade: +d,
-      low: mean(g[d].map((r) => r.low)),
-      high: mean(g[d].map((r) => r.high)),
-      n: g[d].length,
-    })).filter((d) => d.n >= 4).sort((a, b) => a.decade - b.decade);
-  }, [vis]);
+  const decades = useMemo(() => decadeGroups(vis, 4).map((g) => ({
+    decade: g.decade,
+    low: mean(g.rows.map((r) => r.low)),
+    high: mean(g.rows.map((r) => r.high)),
+    n: g.n,
+  })), [vis]);
 
   const ladder = useMemo(() => {
     if (!decades.length) return null;

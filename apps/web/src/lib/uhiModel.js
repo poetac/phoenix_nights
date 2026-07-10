@@ -1,4 +1,5 @@
 import { linreg, mean } from "./stats.js";
+import { decadeGroups } from "./series.js";
 
 // Pure transform behind UhiCard — the city-vs-rural overnight-low series, the two OLS
 // trends, the per-decade city-minus-rural gap, and the urban-heat-island EXCESS
@@ -25,15 +26,8 @@ export function uhiModel(cityRows, ruralRows) {
   if (!cityFit || !desertFit) return null;
   const cityTrend = cityFit.slope * 10;
   const desertTrend = desertFit.slope * 10;
-  const byDec = {};
-  for (const d of data) {
-    const dec = Math.floor(d.year / 10) * 10;
-    (byDec[dec] ??= []).push(d.city - d.desert);
-  }
-  const gaps = Object.entries(byDec)
-    .filter(([, v]) => v.length >= 4)
-    .map(([dec, v]) => ({ decade: +dec, gap: mean(v) }))
-    .sort((a, b) => a.decade - b.decade);
+  const gaps = decadeGroups(data, 4)
+    .map((g) => ({ decade: g.decade, gap: mean(g.rows.map((d) => d.city - d.desert)) }));
   if (gaps.length < 2) return null;
   const excess = cityTrend - desertTrend;
   if (excess <= 0) return null;

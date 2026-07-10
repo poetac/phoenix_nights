@@ -1,4 +1,5 @@
 import { linreg, mean } from "./stats.js";
+import { throughYear, lastYears } from "./series.js";
 
 // Pure transform behind ExtremesCard — the daily-low record → the warmest/coldest-night
 // series, their per-decade trends, the baseline vs recent coldest-night averages, the
@@ -21,9 +22,8 @@ export function extremesModel(rows, windowStart, city) {
   const coldFit = linreg(series.map((r) => ({ x: r.year, y: r.coldLow })));
   if (!warmFit || !coldFit) return null;
 
-  const lastYear = series[series.length - 1].year;
-  const baseCold = series.filter((r) => r.year <= city.baseline.end).map((r) => r.coldLow);
-  const recentCold = series.filter((r) => r.year > lastYear - 10).map((r) => r.coldLow);
+  const baseCold = throughYear(series, city.baseline.end).map((r) => r.coldLow);
+  const recentCold = lastYears(series, 10).map((r) => r.coldLow);
   const recordWarm = series.reduce((m, r) => (r.warmLow > m.warmLow ? r : m), series[0]);
   const coldTrend = coldFit.slope * 10;
   const warmTrend = warmFit.slope * 10;
