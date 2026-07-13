@@ -12,7 +12,7 @@ import { throughYear, lastYears } from "./series.js";
 // card so that selector and the guards are unit-testable without a DOM
 // (tests/seasonsModel.test.mjs). Returns null (card renders nothing) when the asset is
 // missing or any season has fewer than 30 years since 1970.
-const TREND_START = 1970;
+export const TREND_START = 1970;
 
 export function seasonsModel(seasonal, city) {
   if (!seasonal) return null;
