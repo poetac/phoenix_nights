@@ -1,5 +1,6 @@
 import { linreg, mean } from "./stats.js";
 import { SEASONS } from "./data.js";
+import { throughYear, lastYears } from "./series.js";
 
 // Pure transform behind SeasonsCard — the per-season yearly low/high series → each
 // season's per-decade low and high trends, the summer-night warming delta, plus two
@@ -21,9 +22,8 @@ export function seasonsModel(seasonal, city) {
     if (series.length < 30) return null;
     const lowFit = linreg(series.map((r) => ({ x: r.year, y: r.low })));
     const highFit = linreg(series.map((r) => ({ x: r.year, y: r.high })));
-    const base = series.filter((r) => r.year <= city.baseline.end).map((r) => r.low);
-    const lastYear = series[series.length - 1].year;
-    const recent = series.filter((r) => r.year > lastYear - 10).map((r) => r.low);
+    const base = throughYear(series, city.baseline.end).map((r) => r.low);
+    const recent = lastYears(series, 10).map((r) => r.low);
     seasons.push({
       ...s,
       lowTrend: lowFit.slope * 10,

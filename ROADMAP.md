@@ -428,12 +428,17 @@ are the immutable bar and stay untouched.
    (differs from `signed` at exactly zero). One genuine drop-in **deferred, not blind**: Growth `+{p.gap}`
    renders a raw `+(…).toFixed(1)` number, so an integer gap prints `"+5"` where `signed()` would force
    `"+5.0"` — a visible change needing a decision (normalize to 1dp, or keep raw), not a swap.
-5. **Extract `lib/series.js`** — `splitEarlyLate`/`meanEarlyLate`/`decadeBuckets` are re-implemented in
-   9 cards + `DashboardBody`; extract + unit-test. **Not a clean drop-in** (verified): the "early" window
-   has two live variants — bounded `[baseline.start, baseline.end]` (Streak/NightCooling/HotNightSeason/
-   SeasonLength) vs unbounded `≤ baseline.end` (Sleep/Extremes/Seasons) — plus bespoke windows (Winter:
-   `<1970` / `-30y`; CoolWindow: decade buckets). A shared helper must take the window as a parameter and
-   adopt per-card with output-equivalence checks; do it browser-attended, not unattended.
+5. **Extract `lib/series.js`** — ✅ *(complete)* `baselineWindow` (bounded, inclusive) / `throughYear`
+   (open-ended `≤ end`) / `lastYears` (strict `> lastYear − n`, anchored on the last row) / `decadeGroups`
+   (calendar decades + min-count floor; callers take their own means) now live in `lib/series.js`, adopted
+   at all 12 re-implementation sites — 9 card models plus Sleep/Growth/`DashboardBody` — with the two
+   "early" variants kept as SEPARATE named helpers so a call site must say which it means (the
+   `convTemp`/`convTempDelta` philosophy). Bespoke windows (Winter `<1970`, GlobalContext since-1970,
+   CoolWindow's asset-keyed decades) stay in their models by design. This item was flagged
+   "browser-attended, not unattended" when the windowing lived in JSX — the #6 extractions obsoleted that:
+   9 of 12 sites are pure models whose exact-value tests ARE the output-equivalence check (all pass
+   unchanged), the three JSX swaps are mechanical, and `tests/series.test.mjs` pins the helpers' edge
+   semantics (inclusive bounds, strict trailing boundary, decade floor) (#129).
 6. **Extract card `useMemo` models to pure, tested functions** — ✅ *(complete)* Every prose-bearing card
    transform now lives in a pure `lib/<name>Model.js` (no React/JSX/units), called from a thin `useMemo`,
    with a `tests/<name>Model.test.mjs` exercising its direction branches and applicability guards — the

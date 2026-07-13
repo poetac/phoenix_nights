@@ -12,6 +12,8 @@
 // Note `baseShare` is computed twice on purpose: the raw fraction below (max(1, …)
 // denominator) is the >0 PREMISE test; the returned `baseShare` is the display percentage
 // via sumShare. Kept verbatim so US output is byte-for-byte unchanged.
+import { baselineWindow, lastYears } from "./series.js";
+
 export function nightCoolingModel(cddSplit, city) {
   if (!cddSplit?.years || cddSplit.years.length < 30) return null;
   const data = cddSplit.years.map((r) => ({
@@ -19,9 +21,9 @@ export function nightCoolingModel(cddSplit, city) {
     total: r.nightCdd + r.dayCdd,
     share: r.nightCdd + r.dayCdd > 0 ? (100 * r.nightCdd) / (r.nightCdd + r.dayCdd) : 0,
   }));
-  const base = data.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
-  const lastYear = data[data.length - 1].year;
-  const late = data.filter((r) => r.year > lastYear - 10);
+  const base = baselineWindow(data, city.baseline);
+  const lastYear = data[data.length - 1].year; // returned below
+  const late = lastYears(data, 10);
   if (base.length < 5 || late.length < 5) return null;
   const baseShare = base.reduce((s, r) => s + r.night, 0) /
     Math.max(1, base.reduce((s, r) => s + r.night + r.day, 0));

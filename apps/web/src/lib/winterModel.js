@@ -1,4 +1,5 @@
 import { mean } from "./stats.js";
+import { lastYears } from "./series.js";
 
 // Pure transform behind WinterCard — the per-year frost / cool-night counts → the
 // pre-1970 frost average, the share of recent frost-free winters, the last winter that
@@ -15,9 +16,9 @@ import { mean } from "./stats.js";
 export function winterModel(streaks) {
   if (!streaks?.years) return null;
   const data = streaks.years.map((r) => ({ year: r.year, frost: r.frost, cool60: r.cool60 }));
-  const lastYear = data[data.length - 1].year;
-  const early = data.filter((r) => r.year < 1970);
-  const late = data.filter((r) => r.year > lastYear - 30);
+  const lastYear = data[data.length - 1].year; // read by the frost guard below
+  const early = data.filter((r) => r.year < 1970); // bespoke pre-1970 era, not the baseline window
+  const late = lastYears(data, 30);
   if (early.length < 30 || late.length < 20) return null;
   const lastFrosty = [...data].reverse().find((r) => r.frost >= 5);
   const zeroFrostShare = late.filter((r) => r.frost === 0).length / late.length;
@@ -28,6 +29,6 @@ export function winterModel(streaks) {
     zeroFrostShare,
     lastFrosty,
     earlyCool: mean(early.map((r) => r.cool60)),
-    lateCool: mean(data.filter((r) => r.year > lastYear - 10).map((r) => r.cool60)),
+    lateCool: mean(lastYears(data, 10).map((r) => r.cool60)),
   };
 }

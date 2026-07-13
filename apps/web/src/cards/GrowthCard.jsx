@@ -5,23 +5,21 @@ import {
 import { C, Card, CardHead, axisTick, useUnits, TooltipShell } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
 import { convTempDelta, tempUnit } from "../lib/units.js";
+import { decadeGroups } from "../lib/series.js";
 
 export default function GrowthCard({ city, cityRows, ruralRows }) {
   const model = useMemo(() => {
     if (!city.metroPopulation || !ruralRows) return null;
     const cityBy = new Map(cityRows.map((r) => [r.year, r.low]));
-    const byDec = {};
-    for (const r of ruralRows) {
-      if (!cityBy.has(r.year)) continue;
-      const dec = Math.floor(r.year / 10) * 10;
-      (byDec[dec] ??= []).push(cityBy.get(r.year) - r.low);
-    }
-    const data = Object.entries(byDec)
-      .filter(([dec, v]) => v.length >= 4 && city.metroPopulation[dec] != null)
-      .map(([dec, v]) => ({
-        decade: `${dec}s`,
-        pop: +(city.metroPopulation[dec] / 1e6).toFixed(2),
-        gap: +mean(v).toFixed(1),
+    const joined = ruralRows
+      .filter((r) => cityBy.has(r.year))
+      .map((r) => ({ year: r.year, gap: cityBy.get(r.year) - r.low }));
+    const data = decadeGroups(joined, 4)
+      .filter((g) => city.metroPopulation[g.decade] != null)
+      .map((g) => ({
+        decade: `${g.decade}s`,
+        pop: +(city.metroPopulation[g.decade] / 1e6).toFixed(2),
+        gap: +mean(g.rows.map((r) => r.gap)).toFixed(1),
       }))
       .sort((a, b) => a.pop - b.pop);
     if (data.length < 4) return null;

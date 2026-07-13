@@ -1,4 +1,5 @@
 import { linreg, mean } from "./stats.js";
+import { decadeGroups } from "./series.js";
 
 // Pure transform behind GapCard — the yearly diurnal range (DTR = high - low) since
 // `dtrStart` → the per-year series + OLS trend, decade-averaged endpoints, and the
@@ -19,15 +20,8 @@ export function gapModel(rows, dtrStart) {
   const fit = linreg(series.map((r) => ({ x: r.year, y: r.dtr })));
   if (!fit) return null;
 
-  const byDec = {};
-  for (const r of series) {
-    const d = Math.floor(r.year / 10) * 10;
-    (byDec[d] ||= []).push(r.dtr);
-  }
-  const decades = Object.keys(byDec)
-    .map((d) => ({ decade: +d, dtr: mean(byDec[d]), n: byDec[d].length }))
-    .filter((d) => d.n >= 5)
-    .sort((a, b) => a.decade - b.decade);
+  const decades = decadeGroups(series, 5)
+    .map((g) => ({ decade: g.decade, dtr: mean(g.rows.map((r) => r.dtr)), n: g.n }));
   if (decades.length < 3) return null;
 
   const first = decades[0], last = decades[decades.length - 1];

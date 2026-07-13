@@ -1,4 +1,5 @@
 import { mean } from "./stats.js";
+import { baselineWindow, lastYears } from "./series.js";
 
 // Pure transform behind SeasonLengthCard — each year's 100°F-day band (first day, last
 // day, length, count) → the baseline-vs-recent shifts the prose quotes, plus a sustained-
@@ -17,9 +18,9 @@ export function seasonLengthModel(heatSeason, city) {
     length: r.length, count: r.count,
     susLen: r.firstRun != null && r.lastRun != null ? r.lastRun - r.firstRun + 1 : null,
   }));
-  const early = data.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
-  const lastYear = data[data.length - 1].year;
-  const late = data.filter((r) => r.year > lastYear - 10);
+  const early = baselineWindow(data, city.baseline);
+  const lastYear = data[data.length - 1].year; // returned below (the prose cites the record's span)
+  const late = lastYears(data, 10);
   if (early.length < 7 || late.length < 7) return null;
   const eSus = early.map((r) => r.susLen).filter((v) => v != null);
   const lSus = late.map((r) => r.susLen).filter((v) => v != null);

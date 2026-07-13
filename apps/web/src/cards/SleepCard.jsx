@@ -4,6 +4,7 @@ import {
 } from "recharts";
 import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick } from "../ui.jsx";
 import { mean } from "../lib/stats.js";
+import { throughYear, lastYears } from "../lib/series.js";
 
 // Nights at/above ~25°C (77°F) — the threshold above which population sleep
 // measurably degrades in the peer-reviewed record (Obradovich 2017; Minor 2022).
@@ -15,9 +16,8 @@ export default function SleepCard({ city, rows, windowStart }) {
   const model = useMemo(() => {
     const series = rows.filter((r) => r.year >= windowStart && r.sleepNights != null);
     if (series.length < 20) return null;
-    const lastYear = series[series.length - 1].year;
-    const base = series.filter((r) => r.year <= city.baseline.end).map((r) => r.sleepNights);
-    const recent = series.filter((r) => r.year > lastYear - 10).map((r) => r.sleepNights);
+    const base = throughYear(series, city.baseline.end).map((r) => r.sleepNights);
+    const recent = lastYears(series, 10).map((r) => r.sleepNights);
     if (base.length < 7 || recent.length < 7) return null;
     return {
       data: series.map((r) => ({ year: r.year, nights: r.sleepNights })),

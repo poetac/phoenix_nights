@@ -1,4 +1,5 @@
 import { mean } from "./stats.js";
+import { baselineWindow, lastYears } from "./series.js";
 
 // Pure transform behind HotNightSeasonCard — each year's 80°F-night band (first night,
 // last night, length, count) → the baseline-vs-recent shifts at BOTH ends and the
@@ -19,9 +20,9 @@ export function hotNightSeasonModel(streaks, city) {
       susLen: r.firstSus != null && r.lastSus != null ? r.lastSus - r.firstSus + 1 : null,
     }));
   if (data.length < 30) return null;
-  const early = data.filter((r) => r.year >= city.baseline.start && r.year <= city.baseline.end);
-  const lastYear = data[data.length - 1].year;
-  const late = data.filter((r) => r.year > lastYear - 10);
+  const early = baselineWindow(data, city.baseline);
+  const lastYear = data[data.length - 1].year; // returned below (the prose cites the record's span)
+  const late = lastYears(data, 10);
   if (early.length < 7 || late.length < 7) return null;
   const eSus = early.map((r) => r.susLen).filter((v) => v != null);
   const lSus = late.map((r) => r.susLen).filter((v) => v != null);
