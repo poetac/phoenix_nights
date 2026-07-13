@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { C, DISPLAY, Card, CardHead, useUnits } from "../ui.jsx";
 import { convTempDelta, tempUnit } from "../lib/units.js";
 import { signed } from "../lib/format.js";
-import { seasonsModel } from "../lib/seasonsModel.js";
+import { seasonsModel, TREND_START } from "../lib/seasonsModel.js";
 
 export default function SeasonsCard({ city, seasonal }) {
   const model = useMemo(() => seasonsModel(seasonal, city), [seasonal, city]);
