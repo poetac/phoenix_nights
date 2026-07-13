@@ -407,9 +407,16 @@ are the immutable bar and stay untouched.
 **Performance** (`deferred`)
 1. **Product-split the maps** — load only the active product's single map (~40–50 KB more off the
    lazy chunk). Needs the dynamic-import restructure inside `CityMap`.
-2. **Lighten recharts** — the lazy `LineChart` chunk is 365 KB / 101 KB gz; recharts 2.x barely
-   tree-shakes and the charts are static. recharts v3 (ESM) or a lightweight SVG/d3-shape renderer
-   could cut 50–80 KB gz. Needs a dep swap + browser regression.
+2. **Lighten recharts** — ✅ *(v3 bump landed, hypothesis measured false)* recharts 2.x was EOL
+   (npm deprecation notice: "1.x and 2.x branches are no longer active"), so bumped to v3.9.0 anyway
+   for maintenance/security currency (#130) — paired with a forced `vite@8.1.0` +
+   `@vitejs/plugin-react@6.0.3` bump (their peer ranges are mutually exclusive with the old versions,
+   so Dependabot's three separate PRs (#129–#131) each failed alone and had to land together). Measured
+   the *actual* gzip delta before/after, same app, controlled: **310.63 → 313.57 KB total gzip, LineChart
+   chunk 101.18 → 101.57 KB gz — essentially flat, not the hoped-for 50–80 KB cut.** recharts v3's
+   tree-shaking gains don't reach this app's usage pattern (mostly static line/bar/area charts via
+   `ResponsiveContainer`). *Still open* if the size win matters: a lightweight SVG/d3-shape renderer,
+   or auditing exactly which recharts subcomponents pull in the bulk of the chunk.
 3. **Cache-bust `public/data`** — assets keep stable filenames across rebuilds while JS/CSS are
    hashed, so a browser/CDN can serve stale data. Append `?v=<throughYear>` (already stamped) in the
    fetchers, or hash filenames. Pair with a `schemaVersion` field for forward-compat.
