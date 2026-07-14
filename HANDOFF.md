@@ -9,6 +9,36 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 
 ---
 
+## In flight right now (check this first)
+
+- **All caught up as of 2026-07-13** — `main` is green (build + verify-data +
+  render). The three Dependabot dep bumps (vite 8.1.0, @vitejs/plugin-react
+  6.0.3 — paired together, see the lesson below — and recharts 3.9.0) are
+  merged (#130, #133), and a real regression they exposed is fixed (#135,
+  next bullet). Nothing else known in flight.
+- **A real bug was caught and fixed this session — read this if anything
+  still looks broken.** After #133 (the vite 8 bump) merged, `SeasonsCard`
+  started throwing `TREND_START is not defined` on **every render** — i.e.
+  every ACIS-sourced city's Desert Nights page. Root cause: `TREND_START` was
+  moved into `lib/seasonsModel.js` during an earlier model extraction (#115)
+  but never re-exported/re-imported into the card, which used it directly in
+  its prose. **This bug existed since #115** but was masked for months by the
+  old bundler's (Rollup) scope-hoisting accidentally concatenating the two
+  modules into one scope; Vite 8 defaults to a different bundler (Rolldown)
+  whose chunking finally exposed it. Fixed in #135 (verified via CI's `render`
+  job hitting the real live ACIS path — the exact thing this sandbox's network
+  policy can't test locally). **Lesson for any future model extraction:** if
+  you move a top-level `const` out of a card into its `lib/*Model.js`, grep the
+  card for every remaining bare reference to that name before calling the
+  extraction done — a local build succeeding is NOT sufficient proof (it
+  passed here too, both times, until Rolldown's chunking differed).
+- **M8 items #4, #5, #6 all completed** this session (PRs #105–#132):
+  every card's prose/guard logic is now a pure, unit-tested `lib/<name>Model.js`
+  (see the compact table at ROADMAP.md M8 item 6), and the shared year-window
+  helpers (`lib/series.js`) are adopted everywhere. 23 test suites, all offline.
+- **recharts bumped to v3.9.0** (#130, merged) for maintenance/EOL currency —
+  see ROADMAP M8 item 2 for the honestly-measured (flat, not a size win) result.
+
 ## Status snapshot
 
 - `main` builds green; CI = **build** + **verify-data** (`analysis/verify_v0.py`,
@@ -100,20 +130,87 @@ The breadth cities are shallower than Phoenix; close that before widening furthe
 
 ## Environment / unblockers
 
-1. **A fresh sandbox has no git write + no EIA key.** Ask the user to paste a
+**This section covers two different sandbox types** — check which one you're in
+(if `mcp__github__*` tools are present, you're in the first).
+
+### A. Claude Code on the web / GitHub Action (this session's type)
+
+1. **GitHub MCP tools work out of the box** — `mcp__github__get_me` confirms
+   auth, no PAT needed. Use them for all PR/CI/repo operations (see CLAUDE.md's
+   GitHub Integration section). If a tool call returns "server disconnected,"
+   the connector needs the user to re-authorize (claude.ai connector settings) —
+   it usually reconnects on its own after a beat; verify with `get_me` before
+   assuming it's still down.
+2. **Network egress is a POLICY, not a missing-libs problem — and it may deny
+   ACIS/NCEI/EIA/open-meteo.** Confirmed on 2026-07-13: `curl` to
+   `data.rcc-acis.org`, `archive-api.open-meteo.com`, and even
+   `www.google.com` all get `403` from the proxy gateway
+   (`curl -sS "$HTTPS_PROXY/__agentproxy/status"` shows `recentRelayFailures`
+   with `"policy denial"` for each) — this is the environment's configured
+   network policy (chosen at environment-creation time), not a code or library
+   issue, and it blocks **both** shell (`curl`/Python `requests`) and a
+   Playwright-launched browser identically (tested independently — same 403
+   either way). If you hit this: **`python3 analysis/verify_v0.py` and the
+   data pipelines cannot run here** — don't burn time debugging what looks like
+   a connectivity bug; check the status endpoint above to confirm it's policy,
+   then rely on CI's `verify-data` job (GitHub-hosted runners have full
+   internet). If live data pipeline work is actually the task, tell the user
+   their environment's network policy needs ACIS/NCEI/EIA/open-meteo allowed
+   (see the docs page in the system prompt for how policies are configured).
+3. **Chromium IS pre-installed and DOES work locally**
+   (`/opt/pw-browsers/chromium-1194/...`; the system prompt has the exact
+   paths/env vars) — correcting an earlier version of this note that said
+   otherwise. You can run `tests/render-smoke.mjs` locally against a served
+   `dist/` build, and it will correctly validate everything backed by
+   **precomputed/committed JSON** (explore landing, world/US map, compare
+   chart, city switcher, cross-city signal hero, climate tags). What it
+   **cannot** validate locally is any route needing a **live** fetch (the
+   curated Desert-Nights-layout dashboards' "last night" / daily-record calls
+   to ACIS/Open-Meteo) — those cards gate on `if (!rows.length) return null`,
+   so a blocked fetch means the whole card set silently renders nothing,
+   which reads exactly like a real regression if you don't know the network
+   is policy-blocked. **CI's `render` job is the only authoritative check for
+   those routes.** (If a freshly-installed local `playwright` package
+   mismatches the pre-baked browser version — `chrome-headless-shell`
+   version-not-found — pass `executablePath` pointing at the pre-baked
+   `chrome-linux/chrome` binary instead of reinstalling browsers.)
+4. **Dependency bumps that touch a build-tool/plugin pair must be checked
+   together.** Learned from Dependabot #129/#131 (2026-07): `vite` and
+   `@vitejs/plugin-react` have peer ranges that only overlap for specific
+   version pairs — bumping one without the other can silently break CI with
+   an `ERESOLVE` peer conflict. Before merging any Dependabot PR that touches
+   a `devDependencies` build-tool package, check `npm install` locally for
+   `ERESOLVE` and check whether a coupled package (its plugin, its peer)
+   needs to move too.
+5. **Before trusting a "performance win" hypothesis in ROADMAP.md, measure
+   it.** The "recharts v3 could cut 50–80 KB gz" hunch (M8 perf item 2)
+   turned out flat (310.63 → 313.57 KB gzip, measured 2026-07) once actually
+   built both ways under controlled conditions. Worth doing anyway (recharts
+   2.x is npm-flagged EOL) but don't re-attempt the same bet expecting a
+   different result — a real size win there needs a different approach
+   (hand-rolled SVG/d3-shape renderer, or auditing which recharts
+   subcomponents are actually pulled into the bundle).
+
+### B. Bare shell sandbox (no GitHub MCP — older/different setup)
+
+1. **No git write + no EIA key by default.** Ask the user to paste a
    **fine-grained GitHub PAT** for `poetac/phoenix_nights` (Contents R/W, Pull
    requests R/W, Workflows R/W — note: **no** Actions:write, so you can't re-run a
    stuck run via API; re-trigger with an empty commit). For grid builds only, ask
    for the free **`EIA_API_KEY`** (eia.gov/opendata).
-2. **Egress is open** from the shell (ACIS, NCEI, EIA, api.github.com, npm). Clone
-   into a **sandbox-native dir** (e.g. `$HOME/work`), NOT the mounted outputs folder
-   (git locking fails there). Push via
+2. **Egress may be open** from the shell (ACIS, NCEI, EIA, api.github.com, npm) —
+   this varies by sandbox provisioning; verify before assuming (see the policy
+   check in A.2 above, which applies here too if this sandbox uses the same
+   agent-proxy mechanism). Clone into a **sandbox-native dir** (e.g. `$HOME/work`),
+   NOT the mounted outputs folder (git locking fails there). Push via
    `git push https://x-access-token:<PAT>@github.com/...`; open/squash-merge via the
    REST API. Never echo the token.
-3. **Do NOT attempt a local full-app browser render** — the sandbox lacks the
-   browser system libs. **Rely on CI** (`build`, `verify-data`, `render`). You *can*
-   run `npm run build`, `python3 analysis/verify_v0.py` (hits ACIS), the data
-   pipelines, and rasterize a committed SVG via `@resvg/resvg-js` to eyeball the map.
+3. **Do NOT attempt a local full-app browser render** if the sandbox genuinely
+   lacks browser system libs (verify — this may not apply to your sandbox; see
+   A.3 above). **Rely on CI** (`build`, `verify-data`, `render`) as the fallback.
+   You *can* run `npm run build`, and — if egress is confirmed open —
+   `python3 analysis/verify_v0.py` (hits ACIS), the data pipelines, and
+   rasterize a committed SVG via `@resvg/resvg-js` to eyeball the map.
 4. **Background jobs don't survive across shell calls** (each call is isolated) —
    keep long ACIS/pipeline runs inside one call (the audit + builders finish in
    seconds per city).
