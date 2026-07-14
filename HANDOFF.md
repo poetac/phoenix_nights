@@ -11,13 +11,27 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 
 ## In flight right now (check this first)
 
-- **PR #133** (`claude/vite8-plugin-react6`, draft) — pairs `vite@8.1.0` +
-  `@vitejs/plugin-react@6.0.3` (their peer ranges are mutually exclusive with
-  the old versions, so Dependabot's separate #129/#131 each failed alone;
-  fixed forward together here, with #129/#131 closed pointing at this PR).
-  `npm test` (23 suites) and both builds pass locally; check its CI (`build`,
-  `verify-data`, `render`) and squash-merge if green — this is routine, no
-  open question attached.
+- **All caught up as of 2026-07-13** — `main` is green (build + verify-data +
+  render). The three Dependabot dep bumps (vite 8.1.0, @vitejs/plugin-react
+  6.0.3 — paired together, see the lesson below — and recharts 3.9.0) are
+  merged (#130, #133), and a real regression they exposed is fixed (#135,
+  next bullet). Nothing else known in flight.
+- **A real bug was caught and fixed this session — read this if anything
+  still looks broken.** After #133 (the vite 8 bump) merged, `SeasonsCard`
+  started throwing `TREND_START is not defined` on **every render** — i.e.
+  every ACIS-sourced city's Desert Nights page. Root cause: `TREND_START` was
+  moved into `lib/seasonsModel.js` during an earlier model extraction (#115)
+  but never re-exported/re-imported into the card, which used it directly in
+  its prose. **This bug existed since #115** but was masked for months by the
+  old bundler's (Rollup) scope-hoisting accidentally concatenating the two
+  modules into one scope; Vite 8 defaults to a different bundler (Rolldown)
+  whose chunking finally exposed it. Fixed in #135 (verified via CI's `render`
+  job hitting the real live ACIS path — the exact thing this sandbox's network
+  policy can't test locally). **Lesson for any future model extraction:** if
+  you move a top-level `const` out of a card into its `lib/*Model.js`, grep the
+  card for every remaining bare reference to that name before calling the
+  extraction done — a local build succeeding is NOT sufficient proof (it
+  passed here too, both times, until Rolldown's chunking differed).
 - **M8 items #4, #5, #6 all completed** this session (PRs #105–#132):
   every card's prose/guard logic is now a pure, unit-tested `lib/<name>Model.js`
   (see the compact table at ROADMAP.md M8 item 6), and the shared year-window
