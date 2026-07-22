@@ -517,21 +517,18 @@ are the immutable bar and stay untouched.
     `products.js` (`citiesOf(PRODUCTS.desert)`) instead of a hardcoded `=== 5`, so vetting in a sixth
     desert city no longer silently breaks the test. *Remaining:* reduce live-ACIS exposure / add a
     wall-clock budget; share `dist/` between the build and render jobs (built twice per PR today).
-18. **No lint at all — `apps/web` has zero ESLint config.** Confirmed by a real incident (2026-07):
+18. ✅ **No lint at all — `apps/web` has zero ESLint config.** Confirmed by a real incident (2026-07):
     `SeasonsCard.jsx` referenced `TREND_START` (moved into `lib/seasonsModel.js` during the #115
     extraction, never re-imported) — an unconditional `ReferenceError` on every render, live on `main`
     for months. It was masked because the old bundler's scope-hoisting happened to concatenate the two
     modules into one scope; a Vite 8/Rolldown chunking change (#133) finally exposed it (fixed in #135).
-    A bare `no-undef` lint rule would have caught this in milliseconds, offline, in the `build` job — no
-    live ACIS, no Playwright, no bundler-specific luck required. *Proposed scope (deliberately minimal,
-    not attempted this session — see HANDOFF.md "In flight" for why):* `eslint` + `no-undef` +
-    `eslint-plugin-react`'s recommended config (for JSX-aware globals), run in CI's `build` job, scoped to
-    `apps/web/src/**`. Expect it to pass clean today — a scan for this exact bug class across all 15
-    extracted models turned up nothing else (see the #135 PR description). Getting the globals/env config
-    right for a codebase this size (React JSX + Node build scripts + test files) needs care to avoid a
-    flood of false positives; do this browser-un-attended (it's pure static analysis) but budget time to
-    verify zero regressions before landing it, and don't scope-creep into style rules — `no-undef` (and
-    maybe `no-unused-vars`) is the whole point, not a general lint pass.
+    Shipped: `eslint.config.js` — flat config, `no-undef` + `no-unused-vars` only, `eslint-plugin-react`
+    for `jsx-uses-vars` (so a component only referenced via JSX isn't flagged unused), scoped to
+    `apps/web/src/**`, wired into CI's `build` job as `npm run lint`. Passed clean apart from two
+    genuinely-dead catch bindings in `CityDashboard.jsx` and an unused `city` prop in `GridCard.jsx`
+    (fixed) — no second `no-undef` case turned up, matching the #135 scan. Deliberately still not
+    covering `scripts/*.mjs` / `tests/*.mjs` / `vite.config.js` (node-env globals, separate config
+    block) — cheap follow-up if it's ever worth the extra surface. (#137)
 
 **Governance**
 17. **Branch protection on `main`** (require build/verify-data/render) — a repo setting, not code. The

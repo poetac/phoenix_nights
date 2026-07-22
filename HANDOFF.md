@@ -11,11 +11,17 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 
 ## In flight right now (check this first)
 
-- **All caught up as of 2026-07-13** — `main` is green (build + verify-data +
-  render). The three Dependabot dep bumps (vite 8.1.0, @vitejs/plugin-react
-  6.0.3 — paired together, see the lesson below — and recharts 3.9.0) are
-  merged (#130, #133), and a real regression they exposed is fixed (#135,
-  next bullet). Nothing else known in flight.
+- **As of 2026-07-22** — `main` is green (build + verify-data + render).
+  Since the 2026-07-13 snapshot below: `HANDOFF.md`'s own stale "no browser
+  libs" claim was corrected (#134 — it's a network *policy* blocking
+  ACIS/NCEI/EIA/open-meteo egress, not a missing browser; confirmed via the
+  proxy's own `/__agentproxy/status` endpoint, see `README.md`/this file's
+  environment note); the M8 #18 lint gate shipped (#137 — see ROADMAP); and
+  the one open Dependabot PR (#136, `@tailwindcss/vite`/`tailwindcss`/`vite`
+  patch bumps) merged clean — full CI (build/verify-data/render, including
+  live NCEI + Playwright) passed against current `main` before merging, so
+  unlike the vite 8/plugin-react 6 pairing this one really was a low-risk
+  patch bump. Nothing known outstanding.
 - **A real bug was caught and fixed this session — read this if anything
   still looks broken.** After #133 (the vite 8 bump) merged, `SeasonsCard`
   started throwing `TREND_START is not defined` on **every render** — i.e.

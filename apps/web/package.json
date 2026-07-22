@@ -9,7 +9,8 @@
     "build": "vite build",
     "build:desert": "VITE_PRODUCT=desert vite build --outDir dist-desert",
     "preview": "vite preview",
-    "test": "for f in tests/*.test.mjs; do echo \"› $f\"; node \"$f\" || exit 1; done"
+    "test": "for f in tests/*.test.mjs; do echo \"› $f\"; node \"$f\" || exit 1; done",
+    "lint": "eslint src"
   },
   "engines": {
     "node": ">=22"
@@ -22,6 +23,9 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.7.0",
     "playwright": "1.61.1",
     "tailwindcss": "^4.1.11",
     "vite": "^8.1.5"

@@ -6,7 +6,7 @@ import { C, DISPLAY, Card, CardHead, DarkTooltip, axisTick } from "../ui.jsx";
 import { hourLabel } from "../lib/labels.js";
 import { gridModel } from "../lib/gridModel.js";
 
-export default function GridCard({ city, grid }) {
+export default function GridCard({ grid }) {
   const model = useMemo(() => gridModel(grid), [grid]);
 
   if (!model) return null;
