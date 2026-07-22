@@ -11,18 +11,17 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 
 ## In flight right now (check this first)
 
-- **As of 2026-07-22** — `main` is green (build + verify-data + render). Since
-  the 2026-07-13 snapshot below: `HANDOFF.md`'s own stale "no browser libs"
-  claim was corrected (#134 — it's a network *policy* blocking ACIS/NCEI/EIA/
-  open-meteo egress, not a missing browser; confirmed via the proxy's own
-  `/__agentproxy/status` endpoint, see `README.md`/this file's environment
-  note), and the M8 #18 lint gate shipped (#137 — see ROADMAP). **One
-  Dependabot PR is open and unresolved: #136**, `deps: bump the front-end
-  group in /apps/web with 3 updates` (`@tailwindcss/vite`, `tailwindcss`,
-  `vite` patch bumps), opened 2026-07-20. Its status checks show
-  `total_count: 0` (never ran) as of this snapshot — check CI before assuming
-  it's safe to merge; the vite/plugin-react peer-range lesson below means a
-  patch-looking bump isn't automatically low-risk in this repo.
+- **As of 2026-07-22** — `main` is green (build + verify-data + render).
+  Since the 2026-07-13 snapshot below: `HANDOFF.md`'s own stale "no browser
+  libs" claim was corrected (#134 — it's a network *policy* blocking
+  ACIS/NCEI/EIA/open-meteo egress, not a missing browser; confirmed via the
+  proxy's own `/__agentproxy/status` endpoint, see `README.md`/this file's
+  environment note); the M8 #18 lint gate shipped (#137 — see ROADMAP); and
+  the one open Dependabot PR (#136, `@tailwindcss/vite`/`tailwindcss`/`vite`
+  patch bumps) merged clean — full CI (build/verify-data/render, including
+  live NCEI + Playwright) passed against current `main` before merging, so
+  unlike the vite 8/plugin-react 6 pairing this one really was a low-risk
+  patch bump. Nothing known outstanding.
 - **A real bug was caught and fixed this session — read this if anything
   still looks broken.** After #133 (the vite 8 bump) merged, `SeasonsCard`
   started throwing `TREND_START is not defined` on **every render** — i.e.
