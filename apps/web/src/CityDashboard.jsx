@@ -70,11 +70,11 @@ export default function CityDashboard({ city, product }) {
         // bonus cards — never block or fail the page on them
         fetchRural(city).then((rr) => alive && setRural(rr)).catch(() => {});
         fetchSeasonal(city).then((ss) => alive && setSeasonal(ss)).catch(() => {});
-      } catch (e1) {
+      } catch {
         try {
           const res = await fetchOpenMeteo(city);
           if (alive) setState({ loading: false, error: null, ...res });
-        } catch (e2) {
+        } catch {
           if (alive) setState({ loading: false, error: "Couldn't reach NOAA (ACIS) or the Open-Meteo archive. Check your connection, then tap retry.", rows: [], source: null });
         }
       }
