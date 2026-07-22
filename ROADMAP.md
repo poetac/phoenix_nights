@@ -498,9 +498,12 @@ are the immutable bar and stay untouched.
     day late in leap years (cosmetic).
 
 **Testing / CI** (`deferred`)
-13. **Pin Playwright** — `ci.yml` installs `playwright` unpinned (the only unpinned CI dep); a release
-    can break render with no code change. Pin an exact (resolvable) version or add it to devDeps via the
-    lockfile; cache the browser download.
+13. ✅ **Pin Playwright** — `ci.yml`'s `render` job ran `npm i --no-save playwright` (unpinned, the
+    only unpinned CI dep); a release could break render with no code change. Shipped: `playwright` is
+    now an exact-pinned (`1.61.1`, no `^`) devDependency in `package.json`/lockfile, so it's
+    Dependabot-tracked like everything else and `npm ci` installs it; the render job now just runs
+    `npx playwright install --with-deps chromium`, plus an `actions/cache` step keyed on the lockfile
+    hash so an unchanged pin skips the browser re-download. (#138)
 14. **Split `verify_v0` offline/live** — the offline checks (shape/finiteness/stdlib) sit *after* an
     unguarded `fetch_gsoy()`, so an ACIS/NCEI outage fails the gate on PRs that never touched data and
     the most valuable PR checks never run. Run the offline checks as a network-free hard gate; make the
