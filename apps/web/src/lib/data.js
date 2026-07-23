@@ -169,8 +169,17 @@ export async function fetchSeasonal(city) {
   return out;
 }
 
+// Cache-bust a committed-asset URL with a build-time content-hash version (see
+// vite.config.js's hashDataDir) so a stale browser/CDN cache from before a data
+// refresh can't shadow the redeployed file. `version` is a parameter (not read
+// from import.meta.env internally) so this is callable under plain node in tests.
+export function assetUrl(path, version) {
+  if (!version) return path;
+  return path + (path.includes("?") ? "&" : "?") + "v=" + version;
+}
+
 async function fetchAsset(path) {
-  const r = await robustFetch(import.meta.env.BASE_URL + path);
+  const r = await robustFetch(import.meta.env.BASE_URL + assetUrl(path, import.meta.env.VITE_DATA_VERSION));
   if (!r.ok) throw new Error("asset " + path + " " + r.status);
   return r.json();
 }

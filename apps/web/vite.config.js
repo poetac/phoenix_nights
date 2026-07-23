@@ -1,6 +1,31 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { createHash } from "node:crypto";
+import { readdirSync, readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+
+// public/data/*.json keep stable filenames across a rebuild (JS/CSS are content-
+// hashed, these aren't), so a browser/CDN can serve a stale asset after a data
+// refresh redeploys. Hash the directory's actual bytes once here and thread it
+// through as a query-string cache-buster (see lib/data.js's fetchAsset) — value
+// changes only when an asset's content changes, not on every commit. Falls back
+// to a constant on any error so a future restructure of public/data/ can't brick
+// the build for either product.
+function hashDataDir() {
+  try {
+    const dir = fileURLToPath(new URL("./public/data/", import.meta.url));
+    const hash = createHash("sha1");
+    for (const name of readdirSync(dir).sort()) {
+      hash.update(name);
+      hash.update(readFileSync(dir + name));
+    }
+    return hash.digest("hex").slice(0, 10);
+  } catch {
+    return "0";
+  }
+}
+const DATA_VERSION = hashDataDir();
 
 // One index.html, two products. The shared template carries __META_*__ tokens; this
 // plugin fills them at build time from the active product (VITE_PRODUCT) so the root
@@ -54,6 +79,9 @@ function productMeta() {
 
 export default defineConfig({
   plugins: [productMeta(), react(), tailwindcss()],
+  define: {
+    "import.meta.env.VITE_DATA_VERSION": JSON.stringify(DATA_VERSION),
+  },
   build: {
     // recharts is the heavy dependency; keep it in its own chunk separate from
     // react so it is pulled only by the lazy DashboardBody, not the shell.

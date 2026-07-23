@@ -417,9 +417,16 @@ are the immutable bar and stay untouched.
    tree-shaking gains don't reach this app's usage pattern (mostly static line/bar/area charts via
    `ResponsiveContainer`). *Still open* if the size win matters: a lightweight SVG/d3-shape renderer,
    or auditing exactly which recharts subcomponents pull in the bulk of the chunk.
-3. **Cache-bust `public/data`** — assets keep stable filenames across rebuilds while JS/CSS are
-   hashed, so a browser/CDN can serve stale data. Append `?v=<throughYear>` (already stamped) in the
-   fetchers, or hash filenames. Pair with a `schemaVersion` field for forward-compat.
+3. ✅ **Cache-bust `public/data`** — assets keep stable filenames across rebuilds while JS/CSS are
+   hashed, so a browser/CDN can serve stale data. Not the literal `?v=<throughYear>` wording: asset
+   stamp coverage turned out non-uniform (`phx-facts.json`/`phx-normals.json` carry no `throughYear`,
+   `phx-heat-deaths.json` no stamp at all) and the value lives inside the response you'd be trying to
+   cache-bust — a chicken-and-egg problem. Shipped instead: `vite.config.js`'s `hashDataDir()` sha1-hashes
+   `public/data/`'s actual bytes once per build, exposed as `import.meta.env.VITE_DATA_VERSION`
+   (same idiom as `VITE_PRODUCT`) and appended by `lib/data.js`'s new `assetUrl()` at `fetchAsset`'s one
+   choke point — covers all ~10 asset kinds/94 files uniformly, changes only when content actually
+   changes, needs zero Python/`verify_v0.py` changes. `schemaVersion` deliberately deferred as its own
+   follow-up (touches 9+ builders — a materially different diff). (#140)
 
 **Frontend architecture** (`deferred`)
 4. **Finish `lib/format.js` adoption** — ✅ *(clean drop-ins done)* Extremes (3×) + Gap (1×) `signed()`
