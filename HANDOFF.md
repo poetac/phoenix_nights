@@ -11,17 +11,36 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 
 ## In flight right now (check this first)
 
-- **As of 2026-07-22** — `main` is green (build + verify-data + render).
-  Since the 2026-07-13 snapshot below: `HANDOFF.md`'s own stale "no browser
-  libs" claim was corrected (#134 — it's a network *policy* blocking
-  ACIS/NCEI/EIA/open-meteo egress, not a missing browser; confirmed via the
-  proxy's own `/__agentproxy/status` endpoint, see `README.md`/this file's
-  environment note); the M8 #18 lint gate shipped (#137 — see ROADMAP); and
-  the one open Dependabot PR (#136, `@tailwindcss/vite`/`tailwindcss`/`vite`
-  patch bumps) merged clean — full CI (build/verify-data/render, including
-  live NCEI + Playwright) passed against current `main` before merging, so
-  unlike the vite 8/plugin-react 6 pairing this one really was a low-risk
-  patch bump. Nothing known outstanding.
+- **As of 2026-07-23** — `main` is green (build + verify-data + render). This
+  session worked straight through the M8 durability backlog (see ROADMAP.md
+  M8 for the full detail on each): #134 corrected `HANDOFF.md`'s own stale
+  "no browser libs" claim (it's a network *policy* blocking ACIS/NCEI/EIA/
+  open-meteo egress, not a missing browser); #136 (a Dependabot patch bump)
+  and #135's regression are clean; #137 shipped the M8 #18 lint gate
+  (`no-undef`/`no-unused-vars`); #138 pinned Playwright as an exact
+  devDependency (M8 #13); #139 product-split `CityMap` so each product only
+  fetches its own map geometry (M8 #1, ~41–53 KB gz saved); #140 cache-busts
+  `public/data` with a build-time content hash (M8 #3); #141 split
+  `cities.js` (926 lines) into per-city files under `lib/cityData/` (M8 #8);
+  #142 split `verify_v0.py` into offline (hard gate, zero network) and live
+  (soft, retried) phases (M8 #14) — genuinely testable end-to-end in this
+  sandbox for the first time, since the offline half needs no ACIS/NCEI
+  access. Remaining M8 items: #7 (`CityDashboard` reducer — deferred, see
+  below), #10 (shared `acis.py`/`assetio.py` — high risk, wants a phased
+  one-file-at-a-time approach with a real rebuild-workflow dispatch per
+  phase, not attempted this session), #12 (unify day-of-year — a real
+  semantics change to committed historical data, same caution), #17 (branch
+  protection on `main` — a repo *setting*, no GitHub API/MCP tool exposes
+  it; still needs you in the Settings UI).
+- **A new finding, not yet acted on:** researching the M8 #7 `CityDashboard`
+  reducer collapse turned up a sharper reason than "browser-attended" to
+  leave it deferred — `CityDashboard` is keyed on `city.id` in `App.jsx`
+  (`<CityDashboard key={city.id} .../>`), so React remounts a fresh instance
+  on every city switch; the reset-on-an-already-mounted-instance code path
+  this item would refactor only ever runs today via the Retry button
+  (`reloadKey` bump) after a fetch failure — and `render-smoke.mjs` has zero
+  coverage of that specific path, before or after such a refactor. Worth
+  adding a Playwright case for it before attempting the reducer collapse.
 - **A real bug was caught and fixed this session — read this if anything
   still looks broken.** After #133 (the vite 8 bump) merged, `SeasonsCard`
   started throwing `TREND_START is not defined` on **every render** — i.e.

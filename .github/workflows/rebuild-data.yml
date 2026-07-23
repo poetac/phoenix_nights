@@ -72,6 +72,8 @@ jobs:
         run: python3 analysis/build_compare.py
 
       # Gate: don't commit anything if the headline numbers stopped checking out.
+      # Bare invocation relies on verify_v0.py's --mode default staying "all" (both
+      # offline + live, hard-fail) — see ci.yml's verify-data job for the split.
       - name: Verify statistics against the official record
         run: python3 analysis/verify_v0.py
 
