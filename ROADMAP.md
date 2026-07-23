@@ -405,8 +405,21 @@ are the immutable bar and stay untouched.
   prose fixes (#82–#96).
 
 **Performance** (`deferred`)
-1. **Product-split the maps** — load only the active product's single map (~40–50 KB more off the
-   lazy chunk). Needs the dynamic-import restructure inside `CityMap`.
+1. ✅ **Product-split the maps** — `CityMap.jsx` statically imported BOTH `usMap.js` and `worldMap.js`
+   (~95 KB gz combined) into its one lazy chunk, so every product paid for both maps even though only
+   one is ever rendered. Split into 4 files: `CityMapView.jsx` (pure presentational, takes `MAP`/
+   `useWorld` as props), `CityMapUS.jsx`/`CityMapWorld.jsx` (each statically imports exactly one map
+   module), and `CityMap.jsx` (a thin picker — two `lazy()` refs chosen by `product?.id === "explorer"`,
+   mirroring the `DashboardBody`/`SignalsBody` pattern already used in `CityDashboard.jsx`). Measured,
+   network-traced (not just built): City Signals now fetches `CityMap`+`CityMapView`+`CityMapWorld` =
+   56.36 KB gz (was 97.00) — saves 40.64 KB; Desert Nights fetches `CityMap`+`CityMapView`+`CityMapUS` =
+   43.96 KB gz — saves 53.04 KB. Both exceed the original 40–50 KB estimate. The "before world map
+   generation, City Signals falls back to the US map" behavior (HANDOFF.md) is preserved — verified by
+   stubbing `WORLD_MAP` to empty and confirming `CityMapWorld.jsx`'s fallback (a *lazy*, not static,
+   `import("./CityMapUS.jsx")`) still renders the full US map correctly. `render-smoke.mjs` now asserts
+   each product's landing fetches only its own map chunk, so a future edit that turns that fallback back
+   into a static import — silently re-merging the chunks with zero functional symptom — fails CI instead
+   of quietly regressing. (#139)
 2. **Lighten recharts** — ✅ *(v3 bump landed, hypothesis measured false)* recharts 2.x was EOL
    (npm deprecation notice: "1.x and 2.x branches are no longer active"), so bumped to v3.9.0 anyway
    for maintenance/security currency (#130) — paired with a forced `vite@8.1.0` +
