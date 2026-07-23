@@ -3,9 +3,9 @@ import { climateOf } from "./lib/cities.js";
 import { fetchFacts } from "./lib/data.js";
 import { signed } from "./lib/format.js";
 import { C, DISPLAY, BODY } from "./ui.jsx";
-// CityMap statically imports both pre-projected map geometries (US + world, ~95 KB
-// gzip combined). Lazy-load it so they don't sit in the eager entry chunk — the map
-// is a viewport down, and only one of the two maps is ever rendered per product.
+// CityMap picks the active product's map geometry (US ~42 KB gz / world ~54 KB gz)
+// and lazy-loads only that one — see CityMap.jsx. Lazy here too so neither map
+// sits in the eager entry chunk; the map is a viewport down.
 const CityMap = lazy(() => import("./CityMap.jsx"));
 const CityCompare = lazy(() => import("./CityCompare.jsx"));
 

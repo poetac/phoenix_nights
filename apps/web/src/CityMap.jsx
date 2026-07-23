@@ -1,109 +1,19 @@
-import { US_MAP } from "./lib/usMap.js";
-import { WORLD_MAP } from "./lib/worldMap.js";
-import { signed } from "./lib/format.js";
-import { C, DISPLAY, BODY } from "./ui.jsx";
+import { lazy, Suspense } from "react";
 
-// Map a night-warming rate (°F/decade, ~0.8–2.2) to a 0..1 ramp position.
-const LO = 0.7, HI = 2.2;
-const clamp01 = (t) => Math.max(0, Math.min(1, t));
+// Picks ONE of the two map geometries by product, so only the active product's
+// map data ever hits the network — City Signals never fetches usMap.js (~42 KB
+// gz), Desert Nights never fetches worldMap.js (~54 KB gz). Both stay reachable
+// dynamic-import targets in the built dist/ (the ?product= override still works),
+// only the actual fetch is product-conditional — the same pattern CityDashboard.jsx
+// uses for DashboardBody vs SignalsBody.
+const CityMapWorld = lazy(() => import("./CityMapWorld.jsx"));
+const CityMapUS = lazy(() => import("./CityMapUS.jsx"));
 
-// The literal map for the explore landing: committed, pre-projected US state
-// outlines + a clickable dot per city. Dots are sized by how fast that city's
-// summer nights are warming, so the map carries the ranking spatially; the city
-// name reveals on hover/focus (the engine now spans the arid West and the humid
-// South, so the dots are spread across the country and always-on labels would
-// collide). Only the active product's cities get a dot. No runtime map deps.
-export default function CityMap({ onPick, ranked, cities, product }) {
-  // City Signals (worldwide) uses the world map once it's been generated; Desert
-  // Nights — and the fallback before generation — uses the US Albers map.
-  const useWorld = product?.id === "explorer" && WORLD_MAP?.cities;
-  const MAP = useWorld ? WORLD_MAP : US_MAP;
-  const byId = new Map(cities.map((c) => [c.id, c]));
-  const rate = new Map((ranked || []).map((r) => [r.city.id, r.nightWarming]));
-  const dots = Object.entries(MAP.cities)
-    .map(([id, xy]) => ({ city: byId.get(id), xy }))
-    .filter((d) => d.city);
-
-  // Scale dot/label sizes to the viewBox so they render at a consistent on-screen
-  // size whatever the map's geographic extent (regional SW vs national vs world).
-  const vbW = parseFloat(MAP.viewBox.split(" ")[2]) || 290;
-  const k = vbW / 290;
-  const radius = (nw) => (nw == null ? 4.6 : 3.6 + clamp01((nw - LO) / (HI - LO)) * 3.8) * k;
-
+export default function CityMap(props) {
+  const useWorld = props.product?.id === "explorer";
   return (
-    <figure className="mt-8 mb-2 rounded-2xl overflow-hidden"
-      style={{ background: C.panel, border: `1px solid ${C.line}` }}>
-      <svg
-        data-testid="us-map"
-        viewBox={MAP.viewBox}
-        role="group"
-        aria-label={`Map of ${useWorld ? "the world" : "the United States"}; dot size shows each city's overnight-low warming rate. Select a city.`}
-        style={{ display: "block", width: "100%", height: "auto" }}
-      >
-        <title>{`${useWorld ? "Cities worldwide" : "US cities"} — bigger dot = faster-warming nights. Select one to open its page.`}</title>
-        {useWorld ? (
-          <>
-            {MAP.graticule && (
-              <path d={MAP.graticule} fill="none" stroke={C.line} strokeWidth={0.5 * k}
-                strokeOpacity={0.35} vectorEffect="non-scaling-stroke" />
-            )}
-            {MAP.countries.map((d, i) => (
-              <path key={i} d={d} fill={C.panel2} stroke={C.line} strokeWidth={0.6 * k}
-                strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-            ))}
-          </>
-        ) : (
-          US_MAP.states.map((s) => (
-            <path key={s.id} d={s.d} fill={C.panel2} stroke={C.line} strokeWidth={0.6 * k}
-              strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-          ))
-        )}
-        {dots.map(({ city, xy: [x, y] }) => {
-          const flagship = !!city.featured;
-          const nw = rate.get(city.id) ?? null;
-          const r = radius(nw) * (flagship ? 1.12 : 1);
-          const activate = () => onPick(city.id);
-          const rateText = nw != null ? `, overnight lows ${signed(nw)}°F per decade` : "";
-          return (
-            <g
-              key={city.id}
-              className="group"
-              data-city={city.id}
-              data-rate={nw != null ? nw.toFixed(2) : ""}
-              role="button"
-              tabIndex={0}
-              aria-label={`${city.name}${rateText} — open page`}
-              onClick={activate}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <title>{`${city.name}${rateText}`}</title>
-              <circle cx={x} cy={y} r={Math.max(11, r + 6)} fill="transparent" />
-              <circle cx={x} cy={y} r={r}
-                fill={flagship ? C.gold : C.ember}
-                fillOpacity={nw == null ? 0.85 : 0.92}
-                stroke={C.bg} strokeWidth={1.4 * k}
-                className="transition-all group-hover:brightness-110" />
-              <text x={x + 7 * k} y={y - 6 * k} textAnchor="start"
-                className="opacity-0 group-hover:opacity-100 group-focus:opacity-100 pointer-events-none transition-opacity"
-                style={{
-                  fontFamily: DISPLAY, fontSize: 11 * k, fontWeight: 650,
-                  fill: C.text, paintOrder: "stroke",
-                  stroke: C.bg, strokeWidth: 3 * k, strokeLinejoin: "round",
-                }}>
-                {city.shortName}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-      <figcaption className="px-4 py-2 text-xs" style={{ color: C.muted, fontFamily: BODY }}>
-        Each dot is a city; <strong style={{ color: C.text }}>bigger dots warm faster at night</strong>
-        {" "}(overnight-low trend since 1970). <span style={{ color: C.gold }}>★ gold</span> is the Phoenix
-        flagship. Hover or focus a dot for its name; select it — or a row below — for the full record.
-      </figcaption>
-    </figure>
+    <Suspense fallback={null}>
+      {useWorld ? <CityMapWorld {...props} /> : <CityMapUS {...props} />}
+    </Suspense>
   );
 }

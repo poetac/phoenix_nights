@@ -28,6 +28,18 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 2200 } });
 page.on("pageerror", (e) => pageErrors.push(e.message));
 // caught fetch errors are handled in-app; we only fail on uncaught exceptions
 
+// Product-split map chunks (M8 #1): CityMapWorld.jsx/CityMapUS.jsx must each stay a
+// separate lazy chunk only the matching product ever fetches — that's the whole
+// point of the split (a static (not lazy) cross-reference between them would
+// silently re-merge the ~54+42 KB gz payload with no functional symptom, so this
+// is the only thing that would catch that regression). Reset mapChunks right
+// before a navigation whose fetch set you want to assert on.
+let mapChunks = [];
+page.on("request", (req) => {
+  const m = req.url().match(/\/assets\/(CityMapWorld|CityMapUS)-/);
+  if (m) mapChunks.push(m[1]);
+});
+
 async function checkCity(cityId, label) {
   await page.goto(`${BASE}/?city=${cityId}`, { waitUntil: "domcontentloaded", timeout: 30000 });
   await page.waitForSelector('[data-testid="city-switcher"]', { timeout: 15000 });
@@ -60,6 +72,7 @@ async function checkCity(cityId, label) {
 }
 
 // Phase 3: the cross-city explore landing renders at the root
+mapChunks = [];
 await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
 try {
   await page.waitForFunction(() => {
@@ -105,6 +118,11 @@ try {
   if (!sw.includes("El Paso")) fail(`map dot click: expected switcher "El Paso", got ${JSON.stringify(sw)}`);
   else console.log("\u2713 explore map: dot click deep-links to El Paso");
 } catch (e) { fail("explore map did not render/behave: " + e.message.split("\n")[0]); }
+
+// Product-split map chunks: City Signals must fetch only the world map.
+if (!mapChunks.includes("CityMapWorld")) fail(`City Signals: expected a CityMapWorld chunk fetch, got ${JSON.stringify(mapChunks)}`);
+else if (mapChunks.includes("CityMapUS")) fail(`City Signals: fetched CityMapUS too \u2014 the product-split map chunks have re-merged (${JSON.stringify(mapChunks)})`);
+else console.log("\u2713 product-split maps: City Signals fetched only CityMapWorld");
 
 // Bugfix: the city switcher opens a menu and collapses on selection (it used to
 // spill all cities into a multi-row block over the page at 9 cities).
@@ -227,6 +245,7 @@ else console.log("✓ share landing redirect ->", url);
 // Same shared engine; ?product=desert scopes the city set to the arid West and
 // reframes the landing. (Build-time VITE_PRODUCT picks each deployed site's
 // product; the query override lets us exercise both from one build here.)
+mapChunks = [];
 await page.goto(`${BASE}/?product=desert`, { waitUntil: "domcontentloaded", timeout: 30000 });
 try {
   await page.waitForFunction(
@@ -243,6 +262,9 @@ try {
   const txt = await page.evaluate(() => document.body.textContent || "");
   if (txt.includes("Humid South")) fail("desert: 'Humid South' should not appear in the desert product");
   console.log(`✓ desert product: ${dots.length} hot-desert cities, thesis landing, no leak`);
+  if (!mapChunks.includes("CityMapUS")) fail(`Desert Nights: expected a CityMapUS chunk fetch, got ${JSON.stringify(mapChunks)}`);
+  else if (mapChunks.includes("CityMapWorld")) fail(`Desert Nights: fetched CityMapWorld too — the product-split map chunks have re-merged (${JSON.stringify(mapChunks)})`);
+  else console.log("✓ product-split maps: Desert Nights fetched only CityMapUS");
 } catch (e) { fail("desert product landing did not render: " + e.message.split("\n")[0]); }
 
 // A desert deep-link keeps the product context and opens the right city.
