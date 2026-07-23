@@ -476,8 +476,24 @@ are the immutable bar and stay untouched.
    collapse `CityDashboard`'s 11 asset `useState`+resets into a reducer (behavioural — do it
    browser-attended). (`MONTH_TICKS` is NOT shared — the two season cards legitimately use different month
    ranges; `CityCompare`'s tooltip is a distinct `text-xs`/max-width variant, intentionally left alone.)
-8. **Split `cities.js`** (922 lines) or push long-form prose into the facts JSON as it scales; a
-   `<ChartCard>` scaffold.
+8. ✅ **Split `cities.js`** (926 lines, 94% of it 16 independent per-city object literals) — kept
+   `cities.js` a real file (not a directory: every consumer imports the literal `./lib/cities.js` path,
+   which plain-Node ESM resolves only to a file — `tests/registry.test.mjs`/`climate.test.mjs` run under
+   plain `node`), now a ~78-line orchestrator: imports each city from a new sibling `lib/cityData/<city>.js`
+   (one file per city, byte-for-byte relocations — verified with a scripted diff against the original
+   source, not retyped by hand), keeps `climateOf`/`ASSET_FILE`/`BASE_ASSETS`/`withAssets`/`CITIES` verbatim,
+   re-exports the same 6 names (`PHOENIX`/`TUCSON`/`LASVEGAS`/`ELPASO`/`SYDNEY`/`DEBILT`) the file exported
+   before. Zero behavior change; the 4 real consumers (`CityExplore.jsx`, `products.js`, both test files)
+   are untouched. **Deliberately NOT done as part of this**: pushing prose (`citations`/`rural.*Note`/
+   `featured`) into the facts JSON — a real, measured perf case (cities.js's prose is a sizeable fraction
+   of the *eager entry chunk*, bigger than the recharts v3 bump's measured-flat result) but a materially
+   riskier, differently-shaped change (needs a new hand-curated per-city asset, not a write into the
+   pipeline-owned `<id>-facts.json` that `build_facts.py` fully overwrites every rebuild — merging into
+   that file risks silently deleting hand-curated prose on the next automated refresh; several fields like
+   `city.featured` are read synchronously by 5+ files and would need a sync/async split). Scope as its own
+   follow-up, gated on measuring the actual gzip delta. The `<ChartCard>` scaffold is a third, separate,
+   smaller item (17 card files share an outer wrapper Recharts' context-based introspection prevents fully
+   deduplicating) — not coupled to this split. (#141)
 
 **Pipelines** (`deferred`)
 9. ✅ **Offline Python test net** (shipped #101) — `analysis/tests/test_builders.py` covers
