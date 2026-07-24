@@ -30,43 +30,42 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
   change) by exhaustively comparing the old/new formulas across 6 years.
   **#10 (shared `acis.py`/`assetio.py`) is in progress, deliberately
   phased** — #143 shipped Phase 1 (the new modules + tests, purely
-  additive, zero existing files touched); migrating the ~17 consumer
-  files continues in small follow-up PRs, each meant to be gated by
-  triggering the real "Rebuild data assets" GitHub Action and confirming
-  it opens no refresh PR (its own `git diff` check on `apps/web/public/data`
-  means a byte-identical migration silently, safely proves itself — see
-  ROADMAP for the planned order, riskiest — `build_facts.py`,
-  `verify_v0.py` — last). Remaining M8 items: #7 (`CityDashboard`
-  reducer — deferred, see below), #17 (branch protection on `main` — a
-  repo *setting*, no GitHub API/MCP tool exposes it; still needs you in
+  additive, zero existing files touched); #145 migrates
+  `build_streaks.py`+`build_cdd_split.py`, the second step. **Correction to
+  the verification methodology stated here previously:** "opens no refresh
+  PR" turned out NOT to be sufficient proof of a byte-identical migration —
+  `"generated"` is stamped with `date.today()` so it always changes, and (see
+  below) the workflow's PR-open step has been failing silently for weeks
+  regardless of whether the diff is real. #145 was actually verified by
+  dispatching the same workflow on the same calendar day against both the
+  feature branch and unmigrated `main`, then diffing the two pushed
+  `auto/refresh-data-*` branches **directly against each other** (not against
+  the stale committed baseline) — zero byte difference, including
+  `"generated"`. (Separately: the workflow's own PR-open step has in fact been
+  failing on *every* run for weeks — `GitHub Actions is not permitted to
+  create or approve pull requests`, because the repo's "Allow GitHub Actions
+  to create and approve pull requests" setting is disabled; confirmed on two
+  dispatches weeks apart. This means `main`'s committed data has been silently
+  stale for a month. Owner action: enable that setting in Settings → Actions →
+  General, then re-run "Rebuild data assets" by hand to catch main up.) Use
+  this same technique (not "did a PR open") for the remaining consumers:
+  `build_heat_season.py`+`build_normals.py` → `build_series.py`+
+  `build_compare.py` → `build_grid.py` → `build_diurnal.py` → the
+  non-CI-gated manual scripts → `build_facts.py` → `verify_v0.py` last.
+  **#7 (`CityDashboard` reducer collapse) is done** — #147 (open) collapses
+  the 11 asset `useState`+resets into one `useReducer`; see ROADMAP M8 item 7
+  for how it was verified without live ACIS egress (a scratch Playwright
+  script mocking ACIS/Open-Meteo, since this sandbox's network policy blocks
+  that egress from a browser context — confirmed empirically this session:
+  the real `render-smoke.mjs` hangs/times out per-city on live ACIS calls
+  here, though its asset-only checks all passed unchanged). `render-smoke.mjs`
+  itself gained a Retry-path case (#146) as the prerequisite for that refactor
+  — `CityDashboard` is keyed on `city.id` in `App.jsx`, so React remounts a
+  fresh instance on every city switch, and the reset-on-an-already-mounted-
+  instance path only ever runs via the Retry button; that path had zero
+  coverage before #146. Remaining M8 items: #17 (branch protection on `main`
+  — a repo *setting*, no GitHub API/MCP tool exposes it; still needs you in
   the Settings UI).
-- **Owner action needed — the monthly automated data refresh has been silently
-  broken for at least a month.** Confirmed by triggering `rebuild-data.yml`
-  directly (workflow_dispatch): every rebuild fetches fresh data, computes it,
-  and passes `verify_v0.py` correctly, but the final "open a PR with refreshed
-  assets" step fails every time with `GitHub Actions is not permitted to
-  create or approve pull requests (createPullRequest)` — a repo *setting*
-  (Settings → Actions → General → Workflow permissions → "Allow GitHub Actions
-  to create and approve pull requests"), not a code bug; the workflow file's
-  own `permissions: pull-requests: write` block doesn't override it. Confirmed
-  this isn't new: a dispatch against `main` itself on 2026-06-26 failed
-  identically. So `apps/web/public/data` has been quietly going stale (last
-  successful refresh predates that) with **no visible failure anywhere** —
-  the job itself shows green right up to the last step. Enable that repo
-  setting, then re-run "Rebuild data assets" by hand to catch main back up.
-- **M8 #7 (`CityDashboard` reducer) — partially addressed.** Researching the
-  reducer collapse turned up a sharper reason than "browser-attended" to
-  leave the refactor itself deferred — `CityDashboard` is keyed on `city.id`
-  in `App.jsx` (`<CityDashboard key={city.id} .../>`), so React remounts a
-  fresh instance on every city switch; the reset-on-an-already-mounted-
-  instance code path this item would refactor only ever runs today via the
-  Retry button (`reloadKey` bump) after a fetch failure. Closed the coverage
-  gap that made this refactor unsafe to attempt: `render-smoke.mjs` now has a
-  Retry-path case (mocks the live ACIS + Open-Meteo calls to fail once via
-  `page.route`, confirms the error card appears, then confirms Retry clears
-  it) — fully offline-verifiable since it's simulating the failure, not
-  relying on real ACIS to fail. The reducer collapse itself is still not
-  done; this test is the prerequisite that makes it safe to attempt.
 - **A real bug was caught and fixed this session — read this if anything
   still looks broken.** After #133 (the vite 8 bump) merged, `SeasonsCard`
   started throwing `TREND_START is not defined` on **every render** — i.e.

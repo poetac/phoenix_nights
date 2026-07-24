@@ -492,9 +492,14 @@ are the immutable bar and stay untouched.
    `climateOf` is now data-driven — every city declares its own `climate`, the hand-kept `HUMID` set is
    deleted, unit-tested (#107); the unused `units` convenience formatters (`fmtTemp`/`fmtTempDelta`/`fmtDist`
    + orphaned `distUnit`) are removed, so every `units.js` export is now used by the app (#108); the 6
-   inlined dark-tooltip wrappers + `DarkTooltip` now share a `TooltipShell` in `ui.jsx` (#109). *Remaining:*
-   collapse `CityDashboard`'s 11 asset `useState`+resets into a reducer (behavioural — do it
-   browser-attended). (`MONTH_TICKS` is NOT shared — the two season cards legitimately use different month
+   inlined dark-tooltip wrappers + `DarkTooltip` now share a `TooltipShell` in `ui.jsx` (#109); `CityDashboard`'s
+   11 asset `useState`+resets collapsed into one `useReducer` (`reset`/`set` actions) — each asset still
+   resolves and resets independently (no cross-asset coupling introduced), verified browser-attended since
+   this sandbox has no live ACIS egress from a browser context: a scratch Playwright script mocking ACIS +
+   Open-Meteo confirmed city load, rapid city-switch (no stale-city data leak), and the outage/Retry path all
+   still behave identically; the real `render-smoke.mjs` suite's asset-only checks (explore landing, map,
+   city-switcher menu, product-split map chunks) also passed unchanged against the refactored build (#147).
+   (`MONTH_TICKS` is NOT shared — the two season cards legitimately use different month
    ranges; `CityCompare`'s tooltip is a distinct `text-xs`/max-width variant, intentionally left alone.)
 8. ✅ **Split `cities.js`** (926 lines, 94% of it 16 independent per-city object literals) — kept
    `cities.js` a real file (not a directory: every consumer imports the literal `./lib/cities.js` path,
