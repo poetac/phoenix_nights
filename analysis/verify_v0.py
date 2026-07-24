@@ -77,7 +77,7 @@ CASA_GRANDE_SID = "USC00021314"  # the open-desert control (cities.js rural.sid)
 # reproduces every statistic independently from raw ACIS — the registry only
 # supplies the station ids, not the numbers.
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from cities import CITIES as REGISTRY, source_of  # noqa: E402
+from cities import CITIES as REGISTRY, day_of_year, source_of  # noqa: E402
 
 
 def _fetch_bytes(req, timeout, attempts=3):
@@ -192,7 +192,7 @@ def warm_night_spans(start_year):
             d["miss"] += 1
             continue
         if lo >= 80:
-            doy = datetime.date.fromisoformat(date).timetuple().tm_yday
+            doy = day_of_year(date)
             if d["first"] is None:
                 d["first"] = doy
             d["last"] = doy

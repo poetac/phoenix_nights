@@ -11,7 +11,7 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
 
 ## In flight right now (check this first)
 
-- **As of 2026-07-23** — `main` is green (build + verify-data + render). This
+- **As of 2026-07-24** — `main` is green (build + verify-data + render). This
   session worked straight through the M8 durability backlog (see ROADMAP.md
   M8 for the full detail on each): #134 corrected `HANDOFF.md`'s own stale
   "no browser libs" claim (it's a network *policy* blocking ACIS/NCEI/EIA/
@@ -25,13 +25,21 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
   #142 split `verify_v0.py` into offline (hard gate, zero network) and live
   (soft, retried) phases (M8 #14) — genuinely testable end-to-end in this
   sandbox for the first time, since the offline half needs no ACIS/NCEI
-  access. Remaining M8 items: #7 (`CityDashboard` reducer — deferred, see
-  below), #10 (shared `acis.py`/`assetio.py` — high risk, wants a phased
-  one-file-at-a-time approach with a real rebuild-workflow dispatch per
-  phase, not attempted this session), #12 (unify day-of-year — a real
-  semantics change to committed historical data, same caution), #17 (branch
-  protection on `main` — a repo *setting*, no GitHub API/MCP tool exposes
-  it; still needs you in the Settings UI).
+  access; #144 unified day-of-year onto one shared, leap-year-aware
+  `cities.day_of_year()` (M8 #12), verified as a pure dedup (zero value
+  change) by exhaustively comparing the old/new formulas across 6 years.
+  **#10 (shared `acis.py`/`assetio.py`) is in progress, deliberately
+  phased** — #143 shipped Phase 1 (the new modules + tests, purely
+  additive, zero existing files touched); migrating the ~17 consumer
+  files continues in small follow-up PRs, each meant to be gated by
+  triggering the real "Rebuild data assets" GitHub Action and confirming
+  it opens no refresh PR (its own `git diff` check on `apps/web/public/data`
+  means a byte-identical migration silently, safely proves itself — see
+  ROADMAP for the planned order, riskiest — `build_facts.py`,
+  `verify_v0.py` — last). Remaining M8 items: #7 (`CityDashboard`
+  reducer — deferred, see below), #17 (branch protection on `main` — a
+  repo *setting*, no GitHub API/MCP tool exposes it; still needs you in
+  the Settings UI).
 - **A new finding, not yet acted on:** researching the M8 #7 `CityDashboard`
   reducer collapse turned up a sharper reason than "browser-attended" to
   leave it deferred — `CityDashboard` is keyed on `city.id` in `App.jsx`

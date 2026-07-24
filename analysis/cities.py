@@ -15,6 +15,8 @@ Stdlib only (mirrors the builders).
 """
 
 import argparse
+import calendar
+import datetime
 import pathlib
 
 # Each city: the ACIS ThreadEx sid the front end queries live, a human label
@@ -321,3 +323,22 @@ def primary_sid(city):
     the GHCN-Daily id (GSOY) for international cities. Lets every CITIES consumer
     stay source-agnostic while the ACIS path stays byte-for-byte unchanged."""
     return city["ghcn_sid"] if source_of(city) == "ghcn" else city["sid"]
+
+
+def day_of_year(date_str):
+    """1-based day-of-year for an ISO date string ('YYYY-MM-DD'), leap-year-aware.
+
+    The single shared implementation — previously reimplemented three ways
+    (index-as-DOY in build_streaks.py, which coincidentally works only because
+    every city's ACIS fetch is gap-padded to one row per calendar day starting
+    Jan 1; date-subtraction in build_heat_season.py; tm_yday in verify_v0.py).
+    All three compute the same calendar value; this is just one place to do it.
+    """
+    return datetime.date.fromisoformat(date_str).timetuple().tm_yday
+
+
+def expected_days(year):
+    """365, or 366 in a leap year — the invariant build_streaks.py's index-as-DOY
+    silently depended on (one row per calendar day, gap-padded by ACIS, starting
+    Jan 1) before day_of_year() made it explicit and date-derived instead."""
+    return 366 if calendar.isleap(year) else 365
