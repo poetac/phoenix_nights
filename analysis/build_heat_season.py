@@ -13,7 +13,7 @@ import datetime
 import json
 import urllib.request
 
-from cities import data_path, get_city
+from cities import data_path, day_of_year, get_city
 
 THRESHOLD = 100
 MAX_MISSING_DAYS = 36
@@ -48,7 +48,7 @@ def main():
             d["run"] = 0  # a missing day breaks a run
             continue
         if float(val) >= THRESHOLD:
-            doy = (datetime.date.fromisoformat(date) - datetime.date(y, 1, 1)).days + 1
+            doy = day_of_year(date)
             if d["first"] is None:
                 d["first"] = doy
             d["last"] = doy

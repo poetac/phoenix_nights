@@ -546,10 +546,25 @@ are the immutable bar and stay untouched.
     `cities.py` agree on the city set, station ids, rural pair (`rural_sid` vs `rural.sid`), source, and
     every per-card opt-in (the diurnal-opt-in assertion catches the boi-orphan class). *Remaining:*
     cross-check the rebuild-workflow loops, and generate `ASSET_SCHEMAS` from the registry.
-12. **Unify day-of-year** — three methods today (index-as-DOY in streaks couples to ACIS gap-padding;
-    date-derived in heat_season; `tm_yday` in verify). Add a `len(year) ∈ {365,366}` assert now; unify
-    on date-derived DOY (semantics change → rebuild gate). Also: leap-year DOY renders a date *label* 1
-    day late in leap years (cosmetic).
+12. ✅ **Unify day-of-year** — three methods existed (index-as-DOY in `build_streaks.py`, coupled to
+    ACIS gap-padding + every city's `record_start` being Jan 1; date-subtraction in
+    `build_heat_season.py`; `tm_yday` in `verify_v0.py`). Added the single shared implementation,
+    `cities.day_of_year(date_str)` (leap-year-aware, `tm_yday`-based), plus `cities.expected_days(year)`
+    (365/366) — `build_streaks.py`'s per-year loop now asserts `len(dates) == expected_days(year)`
+    explicitly instead of silently trusting it. Verified this is a **pure dedup, not a value change**:
+    exhaustively compared the old index-subtraction formula against `tm_yday` for every day across 6
+    years (leap, non-leap, century years) — zero mismatches, confirmed by direct computation, not
+    reasoning by hand. `build_streaks.py`'s `season_span`/`sustained_span` now take a parallel `dates`
+    list (only 2 callers: `build_streaks.py` itself + its test file — grep-confirmed, safe to change the
+    signature); `build_heat_season.py` and `verify_v0.py`'s `warm_night_spans` swap their inline formula
+    for the shared call, no other line changes. New tests prove the actual leap-year distinction
+    index-as-DOY structurally could never express (the *same* calendar date, Mar 1, is day 60 in a
+    non-leap year vs day 61 in a leap year). **Deliberately excluded** (a further scope decision, not an
+    oversight): `verify_v0.py`'s `sustained_window_span`/`sustained_run_span` are the same class of
+    index-as-DOY, but their shared `_daily_by_year` feed also backs the unrelated SleepCard check —
+    changing its shape would ripple into that check too, a separate change. The front-end
+    `labels.js` `doyLabel` cosmetic bug (a date *label* renders 1 day late in leap years) is also **not**
+    touched here — this PR is Python-pipeline-only. (#144)
 
 **Testing / CI** (`deferred`)
 13. ✅ **Pin Playwright** — `ci.yml`'s `render` job ran `npm i --no-save playwright` (unpinned, the

@@ -14,6 +14,7 @@ Stdlib only — no ACIS, no third-party deps — so it runs in the CI build job
 alongside the node test suites, not the live verify-data job.
 """
 
+import datetime
 import os
 import sys
 import unittest
@@ -24,6 +25,16 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import build_streaks  # noqa: E402
 import build_cdd_split  # noqa: E402
+import cities  # noqa: E402
+
+
+def dates_from(year, n):
+    """n consecutive ISO date strings starting Jan 1 of `year`. Using a
+    non-leap year makes day_of_year(dates[i]) == i + 1, so the existing
+    index-based test expectations below still hold unchanged with the
+    now-date-derived season_span/sustained_span."""
+    d0 = datetime.date(year, 1, 1)
+    return [(d0 + datetime.timedelta(days=i)).isoformat() for i in range(n)]
 
 
 class MaxStreak(unittest.TestCase):
@@ -57,33 +68,59 @@ class MaxStreak(unittest.TestCase):
 
 
 class SeasonSpan(unittest.TestCase):
-    """First/last matching day-of-year (1-based index) and the count."""
+    """First/last matching day-of-year (now date-derived, not the list index —
+    M8 #12) and the count."""
 
     def pred(self, v):
         return v >= 80
 
     def test_nothing_matches(self):
-        self.assertEqual(build_streaks.season_span([70, 60, None], self.pred),
+        vals = [70, 60, None]
+        self.assertEqual(build_streaks.season_span(vals, dates_from(2023, len(vals)), self.pred),
                          (None, None, 0))
 
     def test_single_match_is_one_based(self):
-        # index 0 -> day-of-year 1
-        self.assertEqual(build_streaks.season_span([85], self.pred), (1, 1, 1))
-        # match at index 2 -> day-of-year 3
-        self.assertEqual(build_streaks.season_span([70, 60, 85], self.pred),
+        # index 0 -> day-of-year 1 (Jan 1, a non-leap year)
+        self.assertEqual(build_streaks.season_span([85], dates_from(2023, 1), self.pred),
+                         (1, 1, 1))
+        # match at index 2 -> day-of-year 3 (Jan 3)
+        vals = [70, 60, 85]
+        self.assertEqual(build_streaks.season_span(vals, dates_from(2023, len(vals)), self.pred),
                          (3, 3, 1))
 
     def test_first_last_and_count_with_gaps(self):
         # vals: day1=70, day2=missing, day3=82, day4=missing, day5=85, day6=70
         # warm days are 3 and 5; the missing days neither count nor move the edges
         vals = [70, None, 82, None, 85, 70]
-        self.assertEqual(build_streaks.season_span(vals, self.pred), (3, 5, 2))
+        self.assertEqual(build_streaks.season_span(vals, dates_from(2023, len(vals)), self.pred),
+                         (3, 5, 2))
 
     def test_none_is_not_counted(self):
         # the missing-high/observed-low fix relies on None placeholders preserving
         # day-of-year *without* being counted as warm nights
         vals = [None, 80, None, 80, None]
-        self.assertEqual(build_streaks.season_span(vals, self.pred), (2, 4, 2))
+        self.assertEqual(build_streaks.season_span(vals, dates_from(2023, len(vals)), self.pred),
+                         (2, 4, 2))
+
+    def test_leap_year_makes_the_same_calendar_date_a_different_day_of_year(self):
+        # The check pure index-as-DOY could never express: the SAME calendar
+        # date (Mar 1) is a different day-of-year depending on whether that
+        # year's Feb had 28 or 29 days. Proves day_of_year is genuinely
+        # date-derived, not a re-derivation of a list index (which — see
+        # season_span below — advances by elapsed days regardless of leap
+        # years, so it can't distinguish this case at all).
+        self.assertEqual(cities.day_of_year("2023-03-01"), 60)   # non-leap
+        self.assertEqual(cities.day_of_year("2024-03-01"), 61)   # leap (Feb 29 exists)
+        # season_span integration: index 60 (the 61st entry) is 60 elapsed days
+        # past Jan 1 in EITHER year — 2023-03-02 / 2024-03-01 respectively —
+        # both correctly day-of-year 61, since elapsed-day arithmetic is itself
+        # leap-year-safe (Python's date + timedelta already accounts for Feb's
+        # length). Confirms the integration is correct in both calendars.
+        vals = [0] * 60 + [85]  # match at index 60
+        self.assertEqual(
+            build_streaks.season_span(vals, dates_from(2023, len(vals)), self.pred), (61, 61, 1))
+        self.assertEqual(
+            build_streaks.season_span(vals, dates_from(2024, len(vals)), self.pred), (61, 61, 1))
 
 
 class SustainedSpan(unittest.TestCase):
@@ -96,21 +133,37 @@ class SustainedSpan(unittest.TestCase):
     def test_isolated_match_does_not_open_season(self):
         # a single warm day in a sea of cool ones never reaches 5-of-7
         vals = [0, 0, 0, 1, 0, 0, 0]
-        self.assertEqual(build_streaks.sustained_span(vals, self.pred),
-                         (None, None))
+        self.assertEqual(
+            build_streaks.sustained_span(vals, dates_from(2023, len(vals)), self.pred),
+            (None, None))
 
     def test_solid_block_opens_and_closes(self):
         # 7 consecutive matches flanked by 3 cool days each side.
         # With win=7/need=5 the sustained window is days 5..9 (1-based).
         vals = [0, 0, 0] + [1] * 7 + [0, 0, 0]
-        self.assertEqual(build_streaks.sustained_span(vals, self.pred), (5, 9))
+        self.assertEqual(
+            build_streaks.sustained_span(vals, dates_from(2023, len(vals)), self.pred), (5, 9))
 
     def test_none_counts_as_non_match(self):
         # a None inside an otherwise-solid block is treated as a miss, exactly
         # like a sub-threshold day, so it shrinks the sustained window: the same
         # block with a hole at its center narrows from (5, 9) to (6, 8).
         vals = [0, 0, 0] + [1, 1, 1, None, 1, 1, 1] + [0, 0, 0]
-        self.assertEqual(build_streaks.sustained_span(vals, self.pred), (6, 8))
+        self.assertEqual(
+            build_streaks.sustained_span(vals, dates_from(2023, len(vals)), self.pred), (6, 8))
+
+
+class ExpectedDays(unittest.TestCase):
+    """365, or 366 in a leap year — the invariant build_streaks.py's per-year
+    loop now asserts explicitly (M8 #12)."""
+
+    def test_leap_years(self):
+        self.assertEqual(cities.expected_days(2024), 366)
+        self.assertEqual(cities.expected_days(2000), 366)  # divisible by 400
+
+    def test_non_leap_years(self):
+        self.assertEqual(cities.expected_days(2023), 365)
+        self.assertEqual(cities.expected_days(1900), 365)  # divisible by 100, not 400
 
 
 class SplitCoolingDay(unittest.TestCase):

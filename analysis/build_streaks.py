@@ -23,7 +23,7 @@ import datetime
 import json
 import urllib.request
 
-from cities import data_path, get_city
+from cities import data_path, day_of_year, expected_days, get_city
 
 MAX_MISSING_DAYS = 36
 LAST_COMPLETE_YEAR = datetime.date.today().year - 1
@@ -54,26 +54,30 @@ def max_streak(vals, pred):
     return best
 
 
-def season_span(vals, pred):
+def season_span(vals, dates, pred):
     """First and last day-of-year matching pred, plus the count.
 
-    vals is the year's daily series in calendar order (missing days are
-    None placeholders), so the 1-based list index is the day-of-year.
-    Returns (first_doy, last_doy, count); first/last are None if nothing
-    matched that year.
+    vals is the year's daily series in calendar order (missing days are None
+    placeholders); dates is the parallel list of ISO date strings, so the
+    day-of-year is derived from the actual calendar date, not the list index
+    (see cities.day_of_year — the index coincidentally agrees with the date
+    only because ACIS gap-pads to one row per day starting Jan 1; date-derived
+    is correct even if that padding assumption were ever broken). Returns
+    (first_doy, last_doy, count); first/last are None if nothing matched.
     """
     first = last = None
     count = 0
-    for i, v in enumerate(vals):
+    for date, v in zip(dates, vals):
         if v is not None and pred(v):
+            doy = day_of_year(date)
             if first is None:
-                first = i + 1
-            last = i + 1
+                first = doy
+            last = doy
             count += 1
     return first, last, count
 
 
-def sustained_span(vals, pred, win=7, need=5):
+def sustained_span(vals, dates, pred, win=7, need=5):
     """First and last day-of-year inside a 'sustained' stretch: a day counts
     only if >=`need` of the `win` days centered on it match `pred`. This is the
     outlier-robust companion to season_span — one isolated warm night can't open
@@ -85,9 +89,10 @@ def sustained_span(vals, pred, win=7, need=5):
     for i in range(n):
         lo, hi = max(0, i - half), min(n, i + half + 1)
         if sum(1 for v in vals[lo:hi] if v is not None and pred(v)) >= need:
+            doy = day_of_year(dates[i])
             if first is None:
-                first = i + 1
-            last = i + 1
+                first = doy
+            last = doy
     return first, last
 
 
@@ -97,14 +102,15 @@ def main():
     years = {}
     for date, lo, hi in fetch_daily(city):
         y = int(date[:4])
-        d = years.setdefault(y, {"lo": [], "hi": [], "missLo": 0, "missHi": 0})
+        d = years.setdefault(y, {"lo": [], "hi": [], "dates": [], "missLo": 0, "missHi": 0})
+        d["dates"].append(date)
         # Track missingness PER element: a missing daily HIGH must not discard an
         # observed overnight LOW. The low-based metrics — streak80/90, the warm-night
         # season, frost/cool counts — depend on every valid mint, and verify_v0 checks
         # them mint-only, so coupling the two (the old behaviour) could drop an observed
         # low and even push a complete-low year past the missing-day cutoff. One entry
         # per calendar day is still appended to each list (None when that element is
-        # missing), so the 1-based index stays the day-of-year.
+        # missing), so day_of_year(dates[i]) stays correct for every index.
         if lo in ("M", "T", None):
             d["lo"].append(None); d["missLo"] += 1
         else:
@@ -117,14 +123,21 @@ def main():
     rows = []
     for y in sorted(years):
         d = years[y]
+        # Every city's record_start is Jan 1 (analysis/cities.py), so ACIS's
+        # gap-padding should yield exactly one row per calendar day for any
+        # complete year — the invariant day_of_year(dates[i]) relies on lining
+        # up with the list index. Assert it explicitly rather than silently
+        # trust it.
+        assert len(d["dates"]) == expected_days(y), (
+            f"{city['prefix']} {y}: got {len(d['dates'])} days, expected {expected_days(y)}")
         # Qualify a year on its LOW record (what the warm-night metrics need, and what
         # verify_v0 mirrors). streak110 is the only high-based output; a year with gappy
         # highs just yields a conservative run, and its only consumer is the all-time
         # record, set in recent complete years.
         if d["missLo"] > MAX_MISSING_DAYS:
             continue
-        first80, last80, count80 = season_span(d["lo"], lambda v: v >= 80)
-        firstSus, lastSus = sustained_span(d["lo"], lambda v: v >= 80)
+        first80, last80, count80 = season_span(d["lo"], d["dates"], lambda v: v >= 80)
+        firstSus, lastSus = sustained_span(d["lo"], d["dates"], lambda v: v >= 80)
         rows.append({
             "year": y,
             "streak80": max_streak(d["lo"], lambda v: v >= 80),
