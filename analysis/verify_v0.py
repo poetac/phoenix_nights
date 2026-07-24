@@ -30,12 +30,14 @@ card. The latest-complete-year cutoff is derived, never hardcoded.
 Stdlib only. Exit code 0 = all checks pass.
 """
 
+import argparse
 import ast
 import datetime
 import json
 import math
 import pathlib
 import sys
+import time
 import urllib.request
 
 ACIS_URL = "https://data.rcc-acis.org/StnData"
@@ -78,10 +80,24 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from cities import CITIES as REGISTRY, source_of  # noqa: E402
 
 
+def _fetch_bytes(req, timeout, attempts=3):
+    """Retry/backoff wrapper for the live ACIS/NCEI fetches below (mirrors the
+    existing idiom in build_diurnal.py/build_grid.py — 3 attempts, backing off
+    3s/6s) so a single transient blip resolves quietly instead of aborting the
+    whole live-checks phase on it."""
+    for attempt in range(attempts):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except Exception:
+            if attempt == attempts - 1:
+                raise
+            time.sleep(3 * (attempt + 1))
+
+
 def fetch_gsoy():
     req = urllib.request.Request(GSOY_URL, headers={"User-Agent": "phoenix-nights-verify/0.1"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return json.load(r)
+    return json.loads(_fetch_bytes(req, timeout=60))
 
 
 def fetch_gsoy_station(sid, start_year=1970):
@@ -92,8 +108,7 @@ def fetch_gsoy_station(sid, start_year=1970):
            f"&stations={sid}&startDate={start_year}-01-01&endDate={LAST_COMPLETE_YEAR}-12-31"
            "&units=standard&format=json")
     req = urllib.request.Request(url, headers={"User-Agent": "phoenix-nights-verify/0.1"})
-    with urllib.request.urlopen(req, timeout=90) as r:
-        return json.load(r)
+    return json.loads(_fetch_bytes(req, timeout=90))
 
 
 def ghcn_night_trend(sid, start=1970):
@@ -154,8 +169,7 @@ def fetch_acis_mint(start_year):
     }).encode()
     req = urllib.request.Request(ACIS_URL, data=body,
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return json.load(r)["data"]
+    return json.loads(_fetch_bytes(req, timeout=120))["data"]
 
 
 def warm_night_spans(start_year):
@@ -197,8 +211,7 @@ def fetch_acis_daily_mint(start_year, end_year):
     }).encode()
     req = urllib.request.Request(ACIS_URL, data=body,
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return json.load(r)["data"]
+    return json.loads(_fetch_bytes(req, timeout=120))["data"]
 
 
 def fetch_acis_daily_minmax(start_year, end_year):
@@ -211,8 +224,7 @@ def fetch_acis_daily_minmax(start_year, end_year):
     }).encode()
     req = urllib.request.Request(ACIS_URL, data=body,
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return json.load(r)["data"]
+    return json.loads(_fetch_bytes(req, timeout=120))["data"]
 
 
 def acis_yearly_low_trend(sid, start_year):
@@ -230,8 +242,7 @@ def acis_yearly_low_trend(sid, start_year):
     }).encode()
     req = urllib.request.Request(ACIS_URL, data=body,
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        data = json.load(r)["data"]
+    data = json.loads(_fetch_bytes(req, timeout=120))["data"]
     pts = []
     for row in data:
         y = int(row[0])
@@ -258,8 +269,7 @@ def facts_trend(sid, elem, start=1970, maxmissing=20):
     }).encode()
     req = urllib.request.Request(ACIS_URL, data=body,
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        data = json.load(r)["data"]
+    data = json.loads(_fetch_bytes(req, timeout=120))["data"]
     pts = []
     for y, v in data:
         try:
@@ -743,7 +753,50 @@ def linreg(points):
     return (n * sxy - sx * sy) / (n * sxx - sx * sx)
 
 
-def main():
+def run_offline_checks():
+    """Shape/finiteness/stdlib checks plus the cool-window trend — all read only
+    committed JSON or analysis/*.py from disk, zero network. This is the hard gate:
+    it must run (and report) regardless of whether ACIS/NCEI are reachable, so a PR
+    that never touched data doesn't fail CI on a live-service outage."""
+    checks = []
+
+    # Narrowing cool window (CoolWindowCard): for every city the card actually
+    # shows it for — a hot city whose latest decade still has <=13 h/night below
+    # 85F (the card's own applicability gate in CoolWindowCard.jsx) — the overnight
+    # window below 85F narrows vs the 1970s. Cities where the card omits (relief
+    # still abundant, e.g. the high-desert/humid set) or whose diurnal asset isn't
+    # rebuilt yet are skipped, so verify asserts exactly the claim the page shows.
+    # Reads only the committed <prefix>-diurnal.json — no fetch.
+    for _c in REGISTRY.values():
+        cw = cool_window_hours(_c["prefix"])
+        if cw is None:
+            continue
+        cw70, cw_now, cw_label = cw
+        if cw_now > 13:
+            continue
+        _nm = _c["label"].split(" (")[0]
+        checks.append((f"{_nm}: cool window <85F shrinks 1970s({cw70}h)->{cw_label}({cw_now}h)",
+                       cw70 - cw_now, cw_now < cw70))
+
+    # Shape-check every committed asset (structure, not just values).
+    for name, ok_a, count, detail in validate_assets():
+        checks.append((f"asset {name}: {detail}", float(count), ok_a))
+
+    # Supply-chain invariant: analysis/ is stdlib-only (zero third-party surface). Enforce
+    # it so a future non-stdlib import fails CI instead of silently widening the surface.
+    _imp_offenders = check_stdlib_imports()
+    checks.append(("analysis/ imports are stdlib-only"
+                   + ("" if not _imp_offenders else ": " + "; ".join(_imp_offenders)),
+                   float(len(_imp_offenders)), not _imp_offenders))
+
+    return checks
+
+
+def run_live_checks():
+    """Everything that hits ACIS/NCEI. Soft in CI (continue-on-error) so an upstream
+    outage doesn't block a PR that never touched data — the offline checks above are
+    the hard gate, and rebuild-data.yml's monthly/dispatch run (both phases, hard-fail)
+    is the existing backstop that still eventually catches a real regression."""
     rows = fetch_gsoy()
     years = {}
     for row in rows:
@@ -823,23 +876,6 @@ def main():
     checks.append(("1970s mid-July normal low ~80F (hero baseline)", july_norm, 76.0 <= july_norm <= 84.0))
     checks.append(("1970s mid-Jan normal low ~40F (hero baseline)", jan_norm, 34.0 <= jan_norm <= 46.0))
 
-    # Narrowing cool window (CoolWindowCard): for every city the card actually
-    # shows it for — a hot city whose latest decade still has <=13 h/night below
-    # 85F (the card's own applicability gate in CoolWindowCard.jsx) — the overnight
-    # window below 85F narrows vs the 1970s. Cities where the card omits (relief
-    # still abundant, e.g. the high-desert/humid set) or whose diurnal asset isn't
-    # rebuilt yet are skipped, so verify asserts exactly the claim the page shows.
-    for _c in REGISTRY.values():
-        cw = cool_window_hours(_c["prefix"])
-        if cw is None:
-            continue
-        cw70, cw_now, cw_label = cw
-        if cw_now > 13:
-            continue
-        _nm = _c["label"].split(" (")[0]
-        checks.append((f"{_nm}: cool window <85F shrinks 1970s({cw70}h)->{cw_label}({cw_now}h)",
-                       cw70 - cw_now, cw_now < cw70))
-
     # Night share of cooling demand rising: the night half of CDD grows faster
     # than the day half (the "thermostat that never turns off" card).
     split_rows = fetch_acis_daily_minmax(1970, LAST_COMPLETE_YEAR)
@@ -888,28 +924,47 @@ def main():
     checks.append((f"sleep nights >=77F rising vs 1970s ({sleep_70s:.0f}->{sleep_now:.0f}/yr)",
                    sleep_now - sleep_70s, sleep_now > sleep_70s))
 
-    # Shape-check every committed asset (structure, not just values).
-    for name, ok_a, count, detail in validate_assets():
-        checks.append((f"asset {name}: {detail}", float(count), ok_a))
+    summary = [
+        f"\nTMIN: +{tmin_slope:.2f} F/decade | TMAX: +{tmax_slope:.2f} F/decade | ratio {ratio:.1f}x",
+        f"80F-night season: 1970s ~{span_70s:.0f} days vs last 10y ~{span_recent:.0f} days",
+        f"1970s normal low (hero baseline): mid-Jul ~{july_norm:.0f}F, mid-Jan ~{jan_norm:.0f}F",
+        f"night share of cooling demand: 1970s ~{share_70s:.0f}% vs last 10y ~{share_now:.0f}%",
+        f"night-low trend since 1970 vs global ~{GLOBAL_BENCH}/dec: "
+        f"Phoenix +{tmin_slope:.2f}, desert +{desert_trend:.2f}",
+    ]
+    return checks, summary
 
-    # Supply-chain invariant: analysis/ is stdlib-only (zero third-party surface). Enforce
-    # it so a future non-stdlib import fails CI instead of silently widening the surface.
-    _imp_offenders = check_stdlib_imports()
-    checks.append(("analysis/ imports are stdlib-only"
-                   + ("" if not _imp_offenders else ": " + "; ".join(_imp_offenders)),
-                   float(len(_imp_offenders)), not _imp_offenders))
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--mode", choices=["offline", "live", "all"], default="all",
+                         help="offline: network-free hard gate (shape/finiteness/stdlib-imports/"
+                              "cool-window). live: ACIS/NCEI value checks (soft in CI — see ci.yml). "
+                              "all (default): both, offline first, matching every prior invocation "
+                              "of this script (rebuild-data.yml, local `python3 verify_v0.py`).")
+    args = parser.parse_args()
+
+    checks = []
+    summary = []
+
+    if args.mode in ("offline", "all"):
+        checks += run_offline_checks()
+
+    if args.mode in ("live", "all"):
+        try:
+            live_checks, summary = run_live_checks()
+            checks += live_checks
+        except Exception as e:
+            checks.append((f"live checks completed without an unhandled exception ({e})", 0.0, False))
 
     ok = True
     for name, value, passed in checks:
         ok &= passed
         print(f"  [{'PASS' if passed else 'FAIL'}] {name}: {value:.2f}")
 
-    print(f"\nTMIN: +{tmin_slope:.2f} F/decade | TMAX: +{tmax_slope:.2f} F/decade | ratio {ratio:.1f}x")
-    print(f"80F-night season: 1970s ~{span_70s:.0f} days vs last 10y ~{span_recent:.0f} days")
-    print(f"1970s normal low (hero baseline): mid-Jul ~{july_norm:.0f}F, mid-Jan ~{jan_norm:.0f}F")
-    print(f"night share of cooling demand: 1970s ~{share_70s:.0f}% vs last 10y ~{share_now:.0f}%")
-    print(f"night-low trend since 1970 vs global ~{GLOBAL_BENCH}/dec: "
-          f"Phoenix +{tmin_slope:.2f}, desert +{desert_trend:.2f}")
+    for line in summary:
+        print(line)
+
     sys.exit(0 if ok else 1)
 
 

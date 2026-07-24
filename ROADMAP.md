@@ -540,10 +540,22 @@ are the immutable bar and stay untouched.
     Dependabot-tracked like everything else and `npm ci` installs it; the render job now just runs
     `npx playwright install --with-deps chromium`, plus an `actions/cache` step keyed on the lockfile
     hash so an unchanged pin skips the browser re-download. (#138)
-14. **Split `verify_v0` offline/live** — the offline checks (shape/finiteness/stdlib) sit *after* an
-    unguarded `fetch_gsoy()`, so an ACIS/NCEI outage fails the gate on PRs that never touched data and
-    the most valuable PR checks never run. Run the offline checks as a network-free hard gate; make the
-    live value-checks soft/retried.
+14. ✅ **Split `verify_v0` offline/live** — the offline checks (shape/finiteness/stdlib) sat *after* an
+    unguarded `fetch_gsoy()`, so an ACIS/NCEI outage failed the gate on PRs that never touched data and
+    the most valuable checks never even ran. Split `main()` into `run_offline_checks()` (shape/
+    finiteness/stdlib-imports, plus the cool-window loop — already 100% file-read, just moved out of the
+    live-heavy body) and `run_live_checks()` (everything that hits ACIS/NCEI); a new `--mode
+    {offline,live,all}` flag (default `all`, so `rebuild-data.yml`'s bare invocation is unchanged) lets
+    `ci.yml`'s `verify-data` job run them as two steps — offline with no `continue-on-error` (the actual
+    hard gate), live with `continue-on-error: true` (this repo's existing best-effort idiom, already used
+    for `rebuild-data.yml`'s diurnal/grid steps). Also added a shared `_fetch_bytes()` retry/backoff
+    helper (3 attempts, mirroring `build_diurnal.py`/`build_grid.py`'s idiom) across all 7 live-fetch call
+    sites, so a single transient blip resolves quietly instead of tripping the soft-fail path. A new
+    `analysis/tests/test_verify_offline.py` proves `run_offline_checks()` has zero network dependency
+    (patches `urlopen` to raise) — auto-discovered by the existing `build` job's Python unit-test step.
+    Verified locally, for the first time ever in this sandbox (previously `verify_v0.py` categorically
+    needed live ACIS): `--mode offline` runs clean end-to-end against the committed tree with zero
+    network access; `--mode all` still prints every offline result before the live phase fails. (#142)
 15. ✅ **Test auto-discovery + reproducibility pins** (shipped #103) — `npm test` globs
     `tests/*.test.mjs` (one source of truth; a new suite auto-runs with no `ci.yml` edit), CI calls it,
     and `engines` + `.nvmrc` pin node 22. Used a glob runner rather than `node:test` because `node --test`
