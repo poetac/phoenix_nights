@@ -233,6 +233,33 @@ try {
   console.log("\u2713 City Signals: phx uses the salience body + its enriched signal family");
 } catch (e) { fail("City Signals: salience body / enriched family missing on phx: " + e.message.split("\n")[0]); }
 
+// Retry path (M8 #7 prerequisite): CityDashboard's reset-on-an-already-mounted-
+// instance code only ever runs today via this Retry button (a reloadKey bump) \u2014
+// every other navigation in this file either goes through a fresh page.goto or a
+// city-switch remount (CityDashboard is keyed on city.id in App.jsx), neither of
+// which exercises it. Force both the live ACIS call and its Open-Meteo fallback
+// to fail once (so the error card genuinely appears), then let them through and
+// confirm Retry actually recovers.
+{
+  let blocked = true;
+  const blockIfNeeded = (route) => (blocked ? route.abort("failed") : route.continue());
+  await page.route("https://data.rcc-acis.org/**", blockIfNeeded);
+  await page.route("https://archive-api.open-meteo.com/**", blockIfNeeded);
+  await page.goto(`${BASE}/?city=phx`, { waitUntil: "domcontentloaded", timeout: 30000 });
+  try {
+    await page.waitForFunction(() => (document.body.textContent || "").includes("Couldn't reach NOAA"),
+      undefined, { timeout: 20000 });
+    console.log("\u2713 retry: error card appears when ACIS + Open-Meteo both fail");
+    blocked = false;
+    await page.getByRole("button", { name: "Retry" }).click();
+    await page.waitForFunction(() => !(document.body.textContent || "").includes("Couldn't reach NOAA"),
+      undefined, { timeout: 40000 });
+    console.log("\u2713 retry: error card clears after clicking Retry (the reset path this refactor would touch)");
+  } catch (e) { fail("retry path did not behave as expected: " + e.message.split("\n")[0]); }
+  await page.unroute("https://data.rcc-acis.org/**", blockIfNeeded);
+  await page.unroute("https://archive-api.open-meteo.com/**", blockIfNeeded);
+}
+
 // per-card share landing page must redirect to the right city + card anchor
 await page.goto(`${BASE}/share/phx-hot-nights.html`, { waitUntil: "domcontentloaded", timeout: 20000 });
 await page.waitForTimeout(2000);

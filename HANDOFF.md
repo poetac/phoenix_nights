@@ -40,15 +40,33 @@ Principles + the "City-climate engine" and "Breadth" sections), `CLAUDE.md`, and
   reducer — deferred, see below), #17 (branch protection on `main` — a
   repo *setting*, no GitHub API/MCP tool exposes it; still needs you in
   the Settings UI).
-- **A new finding, not yet acted on:** researching the M8 #7 `CityDashboard`
+- **Owner action needed — the monthly automated data refresh has been silently
+  broken for at least a month.** Confirmed by triggering `rebuild-data.yml`
+  directly (workflow_dispatch): every rebuild fetches fresh data, computes it,
+  and passes `verify_v0.py` correctly, but the final "open a PR with refreshed
+  assets" step fails every time with `GitHub Actions is not permitted to
+  create or approve pull requests (createPullRequest)` — a repo *setting*
+  (Settings → Actions → General → Workflow permissions → "Allow GitHub Actions
+  to create and approve pull requests"), not a code bug; the workflow file's
+  own `permissions: pull-requests: write` block doesn't override it. Confirmed
+  this isn't new: a dispatch against `main` itself on 2026-06-26 failed
+  identically. So `apps/web/public/data` has been quietly going stale (last
+  successful refresh predates that) with **no visible failure anywhere** —
+  the job itself shows green right up to the last step. Enable that repo
+  setting, then re-run "Rebuild data assets" by hand to catch main back up.
+- **M8 #7 (`CityDashboard` reducer) — partially addressed.** Researching the
   reducer collapse turned up a sharper reason than "browser-attended" to
-  leave it deferred — `CityDashboard` is keyed on `city.id` in `App.jsx`
-  (`<CityDashboard key={city.id} .../>`), so React remounts a fresh instance
-  on every city switch; the reset-on-an-already-mounted-instance code path
-  this item would refactor only ever runs today via the Retry button
-  (`reloadKey` bump) after a fetch failure — and `render-smoke.mjs` has zero
-  coverage of that specific path, before or after such a refactor. Worth
-  adding a Playwright case for it before attempting the reducer collapse.
+  leave the refactor itself deferred — `CityDashboard` is keyed on `city.id`
+  in `App.jsx` (`<CityDashboard key={city.id} .../>`), so React remounts a
+  fresh instance on every city switch; the reset-on-an-already-mounted-
+  instance code path this item would refactor only ever runs today via the
+  Retry button (`reloadKey` bump) after a fetch failure. Closed the coverage
+  gap that made this refactor unsafe to attempt: `render-smoke.mjs` now has a
+  Retry-path case (mocks the live ACIS + Open-Meteo calls to fail once via
+  `page.route`, confirms the error card appears, then confirms Retry clears
+  it) — fully offline-verifiable since it's simulating the failure, not
+  relying on real ACIS to fail. The reducer collapse itself is still not
+  done; this test is the prerequisite that makes it safe to attempt.
 - **A real bug was caught and fixed this session — read this if anything
   still looks broken.** After #133 (the vite 8 bump) merged, `SeasonsCard`
   started throwing `TREND_START is not defined` on **every render** — i.e.
