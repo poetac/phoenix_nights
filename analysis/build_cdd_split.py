@@ -18,28 +18,19 @@ apps/web/public/data/phx-cdd-split.json. Stdlib only.
 """
 
 import datetime
-import json
-import urllib.request
 
+import assetio
+from acis import LAST_COMPLETE_YEAR, MAX_MISSING_DAYS, acis_stndata
 from cities import data_path, get_city
 
-MAX_MISSING_DAYS = 36
 BASE = 65.0
-LAST_COMPLETE_YEAR = datetime.date.today().year - 1
 
 # OUT is derived per-city in main() via data_path().
 
 
 def fetch_daily(city):
-    body = json.dumps({
-        "sid": city["sid"], "sdate": city["record_start"],
-        "edate": f"{LAST_COMPLETE_YEAR}-12-31",
-        "elems": [{"name": "mint"}, {"name": "maxt"}],
-    }).encode()
-    req = urllib.request.Request("https://data.rcc-acis.org/StnData", data=body,
-                                 headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return json.load(r)["data"]
+    return acis_stndata(city["sid"], city["record_start"], f"{LAST_COMPLETE_YEAR}-12-31",
+                         [{"name": "mint"}, {"name": "maxt"}], timeout=120)
 
 
 def split_cooling_day(lo, hi, base=BASE):
@@ -81,7 +72,7 @@ def main():
             "nightCdd": round(d["night"]),
         })
 
-    OUT.write_text(json.dumps({
+    assetio.write_json(OUT, {
         "station": city["label"],
         "source": "NOAA/NWS ACIS daily mint/maxt",
         "base": BASE,
@@ -91,7 +82,7 @@ def main():
         "generated": datetime.date.today().isoformat(),
         "throughYear": rows[-1]["year"] if rows else None,
         "years": rows,
-    }, indent=1, allow_nan=False))
+    })
 
     print(f"wrote {OUT} ({len(rows)} years)")
 
