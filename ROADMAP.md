@@ -520,10 +520,28 @@ are the immutable bar and stay untouched.
    `max_streak`/`season_span`/`sustained_span` (incl. the `None`-gap missing-day contract) and the
    CDD-split identity (extracted to `split_cooling_day`); wired into the CI build job. *Remaining:*
    broaden to the other builders' reduces as they're extracted (pairs with item 6/10).
-10. **Shared `analysis/acis.py` + `assetio.py`** — the ACIS/GSOY fetch boilerplate is copy-pasted ~16×,
-    `LAST_COMPLETE_YEAR`/`MAX_MISSING_DAYS` redefined in 14/6 files, the stamped-write block 8×.
-    Consolidate (stdlib-only; a local module passes the import guard) **with the rebuild workflow as the
-    byte-identical gate**; fold in retry/backoff for the daily fetches (only diurnal/grid have it).
+10. **Shared `analysis/acis.py` + `assetio.py`** (in progress — phased, not a one-PR migration) — the
+    ACIS/GSOY fetch boilerplate is copy-pasted ~16×, `LAST_COMPLETE_YEAR`/`MAX_MISSING_DAYS` redefined
+    in 14/6 files, the stamped-write block 8×. A prior scoping pass flagged doing all ~17 consumer files
+    in one PR as the single largest risk here — a subtle bug (a mis-ordered `elems` dict, a dropped
+    `maxmissing` default) could silently corrupt every city's committed data in one shot, since
+    `build_facts.py` rewrites all cities per run. Phase 1 ✅ **(#143)**: `analysis/acis.py`
+    (`acis_stndata`/`gsoy_rows`/`retry` — retry defaults to no-retry, so a real upstream failure stays
+    loud unless a caller explicitly opts in; the EIA-secret-hiding `from None` exception-chain suppression
+    build_grid.py already does is preserved as an explicit `fail_msg` option) and `analysis/assetio.py`
+    (`write_json`, a pure pass-through — no dict-merging, so a commit diff stays exactly the byte-for-byte
+    change it looks like), both stdlib-only, both offline-unit-tested. Zero existing files changed yet —
+    purely additive, so this phase alone carries no behavior-change risk. **Remaining, each its own
+    small PR gated by triggering the real "Rebuild data assets" workflow and confirming zero asset diff**
+    (workflow_dispatch only opens a PR if `git diff` on `apps/web/public/data` is non-empty, so a clean
+    migration is silently, safely provable): `build_streaks.py`+`build_cdd_split.py` (identical
+    `fetch_daily`, good first migration) → `build_heat_season.py`+`build_normals.py` → `build_series.py`+
+    `build_compare.py` → `build_grid.py` (the api_key-secrecy risk) → `build_diurnal.py` → `city_audit.py`/
+    `uhi_pair.py`/`uhi_robustness.py`/`spatial_gradient_probe.py` (not CI-gated; migrate by hand, verify
+    printed output unchanged) → `build_facts.py` (highest blast radius — rewrites every city's facts.json
+    per run — migrate second-to-last) → `verify_v0.py` (last of all: it must independently re-derive
+    every number `build_facts.py` produces, so migrate only the request plumbing, never the
+    OLS/parsing logic, and only once #142's offline/live split has been live a while).
 11. ✅ **Registry-parity CI check** (shipped #102) — `tests/registry.test.mjs` asserts `cities.js` ⟷
     `cities.py` agree on the city set, station ids, rural pair (`rural_sid` vs `rural.sid`), source, and
     every per-card opt-in (the diurnal-opt-in assertion catches the boi-orphan class). *Remaining:*
