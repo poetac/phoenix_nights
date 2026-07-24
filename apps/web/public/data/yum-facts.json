@@ -1,7 +1,7 @@
 {
  "city": "yum",
  "name": "Yuma (ThreadEx YUMthr 9)",
- "generated": "2026-06-22",
+ "generated": "2026-07-24",
  "facts": [
   {
    "key": "coldest_night",
@@ -15,7 +15,7 @@
   },
   {
    "key": "lows_outpace_highs",
-   "score": 0.562,
+   "score": 0.561,
    "crossCityPercentile": 0.56,
    "label": "Overnight lows are rising 2.1\u00d7 as fast as afternoon highs",
    "value": 2.1,
@@ -25,7 +25,7 @@
   },
   {
    "key": "diurnal_compression",
-   "score": 0.562,
+   "score": 0.561,
    "crossCityPercentile": 0.56,
    "label": "The day\u2013night temperature gap is shrinking 0.44\u00b0F per decade",
    "value": 0.44,
