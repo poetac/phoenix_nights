@@ -13,9 +13,9 @@ apps/web/public/data/phx-normals.json. Stdlib only.
 """
 
 import datetime
-import json
-import urllib.request
 
+import assetio
+from acis import acis_stndata
 from cities import data_path, get_city
 
 BASE_START, BASE_END = 1970, 1979
@@ -29,16 +29,8 @@ CANON = datetime.date(2000, 1, 1)
 
 
 def fetch_daily(city):
-    body = json.dumps({
-        "sid": city["sid"],
-        "sdate": f"{BASE_START}-01-01",
-        "edate": f"{BASE_END}-12-31",
-        "elems": [{"name": "mint"}, {"name": "maxt"}],
-    }).encode()
-    req = urllib.request.Request("https://data.rcc-acis.org/StnData", data=body,
-                                 headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return json.load(r)["data"]
+    return acis_stndata(city["sid"], f"{BASE_START}-01-01", f"{BASE_END}-12-31",
+                         [{"name": "mint"}, {"name": "maxt"}], timeout=120)
 
 
 def canon_index(month, day):
@@ -80,8 +72,7 @@ def main():
             "n": len(lows),
         }
 
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({
+    assetio.write_json(OUT, {
         "station": city["label"],
         "baseline": [BASE_START, BASE_END],
         "baselineLabel": "1970s",
@@ -90,7 +81,7 @@ def main():
         "source": "NOAA/NWS ACIS daily mint/maxt",
         "generated": datetime.date.today().isoformat(),
         "byDate": by_date,
-    }, indent=1, allow_nan=False))
+    })
 
     print(f"wrote {OUT} ({len(by_date)} calendar days)")
     for k in ("01-15", "04-15", "07-15", "10-15"):

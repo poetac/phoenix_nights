@@ -10,29 +10,19 @@ Stdlib only. Usage: python3 analysis/build_heat_season.py
 """
 
 import datetime
-import json
-import urllib.request
 
+import assetio
+from acis import LAST_COMPLETE_YEAR, MAX_MISSING_DAYS, acis_stndata
 from cities import data_path, day_of_year, get_city
 
 THRESHOLD = 100
-MAX_MISSING_DAYS = 36
-LAST_COMPLETE_YEAR = datetime.date.today().year - 1
 
 # OUT is derived per-city in main() via data_path().
 
 
 def fetch_daily_maxt(city):
-    body = json.dumps({
-        "sid": city["sid"],
-        "sdate": city["record_start"],
-        "edate": f"{LAST_COMPLETE_YEAR}-12-31",
-        "elems": [{"name": "maxt"}],
-    }).encode()
-    req = urllib.request.Request("https://data.rcc-acis.org/StnData", data=body,
-                                 headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return json.load(r)["data"]
+    return acis_stndata(city["sid"], city["record_start"], f"{LAST_COMPLETE_YEAR}-12-31",
+                         [{"name": "maxt"}], timeout=120)
 
 
 def main():
@@ -83,8 +73,7 @@ def main():
         print(f"{city['prefix']}: only {len(years)} years with a 100F day (<30) — skipping asset (card omits it)")
         return
 
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({
+    assetio.write_json(OUT, {
         "station": city["label"],
         "thresholdF": THRESHOLD,
         "note": ("first/last are day-of-year of the first/last single 100F day; "
@@ -94,7 +83,7 @@ def main():
         "generated": datetime.date.today().isoformat(),
         "throughYear": years[-1]["year"] if years else None,
         "years": years,
-    }, indent=1, allow_nan=False))
+    })
 
     early = [r for r in years if 1970 <= r["year"] <= 1979]
     late = [r for r in years if r["year"] > LAST_COMPLETE_YEAR - 10]
