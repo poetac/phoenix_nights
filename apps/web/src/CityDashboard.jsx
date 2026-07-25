@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, lazy, Suspense } from "react";
+import { useState, useEffect, useMemo, useReducer, lazy, Suspense } from "react";
 import { C, DISPLAY, BODY, Card, UnitsContext } from "./ui.jsx";
 import { unitsOf } from "./lib/units.js";
 import {
@@ -18,47 +18,45 @@ const DashboardBody = lazy(() => import("./DashboardBody.jsx"));
 // top-fact cards). Desert Nights keeps the full curated DashboardBody.
 const SignalsBody = lazy(() => import("./SignalsBody.jsx"));
 
+// The 11 secondary assets each resolve independently (their own fetch, their own
+// catch) and all reset together on a city switch or Retry — one reducer captures
+// both without 11 parallel useState/setX pairs staying in sync by convention.
+const ASSET_KEYS = [
+  "rural", "seasonal", "diurnal", "heatSeason", "heatDeaths",
+  "streaks", "grid", "normals", "lastNight", "cddSplit", "facts",
+];
+const EMPTY_ASSETS = Object.fromEntries(ASSET_KEYS.map((k) => [k, null]));
+
+function assetsReducer(assets, action) {
+  switch (action.type) {
+    case "reset": return EMPTY_ASSETS;
+    case "set": return { ...assets, [action.key]: action.value };
+    default: return assets;
+  }
+}
+
 export default function CityDashboard({ city, product }) {
   const signals = product?.layout === "signals";
   const [state, setState] = useState({ loading: true, error: null, rows: [], source: null });
-  const [rural, setRural] = useState(null);
-  const [seasonal, setSeasonal] = useState(null);
-  const [diurnal, setDiurnal] = useState(null);
-  const [heatSeason, setHeatSeason] = useState(null);
-  const [heatDeaths, setHeatDeaths] = useState(null);
-  const [streaks, setStreaks] = useState(null);
-  const [grid, setGrid] = useState(null);
-  const [normals, setNormals] = useState(null);
-  const [lastNight, setLastNight] = useState(null);
-  const [cddSplit, setCddSplit] = useState(null);
-  const [facts, setFacts] = useState(null);
+  const [assets, dispatchAssets] = useReducer(assetsReducer, EMPTY_ASSETS);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let alive = true;
+    const set = (key) => (value) => alive && dispatchAssets({ type: "set", key, value });
     setState((s) => ({ ...s, loading: true, error: null }));
-    setRural(null);
-    setSeasonal(null);
-    setDiurnal(null);
-    setHeatSeason(null);
-    setHeatDeaths(null);
-    setStreaks(null);
-    setGrid(null);
-    setNormals(null);
-    setLastNight(null);
-    setCddSplit(null);
-    setFacts(null);
+    dispatchAssets({ type: "reset" });
     // these cards read static precomputed assets — independent of ACIS
-    fetchDiurnal(city).then((d) => alive && setDiurnal(d)).catch(() => {});
-    fetchHeatSeason(city).then((d) => alive && setHeatSeason(d)).catch(() => {});
-    fetchHeatDeaths(city).then((d) => alive && setHeatDeaths(d)).catch(() => {});
-    fetchStreaks(city).then((d) => alive && setStreaks(d)).catch(() => {});
-    fetchGrid(city).then((d) => alive && setGrid(d)).catch(() => {});
-    fetchCddSplit(city).then((d) => alive && setCddSplit(d)).catch(() => {});
-    fetchFacts(city).then((d) => alive && setFacts(d)).catch(() => {});
+    fetchDiurnal(city).then(set("diurnal")).catch(() => {});
+    fetchHeatSeason(city).then(set("heatSeason")).catch(() => {});
+    fetchHeatDeaths(city).then(set("heatDeaths")).catch(() => {});
+    fetchStreaks(city).then(set("streaks")).catch(() => {});
+    fetchGrid(city).then(set("grid")).catch(() => {});
+    fetchCddSplit(city).then(set("cddSplit")).catch(() => {});
+    fetchFacts(city).then(set("facts")).catch(() => {});
     // the live hero hook: last night's low (ACIS) vs the 1970s seasonal normal (asset)
-    fetchNormals(city).then((d) => alive && setNormals(d)).catch(() => {});
-    fetchLastNight(city).then((d) => alive && setLastNight(d)).catch(() => {});
+    fetchNormals(city).then(set("normals")).catch(() => {});
+    fetchLastNight(city).then(set("lastNight")).catch(() => {});
     // warm the lazy body chunk in parallel with the fetch so there's no gap
     // between the data resolving and the charts rendering.
     import(signals ? "./SignalsBody.jsx" : "./DashboardBody.jsx").catch(() => {});
@@ -68,8 +66,8 @@ export default function CityDashboard({ city, product }) {
         if (!alive) return;
         setState({ loading: false, error: null, ...res });
         // bonus cards — never block or fail the page on them
-        fetchRural(city).then((rr) => alive && setRural(rr)).catch(() => {});
-        fetchSeasonal(city).then((ss) => alive && setSeasonal(ss)).catch(() => {});
+        fetchRural(city).then(set("rural")).catch(() => {});
+        fetchSeasonal(city).then(set("seasonal")).catch(() => {});
       } catch {
         try {
           const res = await fetchOpenMeteo(city);
@@ -83,6 +81,7 @@ export default function CityDashboard({ city, product }) {
   }, [reloadKey, city, signals]);
 
   const { rows, source } = state;
+  const { rural, seasonal, diurnal, heatSeason, heatDeaths, streaks, grid, normals, lastNight, cddSplit, facts } = assets;
 
   const freshness = useMemo(
     () => assetFreshness({
